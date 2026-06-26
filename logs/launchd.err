@@ -1,0 +1,100 @@
+Traceback (most recent call last):
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/httplib2/__init__.py", line 1369, in _conn_request
+    conn.connect()
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/httplib2/__init__.py", line 1145, in connect
+    address_info = socket.getaddrinfo(host, port, 0, socket.SOCK_STREAM)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socket.py", line 953, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/google_auth_httplib2.py", line 117, in __call__
+    response, data = self.http.request(
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/httplib2/__init__.py", line 1727, in request
+    (response, content) = self._request(
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/httplib2/__init__.py", line 1447, in _request
+    (response, content) = self._conn_request(conn, request_uri, method, body, headers)
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/httplib2/__init__.py", line 1376, in _conn_request
+    raise ServerNotFoundError("Unable to find the server at %s" % conn.host)
+httplib2.error.ServerNotFoundError: Unable to find the server at oauth2.googleapis.com
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/kikuchikenta/01_honbu_docs_automation/scripts/auto_pipeline.py", line 290, in <module>
+    run_from_sheet(); run_from_drive(); sys.exit(0)
+  File "/Users/kikuchikenta/01_honbu_docs_automation/scripts/auto_pipeline.py", line 105, in run_from_sheet
+    rows = svc.spreadsheets().values().get(
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/googleapiclient/_helpers.py", line 130, in positional_wrapper
+    return wrapped(*args, **kwargs)
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/googleapiclient/http.py", line 923, in execute
+    resp, content = _retry_request(
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/googleapiclient/http.py", line 191, in _retry_request
+    resp, content = http.request(uri, method, *args, **kwargs)
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/google_auth_httplib2.py", line 207, in request
+    self.credentials.before_request(self._request, method, uri, request_headers)
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/google/auth/credentials.py", line 230, in before_request
+    self._blocking_refresh(request)
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/google/auth/credentials.py", line 193, in _blocking_refresh
+    self.refresh(request)
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/google/oauth2/credentials.py", line 412, in refresh
+    ) = reauth.refresh_grant(
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/google/oauth2/reauth.py", line 337, in refresh_grant
+    ) = _client._token_endpoint_request_no_throw(
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/google/oauth2/_client.py", line 192, in _token_endpoint_request_no_throw
+    response = request(
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/google_auth_httplib2.py", line 124, in __call__
+    raise exceptions.TransportError(exc)
+google.auth.exceptions.TransportError: Unable to find the server at oauth2.googleapis.com
+Traceback (most recent call last):
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/httplib2/__init__.py", line 1369, in _conn_request
+    conn.connect()
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/httplib2/__init__.py", line 1145, in connect
+    address_info = socket.getaddrinfo(host, port, 0, socket.SOCK_STREAM)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socket.py", line 953, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/google_auth_httplib2.py", line 117, in __call__
+    response, data = self.http.request(
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/httplib2/__init__.py", line 1727, in request
+    (response, content) = self._request(
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/httplib2/__init__.py", line 1447, in _request
+    (response, content) = self._conn_request(conn, request_uri, method, body, headers)
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/httplib2/__init__.py", line 1376, in _conn_request
+    raise ServerNotFoundError("Unable to find the server at %s" % conn.host)
+httplib2.error.ServerNotFoundError: Unable to find the server at oauth2.googleapis.com
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/kikuchikenta/01_honbu_docs_automation/scripts/auto_pipeline.py", line 290, in <module>
+    run_from_sheet(); run_from_drive(); sys.exit(0)
+  File "/Users/kikuchikenta/01_honbu_docs_automation/scripts/auto_pipeline.py", line 105, in run_from_sheet
+    rows = svc.spreadsheets().values().get(
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/googleapiclient/_helpers.py", line 130, in positional_wrapper
+    return wrapped(*args, **kwargs)
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/googleapiclient/http.py", line 923, in execute
+    resp, content = _retry_request(
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/googleapiclient/http.py", line 191, in _retry_request
+    resp, content = http.request(uri, method, *args, **kwargs)
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/google_auth_httplib2.py", line 207, in request
+    self.credentials.before_request(self._request, method, uri, request_headers)
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/google/auth/credentials.py", line 230, in before_request
+    self._blocking_refresh(request)
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/google/auth/credentials.py", line 193, in _blocking_refresh
+    self.refresh(request)
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/google/oauth2/credentials.py", line 412, in refresh
+    ) = reauth.refresh_grant(
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/google/oauth2/reauth.py", line 337, in refresh_grant
+    ) = _client._token_endpoint_request_no_throw(
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/google/oauth2/_client.py", line 192, in _token_endpoint_request_no_throw
+    response = request(
+  File "/Users/kikuchikenta/Library/Python/3.9/lib/python/site-packages/google_auth_httplib2.py", line 124, in __call__
+    raise exceptions.TransportError(exc)
+google.auth.exceptions.TransportError: Unable to find the server at oauth2.googleapis.com

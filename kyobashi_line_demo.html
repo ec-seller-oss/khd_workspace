@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>京橋クリニック 公式LINE デモ</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { margin: 0; background: #E7E3DA; font-family: "Hiragino Sans", -apple-system, sans-serif; display: flex; justify-content: center; padding: 14px; }
+  .phone { width: 100%; max-width: 390px; background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 6px 24px rgba(0,0,0,0.12); }
+  .hd { background: #06C755; padding: 13px 14px; display: flex; align-items: center; gap: 10px; }
+  .av { width: 34px; height: 34px; border-radius: 50%; background: #fff; color: #067A35; font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+  .nm { color: #fff; font-size: 15px; font-weight: 600; }
+  .sub { color: rgba(255,255,255,0.85); font-size: 11px; }
+  #chat { height: 56vh; min-height: 320px; overflow-y: auto; background: #97B3CE; padding: 12px 10px; }
+  .row { display: flex; margin: 6px 2px; }
+  .b { max-width: 76%; font-size: 13px; line-height: 1.5; padding: 8px 11px; border-radius: 14px; }
+  .left .b { background: #fff; color: #1A1A1A; border: 0.5px solid #E1DACB; border-bottom-left-radius: 4px; }
+  .right { justify-content: flex-end; }
+  .right .b { background: #8DE055; color: #13360A; border-bottom-right-radius: 4px; }
+  .bar { background: #F4F1EA; border-top: 0.5px solid #DAD6CF; padding: 7px 10px; display: flex; align-items: center; gap: 8px; }
+  .bar span { font-size: 11px; color: #6E6E6E; }
+  .bar button { font-size: 11px; padding: 5px 9px; border: 0.5px solid #AA2E26; color: #AA2E26; background: #fff; border-radius: 6px; }
+  .bar .gray { border-color: #DAD6CF; color: #6E6E6E; margin-left: auto; }
+  #menu { display: grid; grid-template-columns: repeat(3, 1fr); background: #DAD6CF; gap: 0.5px; }
+  #menu button { border: none; padding: 12px 6px 13px; text-align: center; font-family: inherit; }
+  .badge { width: 24px; height: 24px; border-radius: 50%; background: #AA2E26; color: #fff; font-size: 11px; font-weight: 700; line-height: 24px; margin: 0 auto 5px; }
+  .mt { font-size: 13px; font-weight: 600; color: #1A1A1A; }
+  .ms { font-size: 10.5px; color: #6E6E6E; margin-top: 2px; }
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="hd">
+    <div class="av">京</div>
+    <div style="flex:1;"><div class="nm">京橋クリニック</div><div class="sub">公式アカウント・認証済</div></div>
+    <div style="color:#fff;font-size:12px;border:1px solid rgba(255,255,255,0.7);border-radius:999px;padding:2px 8px;">友だち</div>
+  </div>
+  <div id="chat"></div>
+  <div class="bar">
+    <span>配信デモ：</span>
+    <button onclick="pushMsg(0)">再診リマインド</button>
+    <button onclick="pushMsg(1)">順番のお知らせ</button>
+    <button class="gray" onclick="resetChat()">最初から</button>
+  </div>
+  <div id="menu"></div>
+</div>
+<script>
+var tiles = [
+  {no:"01",t:"順番・待ち時間",s:"アイコール順番",r:"現在の待ち人数をLINEでお知らせします。順番が近づくと『あと3人です』と自動でご連絡。WEB受付の方は受付時間内のご来院をお願いします。"},
+  {no:"02",t:"ご予約・再診",s:"CPAP/定期の方",r:"再診のご予約はこちらから。CPAPなど毎月の定期受診の方には、ご予約日の前にLINEで自動リマインドをお送りします。"},
+  {no:"03",t:"Web問診",s:"来院前に記入",r:"来院前にスマホで問診を記入できます。受付・待ち時間の短縮につながります。 ▶ 問診を始める"},
+  {no:"04",t:"診療時間・休診",s:"カレンダー",r:"診療時間：平日 9:00-12:30 / 15:00-18:30。休診日・臨時休診はカレンダーでご確認いただけます。"},
+  {no:"05",t:"アクセス・電話",s:"地図・問合せ",r:"地図・お電話番号はこちら。お問い合わせもLINEで承ります（順次返信）。"},
+  {no:"06",t:"よくある質問",s:"受付ルール 他",r:"本人確認・マイナ保険証・受付ルールなど、よくあるご質問をまとめています。化学物質過敏症のご相談もこちらから。"}
+];
+var pushes = [
+  "【京橋クリニック】そろそろCPAPの定期診察の時期です。今月のご予約はこちら ▶  来院でCPAPデータの確認ができます。",
+  "【順番のお知らせ】あと3人で受付番号 42 番の方の番です。院内にお戻りください。"
+];
+var chat = document.getElementById("chat"), menu = document.getElementById("menu");
+function bubble(text, side){
+  var row = document.createElement("div"); row.className = "row " + side;
+  var b = document.createElement("div"); b.className = "b"; b.textContent = text;
+  row.appendChild(b); chat.appendChild(row); chat.scrollTop = chat.scrollHeight;
+}
+function tap(i){ bubble(tiles[i].t,"right"); setTimeout(function(){ bubble(tiles[i].r,"left"); },280); }
+function pushMsg(i){ bubble(pushes[i],"left"); }
+function resetChat(){ chat.innerHTML=""; bubble("京橋クリニックの公式LINEへようこそ。ご予約・順番のお知らせ・問診などをLINEで承ります。下のメニューからお選びください。","left"); }
+tiles.forEach(function(tile,i){
+  var c = document.createElement("button");
+  c.style.background = (i%2===0)?"#F1ECE1":"#F9F6EF";
+  c.onclick = function(){ tap(i); };
+  c.innerHTML = '<div class="badge">'+tile.no+'</div><div class="mt">'+tile.t+'</div><div class="ms">'+tile.s+'</div>';
+  menu.appendChild(c);
+});
+resetChat();
+</script>
+</body>
+</html>

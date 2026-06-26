@@ -1,0 +1,249 @@
+{% extends "base.html" %}
+{% block title %}ユーザー設定 - Land Scanner{% endblock %}
+
+{% block head %}
+<style>
+  #settings-map { height: 350px; border-radius: 8px; }
+  .pattern-tab.active { border-color: #2563eb; color: #2563eb; background: #eff6ff; }
+  .pattern-tab { cursor: pointer; transition: all 0.15s; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 py-8">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-bold text-gray-900">ユーザー設定</h1>
+    <span class="text-sm text-gray-500">最大3パターンまで設定できます</span>
+  </div>
+
+  <!-- パターンタブ -->
+  <div class="flex gap-2 mb-6" id="pattern-tabs">
+    {% for p in patterns %}
+    <button
+      class="pattern-tab border-2 rounded-lg px-4 py-2 text-sm font-medium text-gray-600 border-gray-200 {% if loop.first %}active{% endif %}"
+      data-pattern-id="{{ p.id }}"
+      onclick="selectPattern({{ p.id }})"
+    >
+      {{ p.name }}
+      {% if not p.enabled %}<span class="text-gray-400 ml-1">（無効）</span>{% endif %}
+    </button>
+    {% endfor %}
+    {% if patterns|length < max_patterns %}
+    <button
+      onclick="createPattern()"
+      class="border-2 border-dashed border-gray-300 rounded-lg px-4 py-2 text-sm font-medium text-gray-400 hover:text-gray-600 hover:border-gray-400 transition-colors"
+    >
+      + パターン追加
+    </button>
+    {% endif %}
+  </div>
+
+  <!-- パターン設定フォーム -->
+  <div id="pattern-form" class="{% if not patterns %}hidden{% endif %}">
+    <form id="settings-form" class="space-y-6">
+      <input type="hidden" id="current-pattern-id" value="{{ patterns[0].id if patterns else '' }}" />
+
+      <!-- パターン基本情報 -->
+      <div class="bg-white rounded-2xl shadow-sm border p-6">
+        <h2 class="font-bold text-gray-800 mb-4">基本設定</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">パターン名</label>
+            <input type="text" id="pattern-name" maxlength="50"
+              class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
+          </div>
+          <div class="flex items-end gap-4">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="pattern-enabled" class="w-4 h-4 rounded text-blue-600" />
+              <span class="text-sm font-medium text-gray-700">有効</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 駅・沿線選択 -->
+      <div class="bg-white rounded-2xl shadow-sm border p-6">
+        <h2 class="font-bold text-gray-800 mb-4">対象エリア設定</h2>
+
+        <!-- 地図 -->
+        <div class="mb-4">
+          <p class="text-sm text-gray-500 mb-2">地図上の駅をクリックして選択/解除できます</p>
+          <div id="settings-map"></div>
+        </div>
+
+        <!-- 選択中の駅 -->
+        <div class="mb-4">
+          <p class="text-sm font-medium text-gray-700 mb-2">選択中の駅</p>
+          <div id="selected-stations" class="flex flex-wrap gap-2 min-h-8">
+            <span class="text-sm text-gray-400 italic" id="no-stations-msg">駅が選択されていません</span>
+          </div>
+        </div>
+
+        <!-- 沿線選択 -->
+        <div>
+          <p class="text-sm font-medium text-gray-700 mb-2">沿線選択</p>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-1.5 max-h-48 overflow-y-auto border rounded-lg p-3">
+            {% for line in lines %}
+            <label class="flex items-center gap-1.5 text-xs cursor-pointer hover:text-blue-600">
+              <input type="checkbox" class="line-checkbox w-3 h-3" value="{{ line }}" />
+              <span class="truncate">{{ line }}</span>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- 投資計算設定 -->
+      <div class="bg-white rounded-2xl shadow-sm border p-6">
+        <h2 class="font-bold text-gray-800 mb-4">投資計算パラメータ</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
+          <div>
+            <label class="block text-gray-700 mb-1">建築費（万円/坪）</label>
+            <input type="number" id="build-cost" step="1" min="50" max="200"
+              class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+          </div>
+          <div>
+            <label class="block text-gray-700 mb-1">部屋面積（㎡）</label>
+            <input type="number" id="room-area" step="0.5" min="10" max="50"
+              class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+          </div>
+          <div>
+            <label class="block text-gray-700 mb-1">月額家賃（万円/部屋）</label>
+            <input type="number" id="monthly-rent" step="0.5" min="1" max="30"
+              class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+          </div>
+          <div>
+            <label class="block text-gray-700 mb-1">居住面積割合（%）</label>
+            <input type="number" id="living-ratio" step="1" min="50" max="90"
+              class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+          </div>
+          <div>
+            <label class="block text-gray-700 mb-1">解体費（万円/㎡）</label>
+            <input type="number" id="demolition-unit" step="0.5" min="1" max="10"
+              class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+          </div>
+        </div>
+      </div>
+
+      <!-- フィルター設定 -->
+      <div class="bg-white rounded-2xl shadow-sm border p-6">
+        <h2 class="font-bold text-gray-800 mb-4">フィルター設定</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
+          <div>
+            <label class="block text-gray-700 mb-1">最低利回り（%）</label>
+            <input type="number" id="yield-threshold" step="0.5" min="0" max="30"
+              class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none" />
+          </div>
+          <div>
+            <label class="block text-gray-700 mb-1">土地価格上限（万円）</label>
+            <input type="number" id="max-land-price" step="100" min="0"
+              class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="上限なし" />
+          </div>
+          <div>
+            <label class="block text-gray-700 mb-1">総投資額上限（万円）</label>
+            <input type="number" id="max-total" step="100" min="0"
+              class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="上限なし" />
+          </div>
+          <div>
+            <label class="block text-gray-700 mb-1">最小面積（㎡）</label>
+            <input type="number" id="min-area" step="10" min="0"
+              class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="下限なし" />
+          </div>
+          <div>
+            <label class="block text-gray-700 mb-1">最大面積（㎡）</label>
+            <input type="number" id="max-area" step="10" min="0"
+              class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="上限なし" />
+          </div>
+        </div>
+      </div>
+
+      <!-- 通知設定 -->
+      <div class="bg-white rounded-2xl shadow-sm border p-6">
+        <h2 class="font-bold text-gray-800 mb-4">通知設定</h2>
+        <div class="space-y-3 text-sm">
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input type="checkbox" id="notify-email" class="w-4 h-4 rounded text-blue-600" />
+            <span class="text-gray-700">メール通知を受け取る</span>
+          </label>
+          <label class="flex items-center gap-3 cursor-pointer">
+            <input type="checkbox" id="notify-announcement" class="w-4 h-4 rounded text-blue-600" />
+            <span class="text-gray-700">お知らせメールを受け取る</span>
+          </label>
+          <div>
+            <label class="block text-gray-700 mb-1">通知タイミング</label>
+            <select id="notify-timing"
+              class="border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+              <option value="daily">1日1回まとめて</option>
+              <option value="realtime">リアルタイム</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- アクションボタン -->
+      <div class="flex items-center justify-between pt-2">
+        <button
+          type="button" onclick="deletePattern()"
+          class="text-sm text-red-500 hover:text-red-700 transition-colors"
+        >
+          このパターンを削除
+        </button>
+        <div class="flex gap-3">
+          <button type="button" onclick="savePattern()"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2.5 rounded-lg text-sm transition-colors">
+            保存する
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  {% if not patterns %}
+  <div class="bg-white rounded-2xl shadow-sm border p-10 text-center text-gray-500">
+    <p class="mb-4">まだ検索パターンがありません</p>
+    <button onclick="createPattern()" class="bg-blue-600 text-white px-6 py-2.5 rounded-lg font-semibold text-sm hover:bg-blue-700 transition-colors">
+      最初のパターンを作成
+    </button>
+  </div>
+  {% endif %}
+</div>
+
+<!-- トースト通知 -->
+<div id="toast" class="fixed bottom-6 right-6 bg-gray-900 text-white text-sm px-4 py-3 rounded-lg shadow-lg hidden transition-all z-50">
+  <span id="toast-msg"></span>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/settings.js"></script>
+<script>
+const STATIONS_DATA = {{ stations_json | safe }};
+
+// Jinja2 patterns to JS
+const patternMap = {};
+{% for p in patterns %}
+patternMap[{{ p.id }}] = {
+  id: {{ p.id }},
+  name: {{ p.name | tojson }},
+  enabled: {{ 'true' if p.enabled else 'false' }},
+  stations: {{ (p.stations or []) | tojson }},
+  lines: {{ (p.lines or []) | tojson }},
+  build_cost_per_tsubo: {{ p.build_cost_per_tsubo }},
+  room_area: {{ p.room_area }},
+  demolition_unit: {{ p.demolition_unit }},
+  living_ratio: {{ p.living_ratio }},
+  monthly_rent: {{ p.monthly_rent }},
+  yield_threshold: {{ p.yield_threshold }},
+  max_land_price: {{ p.max_land_price if p.max_land_price else 'null' }},
+  max_total_investment: {{ p.max_total_investment if p.max_total_investment else 'null' }},
+  min_area: {{ p.min_area if p.min_area else 'null' }},
+  max_area: {{ p.max_area if p.max_area else 'null' }},
+  notify_email: {{ 'true' if p.notify_email else 'false' }},
+  notify_announcement: {{ 'true' if p.notify_announcement else 'false' }},
+  notify_timing: {{ p.notify_timing | tojson }},
+};
+{% endfor %}
+
+initSettingsPage(patternMap, STATIONS_DATA);
+</script>
+{% endblock %}

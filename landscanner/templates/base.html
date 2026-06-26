@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Land Scanner{% endblock %}</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- カスタム CSS -->
+  <link rel="stylesheet" href="/static/css/app.css" />
+  <!-- マップモジュール（全ページ共通） -->
+  <script src="/static/js/map.js"></script>
+  <style>
+    /* ヘッダーナビ */
+    .nav-link { @apply text-gray-300 hover:text-white transition-colors px-3 py-2 rounded-md text-sm font-medium; }
+    .nav-link.active { @apply text-white bg-blue-700; }
+    /* テーブル */
+    .data-table tbody tr:nth-child(odd) { background: #f9fafb; }
+    .data-table tbody tr:hover { background: #eff6ff; }
+    /* 利回り色 */
+    .yield-high { color: #16a34a; font-weight: 700; }
+    .yield-mid  { color: #ca8a04; font-weight: 700; }
+    .yield-low  { color: #dc2626; }
+    /* バッジ */
+    .badge-limited { background: linear-gradient(90deg, #7c3aed, #db2777); }
+  </style>
+  {% block head %}{% endblock %}
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+
+  <!-- ヘッダー -->
+  <header class="bg-[#1a2332] shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- ロゴ -->
+        <a href="/" class="flex items-center gap-2">
+          <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
+          </svg>
+          <span class="text-white font-bold text-xl tracking-wide">Land Scanner</span>
+        </a>
+
+        <!-- ナビゲーション（PC） -->
+        <nav class="hidden md:flex items-center gap-1">
+          <a href="/" class="nav-link {% if request.url.path == '/' %}active{% endif %}">ホーム</a>
+          <a href="/search" class="nav-link {% if request.url.path == '/search' %}active{% endif %}">物件検索</a>
+          <a href="/history" class="nav-link {% if request.url.path == '/history' %}active{% endif %}">通知履歴</a>
+          <a href="/volume-check" class="nav-link {% if request.url.path == '/volume-check' %}active{% endif %}">ボリュームチェック</a>
+          <a href="/reins" class="nav-link {% if request.url.path == '/reins' %}active{% endif %}">
+            レインズ分析
+            <span class="badge-limited text-white text-[10px] px-1 rounded ml-1">限定品</span>
+          </a>
+          <a href="/announcements" class="nav-link {% if request.url.path == '/announcements' %}active{% endif %}">お知らせ</a>
+        </nav>
+
+        <!-- ユーザーメニュー -->
+        <div class="flex items-center gap-3">
+          {% if user %}
+          <div class="relative group">
+            <button class="flex items-center gap-2 text-gray-300 hover:text-white text-sm">
+              <span class="hidden sm:inline">{{ user.email }}</span>
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </button>
+            <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden group-hover:block z-50">
+              <a href="/settings" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">ユーザー設定</a>
+              <a href="/feature-request" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">機能リクエスト</a>
+              <hr class="my-1">
+              <a href="/logout" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">ログアウト</a>
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- ハンバーガーメニュー（モバイル） -->
+          <button id="mobile-menu-btn" class="md:hidden text-gray-300 hover:text-white">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- モバイルメニュー -->
+      <div id="mobile-menu" class="hidden md:hidden pb-3">
+        <a href="/" class="block nav-link">ホーム</a>
+        <a href="/search" class="block nav-link">物件検索</a>
+        <a href="/history" class="block nav-link">通知履歴</a>
+        <a href="/volume-check" class="block nav-link">ボリュームチェック</a>
+        <a href="/reins" class="block nav-link">レインズ分析</a>
+        <a href="/announcements" class="block nav-link">お知らせ</a>
+        {% if user %}
+        <a href="/settings" class="block nav-link">ユーザー設定</a>
+        <a href="/logout" class="block nav-link text-red-400">ログアウト</a>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+
+  <!-- メインコンテンツ -->
+  <main class="flex-1">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- フッター -->
+  <footer class="bg-[#1a2332] text-gray-400 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 py-6 flex flex-col sm:flex-row justify-between items-center text-sm">
+      <div class="font-bold text-white tracking-widest mb-2 sm:mb-0">LANDSCANNER</div>
+      <div class="flex gap-4">
+        <a href="/announcements" class="hover:text-white transition-colors">お知らせ</a>
+        <a href="/feature-request" class="hover:text-white transition-colors">機能リクエスト</a>
+      </div>
+      <div class="mt-2 sm:mt-0">© 2026 Land Scanner. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    // モバイルメニュートグル
+    document.getElementById('mobile-menu-btn')?.addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+  </script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

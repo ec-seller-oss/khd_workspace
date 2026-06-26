@@ -1,0 +1,10 @@
+{
+  "division": "01本部",
+  "description": "資料作成キット生成用テンプレートパス（Google Drive 同期フォルダ）",
+  "templates": {
+    "case_summary_pptx": "/Users/kikuchikenta/Library/CloudStorage/GoogleDrive-ec-seller@kikuchi-hd.net/マイドライブ/250903_taw/260318_つちはし整形外科の案件概要書/リクルートひな形/【ひな型】医院×法人_案件概要書、R8,3,17.pptx",
+    "case_summary_pdf": "/Users/kikuchikenta/Library/CloudStorage/GoogleDrive-ec-seller@kikuchi-hd.net/マイドライブ/250903_taw/260318_つちはし整形外科の案件概要書/リクルートひな形/【ひな型】医院×法人_案件概要書、R8,3,17.pdf",
+    "medical_area_survey_xlsx": "/Users/kikuchikenta/Library/CloudStorage/GoogleDrive-ec-seller@kikuchi-hd.net/マイドライブ/250903_taw/260318_つちはし整形外科の案件概要書/診療圏、事業計画/控え、診療圏調査、つちはし整形外科,R8,3,9.xlsx"
+  },
+  "output_root": "/Users/kikuchikenta/01_honbu_docs_automation/out"
+}

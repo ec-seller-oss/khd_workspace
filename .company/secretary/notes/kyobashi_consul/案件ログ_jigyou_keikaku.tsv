@@ -1,0 +1,34 @@
+■ 京橋クリニック AI医療コンサル 案件ログ（事業計画書）
+対象	医療法人社団順医会 京橋クリニック ／ 山崎明男 院長
+本部	04コンサル（李牧）／ テナントアシスト・ウイン
+窓口	新睦美（事務 atarashi@kyobashi-clinic.com）／ 福井（取次）
+方針	アイコール(順番)は活かす・LINEは来院前後を足す・先生軸で進める（医師以外は様子見）
+
+【1】時系列ログ（アポのたびに1行追記）
+日付	区分	出席・担当	議題／決定（事実）	状況の変化（前→後）	この回の残務 → 期限
+6/2-6/4	準備	事務A/B・新睦美・看護(磯山/東)	面談シート回収→現場課題を抽出	口頭の不満→文書化（アイコール遅刻/CPAP未来院で月末残業/マイナ紙コピー/外来19時残業/紙カルテ二重）	—
+6/19	準備アポ(補助金・効率化)	菊池/宮崎(作業)・福井(取次)・先生	AI課題マトリクス整理／IT補助金は相乗り方針／gBizID郵送着手／iPad・Stream Deckデモ準備	進め方不明→相乗りで7/21交付申請に確定	gBizID着手(先生〜6/23)・SECURITY ACTION(院6月内)・決算/納税(院〜6/26)・相乗りベンダー確定(菊池〜6/26)・ツール選定(6/24)
+6/25	アポ(本命)	菊池・先生・(事務)	LINE導入の方向OK／Stream Deck説明OK→次回=納品アポ／LINEはまず問診から／リマインドはデフォルトON(看護師長)	やるか→やる方向で着手。Stream Deckは検討→納品アポ確定。CPAP・再診の取りこぼしをLINEで断つ方針	問診テンプレ反映(菊池)・問診URL実機テスト(菊池)・開始日を福井と調整・要確認2点を先生に
+6/26	実装(KHD作業)	菊池(指示)・Claude	来院前Web問診を実票21項目で作り込み／再診リマインド(CPAP定期)ON稼働／体系比較・動線をスライド化	設計→実装。問診とCPAPリマインドが本番で動く状態に	ESSは院の正規様式で別フォーム化・新さんへ問診テンプレ依頼・CPAP月次継続運用を確定
+（次回）					↑ この表に1行追記していく
+
+【2】残務一覧（誰が・何を・いつまで）
+#	残務	担当	期限	状態
+1	問診テンプレ＋ESS正規様式を入手	新睦美→菊池	次回まで	依頼前
+2	問診の実機テスト(問診自動URL)	菊池	今週	未
+3	LINE開始日の調整	菊池↔福井	来週〜	調整中
+4	要確認2点(最後の1週間/サインエコー)を先生に	菊池→先生	次回	未
+5	Stream Deck 次回納品→2-3台目打診	菊池/宮崎	次回アポ	予定
+6	IT補助金 gBizID(先生)・相乗りベンダー確定・交付申請提出	先生/菊池	7/15(締切7/21)	進行中
+7	CPAPリマインドの月次継続運用を確定	菊池	7月	設計中
+
+【3】提案・成果物リンク（チーム共有スライド）
+区分	資料	用途	リンク
+院に見せる	公式LINE 導入のご提案	院向け提案(実物スクショ入)	https://drive.google.com/file/d/1dcVB6n3zjgtbuaJ5yGUTyIUyNFoPEYJS/view
+院に見せる	作り込み提案(GO判断用)	問診からの作り込みでGO取り	https://drive.google.com/file/d/1gA6VMjC29-fMCuTA3TcQ1dADty-z1ua7/view
+院に見せる	動線 詳細設計(前後比較)	流入の前後・比較表	https://drive.google.com/file/d/19Jum-1WYlYAqZ9n06zA4QItezk4JuYBS/view
+院に見せる	システム×動線 体系比較	システム層と人の動きの比較	https://drive.google.com/file/d/1NyA_BKLUH4CS_jIF84i4GRBq6jmIfIE4/view
+関係者	福井さん向けA4	運用で大切にしたいこと	https://drive.google.com/file/d/1AxrMO8BDp5S6ltUdMR5mZJhGWYB4SRnb/view
+内部	次アポ作戦・チーム共有	YES取り・役割・タスク	https://drive.google.com/file/d/1Dt-6EWj_VrLAmocMb-idFhczZfwBW9nK/view
+内部	立ち上げパイプライン	横展開の型	https://drive.google.com/file/d/1H1YBJ71PNieYJ_uNqWFXrv1rIY4_xTSS/view
+内部	市場調査	他社比較・独自性	https://drive.google.com/file/d/114f__tTgSDuiG8OdCy74ZL0ZDW23kEeV/view

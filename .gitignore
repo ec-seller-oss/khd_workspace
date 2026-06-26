@@ -1,0 +1,26 @@
+# 認証情報・機密ファイル（絶対にGitに入れない）
+scripts/client_secrets.json
+scripts/sheets_token.pickle
+scripts/*.pickle
+scripts/khd-line-worker
+*.env
+.env.*
+*_token.txt
+*_secret.json
+
+# ログ
+scripts/logs/
+*.log
+
+# Python
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store
+
+# 入れ子の別gitリポジトリ（別管理のため除外）
+line-harness-oss/
+
+# Claude一時/ツール結果
+*.tmp

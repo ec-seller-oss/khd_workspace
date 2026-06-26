@@ -1,0 +1,11 @@
+BS行	資産	残高(円・MF最新2026-06-15)	確認状態	証票リンク(残高確認先)
+91	ANAマイル1	59431	MF自動	https://moneyforward.com/accounts ／ https://www.ana.co.jp/ja/jp/amc/
+92	ANAマイル2	52182	MF自動	https://moneyforward.com/accounts ／ https://www.ana.co.jp/ja/jp/amc/
+93	JALマイル	194850	MF自動	https://moneyforward.com/accounts ／ https://www.jal.co.jp/jp/ja/jmb/
+102	楽天市場ポイント	23719	MF自動	https://moneyforward.com/accounts ／ https://point.rakuten.co.jp/
+109	モッピー	37034	MF自動	https://moneyforward.com/accounts ／ https://pc.moppy.jp/
+114	メルペイ残高	8725	MF自動	メルカリアプリ（残高）
+-	Amex MRポイント	要手入力	MF対象外	Amexアプリ／https://www.americanexpress.com/（自動取得不可・手動）
+-	Unitedマイル	要再連携	MF連携切れ	https://www.united.com/ja/jp/（MF再連携 or 個別確認）
+-	Appleアカウント残高	要手入力	MF未登録	https://account.apple.com/（個別確認）
+-	Marriottポイント	要手入力	MF未登録	https://www.marriott.com/ja/（個別確認）

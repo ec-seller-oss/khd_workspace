@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>京橋クリニック Web問診（来院前）</title>
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{margin:0;background:#E7E3DA;font-family:"Hiragino Sans",-apple-system,sans-serif;display:flex;justify-content:center;padding:14px;color:#1A1A1A;}
+  .card{width:100%;max-width:430px;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.1);}
+  .hd{background:#AA2E26;color:#fff;padding:14px 16px;}
+  .hd h1{margin:0;font-size:17px;font-weight:600;}
+  .hd p{margin:3px 0 0;font-size:11.5px;opacity:.9;}
+  .body{padding:14px 16px 18px;}
+  .sec{font-size:12px;font-weight:600;color:#AA2E26;border-bottom:1.5px solid #F1ECE1;padding-bottom:4px;margin:16px 0 8px;}
+  label.q{display:block;font-size:13px;font-weight:600;margin:12px 0 5px;}
+  .req{color:#AA2E26;font-size:11px;}
+  .opt{display:inline-flex;align-items:center;gap:5px;font-size:13px;margin:0 12px 6px 0;font-weight:400;}
+  input[type=text],input[type=date],input[type=number],textarea{width:100%;font-size:14px;padding:8px 10px;border:1px solid #DAD6CF;border-radius:8px;font-family:inherit;}
+  textarea{min-height:54px;resize:vertical;}
+  .inline input[type=text]{width:auto;flex:1;}
+  .submit{width:100%;margin-top:18px;background:#AA2E26;color:#fff;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:600;}
+  #done{display:none;padding:16px;}
+  .ticket{background:#F9F6EF;border:1px solid #E1DACB;border-left:5px solid #AA2E26;border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.7;}
+  .ticket b{color:#8C241D;}
+  .ok{background:#E1F5EE;color:#0F6E56;border-radius:8px;padding:10px 12px;font-size:13px;font-weight:600;margin-bottom:12px;}
+  .muted{font-size:11px;color:#6E6E6E;margin-top:10px;}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="hd"><h1>来院前 Web問診</h1><p>京橋クリニック ｜ 事前にご記入いただくと当日の待ち時間が短くなります</p></div>
+
+  <div class="body" id="form">
+    <div class="sec">A. 受診について</div>
+    <label class="q">受診区分 <span class="req">必須</span></label>
+    <span class="opt"><input type="radio" name="kubun" value="初診">初診</span>
+    <span class="opt"><input type="radio" name="kubun" value="再診">再診</span>
+
+    <label class="q">本日いちばん困っている症状（複数可）</label>
+    <div id="symp"></div>
+
+    <label class="q">具体的な症状・経過</label>
+    <textarea id="free" placeholder="例：3日前から咳と微熱。夜に悪化。"></textarea>
+
+    <label class="q">いつ頃から</label>
+    <span class="opt"><input type="radio" name="since" value="今日">今日</span>
+    <span class="opt"><input type="radio" name="since" value="2〜3日前">2〜3日前</span>
+    <span class="opt"><input type="radio" name="since" value="1週間以内">1週間以内</span>
+    <span class="opt"><input type="radio" name="since" value="1ヶ月以内">1ヶ月以内</span>
+    <span class="opt"><input type="radio" name="since" value="それ以上">それ以上</span>
+
+    <label class="q">体温（任意）</label>
+    <div class="inline" style="display:flex;align-items:center;gap:8px;"><input type="number" id="temp" step="0.1" placeholder="36.5" style="width:110px;"><span>℃</span></div>
+
+    <div class="sec">B. 既往・服薬・アレルギー</div>
+    <label class="q">現在治療中の病気</label>
+    <input type="text" id="byo" placeholder="なし／高血圧 など">
+    <label class="q">服用中のお薬</label>
+    <input type="text" id="kusuri" placeholder="なし／お薬の名前">
+    <label class="q">お薬手帳</label>
+    <span class="opt"><input type="radio" name="techo" value="あり">あり</span>
+    <span class="opt"><input type="radio" name="techo" value="なし">なし</span>
+    <label class="q">アレルギー（薬・食物）</label>
+    <span class="opt"><input type="radio" name="alle" value="なし" onclick="document.getElementById('allet').value=''">なし</span>
+    <span class="opt"><input type="radio" name="alle" value="あり">あり</span>
+    <input type="text" id="allet" placeholder="ありの場合：内容">
+    <label class="q">妊娠・授乳</label>
+    <span class="opt"><input type="radio" name="ninshin" value="なし">なし</span>
+    <span class="opt"><input type="radio" name="ninshin" value="妊娠中">妊娠中</span>
+    <span class="opt"><input type="radio" name="ninshin" value="授乳中">授乳中</span>
+    <span class="opt"><input type="radio" name="ninshin" value="可能性あり">可能性あり</span>
+
+    <div class="sec">C. 生活・その他（任意）</div>
+    <label class="q">喫煙 ／ 飲酒</label>
+    <span class="opt"><input type="radio" name="smoke" value="喫煙なし">喫煙なし</span>
+    <span class="opt"><input type="radio" name="smoke" value="喫煙あり">喫煙あり</span>
+    &nbsp;
+    <span class="opt"><input type="radio" name="drink" value="飲酒なし">飲酒なし</span>
+    <span class="opt"><input type="radio" name="drink" value="飲酒あり">飲酒あり</span>
+    <label class="q">CPAP・睡眠時無呼吸で通院中</label>
+    <span class="opt"><input type="radio" name="cpap" value="はい">はい</span>
+    <span class="opt"><input type="radio" name="cpap" value="いいえ">いいえ</span>
+
+    <div class="sec">D. ご本人について</div>
+    <label class="q">お名前（フリガナ） <span class="req">必須</span></label>
+    <input type="text" id="name" placeholder="京橋 太郎（キョウバシ タロウ）">
+    <label class="q">生年月日 <span class="req">必須</span></label>
+    <input type="date" id="bd">
+    <label class="q">電話番号 <span class="req">必須</span></label>
+    <input type="text" id="tel" placeholder="090-0000-0000">
+    <label class="q">受診される方</label>
+    <span class="opt"><input type="radio" name="who" value="本人">本人</span>
+    <span class="opt"><input type="radio" name="who" value="家族">家族</span>
+
+    <button class="submit" onclick="submitForm()">送信する</button>
+    <p class="muted">※ご記入内容は診察の参考にします。診断ではありません。送信先・保管の取り扱いは院内ルールに従います（要確認）。</p>
+  </div>
+
+  <div id="done">
+    <div class="ok">送信ありがとうございました。受付でお呼びします。来院前のご記入で待ち時間が短くなります。</div>
+    <div style="font-size:12px;font-weight:600;color:#AA2E26;margin-bottom:6px;">― 受付・診察用プレビュー（スタッフ画面イメージ）―</div>
+    <div class="ticket" id="ticket"></div>
+    <p class="muted">この内容がそのまま受付・電子カルテに渡る想定 → 紙に書いて写す二度手間が消えます。</p>
+  </div>
+</div>
+<script>
+var symptoms=["発熱","せき・たん","のどの痛み","鼻水・鼻づまり","息切れ・呼吸が苦しい","胸の症状","腹痛・下痢","頭痛","だるさ","健診・予防接種","CPAP定期","その他"];
+var box=document.getElementById("symp");
+symptoms.forEach(function(s){var l=document.createElement("label");l.className="opt";l.innerHTML='<input type="checkbox" name="symp" value="'+s+'">'+s;box.appendChild(l);});
+function val(n){var e=document.querySelector('input[name="'+n+'"]:checked');return e?e.value:"—";}
+function checks(n){return Array.prototype.slice.call(document.querySelectorAll('input[name="'+n+'"]:checked')).map(function(e){return e.value;}).join("、")||"—";}
+function txt(id){return (document.getElementById(id).value||"").trim()||"—";}
+function submitForm(){
+  if(!val("kubun")||val("kubun")==="—"||txt("name")==="—"||txt("tel")==="—"){alert("必須項目（受診区分・お名前・電話番号）をご記入ください。");return;}
+  var t=
+    "<b>受診区分：</b>"+val("kubun")+"　<b>受診者：</b>"+val("who")+"<br>"+
+    "<b>氏名：</b>"+txt("name")+"　<b>生年月日：</b>"+txt("bd")+"　<b>電話：</b>"+txt("tel")+"<br>"+
+    "<b>主訴：</b>"+checks("symp")+"<br>"+
+    "<b>経過：</b>"+txt("free")+"　<b>発症：</b>"+val("since")+"　<b>体温：</b>"+(txt("temp")==="—"?"—":txt("temp")+"℃")+"<br>"+
+    "<b>既往：</b>"+txt("byo")+"　<b>服薬：</b>"+txt("kusuri")+"（手帳:"+val("techo")+"）<br>"+
+    "<b>アレルギー：</b>"+val("alle")+(txt("allet")!=="—"?"（"+txt("allet")+"）":"")+"　<b>妊娠授乳：</b>"+val("ninshin")+"<br>"+
+    "<b>生活：</b>"+val("smoke")+"／"+val("drink")+"　<b>CPAP通院：</b>"+val("cpap");
+  document.getElementById("ticket").innerHTML=t;
+  document.getElementById("form").style.display="none";
+  document.getElementById("done").style.display="block";
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>

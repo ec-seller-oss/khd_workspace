@@ -1,0 +1,248 @@
+{% extends "base.html" %}
+{% block title %}通知履歴 - Land Scanner{% endblock %}
+
+{% block head %}
+<style>
+  .yield-high { color: #16a34a; font-weight: 700; }
+  .yield-mid  { color: #ca8a04; font-weight: 700; }
+  .yield-low  { color: #dc2626; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-bold text-gray-900">通知履歴</h1>
+    <p class="text-xs text-gray-400" id="last-updated"></p>
+  </div>
+
+  <!-- パターンタブ -->
+  <div class="flex flex-wrap gap-2 mb-5" id="pattern-tabs">
+    <button
+      class="history-tab border-2 border-blue-600 text-blue-600 bg-blue-50 rounded-lg px-4 py-2 text-sm font-medium"
+      data-pattern-id="" onclick="filterByPattern('')"
+    >すべて</button>
+    {% for p in patterns %}
+    <button
+      class="history-tab border-2 border-gray-200 text-gray-600 rounded-lg px-4 py-2 text-sm font-medium hover:border-blue-300 transition-colors"
+      data-pattern-id="{{ p.id }}" onclick="filterByPattern('{{ p.id }}')"
+    >{{ p.name }}</button>
+    {% endfor %}
+  </div>
+
+  <!-- キーワード検索 + 件数 -->
+  <div class="flex items-center gap-4 mb-4">
+    <div class="flex-1 max-w-sm">
+      <input type="text" id="keyword-input"
+        placeholder="キーワード検索（タイトル・住所・駅名）"
+        class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+        oninput="debounceSearch()" />
+    </div>
+    <p class="text-sm text-gray-600">
+      <span id="results-count">0</span>件
+    </p>
+  </div>
+
+  <!-- ローディング -->
+  <div id="loading" class="hidden text-center py-16">
+    <div class="inline-block w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+    <p class="text-gray-500 mt-3 text-sm">読み込み中...</p>
+  </div>
+
+  <!-- テーブル -->
+  <div id="table-wrap" class="bg-white rounded-2xl shadow-sm border overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm data-table">
+        <thead class="bg-gray-100 text-gray-600 text-xs">
+          <tr>
+            <th class="px-4 py-3 text-left font-semibold cursor-pointer" onclick="sortHistory('sent_at')">
+              通知日時 <span class="sort-icon" data-col="sent_at">↓</span>
+            </th>
+            <th class="px-4 py-3 text-left font-semibold">ソース</th>
+            <th class="px-4 py-3 text-left font-semibold">タイトル / 住所</th>
+            <th class="px-4 py-3 text-right font-semibold cursor-pointer" onclick="sortHistory('price')">
+              価格 <span class="sort-icon" data-col="price">↕</span>
+            </th>
+            <th class="px-4 py-3 text-right font-semibold cursor-pointer" onclick="sortHistory('area')">
+              面積 <span class="sort-icon" data-col="area">↕</span>
+            </th>
+            <th class="px-4 py-3 text-left font-semibold">最寄駅</th>
+            <th class="px-4 py-3 text-right font-semibold cursor-pointer" onclick="sortHistory('yield_pct')">
+              利回り <span class="sort-icon" data-col="yield_pct">↕</span>
+            </th>
+            <th class="px-4 py-3 text-left font-semibold">パターン</th>
+            <th class="px-4 py-3 text-center font-semibold">操作</th>
+          </tr>
+        </thead>
+        <tbody id="history-body">
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ページネーション -->
+    <div class="flex items-center justify-between px-4 py-3 border-t bg-gray-50">
+      <button id="prev-page" onclick="changePage(-1)"
+        class="text-sm text-blue-600 hover:text-blue-800 disabled:text-gray-300 disabled:cursor-not-allowed" disabled>
+        ← 前へ
+      </button>
+      <span id="page-info" class="text-xs text-gray-500">1 / 1 ページ</span>
+      <button id="next-page" onclick="changePage(1)"
+        class="text-sm text-blue-600 hover:text-blue-800 disabled:text-gray-300 disabled:cursor-not-allowed" disabled>
+        次へ →
+      </button>
+    </div>
+  </div>
+
+  <!-- 0件メッセージ -->
+  <div id="no-results" class="hidden bg-white rounded-2xl border shadow-sm p-10 text-center text-gray-400">
+    <p>通知履歴がありません</p>
+    <p class="text-xs mt-2">検索パターンを設定すると、条件に合う物件の履歴が表示されます</p>
+    <a href="/settings" class="inline-block mt-3 text-blue-600 text-sm hover:underline">設定ページへ</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let currentPatternId = '';
+let currentPage = 1;
+let sortCol = 'sent_at';
+let sortDir = 'desc';
+let allResults = [];
+let debounceTimer = null;
+
+function debounceSearch() {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(loadHistory, 400);
+}
+
+function filterByPattern(patternId) {
+  currentPatternId = patternId;
+  currentPage = 1;
+  document.querySelectorAll('.history-tab').forEach(btn => {
+    const isActive = btn.dataset.patternId == patternId;
+    btn.classList.toggle('border-blue-600', isActive);
+    btn.classList.toggle('text-blue-600', isActive);
+    btn.classList.toggle('bg-blue-50', isActive);
+    btn.classList.toggle('border-gray-200', !isActive);
+    btn.classList.toggle('text-gray-600', !isActive);
+  });
+  loadHistory();
+}
+
+function sortHistory(col) {
+  if (sortCol === col) {
+    sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+  } else {
+    sortCol = col;
+    sortDir = col === 'sent_at' ? 'desc' : 'desc';
+  }
+  document.querySelectorAll('.sort-icon').forEach(el => {
+    el.textContent = el.dataset.col === col ? (sortDir === 'asc' ? '↑' : '↓') : '↕';
+  });
+  renderTable();
+}
+
+function changePage(delta) {
+  const totalPages = Math.ceil(allResults.length / 50);
+  currentPage = Math.max(1, Math.min(totalPages, currentPage + delta));
+  renderTable();
+}
+
+async function loadHistory() {
+  const keyword = document.getElementById('keyword-input').value;
+  const params = new URLSearchParams({ page: 1, per_page: 500 });
+  if (currentPatternId) params.set('pattern_id', currentPatternId);
+  if (keyword) params.set('keyword', keyword);
+
+  document.getElementById('loading').classList.remove('hidden');
+  document.getElementById('table-wrap').classList.add('hidden');
+  document.getElementById('no-results').classList.add('hidden');
+
+  try {
+    const resp = await fetch('/api/history?' + params.toString());
+    const data = await resp.json();
+    allResults = data.results || [];
+    document.getElementById('results-count').textContent = allResults.length;
+    document.getElementById('last-updated').textContent = '最終更新: ' + new Date().toLocaleTimeString('ja-JP');
+    renderTable();
+  } catch(e) {
+    console.error(e);
+  } finally {
+    document.getElementById('loading').classList.add('hidden');
+  }
+}
+
+function renderTable() {
+  const PER_PAGE = 50;
+  const sorted = [...allResults].sort((a, b) => {
+    let va = a[sortCol] ?? '';
+    let vb = b[sortCol] ?? '';
+    if (typeof va === 'string') va = va.toLowerCase();
+    if (typeof vb === 'string') vb = vb.toLowerCase();
+    if (va < vb) return sortDir === 'asc' ? -1 : 1;
+    if (va > vb) return sortDir === 'asc' ? 1 : -1;
+    return 0;
+  });
+
+  const totalPages = Math.max(1, Math.ceil(sorted.length / PER_PAGE));
+  currentPage = Math.min(currentPage, totalPages);
+  const page = sorted.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE);
+
+  const tbody = document.getElementById('history-body');
+  if (sorted.length === 0) {
+    document.getElementById('table-wrap').classList.add('hidden');
+    document.getElementById('no-results').classList.remove('hidden');
+    return;
+  }
+
+  document.getElementById('table-wrap').classList.remove('hidden');
+  document.getElementById('no-results').classList.add('hidden');
+
+  tbody.innerHTML = page.map(item => {
+    const yc = item.yield_pct >= 8 ? 'yield-high' : item.yield_pct >= 7 ? 'yield-mid' : 'yield-low';
+    const sourceColors = {suumo:'blue',athome:'green',homes:'orange',reins:'purple'};
+    const sc = sourceColors[item.source] || 'gray';
+    return `
+    <tr class="hover:bg-blue-50 transition-colors">
+      <td class="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">${item.sent_at || '--'}</td>
+      <td class="px-4 py-3">
+        <span class="inline-block bg-${sc}-100 text-${sc}-700 text-[10px] font-semibold px-2 py-0.5 rounded-full uppercase">${item.source}</span>
+      </td>
+      <td class="px-4 py-3">
+        <div class="font-medium text-gray-800 text-xs line-clamp-1">
+          ${item.url ? `<a href="${item.url}" target="_blank" class="hover:text-blue-600">${item.title || '（タイトルなし）'}</a>` : (item.title || '（タイトルなし）')}
+        </div>
+        <div class="text-gray-400 text-xs">${item.address || ''}</div>
+      </td>
+      <td class="px-4 py-3 text-right font-semibold text-gray-800 whitespace-nowrap">
+        ${item.price ? item.price.toLocaleString() + '万円' : '--'}
+      </td>
+      <td class="px-4 py-3 text-right text-gray-600 whitespace-nowrap">
+        ${item.area ? item.area.toFixed(1) + '㎡' : '--'}
+      </td>
+      <td class="px-4 py-3 text-xs text-gray-600 whitespace-nowrap">
+        ${item.nearest_station || '--'}
+        ${item.walk_minutes ? `<span class="text-gray-400">徒歩${item.walk_minutes}分</span>` : ''}
+      </td>
+      <td class="px-4 py-3 text-right whitespace-nowrap">
+        <span class="${yc}">${item.yield_pct ? item.yield_pct.toFixed(2) + '%' : '--'}</span>
+      </td>
+      <td class="px-4 py-3 text-xs text-gray-500">${item.pattern_name || '--'}</td>
+      <td class="px-4 py-3 text-center">
+        <a href="/volume-check?propertyId=${item.property_id}"
+          class="inline-block bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-semibold px-2.5 py-1 rounded transition-colors whitespace-nowrap">
+          ボリュームチェック
+        </a>
+      </td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('page-info').textContent = `${currentPage} / ${totalPages} ページ`;
+  document.getElementById('prev-page').disabled = currentPage <= 1;
+  document.getElementById('next-page').disabled = currentPage >= totalPages;
+}
+
+loadHistory();
+</script>
+{% endblock %}

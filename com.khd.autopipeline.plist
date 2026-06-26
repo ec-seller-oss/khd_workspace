@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.khd.autopipeline</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Library/Developer/CommandLineTools/usr/bin/python3</string>
+    <string>/Users/kikuchikenta/01_honbu_docs_automation/scripts/auto_pipeline.py</string>
+    <string>--all</string>
+  </array>
+  <key>WorkingDirectory</key><string>/Users/kikuchikenta/01_honbu_docs_automation</string>
+  <key>StartCalendarInterval</key>
+  <dict><key>Hour</key><integer>7</integer><key>Minute</key><integer>0</integer></dict>
+  <key>StandardErrorPath</key><string>/Users/kikuchikenta/01_honbu_docs_automation/logs/launchd.err</string>
+  <key>StandardOutPath</key><string>/Users/kikuchikenta/01_honbu_docs_automation/logs/launchd.out</string>
+</dict>
+</plist>

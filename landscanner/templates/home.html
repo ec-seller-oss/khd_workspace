@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+{% block title %}ホーム - Land Scanner{% endblock %}
+
+{% block head %}
+<style>
+  #home-map { height: 480px; border-radius: 12px; }
+  .service-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- ヒーローセクション -->
+<section class="bg-gradient-to-br from-[#1a2332] to-[#243447] text-white py-14">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl">
+      <h1 class="text-3xl sm:text-4xl font-extrabold mb-4 leading-tight">
+        首都圏の投資用土地を<br class="sm:hidden"/>まとめて比較
+      </h1>
+      <p class="text-gray-300 text-lg mb-6">
+        SUUMO・at home・HOMES など主要8サイトから土地物件を自動収集し、<br class="hidden sm:block"/>
+        アパート想定利回りをリアルタイム計算してお知らせします。
+      </p>
+      <div class="flex flex-wrap gap-3">
+        <a href="/search" class="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-2.5 rounded-lg transition-colors">
+          物件を検索する
+        </a>
+        <a href="/settings" class="border border-gray-400 hover:border-white text-gray-300 hover:text-white font-semibold px-6 py-2.5 rounded-lg transition-colors">
+          検索条件を設定
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 統計バー -->
+<section class="bg-white border-b">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex flex-wrap justify-center gap-8 text-center text-sm">
+      <div>
+        <span class="text-2xl font-bold text-blue-600">8</span>
+        <span class="text-gray-500 ml-1">対応サイト</span>
+      </div>
+      <div>
+        <span class="text-2xl font-bold text-blue-600">50+</span>
+        <span class="text-gray-500 ml-1">対応駅</span>
+      </div>
+      <div>
+        <span class="text-2xl font-bold text-blue-600">80</span>
+        <span class="text-gray-500 ml-1">対応路線</span>
+      </div>
+      <div>
+        <span class="text-2xl font-bold text-blue-600">毎日</span>
+        <span class="text-gray-500 ml-1">自動更新</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- メインコンテンツ -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+    <!-- 地図 -->
+    <div class="lg:col-span-2">
+      <div class="bg-white rounded-2xl shadow-sm border p-5">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-bold text-gray-800">対応駅マップ</h2>
+          <span class="text-xs text-gray-500">クリックで駅情報を表示</span>
+        </div>
+        <div id="home-map"></div>
+
+        <!-- 凡例 -->
+        <div class="mt-4 flex flex-wrap gap-2 text-xs">
+          <span class="text-gray-500 mr-1">対応サービス数:</span>
+          <span class="service-badge bg-red-100 text-red-700">● 1</span>
+          <span class="service-badge bg-orange-100 text-orange-700">● 2</span>
+          <span class="service-badge bg-yellow-100 text-yellow-700">● 3</span>
+          <span class="service-badge bg-lime-100 text-lime-700">● 4</span>
+          <span class="service-badge bg-green-100 text-green-700">● 5</span>
+          <span class="service-badge bg-teal-100 text-teal-700">● 6</span>
+          <span class="service-badge bg-blue-100 text-blue-700">● 7+</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- サイドバー -->
+    <div class="space-y-5">
+      <!-- 対応サイト -->
+      <div class="bg-white rounded-2xl shadow-sm border p-5">
+        <h3 class="font-bold text-gray-800 mb-3">対応サイト（8件）</h3>
+        <div class="space-y-2 text-sm">
+          {% set sites = [
+            ("SUUMO", "blue"),
+            ("at home", "green"),
+            ("HOMES", "orange"),
+            ("Yahoo!不動産", "red"),
+            ("東急リバブル", "purple"),
+            ("三井のリハウス", "teal"),
+            ("野村の仲介+", "indigo"),
+            ("REINS（限定）", "pink"),
+          ] %}
+          {% for name, color in sites %}
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-{{ color }}-500 flex-shrink-0"></span>
+            <span class="text-gray-700">{{ name }}</span>
+            {% if "限定" in name %}
+            <span class="text-[10px] text-purple-600 bg-purple-50 px-1.5 rounded font-semibold">限定品</span>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- 利回り計算方法 -->
+      <div class="bg-white rounded-2xl shadow-sm border p-5">
+        <h3 class="font-bold text-gray-800 mb-3">利回り計算方法</h3>
+        <div class="space-y-2 text-xs text-gray-600">
+          <div class="bg-gray-50 rounded-lg p-3 font-mono text-[11px] leading-relaxed">
+            <div class="text-blue-600 font-bold mb-1">// 部屋数</div>
+            延床 = 土地面積 × 容積率%<br/>
+            部屋数 = 延床 × 居住割合% / 部屋面積<br/><br/>
+            <div class="text-blue-600 font-bold mb-1">// 利回り</div>
+            年間賃料 = 月額 × 部屋数 × 12<br/>
+            建設費 = 延床÷3.3 × 建築坪単価<br/>
+            諸費用 = 土地×7% + 建設×4%<br/>
+            総投資 = 土地+建設+解体+諸費用<br/>
+            利回り = 年間賃料 ÷ 総投資 × 100
+          </div>
+        </div>
+      </div>
+
+      <!-- クイックリンク -->
+      <div class="bg-blue-50 rounded-2xl border border-blue-100 p-5">
+        <h3 class="font-bold text-blue-800 mb-3">はじめに設定</h3>
+        <p class="text-sm text-blue-700 mb-3">検索条件を設定すると、条件に合う物件が出たときにメール通知が届きます。</p>
+        <a href="/settings" class="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2.5 rounded-lg transition-colors">
+          検索パターンを設定する →
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const STATIONS = {{ stations | safe }};
+
+// 対応サービス数に応じた色
+function serviceColor(count) {
+  if (count >= 7) return '#2563eb';
+  if (count >= 6) return '#0d9488';
+  if (count >= 5) return '#16a34a';
+  if (count >= 4) return '#65a30d';
+  if (count >= 3) return '#ca8a04';
+  if (count >= 2) return '#ea580c';
+  return '#dc2626';
+}
+
+// ホームマップ初期化
+const map = L.map('home-map').setView([35.75, 139.85], 9);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+  maxZoom: 18,
+}).addTo(map);
+
+// 駅マーカーを追加
+STATIONS.forEach(station => {
+  const color = serviceColor(station.service_count);
+  const marker = L.circleMarker([station.lat, station.lng], {
+    radius: 8,
+    fillColor: color,
+    color: '#fff',
+    weight: 2,
+    opacity: 1,
+    fillOpacity: 0.85,
+  }).addTo(map);
+
+  marker.bindPopup(`
+    <div style="min-width:160px">
+      <div style="font-weight:700;font-size:14px;margin-bottom:4px">${station.name}駅</div>
+      <div style="font-size:12px;color:#555;margin-bottom:2px">${station.line}</div>
+      <div style="font-size:12px;color:#555;margin-bottom:2px">${station.prefecture}</div>
+      <div style="font-size:12px">月額家賃相場: <strong>${station.monthly_rent}万円</strong></div>
+      <div style="font-size:11px;color:#888">対応サービス: ${station.service_count}件</div>
+    </div>
+  `);
+});
+</script>
+{% endblock %}

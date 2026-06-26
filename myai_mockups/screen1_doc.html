@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"><style>
+:root{
+  --navy:#0E2A47; --teal:#12A59B; --teald:#0C7A73; --green:#1EB86B;
+  --ink:#1A2B3A; --gray:#6B7C8C; --line:#E3EBF1; --bg:#F4F7FA;
+  --tealbg:#E8F6F4; --greenbg:#E6F6EC;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Hiragino Sans","Hiragino Kaku Gothic Pro",sans-serif;}
+body{width:1600px;height:1000px;background:var(--bg);color:var(--ink);overflow:hidden;}
+.app{display:flex;height:1000px;}
+/* sidebar */
+.side{width:250px;background:var(--navy);color:#fff;padding:26px 0;flex-shrink:0;}
+.logo{display:flex;align-items:center;gap:11px;padding:0 26px 28px;}
+.logo .mark{width:42px;height:42px;border-radius:11px;background:linear-gradient(135deg,#16C7B9,#0C7A73);
+  display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 4px 14px rgba(18,165,155,.45);}
+.logo .name{font-size:23px;font-weight:800;letter-spacing:.5px;}
+.logo .name small{display:block;font-size:11px;font-weight:500;color:#7FB6C9;letter-spacing:2px;margin-top:2px;}
+.nav{margin-top:8px;}
+.nav a{display:flex;align-items:center;gap:13px;padding:14px 26px;color:#A9C0D2;font-size:15.5px;text-decoration:none;font-weight:600;}
+.nav a .ic{width:22px;text-align:center;font-size:18px;}
+.nav a.on{background:linear-gradient(90deg,rgba(18,165,155,.28),transparent);color:#fff;border-left:4px solid var(--teal);padding-left:22px;}
+.side .clinic{margin:26px 26px 0;padding:15px;background:rgba(255,255,255,.07);border-radius:13px;font-size:13px;color:#BBD0DE;}
+.side .clinic b{color:#fff;font-size:14.5px;display:block;margin-bottom:3px;}
+/* main */
+.main{flex:1;display:flex;flex-direction:column;}
+.top{height:74px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;
+  justify-content:space-between;padding:0 34px;}
+.crumb{font-size:14px;color:var(--gray);}
+.crumb b{color:var(--ink);font-size:20px;font-weight:800;}
+.who{display:flex;align-items:center;gap:11px;font-size:14px;font-weight:600;}
+.who .av{width:38px;height:38px;border-radius:50%;background:#D7E5EE;display:flex;align-items:center;justify-content:center;font-size:17px;}
+.body{flex:1;padding:26px 34px;display:flex;gap:24px;}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 6px 22px rgba(14,42,71,.06);display:flex;flex-direction:column;}
+.left{width:42%;}
+.right{flex:1;}
+.phead{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;}
+.phead .t{font-size:16px;font-weight:800;}
+.phead .tag{font-size:11.5px;background:var(--tealbg);color:var(--teald);padding:4px 11px;border-radius:20px;font-weight:700;}
+.pbody{padding:20px 22px;flex:1;}
+.field{margin-bottom:15px;}
+.field .lb{font-size:12px;color:var(--gray);font-weight:700;margin-bottom:6px;letter-spacing:.5px;}
+.field .vl{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:11px 13px;font-size:14.5px;font-weight:600;}
+.patient{display:flex;gap:13px;align-items:center;background:linear-gradient(135deg,#F0F8F7,#EAF4FB);
+  border:1px solid #D5E8E5;border-radius:13px;padding:15px 17px;margin-bottom:18px;}
+.patient .pi{width:48px;height:48px;border-radius:12px;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;}
+.patient .pn{font-size:18px;font-weight:800;}
+.patient .pm{font-size:13px;color:var(--gray);margin-top:2px;}
+.extract{font-size:11.5px;color:var(--teald);font-weight:700;display:flex;align-items:center;gap:6px;margin-bottom:14px;}
+.extract .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(30,184,107,.18);}
+/* right doc */
+.rhead{background:linear-gradient(135deg,#0E2A47,#12506B);color:#fff;border-radius:16px 16px 0 0;}
+.rhead .t{color:#fff;}
+.rhead .tag{background:rgba(30,184,107,.92);color:#fff;}
+.doc{background:#fff;margin:0;padding:26px 30px;font-size:14.2px;line-height:2.0;color:#26323D;flex:1;overflow:hidden;}
+.doc h3{text-align:center;font-size:19px;letter-spacing:6px;margin-bottom:18px;font-weight:800;}
+.doc .meta{display:flex;justify-content:space-between;font-size:13px;color:var(--gray);margin-bottom:16px;}
+.doc p{margin-bottom:13px;}
+.hl{background:#FFF6D6;padding:1px 4px;border-radius:3px;font-weight:700;}
+.foot{padding:18px 22px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;}
+.stat{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:700;color:var(--green);}
+.stat .big{font-size:21px;}
+.btns{display:flex;gap:10px;}
+.btn{padding:11px 20px;border-radius:10px;font-size:14px;font-weight:700;border:none;cursor:pointer;}
+.btn.ghost{background:#fff;border:1.5px solid var(--line);color:var(--gray);}
+.btn.main{background:linear-gradient(135deg,#16C7B9,#0C7A73);color:#fff;box-shadow:0 5px 16px rgba(18,165,155,.4);}
+.genbar{margin:0 22px 18px;background:var(--greenbg);border:1px solid #BFE8CF;border-radius:11px;
+  padding:13px 16px;display:flex;align-items:center;gap:11px;font-size:13.5px;font-weight:700;color:#148A50;}
+.genbar .ck{width:24px;height:24px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;}
+</style></head><body>
+<div class="app">
+  <aside class="side">
+    <div class="logo"><div class="mark">✦</div><div class="name">My AI<small>CLINIC ASSISTANT</small></div></div>
+    <nav class="nav">
+      <a><span class="ic">▦</span>ダッシュボード</a>
+      <a class="on"><span class="ic">📄</span>書類アシスト</a>
+      <a><span class="ic">🗂</span>カルテ連携</a>
+      <a><span class="ic">✓</span>レセプト点検</a>
+      <a><span class="ic">📞</span>電話・IVR</a>
+      <a><span class="ic">⚙</span>設定</a>
+    </nav>
+    <div class="clinic"><b>さくら内科クリニック</b>自院専用モデル v3.2<br>学習データ：過去カルテ 12,400件</div>
+  </aside>
+  <div class="main">
+    <div class="top">
+      <div class="crumb">書類アシスト ＞ <b>診療情報提供書（紹介状）</b></div>
+      <div class="who"><div class="av">医</div>田中 院長</div>
+    </div>
+    <div class="body">
+      <section class="panel left">
+        <div class="phead"><span class="t">カルテから自動抽出</span><span class="tag">電子カルテ連携</span></div>
+        <div class="pbody">
+          <div class="extract"><span class="dot"></span>マイAIがカルテを読み取り、必要項目を自動で抽出しました</div>
+          <div class="patient">
+            <div class="pi">患</div>
+            <div><div class="pn">山田 太郎 様</div><div class="pm">64歳・男性　ID:0028841　初診 2024/03</div></div>
+          </div>
+          <div class="field"><div class="lb">主訴・現病歴</div><div class="vl">3週間前からの労作時息切れ。血圧高値が持続。</div></div>
+          <div class="field"><div class="lb">既往・基礎疾患</div><div class="vl">高血圧症、2型糖尿病（HbA1c 7.2%）</div></div>
+          <div class="field"><div class="lb">現在の処方</div><div class="vl">アムロジピン5mg、メトホルミン500mg×2</div></div>
+          <div class="field"><div class="lb">紹介先（候補をAI提案）</div><div class="vl">○○総合病院 循環器内科</div></div>
+        </div>
+      </section>
+      <section class="panel right">
+        <div class="phead rhead"><span class="t">マイAI 生成ドラフト</span><span class="tag">✓ 生成完了・7.8秒</span></div>
+        <div class="genbar"><span class="ck">✓</span>自院の記載ルールを学習済み。文体・敬称・定型句を自動で整えました</div>
+        <div class="doc">
+          <h3>診 療 情 報 提 供 書</h3>
+          <div class="meta"><span>○○総合病院 循環器内科 御侍史</span><span>2026年5月26日</span></div>
+          <p>平素より大変お世話になっております。下記の患者様をご紹介申し上げますので、ご高診のほどよろしくお願い申し上げます。</p>
+          <p>患者様は<span class="hl">3週間前より労作時の息切れ</span>を自覚され、当院受診となりました。<span class="hl">高血圧症・2型糖尿病</span>にて加療中ですが、循環器疾患の精査が必要と判断いたしました。</p>
+          <p>現在アムロジピン5mg、メトホルミン500mgを処方しております。心電図にて軽度のST変化を認めており、専門的なご評価を賜れますと幸いです。</p>
+          <p style="text-align:right;color:#6B7C8C;">さくら内科クリニック　田中　拝</p>
+        </div>
+        <div class="foot">
+          <div class="stat"><span>従来 約8分 →</span><span class="big">7.8秒</span></div>
+          <div class="btns"><button class="btn ghost">↻ 再生成</button><button class="btn ghost">編集</button><button class="btn main">確定して出力 →</button></div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+</body></html>

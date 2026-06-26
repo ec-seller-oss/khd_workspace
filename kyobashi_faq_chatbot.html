@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>京橋クリニック FAQ自動応答チャットボット デモ</title>
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{margin:0;background:#E7E3DA;font-family:"Hiragino Sans",-apple-system,sans-serif;display:flex;justify-content:center;padding:14px;}
+  .phone{width:100%;max-width:390px;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.12);}
+  .hd{background:#06C755;padding:12px 14px;display:flex;align-items:center;gap:10px;}
+  .av{width:34px;height:34px;border-radius:50%;background:#fff;color:#067A35;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:15px;}
+  .nm{color:#fff;font-size:15px;font-weight:600;}.sub{color:rgba(255,255,255,.85);font-size:11px;}
+  #chat{height:46vh;min-height:300px;overflow-y:auto;background:#97B3CE;padding:12px 10px;}
+  .row{display:flex;margin:6px 2px;}.right{justify-content:flex-end;}
+  .b{max-width:78%;font-size:13px;line-height:1.5;padding:8px 11px;border-radius:14px;white-space:pre-wrap;}
+  .left .b{background:#fff;color:#1A1A1A;border:.5px solid #E1DACB;border-bottom-left-radius:4px;}
+  .right .b{background:#8DE055;color:#13360A;border-bottom-right-radius:4px;}
+  .esc .b{background:#F4E4E2;color:#8C241D;border:.5px solid #AA2E26;}
+  .chips{background:#F4F1EA;border-top:.5px solid #DAD6CF;padding:7px 8px;display:flex;flex-wrap:wrap;gap:6px;}
+  .chips button{font-size:11px;padding:5px 9px;border:.5px solid #DAD6CF;color:#1A1A1A;background:#fff;border-radius:999px;}
+  .inb{display:flex;gap:8px;padding:8px 10px;border-top:.5px solid #DAD6CF;background:#fff;}
+  .inb input{flex:1;font-size:13px;padding:8px 11px;border:.5px solid #DAD6CF;border-radius:999px;font-family:inherit;}
+  .inb button{font-size:13px;padding:8px 14px;border:none;background:#06C755;color:#fff;border-radius:999px;font-weight:600;}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="hd"><div class="av">京</div><div style="flex:1;"><div class="nm">京橋クリニック</div><div class="sub">自動応答・24時間受付</div></div></div>
+  <div id="chat"></div>
+  <div class="chips" id="chips"></div>
+  <div class="inb"><input id="inp" placeholder="質問を入力（例：何時まで？）" onkeydown="if(event.key==='Enter')send()"><button onclick="send()">送信</button></div>
+</div>
+<script>
+var TEL = "03-____-____";
+var rules = [
+  {k:["時間","何時","診療","やってる","営業","受付時間"], a:"診療時間は平日 9:00-12:30 / 15:00-18:30 です（※要確認）。休診日はメニュー「診療時間・休診」をご覧ください。"},
+  {k:["順番","待ち","アイコール","web受付","ｗｅｂ"], a:"WEB受付の方は受付時間内にご来院ください。順番が近づくとLINEで「あと3人です」と自動でお知らせします。"},
+  {k:["予約","変更","キャンセル","とりたい"], a:"ご予約はメニュー「ご予約・再診」から。変更・キャンセルは「予約変更」とお送りください。CPAPなど定期の方は登録で毎月リマインドします。"},
+  {k:["保険証","マイナ","本人確認","身分"], a:"マイナ保険証または保険証をお持ちください（※運用は要確認）。ご不明点は受付でご案内します。"},
+  {k:["持ち物","持って","必要なもの","用意"], a:"保険証・医療証・お薬手帳、紹介状（お持ちの方）をご用意ください。"},
+  {k:["駐車","アクセス","場所","地図","行き方","最寄","駅"], a:"アクセス・地図はメニュー「アクセス・電話」から。最寄り駅からの行き方もご案内します。"},
+  {k:["cpap","シーパップ","睡眠","無呼吸"], a:"CPAPの方は毎月の定期診察をお願いします。ご予約は「ご予約・再診」から。データ確認と処方継続のためご来院ください。"},
+  {k:["問診","事前"], a:"来院前にスマホでWeb問診を記入できます。当日の待ち時間が短くなります（メニュー「Web問診」）。"},
+  {k:["休診","休み","祝日","年末","お盆"], a:"休診日はメニュー「診療時間・休診」のカレンダーでご確認ください。"}
+];
+var escKeys = ["症状","痛","熱","つらい","具合","診断","治る","副作用","クレーム","苦情","証明書","診断書","化学物質","過敏症","効く","飲んで","副反応"];
+var chat=document.getElementById("chat"), chips=document.getElementById("chips");
+function bubble(text,cls){var r=document.createElement("div");r.className="row "+cls;var b=document.createElement("div");b.className="b";b.textContent=text;r.appendChild(b);chat.appendChild(r);chat.scrollTop=chat.scrollHeight;}
+function answer(q){
+  var low=q.toLowerCase();
+  for(var i=0;i<escKeys.length;i++){if(low.indexOf(escKeys[i].toLowerCase())>=0){return setTimeout(function(){bubble("お問い合わせありがとうございます。こちらの内容は、お電話または受付でご案内します。\n☎ "+TEL+"（受付：平日9:00-18:30 ※要確認）\nお急ぎの場合はお電話ください。","left esc");},300);}}
+  for(var j=0;j<rules.length;j++){for(var k=0;k<rules[j].k.length;k++){if(low.indexOf(rules[j].k[k].toLowerCase())>=0){var a=rules[j].a;return setTimeout(function(){bubble(a,"left");},300);}}}
+  setTimeout(function(){bubble("自動でお答えできない内容でした。お電話または受付でご案内します。\n☎ "+TEL+"（受付：平日9:00-18:30 ※要確認）","left esc");},300);
+}
+function send(){var inp=document.getElementById("inp");var q=inp.value.trim();if(!q)return;bubble(q,"right");inp.value="";answer(q);}
+function ask(q){bubble(q,"right");answer(q);}
+["何時まで？","予約したい","持ち物は？","本人確認は？","頭が痛い","駐車場ある？"].forEach(function(q){var c=document.createElement("button");c.textContent=q;c.onclick=function(){ask(q);};chips.appendChild(c);});
+bubble("京橋クリニックの自動応答です。ご予約・受付・持ち物などにお答えします。下のボタン、または質問を入力してください。","left");
+</script>
+</body>
+</html>

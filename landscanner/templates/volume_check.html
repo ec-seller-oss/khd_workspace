@@ -1,0 +1,218 @@
+{% extends "base.html" %}
+{% block title %}ボリュームチェック - Land Scanner{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 py-8">
+  <h1 class="text-2xl font-bold text-gray-900 mb-2">ボリュームチェック</h1>
+  <p class="text-sm text-gray-500 mb-6">土地条件を入力して、アパート想定利回りをリアルタイム計算します</p>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- 入力フォーム -->
+    <div class="bg-white rounded-2xl shadow-sm border p-6">
+      <h2 class="font-bold text-gray-800 mb-5">入力条件</h2>
+
+      <!-- 物件情報（URLパラメータ経由の場合） -->
+      <div id="property-banner" class="hidden bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4 text-sm">
+        <p class="font-medium text-blue-800" id="property-banner-title"></p>
+        <p class="text-blue-600 text-xs mt-1" id="property-banner-sub"></p>
+      </div>
+
+      <div class="space-y-4">
+        <!-- 土地価格・面積 -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              土地価格（万円） <span class="text-red-500">*</span>
+            </label>
+            <input type="number" id="land-price" step="10" min="0" placeholder="例: 3000"
+              class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              土地面積（㎡） <span class="text-red-500">*</span>
+            </label>
+            <input type="number" id="land-area" step="1" min="0" placeholder="例: 165"
+              class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
+          </div>
+        </div>
+
+        <!-- 容積率・建蔽率 -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">容積率（%）</label>
+            <input type="number" id="far" value="200" step="10" min="50" max="700"
+              class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">建蔽率（%）</label>
+            <input type="number" id="bcr" value="60" step="5" min="30" max="80"
+              class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
+          </div>
+        </div>
+
+        <!-- 月額家賃・部屋面積 -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">月額家賃（万円/部屋）</label>
+            <input type="number" id="monthly-rent" value="5" step="0.5" min="1"
+              class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">部屋面積（㎡）</label>
+            <input type="number" id="room-area" value="20" step="0.5" min="10"
+              class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
+          </div>
+        </div>
+
+        <!-- 部屋数（任意） -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            部屋数（空欄で自動計算）
+          </label>
+          <input type="number" id="rooms" step="1" min="1" placeholder="空欄で自動"
+            class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
+        </div>
+
+        <!-- 建築坪単価・居住割合 -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">建築坪単価（万円/坪）</label>
+            <input type="number" id="build-cost" value="80" step="1" min="50"
+              class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">居住面積割合（%）</label>
+            <input type="number" id="living-ratio" value="70" step="1" min="50" max="90"
+              class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
+          </div>
+        </div>
+
+        <!-- 解体費・古家 -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">解体費（万円/㎡）</label>
+            <input type="number" id="demolition-unit" value="3" step="0.5" min="0"
+              class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
+          </div>
+          <div class="flex items-end pb-2">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="has-old-house" class="w-4 h-4 rounded text-blue-600" />
+              <span class="text-sm text-gray-700">古家あり</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- 諸費用（任意） -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            諸費用（万円）<span class="text-gray-400 text-xs ml-1">空欄で自動（土地7%+建物4%）</span>
+          </label>
+          <input type="number" id="misc-cost" step="10" min="0" placeholder="空欄で自動計算"
+            class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
+        </div>
+
+        <!-- 追加オプション（折りたたみ） -->
+        <details class="text-sm">
+          <summary class="cursor-pointer text-gray-600 font-medium">詳細オプション ▼</summary>
+          <div class="mt-3 space-y-3">
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs text-gray-600 mb-1">上限階数</label>
+                <input type="number" id="max-floors" step="1" min="1" max="20" placeholder="制限なし"
+                  class="w-full border rounded px-2 py-1 text-xs focus:ring-1 focus:ring-blue-500 outline-none" />
+              </div>
+              <div>
+                <label class="block text-xs text-gray-600 mb-1">前面道路幅員（m）</label>
+                <input type="number" id="road-width" step="0.5" min="1" placeholder="未入力"
+                  class="w-full border rounded px-2 py-1 text-xs focus:ring-1 focus:ring-blue-500 outline-none" />
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs text-gray-600 mb-1">用途地域</label>
+              <select id="use-zone" class="w-full border rounded px-2 py-1.5 text-xs focus:ring-1 focus:ring-blue-500 outline-none">
+                <option value="">選択してください</option>
+                <option value="第一種低層住居専用地域">第一種低層住居専用地域</option>
+                <option value="第二種低層住居専用地域">第二種低層住居専用地域</option>
+                <option value="第一種中高層住居専用地域">第一種中高層住居専用地域</option>
+                <option value="第二種中高層住居専用地域">第二種中高層住居専用地域</option>
+                <option value="第一種住居地域">第一種住居地域</option>
+                <option value="第二種住居地域">第二種住居地域</option>
+                <option value="準住居地域">準住居地域</option>
+                <option value="近隣商業地域">近隣商業地域</option>
+                <option value="商業地域">商業地域</option>
+                <option value="準工業地域">準工業地域</option>
+              </select>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- 計算結果 -->
+    <div>
+      <div class="bg-white rounded-2xl shadow-sm border p-6 sticky top-20">
+        <h2 class="font-bold text-gray-800 mb-5">計算結果</h2>
+
+        <!-- 利回りメイン表示 -->
+        <div class="text-center mb-6 p-5 bg-gray-50 rounded-xl">
+          <p class="text-sm text-gray-500 mb-1">想定利回り</p>
+          <p id="result-yield" class="text-5xl font-extrabold text-gray-300">--.--%</p>
+          <p id="result-yield-label" class="text-sm mt-2 text-gray-400"></p>
+        </div>
+
+        <!-- 詳細結果テーブル -->
+        <div class="space-y-2 text-sm">
+          <div class="flex justify-between py-2 border-b">
+            <span class="text-gray-600">想定部屋数</span>
+            <span id="result-rooms" class="font-semibold">--</span>
+          </div>
+          <div class="flex justify-between py-2 border-b">
+            <span class="text-gray-600">延床面積</span>
+            <span id="result-floor-area" class="font-semibold">-- ㎡</span>
+          </div>
+          <div class="flex justify-between py-2 border-b">
+            <span class="text-gray-600">年間賃料</span>
+            <span id="result-annual-rent" class="font-semibold text-green-600">-- 万円</span>
+          </div>
+          <div class="flex justify-between py-2 border-b">
+            <span class="text-gray-600">建設費用</span>
+            <span id="result-construction" class="font-semibold">-- 万円</span>
+          </div>
+          <div class="flex justify-between py-2 border-b" id="demolition-row">
+            <span class="text-gray-600">解体費用</span>
+            <span id="result-demolition" class="font-semibold">-- 万円</span>
+          </div>
+          <div class="flex justify-between py-2 border-b">
+            <span class="text-gray-600">諸費用</span>
+            <span id="result-misc" class="font-semibold">-- 万円</span>
+          </div>
+          <div class="flex justify-between py-2 border-b bg-yellow-50 px-2 -mx-2 rounded">
+            <span class="text-gray-700 font-medium">総投資額</span>
+            <span id="result-total" class="font-bold text-blue-700">-- 万円</span>
+          </div>
+          <div class="flex justify-between py-2 border-b">
+            <span class="text-gray-600">坪単価</span>
+            <span id="result-tsubo" class="font-semibold">-- 万円/坪</span>
+          </div>
+          <div class="flex justify-between py-2">
+            <span class="text-gray-600">一種単価（容積率割戻）</span>
+            <span id="result-ichi" class="font-semibold">-- 万円/坪</span>
+          </div>
+        </div>
+
+        <!-- 注意事項 -->
+        <p class="text-xs text-gray-400 mt-4">
+          ※ 概算値です。実際の数値は建築会社・税理士・金融機関にご確認ください。
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const PROPERTY_DATA = {{ property_data | safe }};
+</script>
+<script src="/static/js/volume.js"></script>
+{% endblock %}

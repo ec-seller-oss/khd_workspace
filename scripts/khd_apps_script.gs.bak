@@ -1,0 +1,1321 @@
+/**
+ * KHD WBS 業務報告 Webhook v2
+ * スプレッドシート → 拡張機能 → Apps Script に貼り付けて「デプロイ」
+ *
+ * デプロイ設定:
+ *   種類: ウェブアプリ
+ *   次のユーザーとして実行: 自分
+ *   アクセスできるユーザー: 全員
+ */
+
+const SECRET_TOKEN = "khd_report_2026";
+const NIPPO_ID = "129j7x0Y4icgzYdTs9s_w1GBnFMIdVMtrTXqHeapM_f8"; // KHD日報ログ（別ファイル）
+const CASHFLOW_ID = "1ofLJOFuW5175OHDSy0J0561LzrfAU-M015o7ByGH5wc"; // 資金繰り司令塔（収益パイプライン同居先）
+
+function doPost(e) {
+  try {
+    const body = JSON.parse(e.postData.contents);
+    if (body.token !== SECRET_TOKEN) return json({ ok: false, error: "unauthorized" });
+
+    const action = body.action;
+    let result;
+
+    if      (action === "update_wbs")      result = updateWbs(body.task, body.status, body.progress);
+    else if (action === "update_study")    result = updateStudy(body);
+    else if (action === "update_kpi")      result = updateKpi(body);
+    else if (action === "append_log")      result = appendLog(body);
+    else if (action === "ping")            result = { pong: true };
+    else if (action === "debug_sheet")     result = debugSheet(body.partial);
+    else if (action === "parse_and_update")   result = parseAndUpdate(body.text);
+    else if (action === "get_wbs_summary")    result = getWbsSummary();
+    else if (action === "check_calendar")     result = checkEndingEvents();
+    else if (action === "log_conversation")   result = logConversation(body);
+    else if (action === "get_next_task")      result = getNextTask();
+    else if (action === "write_nippo")        result = writeNippo(body);
+    else if (action === "append_nippo")       result = appendNippo(body);
+    else if (action === "write_pipeline")     result = writePipeline(body);
+    else if (action === "format_rules")        result = formatOperatingRules();
+    else if (action === "finance_fixes")       result = applyFinanceFixes();
+    else if (action === "tidy_tabs")           result = tidyTabs();
+    else if (action === "build_blueprint")     result = buildBlueprint(body);
+    else if (action === "build_v2_layers")     result = buildV2Layers(body);
+    else if (action === "build_kairyou")       result = buildKairyou(body);
+    else if (action === "build_ops")           result = buildOps(body);
+    else if (action === "build_sosa")          result = buildSosa(body);
+    else if (action === "build_db02")          result = buildDB02(body);
+    else if (action === "build_wire0203")      result = buildWire0203(body);
+    else if (action === "fix_wire0203")        result = fixWire0203(body);
+    else result = { error: "unknown action: " + action };
+
+    return json({ ok: true, result });
+  } catch (err) {
+    return json({ ok: false, error: err.toString() });
+  }
+}
+
+// ── WBS タスク更新 ────────────────────────────────────
+function updateWbs(taskPartial, newStatus, newProgress) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName("02_全社WBS");
+  if (!sheet) return { error: "WBSシートが見つかりません" };
+
+  const data = sheet.getDataRange().getValues();
+
+  // ヘッダー行をスキャンして探す
+  let headerRow = -1, colStatus = -1, colProgress = -1;
+  for (let i = 0; i < data.length; i++) {
+    const idx = data[i].indexOf("ステータス");
+    if (idx >= 0) {
+      headerRow = i;
+      colStatus   = idx;
+      colProgress = data[i].indexOf("進捗率");
+      break;
+    }
+  }
+  if (headerRow < 0) return { error: "WBSヘッダーが見つかりません" };
+
+  // 工程列（タスク名）を特定
+  const colTask = data[headerRow].indexOf("工程");
+
+  for (let i = headerRow + 1; i < data.length; i++) {
+    const taskName = String(colTask >= 0 ? data[i][colTask] : data[i][1]).trim();
+    if (taskName && taskName.includes(taskPartial)) {
+      const updated = [];
+      if (notNull(newStatus)   && colStatus   >= 0) { sheet.getRange(i+1, colStatus+1).setValue(newStatus);   updated.push("ステータス→" + newStatus); }
+      if (notNull(newProgress) && colProgress >= 0) { sheet.getRange(i+1, colProgress+1).setValue(newProgress); updated.push("進捗率→" + newProgress); }
+      return { task: taskName, row: i+1, updated };
+    }
+  }
+  return { error: "タスクが見つかりません: " + taskPartial };
+}
+
+// ── 調査士学習ログ更新 ────────────────────────────────
+function updateStudy(body) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = findSheetByPartial(ss, "05");
+  if (!sheet) return { error: "学習ログシートが見つかりません" };
+
+  const today = todayStr();
+  const data  = sheet.getDataRange().getValues();
+
+  // ヘッダー行スキャン
+  let headerRow = -1, header = [];
+  for (let i = 0; i < data.length; i++) {
+    if (data[i].includes("実績時間")) { headerRow = i; header = data[i]; break; }
+  }
+  if (headerRow < 0) return { error: "学習ログヘッダーが見つかりません", headers_row0: data[0] };
+
+  for (let i = headerRow + 1; i < data.length; i++) {
+    if (dateMatches(data[i][0], today)) {
+      const row = i + 1;
+      const updated = [];
+      const colMap = [
+        ["実績時間",   body.hours],
+        ["範囲(択一)", body.range_takuitsu],
+        ["範囲(記述)", body.range_kijutsu],
+        ["ミス問数",   body.miss_count],
+        ["コメント",   body.comment],
+        ["完遂",       body.kansei],
+      ];
+      colMap.forEach(([col, val]) => {
+        if (!notNull(val)) return;
+        const ci = header.indexOf(col);
+        if (ci >= 0) { sheet.getRange(row, ci+1).setValue(val); updated.push(col + "→" + val); }
+      });
+      return { sheet: sheet.getName(), row, updated };
+    }
+  }
+  return { error: "今日の行が見つかりません (" + today + ")" };
+}
+
+// ── KPI 5指標更新 ─────────────────────────────────────
+function updateKpi(body) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = findSheetByPartial(ss, "06");
+  if (!sheet) return { error: "KPIシートが見つかりません" };
+
+  const today = todayStr();
+  const data  = sheet.getDataRange().getValues();
+
+  // ヘッダー行スキャン
+  let headerRow = -1, header = [];
+  for (let i = 0; i < data.length; i++) {
+    if (data[i].some(h => String(h).includes("他力") || String(h).includes("朝活"))) {
+      headerRow = i; header = data[i]; break;
+    }
+  }
+  if (headerRow < 0) return { error: "KPIヘッダーが見つかりません" };
+
+  for (let i = headerRow + 1; i < data.length; i++) {
+    if (dateMatches(data[i][0], today)) {
+      const row = i + 1;
+      const updated = [];
+
+      // 各列を名前で検索して書き込む
+      const kpiMap = [
+        ["他力",   body.tariki],
+        ["EQ",     body.eq],
+        ["朝活",   body.chokatsu],
+        ["戦サボ", body.sen_sabo],
+        ["家族",   body.kazoku],
+        ["コメント", body.comment],
+        ["TOP3",   body.top3],
+      ];
+      kpiMap.forEach(([keyword, val]) => {
+        if (!notNull(val)) return;
+        const ci = header.findIndex(h => String(h).includes(keyword));
+        if (ci >= 0) { sheet.getRange(row, ci+1).setValue(val); updated.push(header[ci] + "→" + val); }
+      });
+
+      return { sheet: sheet.getName(), row, updated };
+    }
+  }
+  return { error: "今日のKPI行が見つかりません (" + today + ")" };
+}
+
+// ── 日次ログ追記 ──────────────────────────────────────
+function appendLog(body) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = findSheetByPartial(ss, "14");
+  if (!sheet) return { error: "日次ログシートが見つかりません" };
+
+  const lastRow = sheet.getLastRow() + 1;
+  const now = todayStr() + " " + (body.time || formatTime(new Date()));
+  const values = [now, body.category||"", body.dept||"", body.content||"",
+                  body.project||"", body.manager_comment||"", body.wbs_reflect||"",
+                  body.status||"🟡 確認待ち"];
+  sheet.getRange(lastRow, 1, 1, values.length).setValues([values]);
+  return { sheet: sheet.getName(), row: lastRow, written: body.content };
+}
+
+// ── 日報ログ：全置換ミラー（ローカルCSVを丸ごと反映・URL固定） ──
+function writeNippo(body) {
+  const rows = body.rows; // ヘッダ込み2D配列
+  if (!rows || !rows.length) return { error: "rowsが空です" };
+  const ss = SpreadsheetApp.openById(NIPPO_ID);
+  const sheet = ss.getSheets()[0];
+  sheet.clearContents();
+  sheet.getRange(1, 1, rows.length, rows[0].length).setValues(rows);
+  return { written: rows.length, sheet: sheet.getName() };
+}
+
+// ── 日報ログ：末尾に行追記（積み上げ・予定/実績の差分用） ──
+function appendNippo(body) {
+  const rows = body.rows; // データ行のみ（ヘッダ除く）2D配列
+  if (!rows || !rows.length) return { error: "rowsが空です" };
+  const ss = SpreadsheetApp.openById(NIPPO_ID);
+  const sheet = ss.getSheets()[0];
+  sheet.getRange(sheet.getLastRow()+1, 1, rows.length, rows[0].length).setValues(rows);
+  return { appended: rows.length, lastRow: sheet.getLastRow() };
+}
+
+// ── タブをキーワード（名前の一部）で探す＝番号プレフィックス改名後も壊れない ──
+function shByKey(ss, kw) {
+  var a = ss.getSheets();
+  for (var i = 0; i < a.length; i++) { if (a[i].getName().indexOf(kw) >= 0) return a[i]; }
+  return null;
+}
+
+// ── 収益パイプライン：資金繰りスプシ内の「収益パイプライン」タブへ全置換ミラー ──
+// 同居タブ化（残務B）。rows = ヘッダ込み2D配列。"="始まりのセルは数式として展開される。
+function writePipeline(body) {
+  const rows = body.rows;
+  if (!rows || !rows.length) return { error: "rowsが空です" };
+  const ss = SpreadsheetApp.openById(body.hostId || CASHFLOW_ID);
+  let sheet = shByKey(ss, "収益パイプライン");
+  if (!sheet) sheet = ss.insertSheet("10_収益パイプライン");
+  sheet.clearContents();
+  sheet.getRange(1, 1, rows.length, rows[0].length).setValues(rows);
+  return { written: rows.length, sheet: sheet.getName(), host: ss.getName() };
+}
+
+// ── 運用ルールの色分け（マニュアル不要化）────────────────────
+// 色＝ルール。🟡入力 / 🟧毎日見る / 🟦週次月次で見る / ⬜自動・触らない。背景色のみで値は壊さない。
+function formatOperatingRules() {
+  const C = { IN:"#FFF2CC", DAY:"#FCE5CD", WATCH:"#CFE2F3", AUTO:"#ECECEC", HEAD:"#434343" };
+  const ss = SpreadsheetApp.openById(CASHFLOW_ID);
+  const out = [];
+  function f(sh, a1, color, note) {
+    const rg = sh.getRange(a1);
+    if (color) rg.setBackground(color);
+    if (note != null) rg.setNote(note);
+  }
+  function legend(sh, startRow) {
+    const r = startRow;
+    sh.getRange(r,1).setValue("📖 このタブの使い方（色＝運用ルール）").setFontWeight("bold").setFontColor("#FFFFFF").setBackground(C.HEAD);
+    const rows = [
+      ["🟡 黄＝【入力】あなたが打つ（頻度はセルのメモを参照）", C.IN],
+      ["🟧 橙＝【毎日見る】今日の一手・追客目標", C.DAY],
+      ["🟦 青＝【週次/月次で見る】判断に使うKPI", C.WATCH],
+      ["⬜ 灰＝自動計算・触らない", C.AUTO],
+    ];
+    for (let i=0;i<rows.length;i++){
+      sh.getRange(r+1+i,1).setBackground(rows[i][1]);
+      sh.getRange(r+1+i,2).setValue(rows[i][0]);
+    }
+  }
+
+  // ① 売上見込み（金額のSSoT）
+  let s = shByKey(ss, "売上見込み");
+  if (s) {
+    f(s,"B2",C.IN,"【入力・月初/会議前】シナリオを 弱気/現実/強気 で打ち替え");
+    f(s,"A5:G14",C.IN,"【入力・案件が動くたび】本部/科目/案件名/満額(E)/確度(F)/着金月(G)。科目は栄町売却・医療テナントコンサル・テレアポ買取再販のみ。着金月は2026/06形式");
+    f(s,"H5:K14",C.AUTO,"自動・触らない（シナリオ別採用額）");
+    f(s,"M5:M14",C.AUTO,"自動・触らない（期待値=満額×確度）");
+    f(s,"B17:B19",C.AUTO,"自動・触らない（案件別採用額）");
+    f(s,"B20",C.WATCH,"【見る・週次】採用額合計＝今のシナリオで④資金繰りに流れる額");
+    f(s,"B21",C.WATCH,"【見る・週次/月次】期待値合計＝確度加重の収入見込み（収益パイプラインの真実源）");
+    legend(s, 28);
+  }
+  // ⑦ 損益（PL）：営業ドライバー＝逆算エンジン
+  s = shByKey(ss, "損益");
+  if (s) {
+    f(s,"B48",C.IN,"【入力・ほぼ固定】営業直結 目標時間比率（既定0.6）");
+    f(s,"B52",C.IN,"【入力・月1回】追客→アポ 転換率（自分の実績で更新）");
+    f(s,"B53",C.IN,"【入力・月1回】アポ→成約 転換率（自分の実績で更新）");
+    f(s,"B57",C.IN,"【入力・月初】月の稼働日");
+    f(s,"B49",C.DAY,"【毎日見る】今日の一手");
+    f(s,"B59",C.DAY,"【毎日見る】今日の追客目標");
+    f(s,"B63",C.DAY,"【毎日見る】時間の一手");
+    f(s,"B34",C.WATCH,"【見る・週次/月次】経常ギャップ＝毎月埋める穴");
+    f(s,"B42:B43",C.WATCH,"【見る・月次】家族/黒字ラインに必要な医療件数");
+    f(s,"B45",C.WATCH,"【見る・月次】家族ラインに必要な物件件数");
+    f(s,"B58",C.WATCH,"【見る・週次】1日あたり必要追客数");
+    f(s,"B67:F70",C.WATCH,"【見る・月次】月次トラッキング（必要vs確定vs不足）");
+    f(s,"B32",C.AUTO,"自動（経常確定粗利）"); f(s,"B33",C.AUTO,"自動（家族ライン）"); f(s,"B41",C.AUTO,"自動（医療確度込/件）");
+    legend(s, 72);
+  }
+  // ④ 資金繰り（結果・原則見るだけ。固定費だけ入力）
+  s = shByKey(ss, "資金繰り");
+  if (s) {
+    f(s,"B5:I8",C.AUTO,"自動・触らない（売上見込み/IMPORTRANGE連動の入金）");
+    f(s,"B10",C.IN,"【入力・変わったら】育休給付");
+    f(s,"B14:I26",C.IN,"【入力・変わったら】固定費・出金（半固定）");
+    f(s,"B12:I12",C.AUTO,"自動（入金合計）"); f(s,"B27:I27",C.AUTO,"自動（出金合計）");
+    f(s,"B29:I29",C.WATCH,"【見る・週次/月次】月末現預金＝体力計");
+    f(s,"B32",C.WATCH,"【見る・週次】ランウェイ判定");
+    legend(s, 36);
+  }
+  // 収益パイプライン（営業の的リスト・CSV経由で更新）
+  s = shByKey(ss, "収益パイプライン");
+  if (s) {
+    f(s,"K2:L8",C.IN,"【更新・随時／CSV経由】次アクション・ステータス（私に『パイプライン反映して』で書込）");
+    f(s,"I2:I8",C.AUTO,"自動（各ゴールの確度加重・作業用）");
+    f(s,"C12:I13",C.WATCH,"【見る・週次】売上見込み(SSoT)連動の確定値");
+    f(s,"C14:I14",C.WATCH,"【見る・週次】取りこぼしチェック＝＞0なら売上見込み未登録案件あり");
+    legend(s, 16);
+  }
+  out.push("formatted");
+  return { ok:true, tabs:["売上見込み","⑦ 損益（PL）","④ 資金繰り","収益パイプライン"] };
+}
+
+// ── 財務修正バンドル（税理士/経常利益色/色ズレ/未来会計図表参照化）2026-06-05 ──
+function applyFinanceFixes() {
+  const ss = SpreadsheetApp.openById(CASHFLOW_ID);
+  const cf = shByKey(ss, "資金繰り");
+  const pl = shByKey(ss, "損益");
+  const mf = shByKey(ss, "未来会計図表");
+  const Y="#FFF2CC", O="#FCE5CD", B="#CFE2F3", GOLD="#FFE599";
+
+  // 1) 税理士を契約ベースの正値へ（B:I＝6月〜1月の8列）
+  cf.getRange("B14:I14").setValue(18333);  // 法人税理士 決算22万/年÷12
+  cf.getRange("B17:I17").setValue(46750);  // 個人税理士 税込56.1万/年÷12
+
+  // 2) PL固定費計B7＝18333+99000+22167+50000=189500／個人税理士B16=46750／ラベル更新
+  pl.getRange("B7:I7").setValue(189500);
+  pl.getRange("B16:I16").setValue(46750);
+  pl.getRange("A7").setValue("  固定費計（税理士18,333+外注99,000+社保22,167＋役員報酬50,000※未払＝189,500）");
+
+  // 3) 経常利益を結論色(金)＋太字に・支払利息の緑を外して区別
+  pl.getRange("B8:I8").setBackground(null);
+  [9,17,25].forEach(function(r){ var rg=pl.getRange(r,2,1,8); rg.setBackground(GOLD); rg.setFontWeight("bold"); });
+
+  // 4) 営業ドライバーの色ズレ修正：誤りクリア→正しい行へ
+  ["B33","B48","B49","B53","B57","B59","B63","B67"].forEach(function(a){ pl.getRange(a).setBackground(null); });
+  ["B51","B55","B56","B60"].forEach(function(a){ pl.getRange(a).setBackground(Y); });  // 入力
+  ["B52","B62","B66"].forEach(function(a){ pl.getRange(a).setBackground(O); });          // 毎日見る
+  ["B37","B45","B46","B48","B58","B61"].forEach(function(a){ pl.getRange(a).setBackground(B); }); // 週次見る
+
+  // 5) 未来会計図表を⑦PL参照化（固定費・目標利益→損益分岐の二重/矛盾を解消）
+  mf.getRange("B4").setFormula("='⑦ 損益（PL）'!B24");
+  mf.getRange("B5").setFormula("='⑦ 損益（PL）'!B26");
+  mf.getRange("A2").setValue("※固定費・目標利益・損益分岐は⑦損益PLを参照（PL一本化／このタブは図示用）");
+
+  return { ok:true, taxFixed:true, keijo:"gold", driverRecolored:true, miraiLinked:true };
+}
+
+// ── タブ整理：日常で使う順に並べ替え＋データ/スポットは非表示（名前は変えない＝参照壊れない）──
+function tidyTabs() {
+  const ss = SpreadsheetApp.openById(CASHFLOW_ID);
+  // 表示する操縦席（この順＝流れ）。[探すキーワード, 新しい名前(01_〜)]
+  const front = [
+    ["統合司令塔",   "01_統合司令塔"],
+    ["追客リスト",   "02_追客リスト"],
+    ["売上見込み",   "03_売上見込み"],
+    ["損益",         "04_損益PL"],
+    ["資金繰り",     "05_資金繰り"],
+    ["資産負債",     "06_資産負債BS"],
+    ["本部マトリクス","07_本部マトリクス"],
+    ["残高クイック", "08_残高クイック入力"],
+    ["MF残高",       "09_MF残高"],
+    ["収益パイプライン","10_収益パイプライン"],
+    ["KPI",          "11_KPI"]
+  ];
+  // 非表示にする（データ源・スポット・アーカイブ。計算は生きる・いつでも再表示可）
+  const hide = [
+    "⑤ 借入", "借入返済", "借入条件", "税金", "諸経費", "クレカ用途",
+    "按分_260604", "役員報酬", "経費削減・損切り",
+    "💼銀行提出前クリーンアップ", "事業計画（5ヵ年）", "未来会計図表",
+    "WBS"
+  ];
+  // ※pass(ID/パスワード管理)はよく使うので表示のまま（菊池確定2026-06-05）
+  // 不要2枚を削除（菊池確定2026-06-05・戻せない）：⑥使い方=マニュアルで代替／📋テンプレ=按分_260604の重複
+  const del = ["⑥使い方", "📋按分棚卸し_テンプレ"];
+  var deleted = [];
+  del.forEach(function(nm){
+    var sh = ss.getSheetByName(nm);
+    if (sh){ ss.deleteSheet(sh); deleted.push(nm); }
+  });
+  // まず表示対象をキーワードで探し→01_に改名→show→流れ順に前へ（数式参照は自動追従）
+  front.forEach(function(pair, i){
+    var sh = shByKey(ss, pair[0]);
+    if (sh){ sh.setName(pair[1]); sh.showSheet(); ss.setActiveSheet(sh); ss.moveActiveSheet(i+1); }
+  });
+  // 残りを非表示
+  var hidden = [];
+  hide.forEach(function(nm){
+    var sh = ss.getSheetByName(nm);
+    if (sh){ sh.hideSheet(); hidden.push(nm); }
+  });
+  // 先頭（①司令塔）をアクティブに戻す
+  var top = shByKey(ss, "統合司令塔"); if (top) ss.setActiveSheet(top);
+  return { ok:true, shown:front.length, hidden:hidden.length, deleted:deleted };
+}
+
+// ── ブループリント設計版スプシを構築（3層・報告→自動転記モデル）2026-06-06 ──
+function buildBlueprint(body) {
+  const ss = SpreadsheetApp.openById((body && body.hostId) || "1pXGpe3hXaxGEAPq_asP_pm3mruL-NNFIlG14wB_1Ego");
+  const Y="#FFF2CC",O="#FCE5CD",B="#CFE2F3",GOLD="#FFE599",G="#ECECEC",BR="#AA2E26";
+  function mk(name){ var s=ss.getSheetByName(name); if(s) ss.deleteSheet(s); return ss.insertSheet(name); }
+  function put(s,arr){ s.getRange(1,1,arr.length,arr[0].length).setValues(arr); }
+  function bg(s,a1,c){ s.getRange(a1).setBackground(c); }
+  function head(s,a1){ s.getRange(a1).setBackground(BR).setFontColor("#FFFFFF").setFontWeight("bold"); }
+
+  // 01_売上見込み（L1入力：法人売上の科目源）
+  var s1=mk("01_売上見込み");
+  put(s1,[
+    ["科目","案件名","満額","確度","着金月","期待値(自動)","メモ"],
+    ["医療コンサル","曾我先生(千葉都町)",1100000,0.4,"2026-07","=C2*D2","眼科・反応微妙"],
+    ["医療コンサル","内山先生",1100000,0.15,"","=C3*D3","再探索"],
+    ["物件売却","栄町(持倉様)",1900000,0.9,"2026-06","=C4*D4","6/8決済"],
+    ["物件売却","高松転売",4000000,0.3,"2026-07","=C5*D5","査定中"],
+    ["","","","","","=SUM(F2:F5)","◀期待値合計(確度加重)"],
+  ]);
+  head(s1,"A1:G1"); bg(s1,"C2:E5",Y); bg(s1,"F2:F6",G); s1.getRange("F6").setFontWeight("bold");
+
+  // 02_営業ログ（L1入力＝あなたの「報告」をClaudeが転記する先）
+  var s2=mk("02_営業ログ");
+  put(s2,[
+    ["日付","相手","科目","行動","結果","次アクション"],
+    ["2026-06-05","曾我先生","医療コンサル","福井下書き作成","微妙な反応","様子見・関係維持"],
+    ["2026-06-05","内山先生","医療コンサル","福井下書き作成","微妙な反応","様子見"],
+    ["2026-06-06","大坪さん","物件売却","口座確認連絡","","6/8決済へ"],
+    ["（報告するとClaudeがここに1行追加→確度が動けば01へ反映）","","","","",""],
+  ]);
+  head(s2,"A1:F1"); bg(s2,"A2:F5",O);
+
+  // 03_PL（L2自動：科目別損益。手打ち=固定費/目標利益だけ）
+  var s3=mk("03_PL");
+  put(s3,[
+    ["科目","金額","メモ"],
+    ["■法人売上","",""],
+    ["  医療コンサル(確度加重)","=SUMIF('01_売上見込み'!A:A,\"医療コンサル\",'01_売上見込み'!F:F)","01から自動"],
+    ["  物件売却(確度加重)","=SUMIF('01_売上見込み'!A:A,\"物件売却\",'01_売上見込み'!F:F)","01から自動"],
+    ["  EC粗利(月・実精算)",142731,"ECダッシュボードから(暫定手入力)"],
+    ["限界利益(粗利計)","=B3+B4+B5","=売上−変動費"],
+    ["固定費(税理士/外注/社保/役員報酬等)",189500,"入力(半固定)"],
+    ["経常利益","=B6-B7","結論ライン"],
+    ["目標利益(入力)",500000,"入力"],
+    ["損益分岐(固定費+目標利益)","=B7+B9","これ超で黒字"],
+    ["判定","=IF(B6>=B10,\"🟢 黒字達成\",\"🔴 未達 不足\"&TEXT(B10-B6,\"#,##0\")&\"円\")",""],
+  ]);
+  head(s3,"A1:C1"); bg(s3,"B7",Y); bg(s3,"B9",Y); bg(s3,"B8",GOLD); s3.getRange("B8").setFontWeight("bold"); bg(s3,"B3:B6",G); bg(s3,"B10:B11",B);
+
+  // 04_資金繰り（L2自動：PLから現金）
+  var s4=mk("04_資金繰り");
+  put(s4,[
+    ["項目","金額","メモ"],
+    ["月初現金(入力)",8743221,"残高入力 or BS連動"],
+    ["入金(=PL限界利益)","='03_PL'!B6","自動"],
+    ["出金(=PL固定費)","='03_PL'!B7","自動"],
+    ["当月純増減","=B3-B4","自動"],
+    ["月末現金(体力計)","=B2+B5","自動"],
+    ["月次燃焼(固定費−経常入金EC)","='03_PL'!B7-'03_PL'!B5","自動"],
+    ["ランウェイ(月)","=B2/B7","自動"],
+    ["判定","=IF(B8<3,\"🔴守り:投資凍結\",IF(B8<6,\"🟡注意\",\"🟢攻めOK\"))",""],
+  ]);
+  head(s4,"A1:C1"); bg(s4,"B2",Y); bg(s4,"B3:B5",G); bg(s4,"B6",B); bg(s4,"B8:B9",B);
+
+  // 05_時間配分（L1入力：営業直結比率の源＝目標/予定/実績の3本）
+  var s5=mk("05_時間配分");
+  put(s5,[
+    ["指標","値","計算の意味＝なぜ動くか"],
+    ["目標 営業直結比率",0.6,"あるべき姿(固定)"],
+    ["予定 営業時間/週(h)",6,"カレンダーで営業に振った予定"],
+    ["総予定時間/週(h)",40,""],
+    ["予定 営業直結比率","=B3/B4","朝の予定づくりで動く"],
+    ["実績 営業時間/週(h)",2,"日報の実営業"],
+    ["総実時間/週(h)",38,""],
+    ["実績 営業直結比率","=B6/B7","夜の実績入力で動く"],
+    ["計画と実行のギャップ","=B5-B8","予定−実績＝漏れ(これが本当のボトルネック信号)"],
+  ]);
+  head(s5,"A1:C1"); bg(s5,"B3:B4",Y); bg(s5,"B6:B7",Y); bg(s5,"B5",B); bg(s5,"B8:B9",B); bg(s5,"B2",G);
+
+  // 00_司令塔（L3読むだけ）
+  var s0=mk("00_司令塔");
+  put(s0,[
+    ["① 統合司令塔（操縦席）— 読むだけ",""],
+    ["◆ 現在（体力）",""],
+    ["現預金","='04_資金繰り'!B6"],
+    ["ランウェイ(月)","='04_資金繰り'!B8"],
+    ["体力判定","='04_資金繰り'!B9"],
+    ["◆ 損益（詳細→03_PL）",""],
+    ["限界利益(粗利)","='03_PL'!B6"],
+    ["損益分岐","='03_PL'!B10"],
+    ["黒字判定","='03_PL'!B11"],
+    ["経常利益(結論)","='03_PL'!B8"],
+    ["◆ ボトルネック＝営業時間（目標/予定/実績）",""],
+    ["営業直結比率","=TEXT('05_時間配分'!B2,\"0%\")&\" / \"&TEXT('05_時間配分'!B5,\"0%\")&\" / \"&TEXT('05_時間配分'!B8,\"0%\")"],
+    ["計画と実行のギャップ(予定−実績)","=TEXT('05_時間配分'!B9,\"0%\")"],
+    ["◆ 今日のNorth Star",""],
+    ["今日PL科目に効く行動を取れたか","→ 02_営業ログに『科目つき行動』が1行でも入ったか"],
+    ["今日の一手","栄町=大坪さんへ口座確認連絡(6/8決済の生命線)"],
+  ]);
+  head(s0,"A1:B1");
+  ["A2:B2","A6:B6","A11:B11","A14:B14"].forEach(function(a){ s0.getRange(a).setBackground("#EAE0DA").setFontWeight("bold"); });
+  bg(s0,"B3:B5",B); bg(s0,"B7:B9",B); bg(s0,"B10",GOLD); s0.getRange("B10").setFontWeight("bold"); bg(s0,"B12:B13",B); bg(s0,"B15:B16",O);
+
+  // ★使い方・動線
+  var sx=mk("★使い方・動線");
+  put(sx,[
+    ["★ 経営操縦席 設計版 — 使い方と動線",""],
+    ["North Star","今日、PLのゴール科目(医療コンサル/物件売却/EC粗利)に効く行動を取れたか"],
+    ["運用プロトコル","あなたは『報告』するだけ。例:『曾我に追客した/栄町確度上がった/EC精算◯万』"],
+    ["","→ Claudeが 02_営業ログ・01_売上見込み に転記 → 03_PL・04_資金繰り・00_司令塔が自動更新"],
+    ["","行は手で増やさない。トリガーは不要＝Claudeが転記エンジン"],
+    ["3層構造","L1入力(01売上見込み/02営業ログ/05時間配分) → L2自動(03PL/04資金繰り) → L3司令塔"],
+    ["色ルール","🟡黄=入力 / 🟧橙=毎日見る / 🟦青=見る(損益/現金) / ⬜灰=自動・触らない / 金=結論(経常利益)"],
+    ["注意","これは設計プロトタイプ。作り込み(BS自動化/MF連携)は栄町6/20決済後。今は動線確認用。"],
+  ]);
+  head(sx,"A1:B1"); bg(sx,"A2:A8",G);
+
+  // 並び順：表示→入力群→自動→使い方（入力タブを並べて分離）
+  var order=["00_司令塔","01_売上見込み","02_営業ログ","05_時間配分","03_PL","04_資金繰り","★使い方・動線"];
+  order.forEach(function(nm,i){ var s=ss.getSheetByName(nm); if(s){ ss.setActiveSheet(s); ss.moveActiveSheet(i+1); } });
+  // タブ色＝入力/表示を一目で（🟡入力 / 🔵表示 / 🟢自動 / 灰説明）
+  function tc(nm,c){ var s=ss.getSheetByName(nm); if(s) s.setTabColor(c); }
+  tc("00_司令塔","#4A86E8");                                                   // 表示(青)
+  ["01_売上見込み","02_営業ログ","05_時間配分"].forEach(function(n){ tc(n,"#F1C232"); }); // 入力(黄)
+  ["03_PL","04_資金繰り"].forEach(function(n){ tc(n,"#6AA84F"); });             // 自動(緑)
+  tc("★使い方・動線","#999999");
+  // デフォルトの空シート削除
+  ["シート1","Sheet1"].forEach(function(nm){ var s=ss.getSheetByName(nm); if(s) ss.deleteSheet(s); });
+  ss.setActiveSheet(ss.getSheetByName("00_司令塔"));
+  return { ok:true, url:ss.getUrl(), tabs:order };
+}
+
+// ── v2の3レイヤー(診断/事業計画/KPI→WBS)をコピー版スプシに追加 2026-06-06 ──
+// 既存タブ(01_統合司令塔/04_損益PL/03_売上見込み)を参照＝reuse。新規はこの3タブだけ。
+function buildV2Layers(body) {
+  const ss = SpreadsheetApp.openById((body && body.hostId) || "1Oymt0B8CgUmk8mCgnx0eDFIUWjd6_tt2Repo0WWYBc0");
+  const Y="#FFF2CC",B="#CFE2F3",GOLD="#FFE599",G="#ECECEC",BR="#AA2E26",GR="#D9EAD3";
+  function mk(name){ var s=ss.getSheetByName(name); if(s) ss.deleteSheet(s); return ss.insertSheet(name); }
+  function put(s,a){ s.getRange(1,1,a.length,a[0].length).setValues(a); }
+  function head(s,a1){ s.getRange(a1).setBackground(BR).setFontColor("#FFFFFF").setFontWeight("bold"); }
+  // 既存タブ名(コピー元と同じ)。無ければ近い名前を探す
+  function nm(kw,def){ var a=ss.getSheets(); for(var i=0;i<a.length;i++){ if(a[i].getName().indexOf(kw)>=0) return a[i].getName(); } return def; }
+  var SIRE=nm("統合司令塔","01_統合司令塔"), PL=nm("損益","04_損益PL"), URI=nm("売上見込み","03_売上見込み");
+  var q=function(s){return "'"+s+"'";};
+
+  // 🔬経営診断（McKinsey 4軸・司令塔/PLを参照）
+  var d=mk("🔬経営診断");
+  put(d,[
+    ["軸","指標","値","判定","So What（だから何をする）"],
+    ["収益性","限界利益(粗利・全社)/月","="+q(PL)+"!B23","","医療を毎月化して限界利益を厚く"],
+    ["収益性","経常利益(全社)/月","="+q(PL)+"!B25","=IF(C3>=0,\"🟢黒字\",\"🔴赤字\")","毎月の穴を営業で埋める"],
+    ["安全性","純資産","="+q(SIRE)+"!B5","🟢本物","流動性は薄い→現金化導線を持つ"],
+    ["安全性","現預金(流動性)","="+q(SIRE)+"!B10","="+q(SIRE)+"!C11","栄町190万が当面の生命線"],
+    ["安全性","ランウェイ(月)","="+q(SIRE)+"!B11","="+q(SIRE)+"!C11",""],
+    ["効率性","🔴営業直結 時間比率","="+q(SIRE)+"!B24","=IF(C7>=0.6,\"🟢\",\"🔴未達\")","★最重要ボトルネック=内務削って営業へ"],
+    ["成長性","総資産 / 総負債","="+q(SIRE)+"!B6","="+q(SIRE)+"!B7","法人債務超過-42万を監視"],
+    ["","",""," ←詳細は各タブ：限界利益/経常="+PL+"・純資産/現金/比率="+SIRE,""],
+  ]);
+  head(d,"A1:E1"); d.getRange("C2:C8").setBackground(B);
+
+  // 🎯事業計画（時間ROIで営業コミット配分）
+  var p=mk("🎯事業計画");
+  put(p,[
+    ["ストリーム","期待値/件","確度","想定工数","時間ROI(粗利/h)","コミット","今月の的"],
+    ["医療コンサル",1100000,"0.4-0.6","中","高","◎主軸","曾我/内山+福井140医師→毎月0.7件"],
+    ["物件売却","190-400万","0.3-0.9","大","中","○","栄町6/20出口→次の仕入"],
+    ["EC粗利",142731,"0.7","小(ゆーし)","維持","△ストック","KYC解錠待ち"],
+    ["メディア",1100000,"0.05","大","仕込み","種まき","X/note/診療圏ミニ診断"],
+    ["","","","","","",""],
+    ["結論","医療を毎月化＋栄町出口＝家族ライン突破。営業時間の60%を医療へ寄せる。","","","","",""],
+    ["連動","金額の正は"+URI+"タブ（ここは戦略配分の判断用）","","","","",""],
+  ]);
+  head(p,"A1:G1"); p.getRange("A7:G7").setBackground(GOLD).setFontWeight("bold");
+
+  // 🪜KPI→WBS（経営目標→本部KPI→週次→日次のカスケード）
+  var k=mk("🪜KPI→WBS");
+  put(k,[
+    ["階層","内容","数値/担当"],
+    ["① 経営目標(BS)","純資産1億 / 半期500万 / 毎月の穴を埋める","穴=04_損益PLのB34"],
+    ["② 本部KPI","04医療=月0.7件","04 福井/李牧"],
+    ["","05物件=四半期1本(栄町→次)","05 川股"],
+    ["","03EC=粗利14万/月 維持","03 ゆーし"],
+    ["","全社=営業直結 時間比率60%","秘書/01"],
+    ["③ 週次WBS","医療→福井MTG+追客15人 / 物件→栄町決済+新規仕入 / 時間→営業枠6h死守","毎週月"],
+    ["④ 日次タスク","Google Tasks + 日報(実績h) ＝実行の最小単位","毎日"],
+    ["連動の肝","上から下まで数値が繋がる＝今日のタスクが経営目標のどこに効くか一目","—"],
+    ["報告→自動検出","菊池の報告をClaudeが検出→01売上見込み/02営業ログ/日報へ転記→上位KPIが自動更新","Claude"],
+  ]);
+  head(k,"A1:C1");
+  ["A2:C2","A3:C3","A7:C7","A8:C8"].forEach(function(a){ k.getRange(a).setBackground(GR); });
+
+  // 並び：診断/事業計画/KPI-WBS を司令塔の直後(2番目)へ
+  ["🔬経営診断","🎯事業計画","🪜KPI→WBS"].forEach(function(nm2,i){
+    var s=ss.getSheetByName(nm2); if(s){ ss.setActiveSheet(s); ss.moveActiveSheet(i+2); }
+  });
+  var top=ss.getSheetByName(SIRE); if(top) ss.setActiveSheet(top);
+  return { ok:true, url:ss.getUrl(), added:["🔬経営診断","🎯事業計画","🪜KPI→WBS"], ref:{司令塔:SIRE,PL:PL,売上見込み:URI} };
+}
+
+// ── 改良案(03中心)をコピー版に実装。連動(B/E/F/G/K)は触らず追加のみ 2026-06-06 ──
+function buildKairyou(body) {
+  const ss = SpreadsheetApp.openById((body && body.hostId) || "1Oymt0B8CgUmk8mCgnx0eDFIUWjd6_tt2Repo0WWYBc0");
+  const Y="#FFF2CC",B="#CFE2F3",G="#ECECEC",BR="#AA2E26",GR="#D9EAD3";
+  function shk(kw){ var a=ss.getSheets(); for(var i=0;i<a.length;i++){ if(a[i].getName().indexOf(kw)>=0) return a[i]; } return null; }
+  // 1) v2タブ(設計途中版)を削除＝03中心に一本化
+  ["🔬経営診断","🎯事業計画","🪜KPI→WBS"].forEach(function(nm){ var s=ss.getSheetByName(nm); if(s) ss.deleteSheet(s); });
+
+  // 1b) 📥報告ログ（APPEND専用＝ログ駆動の心臓。Claudeが報告から1行追記）
+  var lg=ss.getSheetByName("📥報告ログ"); if(lg) ss.deleteSheet(lg); lg=ss.insertSheet("📥報告ログ");
+  lg.getRange(1,1,4,7).setValues([
+    ["日付","種別","案件・相手","科目","項目","報告値","メモ"],
+    ["2026-06-06","営業","曾我先生","医療","確度","0.4","反応微妙→様子見"],
+    ["2026-06-06","物件","栄町","物件","次アクション","大坪へ口座確認","6/8決済"],
+    ["★APPEND専用(消さない)。Claudeが報告から1行追記→02/03が最新値を参照→01/04/05が自動更新。過去は残るので連動が崩れない","","","","","",""]
+  ]);
+  lg.getRange("A1:G1").setBackground(BR).setFontColor("#FFFFFF").setFontWeight("bold");
+  lg.getRange("A2:G3").setBackground(Y); lg.getRange("A4").setFontColor(BR).setFontWeight("bold");
+
+  // 2) 03_売上見込み を「全業務ハブ」に拡張（N列以降＝追加・連動列は不可侵）
+  var u=shk("売上見込み");
+  u.getRange("N4").setValue("業務種別"); u.getRange("O4").setValue("売上化?"); u.getRange("P4").setValue("次アクション"); u.getRange("Q4").setValue("期限");
+  var ext=[
+    ["物件","🟢直結","大坪へ口座確認→6/8決済","6/8"],
+    ["医療","🟢直結","福井に提示催促(反応微妙→様子見)","随時"],
+    ["物件","🟡仕込み","宮崎とテレアポ設計",""],
+    ["物件","🟡仕込み","新規仕入ソーシング",""],
+    ["医療","🟡仕込み","セミナー後追客",""],
+    ["医療","🟡仕込み","My AI提案デモ",""],
+    ["物件","🟡仕込み","横浜NPO 福井MTG","6/15"],
+  ];
+  u.getRange(5,14,ext.length,4).setValues(ext);
+  u.getRange("N5:Q14").setBackground(Y);
+  u.getRange("N4:Q4").setBackground(BR).setFontColor("#FFFFFF").setFontWeight("bold");
+
+  // 2b) 非売上業務も"売上化?"で横断（連動に入らない下部ブロック r34〜）
+  u.getRange("A34").setValue("■ 非売上業務も「売上化?」で横断（売上になってるか常に意識）").setFontWeight("bold");
+  var ns=[
+    ["調査士(朝活)","内務","⬜自己投資","2027合格→コンサル単価UP"],
+    ["家族/親子","00","⬜死守","記念日先回り"],
+    ["記帳/税務/残高更新","内務","⬜守り","月次・最小化しAIへ"],
+    ["メディア発信(X/note)","仕込み","🟡仕込み","プロTTPで集客装置化"],
+  ];
+  u.getRange(35,1,ns.length,4).setValues(ns);
+  u.getRange("A35:D38").setBackground(G);
+  u.getRange("C35:C38").setBackground(Y);
+
+  // 2c) KPI＆時間サマリー（07-11を集約＝既存タブ参照）r40〜
+  var SIRE=shk("統合司令塔").getName(), PL=shk("損益").getName();
+  u.getRange("A40").setValue("■ KPI＆時間サマリー（07-11を集約・参照表示）").setFontWeight("bold");
+  var kpi=[
+    ["期待値合計(確度加重)","=B21"],
+    ["🔴営業直結 時間比率(目標60%)","='"+SIRE+"'!B24"],
+    ["毎月の穴(家族ライン−粗利)","='"+PL+"'!B34"],
+    ["→ 資金繰り 現預金(体力)","='"+SIRE+"'!B10"],
+    ["→ ランウェイ(月)","='"+SIRE+"'!B11"],
+  ];
+  u.getRange(41,1,kpi.length,2).setValues(kpi);
+  u.getRange("A41:A45").setBackground(G); u.getRange("B41:B45").setBackground(B);
+
+  // 2d) 営業ドライバー入力（転換率・稼働日＝03に集約。出力はPL/01）
+  u.getRange("A47").setValue("■ 営業ドライバー入力（転換率・稼働日をここに集約）").setFontWeight("bold");
+  u.getRange(48,1,3,2).setValues([["追客→アポ 転換率",0.5],["アポ→成約 転換率",0.2],["月の稼働日",20]]);
+  u.getRange("B48:B50").setBackground(Y);
+  u.getRange("A52").setValue("※次段：PLのB55/B56/B60をここ参照に切替＝入力を03へ完全一本化");
+
+  // 2e) 05資金繰り 主格別 出金集計（サイフォSUMIF・追加のみ）
+  var cf=shk("資金繰り");
+  if(cf){
+    cf.getRange("A43").setValue("■ 主格別 出金集計（SUMIF）").setFontWeight("bold");
+    cf.getRange(44,1,5,2).setValues([
+      ["法人 出金","=SUMIF(A14:A26,\"*法人*\",B14:B26)"],
+      ["個人事業 出金","=SUMIF(A14:A26,\"*個人事業*\",B14:B26)"],
+      ["プライベート 出金","=SUMIF(A14:A26,\"*プライベート*\",B14:B26)"],
+      ["世帯生活費","=SUMIF(A14:A26,\"*世帯*\",B14:B26)"],
+      ["全主格 出金合計","=B27"]
+    ]);
+    cf.getRange("A44:A48").setBackground(G); cf.getRange("B44:B48").setBackground(B);
+    cf.getRange("A50").setValue("※次段：主格別ランウェイ＝各主格の現金(06BS)÷各主格の燃焼。BSセル精査後に追加");
+  }
+
+  // 3) 01_司令塔は表示専用＝注記(入力は03へ)
+  var sire=shk("統合司令塔");
+  sire.getRange("D1").setValue("◀表示専用。入力は『03_売上見込み』の黄色セルへ").setFontColor(BR).setFontWeight("bold");
+
+  // 4) タブ整理：見えるのは 03(作業)→01(確認) だけ。07-11・pass・他は非表示
+  ["07_本部マトリクス","08_残高クイック入力","09_MF残高","10_収益パイプライン","11_KPI","pass","02_追客リスト","04_損益PL","06_資産負債BS"].forEach(function(nm){
+    var s=shk(nm.replace(/^[0-9]+_/,"")) || ss.getSheetByName(nm); if(s) s.hideSheet();
+  });
+  // 見えるのは 03(作業)→📥報告ログ→01(確認)→05(資金繰り) の4枚だけ
+  [shk("売上見込み"),ss.getSheetByName("📥報告ログ"),shk("統合司令塔"),shk("資金繰り")].forEach(function(s,i){ if(s){ s.showSheet(); ss.setActiveSheet(s); ss.moveActiveSheet(i+1); } });
+  ss.setActiveSheet(shk("売上見込み"));
+  return { ok:true, url:ss.getUrl(), 残:"IMPORTRANGE(EC)再承認・passは元ファイルにあるのでコピーから非表示済" };
+}
+
+// ── 経営操縦席 完成版(設計版v1に全要件を実装) 2026-06-06 ──
+// 入力=02/03のみ・報告ログ方式(消えない)・05主格別+全体ランウェイ・01シンプル表示・06=MF自動(月初)
+function buildOps(body) {
+  const ss = SpreadsheetApp.openById((body && body.hostId) || "1pXGpe3hXaxGEAPq_asP_pm3mruL-NNFIlG14wB_1Ego");
+  const Y="#FFF2CC",B="#CFE2F3",G="#ECECEC",BR="#AA2E26",GOLD="#FFE599",GR="#D9EAD3";
+  function mk(name){ var s=ss.getSheetByName(name); if(s) ss.deleteSheet(s); return ss.insertSheet(name); }
+  function put(s,a){ s.getRange(1,1,a.length,a[0].length).setValues(a); }
+  function head(s,a1){ s.getRange(a1).setBackground(BR).setFontColor("#FFFFFF").setFontWeight("bold"); }
+  function tc(nm,c){ var s=ss.getSheetByName(nm); if(s) s.setTabColor(c); }
+
+  // 02_報告ログ（入力・追記専用＝消えない。Claudeが報告から1行追記）
+  var s2=mk("02_報告ログ");
+  put(s2,[
+    ["日付","種別","案件・相手","科目","項目","値","メモ"],
+    ["2026-06-06","物件","栄町(持倉様)","物件売却","確度","0.9","6/8決済"],
+    ["2026-06-06","医療","曾我先生","医療コンサル","確度","0.4","反応微妙→様子見"],
+    ["2026-06-06","営業活動","cloud mil","-","追客件数","1","個別提案"],
+    ["★追記専用(絶対に消さない)。Claudeが報告から1行足す→03が最新値を参照→01/04/05が自動更新。過去が残るので連動が崩れない","","","","","",""]
+  ]);
+  head(s2,"A1:G1"); s2.getRange("A2:G4").setBackground(Y); s2.getRange("A5").setFontColor(BR).setFontWeight("bold");
+
+  // 03_売上見込み（入力・案件マスター＋営業ドライバー入力）
+  var s3=mk("03_売上見込み");
+  put(s3,[
+    ["科目","案件名","満額","確度","着金月","期待値(自動)","業務種別","売上化?","次アクション"],
+    ["物件売却","栄町(持倉様)",1900000,0.9,"2026-06","=C2*D2","物件","🟢直結","大坪へ口座確認→6/8決済"],
+    ["医療コンサル","曾我先生(千葉都町)",1100000,0.4,"2026-07","=C3*D3","医療","🟢直結","福井に提示催促"],
+    ["医療コンサル","内山先生",1100000,0.15,"","=C4*D4","医療","🟡仕込み","西新宿35坪↑再ソーシング"],
+    ["物件売却","高松転売",4000000,0.3,"2026-07","=C5*D5","物件","🟡仕込み","立退×解体見積待ち"],
+    ["EC粗利","クーパン1+2",150000,0.7,"月次","=C6*D6","EC","△ストック","ゆーしKYC解錠"],
+    ["(新規はここに1行)","","","","","=IF(C7=\"\",\"\",C7*D7)","","",""],
+    ["","","","","","","","",""],
+    ["■ 集計","","","","","","","",""],
+    ["期待値合計(確度加重)","=SUM(F2:F7)","","","","","","",""],
+    ["","","","","","","","",""],
+    ["■ 営業ドライバー入力（転換率・稼働日＝ここに集約）","","","","","","","",""],
+    ["追客→アポ 転換率",0.5,"","アポ→成約 転換率",0.2,"","月の稼働日",20,""],
+    ["→ 必要追客/日(自動)","=IFERROR(ROUND(MAX(0,'04_PL'!B8)/(C3*D3)*(1/E13)*(1/B13)/H13,2),\"-\")","※穴÷医療確度込単価÷成約率÷アポ率÷稼働日","","","","","",""]
+  ]);
+  head(s3,"A1:I1"); s3.getRange("C2:E7").setBackground(Y); s3.getRange("G2:I7").setBackground(Y);
+  s3.getRange("F2:F7").setBackground(G); s3.getRange("B10").setBackground(B);
+  s3.getRange("A12").setFontWeight("bold"); s3.getRange("A9").setFontWeight("bold");
+  s3.getRange("B13").setBackground(Y); s3.getRange("E13").setBackground(Y); s3.getRange("H13").setBackground(Y);
+
+  // 04_PL（自動・科目別損益。手入力=固定費/目標利益のみ）
+  var s4=mk("04_PL");
+  put(s4,[
+    ["科目","金額","メモ"],
+    ["売上 医療コンサル(確度加重)","=SUMIF('03_売上見込み'!A:A,\"医療コンサル\",'03_売上見込み'!F:F)","03から自動"],
+    ["売上 物件売却(確度加重)","=SUMIF('03_売上見込み'!A:A,\"物件売却\",'03_売上見込み'!F:F)","03から自動"],
+    ["売上 EC粗利","=SUMIF('03_売上見込み'!A:A,\"EC粗利\",'03_売上見込み'!F:F)","03から自動"],
+    ["限界利益(粗利計)","=B2+B3+B4","=売上−変動費"],
+    ["固定費(税理士/外注/社保/役員報酬)",189500,"入力(半固定)"],
+    ["経常利益","=B5-B6","結論ライン"],
+    ["毎月の穴(家族ライン−限界利益)","=B9-B5","=営業で埋める額"],
+    ["家族が潰れないライン(入力)",644504,"資金繰りの全出金−経常入金"],
+    ["目標利益(入力)",500000,"入力"],
+    ["損益分岐(固定費+目標利益)","=B6+B10","これ超で黒字"],
+    ["判定","=IF(B5>=B11,\"🟢黒字達成\",\"🔴未達 不足\"&TEXT(B11-B5,\"#,##0\")&\"円\")",""]
+  ]);
+  head(s4,"A1:C1"); s4.getRange("B6").setBackground(Y); s4.getRange("B9:B10").setBackground(Y);
+  s4.getRange("B7").setBackground(GOLD); s4.getRange("B7").setFontWeight("bold");
+  s4.getRange("B2:B5").setBackground(G); s4.getRange("B8").setBackground(B); s4.getRange("B11:B12").setBackground(B);
+
+  // 05_資金繰り（自動・主格別＋全主格集計＋主格別/全体ランウェイ）
+  var s5=mk("05_資金繰り");
+  put(s5,[
+    ["項目","法人","研太(個人事業+私)","麻梨奈","全主格(集計)"],
+    ["月初現金(入力or06連動)",8000000,600000,150000,"=SUM(B2:D2)"],
+    ["■入金","","","",""],
+    ["売上入金(←04PL連動)","='04_PL'!B3","='04_PL'!B2","0","=SUM(B4:D4)"],
+    ["EC粗利(研太)","0","='04_PL'!B4","0","=SUM(B5:D5)"],
+    ["育休給付(麻梨奈)","0","0","156659","=SUM(B6:D6)"],
+    ["入金計","=SUM(B4:B6)","=SUM(C4:C6)","=SUM(D4:D6)","=SUM(B7:D7)"],
+    ["■出金","","","",""],
+    ["固定費(税理士/外注/社保等)",231167,22000,0,"=SUM(B9:D9)"],
+    ["生活費・私費",0,170000,121000,"=SUM(B10:D10)"],
+    ["借入返済",81633,145296,0,"=SUM(B11:D11)"],
+    ["出金計","=SUM(B9:B11)","=SUM(C9:C11)","=SUM(D9:D11)","=SUM(B12:D12)"],
+    ["当月純増減","=B7-B12","=C7-C12","=D7-D12","=SUM(B13:D13)"],
+    ["月末現金","=B2+B13","=C2+C13","=D2+D13","=SUM(B14:D14)"],
+    ["月次燃焼(出金−経常入金)","=B12-B5","=C12-C5","=D12-D6","=SUM(B15:D15)"],
+    ["★ランウェイ(月)＝月初現金÷燃焼","=IFERROR(B2/B15,\"-\")","=IFERROR(C2/C15,\"-\")","=IFERROR(D2/D15,\"-\")","=IFERROR(E2/E15,\"-\")"],
+    ["","","","",""],
+    ["※リアル化メモ：主格間移動(役員貸付/借入)は別行で明示／クーパン売掛・SBI証券の拘束現金は月初現金から除外して真のランウェイに","","","",""]
+  ]);
+  head(s5,"A1:E1"); s5.getRange("B2:D2").setBackground(Y); s5.getRange("B9:D11").setBackground(Y);
+  s5.getRange("E2:E16").setBackground(B); s5.getRange("B14:E14").setBackground(B);
+  s5.getRange("A16:E16").setBackground(GR).setFontWeight("bold");
+
+  // 06_BS過去実績（MF自動・月初トリガー）
+  var s6=mk("06_BS過去実績");
+  put(s6,[
+    ["BS（過去実績・3主格）","法人","研太","麻梨奈","全体"],
+    ["現預金","","","","=SUM(B2:D2)"],
+    ["総資産","","","","=SUM(B3:D3)"],
+    ["総負債","","","","=SUM(B4:D4)"],
+    ["純資産","=B3-B4","=C3-C4","=D3-D4","=B5+C5+D5"],
+    ["","","","",""],
+    ["★運用：MF連携で自動集計。手動部分だけ見たい日(本来は月初のみ)にトリガー実行→自動集計完了→01へ反映。本体06と同方式","","","",""]
+  ]);
+  head(s6,"A1:E1"); s6.getRange("B2:D4").setBackground(G); s6.getRange("B5:E5").setBackground(B);
+  s6.getRange("A7:E7").setBackground(GR).setFontWeight("bold");
+
+  // 01_司令塔（表示専用・シンプル・必須漏れなし）
+  var s1=mk("01_司令塔");
+  put(s1,[
+    ["① 統合司令塔 — 表示専用（入力は🟡02/03へ）",""],
+    ["◆ 過去（実績ストック）",""],
+    ["純資産","='06_BS過去実績'!E5"],
+    ["◆ 現在（体力）",""],
+    ["現預金(全主格)","='05_資金繰り'!E2"],
+    ["ランウェイ(全体・月)","='05_資金繰り'!E16"],
+    ["体力判定","=IF('05_資金繰り'!E16<3,\"🔴守り:投資凍結\",IF('05_資金繰り'!E16<6,\"🟡注意\",\"🟢攻めOK\"))"],
+    ["◆ 未来（損益・詳細→04_PL）",""],
+    ["限界利益(粗利)","='04_PL'!B5"],
+    ["経常利益(結論)","='04_PL'!B7"],
+    ["毎月の穴","='04_PL'!B8"],
+    ["黒字判定","='04_PL'!B12"],
+    ["◆ ボトルネック＝営業（目標60%）",""],
+    ["必要追客/日","='03_売上見込み'!B14"],
+    ["◆ 今日のNorth Star",""],
+    ["今日PL科目に効く行動を取れたか","→ 02_報告ログに『科目つき報告』が1行でも入ったか"],
+    ["今日の一手","栄町=大坪さんへ口座確認(6/8決済の生命線)"]
+  ]);
+  head(s1,"A1:B1");
+  ["A2:B2","A4:B4","A8:B8","A13:B13","A15:B15"].forEach(function(a){ s1.getRange(a).setBackground("#EAE0DA").setFontWeight("bold"); });
+  s1.getRange("B3").setBackground(B); s1.getRange("B5:B7").setBackground(B); s1.getRange("B9:B12").setBackground(B);
+  s1.getRange("B10").setBackground(GOLD).setFontWeight("bold"); s1.getRange("B14").setBackground(B);
+  s1.getRange("B16:B17").setBackground("#FCE5CD");
+
+  // 📖使い方
+  var sx=mk("📖使い方");
+  put(sx,[
+    ["★ 経営操縦席 完成版 — 使い方",""],
+    ["North Star","今日PL科目(医療/物件/EC)に効く行動を取れたか"],
+    ["運用","菊池は『報告』するだけ→Claudeが🟡02_報告ログに1行追記→03が最新参照→01/04/05が自動更新"],
+    ["ログ方式の肝","02は追記専用＝過去を消さない→連動が崩れない(消したくないデータが消えるリスク回避)"],
+    ["入力タブ(🟡)","02_報告ログ / 03_売上見込み の2枚だけ。ここで未来の数字づくりが完結"],
+    ["表示(🔵)/自動(🟢)","01司令塔=読むだけ / 04PL・05資金繰り・06BS=自動"],
+    ["04PL と 05資金繰りの使い分け","PL=損益(儲かってるか・発生主義) / 資金繰り=現金(いつ足りるか)。別概念だが同じ案件から連動。1画面で見たいなら同月軸で並べる(次段)"],
+    ["06BS","MF自動・月初トリガーで集計→01の純資産へ"],
+    ["色","🟡入力 / 🔵表示 / 🟢自動 / 金=結論(経常利益)"]
+  ]);
+  head(sx,"A1:B1"); sx.getRange("A2:A9").setBackground(G);
+
+  // 並び＝表示→入力(02/03)→自動(04/05/06)→使い方／タブ色で分離
+  ["01_司令塔","02_報告ログ","03_売上見込み","04_PL","05_資金繰り","06_BS過去実績","📖使い方"].forEach(function(nm,i){ var s=ss.getSheetByName(nm); if(s){ ss.setActiveSheet(s); ss.moveActiveSheet(i+1); } });
+  tc("01_司令塔","#4A86E8");
+  ["02_報告ログ","03_売上見込み"].forEach(function(n){ tc(n,"#F1C232"); });
+  ["04_PL","05_資金繰り","06_BS過去実績"].forEach(function(n){ tc(n,"#6AA84F"); });
+  tc("📖使い方","#999999");
+  // 旧設計版v1のトイタブを削除
+  ["00_司令塔","01_売上見込み","02_営業ログ","03_PL","04_資金繰り","05_時間配分","★使い方・動線","シート1","Sheet1"].forEach(function(nm){ var s=ss.getSheetByName(nm); if(s) ss.deleteSheet(s); });
+  ss.setActiveSheet(ss.getSheetByName("01_司令塔"));
+  return { ok:true, url:ss.getUrl(), tabs:["01_司令塔","02_報告ログ","03_売上見込み","04_PL","05_資金繰り","06_BS過去実績","📖使い方"] };
+}
+
+// ── 修正案v3：本体コピーに全要件実装（報告ログ/03ハブ/05主格別ランウェイ/日報連動/収益パイプ削除）2026-06-06 ──
+function buildSosa(body) {
+  const ss = SpreadsheetApp.openById((body && body.hostId) || "1iG0Q7FgIIzX1CK9k7ypdqIwGGVY_-KwhwF75r5hqENk");
+  const NIPPO = "129j7x0Y4icgzYdTs9s_w1GBnFMIdVMtrTXqHeapM_f8";
+  const Y="#FFF2CC",B="#CFE2F3",G="#ECECEC",BR="#AA2E26",GR="#D9EAD3";
+  function shk(kw){ var a=ss.getSheets(); for(var i=0;i<a.length;i++){ if(a[i].getName().indexOf(kw)>=0) return a[i]; } return null; }
+  function tc(s,c){ if(s) s.setTabColor(c); }
+
+  // 1) 不要タブ削除（収益パイプライン＝売上見込みと二重／v2途中版／未来会計図表）
+  ["収益パイプライン","🔬経営診断","🎯事業計画","🪜KPI→WBS","未来会計図表"].forEach(function(nm){ var s=ss.getSheetByName(nm); if(s) ss.deleteSheet(s); });
+
+  // 2) 📥報告ログ（追記専用＝消えない・ログ駆動）
+  var lg=ss.getSheetByName("📥報告ログ"); if(lg) ss.deleteSheet(lg); lg=ss.insertSheet("📥報告ログ");
+  lg.getRange(1,1,4,7).setValues([
+    ["日付","種別","案件・相手","科目","項目","値","メモ"],
+    ["2026-06-06","物件","栄町(持倉様)","物件売却","確度","0.9","6/8決済"],
+    ["2026-06-06","医療","曾我先生","医療コンサル","確度","0.4","反応微妙→様子見"],
+    ["★追記専用(絶対に消さない)。Claudeが報告から1行足す→03が最新参照→01/04/05が自動更新。過去が残るので連動が崩れない","","","","","",""]
+  ]);
+  lg.getRange("A1:G1").setBackground(BR).setFontColor("#FFFFFF").setFontWeight("bold");
+  lg.getRange("A2:G3").setBackground(Y); lg.getRange("A4").setFontColor(BR).setFontWeight("bold");
+
+  // 3) 03_売上見込み ハブ（連動列は不可侵・N列以降を追加）
+  var u=shk("売上見込み");
+  if(u){
+    u.getRange("N4").setValue("業務種別"); u.getRange("O4").setValue("売上化?"); u.getRange("P4").setValue("次アクション"); u.getRange("Q4").setValue("期限");
+    u.getRange(5,14,7,4).setValues([
+      ["物件","🟢直結","大坪へ口座確認→6/8決済","6/8"],
+      ["医療","🟢直結","福井に提示催促(反応微妙)","随時"],
+      ["物件","🟡仕込み","宮崎とテレアポ設計",""],
+      ["物件","🟡仕込み","新規仕入ソーシング",""],
+      ["医療","🟡仕込み","セミナー後追客",""],
+      ["医療","🟡仕込み","My AI提案デモ",""],
+      ["物件","🟡仕込み","横浜NPO 福井MTG","6/15"]
+    ]);
+    u.getRange("N5:Q14").setBackground(Y); u.getRange("N4:Q4").setBackground(BR).setFontColor("#FFFFFF").setFontWeight("bold");
+    u.getRange("A34").setValue("■ 非売上業務も「売上化?」で横断").setFontWeight("bold");
+    u.getRange(35,1,4,4).setValues([
+      ["調査士(朝活)","内務","⬜自己投資","2027合格→単価UP"],
+      ["家族/親子","00","⬜死守","記念日先回り"],
+      ["記帳/残高更新","内務","⬜守り","月次・AIへ"],
+      ["メディア発信(X/note)","仕込み","🟡仕込み","Drでじ超え・週2図解"]
+    ]);
+    u.getRange("A35:D38").setBackground(G); u.getRange("C35:C38").setBackground(Y);
+    u.getRange("A40").setValue("■ 営業ドライバー入力（転換率・稼働日＝03に集約）").setFontWeight("bold");
+    u.getRange(41,1,3,2).setValues([["追客→アポ 転換率",0.5],["アポ→成約 転換率",0.2],["月の稼働日",20]]);
+    u.getRange("B41:B43").setBackground(Y);
+    u.getRange("A45").setValue("※報告は📥報告ログへ→確度・着金はここに反映（Claudeが記録）");
+  }
+
+  // 4) 05_資金繰り：主格別出金SUMIF＋主格別/全体ランウェイ（BS最新現預金をLOOKUPで堅牢取得）
+  var cf=shk("資金繰り");
+  if(cf){
+    cf.getRange("A43").setValue("■ 主格別 集計＆ランウェイ（法人/研太/麻梨奈・サイフォ集計）").setFontWeight("bold");
+    cf.getRange(44,1,6,5).setValues([
+      ["項目","法人","研太(個人事業+私)","麻梨奈","全主格(集計)"],
+      ["現預金(BS最新)","=LOOKUP(9.99E+307,'06_資産負債BS'!12:12)","=LOOKUP(9.99E+307,'06_資産負債BS'!13:13)","=LOOKUP(9.99E+307,'06_資産負債BS'!14:14)","=SUM(B45:D45)"],
+      ["月次出金(SUMIF)","=SUMIF(A14:A26,\"*法人*\",B14:B26)","=SUMIF(A14:A26,\"*個人事業*\",B14:B26)+SUMIF(A14:A26,\"*プライベート*\",B14:B26)","=SUMIF(A14:A26,\"*世帯*\",B14:B26)","=SUM(B46:D46)"],
+      ["月次入金(概算)","0","='04_損益PL'!B15","156659","=SUM(B47:D47)"],
+      ["月次燃焼(出−入)","=B46-B47","=C46-C47","=D46-D47","=SUM(B48:D48)"],
+      ["★ランウェイ(月)","=IFERROR(B45/B48,\"-\")","=IFERROR(C45/C48,\"-\")","=IFERROR(D45/D48,\"-\")","=IFERROR(E45/E48,\"-\")"]
+    ]);
+    cf.getRange("A44:E44").setBackground(BR).setFontColor("#FFFFFF").setFontWeight("bold");
+    cf.getRange("B45:D48").setBackground(G); cf.getRange("E45:E49").setBackground(B); cf.getRange("B49:D49").setBackground(B);
+    cf.getRange("A49:E49").setFontWeight("bold");
+    cf.getRange("A51").setValue("※リアル化：主格間移動(役員貸付/借入)は別行明示／クーパン売掛・SBI証券の拘束現金は現預金から除外で真ランウェイに");
+  }
+
+  // 5) 06_BS：MF自動・月初トリガー注記
+  var bs=shk("資産負債");
+  if(bs){ bs.getRange("BI1").setValue("※MF自動集計・月初トリガーで更新→01へ反映"); }
+
+  // 6) 01_司令塔：表示専用＋日報連動(作業時間/営業直結%)
+  var s1=shk("統合司令塔");
+  if(s1){
+    s1.getRange("D1").setValue("◀表示専用。入力は🟡02/03へ").setFontColor(BR).setFontWeight("bold");
+    s1.getRange("A41").setValue("■ 作業時間（日報連動・IMPORTRANGE）").setFontWeight("bold");
+    s1.getRange(42,1,3,2).setValues([
+      ["総作業時間(分)","=SUM(IMPORTRANGE(\""+NIPPO+"\",\"KHD日報ログ!I2:I2000\"))"],
+      ["営業直結時間(分)","=SUMIF(IMPORTRANGE(\""+NIPPO+"\",\"KHD日報ログ!L2:L2000\"),\"○\",IMPORTRANGE(\""+NIPPO+"\",\"KHD日報ログ!I2:I2000\"))"],
+      ["営業直結 時間比率","=IFERROR(B43/B42,\"-\")"]
+    ]);
+    s1.getRange("B42:B44").setBackground(B);
+    s1.getRange("A45").setValue("※初回はB42セルで『アクセスを許可』をクリック（IMPORTRANGE認証）");
+  }
+
+  // 7) タブ整理：見えるのは 03/📥報告ログ/01/05 ＋色分け
+  ["07_本部マトリクス","08_残高クイック入力","09_MF残高","11_KPI","pass","02_追客リスト","04_損益PL","06_資産負債BS"].forEach(function(nm){
+    var s=ss.getSheetByName(nm) || shk(nm.replace(/^[0-9]+_/,"")); if(s) s.hideSheet();
+  });
+  var ord=[shk("売上見込み"),ss.getSheetByName("📥報告ログ"),shk("統合司令塔"),shk("資金繰り")];
+  ord.forEach(function(s,i){ if(s){ s.showSheet(); ss.setActiveSheet(s); ss.moveActiveSheet(i+1); } });
+  tc(shk("統合司令塔"),"#4A86E8");
+  tc(shk("売上見込み"),"#F1C232"); tc(ss.getSheetByName("📥報告ログ"),"#F1C232");
+  tc(shk("資金繰り"),"#6AA84F");
+  ss.setActiveSheet(shk("売上見込み"));
+  return { ok:true, url:ss.getUrl(), 削除:"収益パイプライン他", 主格別ランウェイ:"BS LOOKUP", 日報連動:"IMPORTRANGE(要認証)" };
+}
+
+// ── 実装①：02_作業DB（旧追客＋日報＋報告ログ統合・追記専用）本体に追加 2026-06-06 ──
+function buildDB02(body) {
+  const ss = SpreadsheetApp.openById((body && body.hostId) || "1ofLJOFuW5175OHDSy0J0561LzrfAU-M015o7ByGH5wc");
+  const Y="#FFF2CC",BR="#AA2E26",G="#ECECEC";
+  var s = ss.getSheetByName("02_作業DB"); if(s) ss.deleteSheet(s); s = ss.insertSheet("02_作業DB");
+  var rows = [
+   ["日付","区分","本部","案件・相手","種類・科目","流入・出所","温度","内容","予定開始","予定終了","実開始","実終了","実所要分","営業直結","報告項目","報告値","結果","ステータス","最終接触","次アクション","期限","詳細リンク"],
+   ["2026-06-06","予定","05","栄町(持倉様)","物件売却","京葉不動産/直","HOT","大坪へ口座確認","09:00","09:30","","","","○","","","","進行","確定","大坪へ口座確認","6/8",""],
+   ["2026-06-06","実績","04","曾我先生","医療コンサル","福井→アイリス","WARM","福井へ提示催促","","","10:00","10:20","20","○","確度","0.4","反応微妙","提案中","2026-06-02","様子見・関係維持","随時",""],
+   ["2026-06-06","実績","03","cloud mil(小池)","cloud mil反響","cloud mil親","WARM","個別提案 追客","","","11:00","11:15","15","○","追客","1","送信済","進行","2026-06-06","返信待ち","",""],
+   ["2026-06-06","予定","04","土地家屋調査士","内務","-","-","朝活","06:30","09:00","","","","-","","","","仕込","","","",""],
+   ["2026-06-06","突発","01","税務","内務","-","-","記帳問い合わせ対応","","","13:00","13:20","20","✕","","","","完了","","","",""],
+   ["（新規はここに1行・Claudeが報告から追記。報告項目=確度/着金月/満額/追客/作業時間 等）","","","","","","","","","","","","","","","","","","","","",""],
+  ];
+  s.getRange(1,1,rows.length,22).setValues(rows);
+  s.getRange("A1:V1").setBackground(BR).setFontColor("#FFFFFF").setFontWeight("bold");
+  s.getRange(2,1,5,22).setBackground(Y);
+  s.getRange(7,1,1,22).setBackground(G);
+  // 運用メモ
+  s.getRange("A9").setValue("★この02_作業DBが唯一の入力ハブ＝追記専用(絶対に消さない)。旧・追客リスト＋日報＋報告ログを統合。").setFontWeight("bold").setFontColor(BR);
+  s.getRange("A10").setValue("流れ：作業DB(02)→売上予定(03は確度/着金をここからLOOKUP)→PL+CF(04/05)→BS(06)→一覧(01)。あなたは報告するだけ、Claudeが1行追記。");
+  s.getRange("A11").setValue("区分：予定=朝にカレンダーから／実績=夜に実開始/実終了/実所要を補充／突発=日中の記録。時間は同じ行の予定列vs実績列(上書きでなく補充)。案件の数値報告は新規行(履歴・消えない)。");
+  s.setFrozenRows(1); s.setTabColor("#F1C232");
+  // 01の直後へ
+  var s01=ss.getSheetByName("01_統合司令塔")||ss.getSheets()[0];
+  ss.setActiveSheet(s); ss.moveActiveSheet(2);
+  return { ok:true, url:ss.getUrl(), tab:"02_作業DB", note:"追加のみ・既存タブ無傷" };
+}
+
+// ── 実装②：02→03 LOOKUP配線＋02に種まき/出会い区分 2026-06-06 ──
+function buildWire0203(body) {
+  const ss = SpreadsheetApp.openById((body && body.hostId) || "1ofLJOFuW5175OHDSy0J0561LzrfAU-M015o7ByGH5wc");
+  const Y="#FFF2CC", G="#ECECEC";
+  function shk(kw){ var a=ss.getSheets(); for(var i=0;i<a.length;i++){ if(a[i].getName().indexOf(kw)>=0) return a[i]; } return null; }
+
+  // (1) 02_作業DBに「種まき/出会い」サンプル＋栄町確度の実報告デモを追記、区分凡例を追加
+  var db = ss.getSheetByName("02_作業DB");
+  if(db){
+    var last = db.getLastRow();
+    db.getRange(last+1,1,2,22).setValues([
+      ["2026-06-06","種まき/出会い","00","異業種交流会","出会い","紹介","-","名刺交換3名(うち1名 開業医)","","","19:00","21:00","120","△","出会い","3","良縁","仕込","2026-06-06","開業医にAI診断GIVE",""," "],
+      ["2026-06-06","案件更新","05","栄町売却（→法人SBI）","物件売却","京葉不動産/直","HOT","確度更新","","","","","","○","確度","0.95","決済目前","進行","2026-06-06","6/8決済","6/8",""]
+    ]);
+    db.getRange(last+1,1,2,22).setBackground(Y);
+    db.getRange("X1").setValue("区分の選択肢：予定／実績／突発／種まき・出会い／案件更新。報告項目：確度／着金月／満額／追客／作業時間／出会い 等。種まき・出会い＝偶然を資産化(後で現金化したら辿れる)").setFontColor("#AA2E26").setFontWeight("bold");
+  }
+
+  // (2) 03_売上見込み：確度(F)・着金月(G)を02の最新報告からLOOKUP、無ければseed(元値)に
+  var u = shk("売上見込み");
+  if(u){
+    // 元のF/Gをseed列R/Sへ退避（読んでから上書き）
+    var fv = u.getRange("F5:F14").getValues();
+    var gv = u.getRange("G5:G14").getValues();
+    u.getRange("R5:R14").setValues(fv);
+    u.getRange("S5:S14").setValues(gv);
+    u.getRange("R4").setValue("確度_seed(初期値)"); u.getRange("S4").setValue("着金_seed");
+    u.getRange("R4:S4").setBackground(G);
+    for(var r=5;r<=14;r++){
+      u.getRange("F"+r).setFormula("=IFERROR(LOOKUP(2,1/(('02_作業DB'!$D$2:$D$2000=$C"+r+")*('02_作業DB'!$O$2:$O$2000=\"確度\")),'02_作業DB'!$P$2:$P$2000),R"+r+")");
+      u.getRange("G"+r).setFormula("=IFERROR(LOOKUP(2,1/(('02_作業DB'!$D$2:$D$2000=$C"+r+")*('02_作業DB'!$O$2:$O$2000=\"着金月\")),'02_作業DB'!$P$2:$P$2000),S"+r+")");
+    }
+    u.getRange("F5:G14").setBackground("#CFE2F3"); // 自動連動(青)に
+    u.getRange("U4").setValue("※確度F・着金G＝02作業DBの最新報告を案件名キーで自動参照。報告が無ければseed(R/S)。報告時は03の案件名(C列)と一致させること");
+  }
+  return { ok:true, wired:"02→03 確度/着金 LOOKUP", demo:"栄町確度0.95が02報告→03に反映されるはず", seed:"R/S列に退避" };
+}
+
+// ── 実装②修正：LOOKUP→FILTERベースに差替(Sheetsで堅牢)＋報告値を数値化。再追記しない 2026-06-06 ──
+function fixWire0203(body) {
+  const ss = SpreadsheetApp.openById((body && body.hostId) || "1ofLJOFuW5175OHDSy0J0561LzrfAU-M015o7ByGH5wc");
+  function shk(kw){ var a=ss.getSheets(); for(var i=0;i<a.length;i++){ if(a[i].getName().indexOf(kw)>=0) return a[i]; } return null; }
+  // 02の確度報告値を数値化（テキスト"0.95"等→数値）
+  var db = ss.getSheetByName("02_作業DB");
+  if(db){
+    var lastR = db.getLastRow();
+    for(var i=2;i<=lastR;i++){
+      if(db.getRange(i,15).getValue()==="確度"){ var pv=db.getRange(i,16).getValue(); if(pv!==""&&pv!==null) db.getRange(i,16).setValue(Number(pv)); }
+    }
+  }
+  // 03の確度F・着金G をFILTERベース(最新=末尾)で02から取得、無ければseed(R/S)
+  var u = shk("売上見込み");
+  if(u){
+    for(var r=5;r<=14;r++){
+      var fF="=IFERROR(INDEX(FILTER('02_作業DB'!$P$2:$P$2000,('02_作業DB'!$D$2:$D$2000=$C"+r+")*('02_作業DB'!$O$2:$O$2000=\"確度\")),COUNTA(FILTER('02_作業DB'!$P$2:$P$2000,('02_作業DB'!$D$2:$D$2000=$C"+r+")*('02_作業DB'!$O$2:$O$2000=\"確度\")))),R"+r+")";
+      var fG="=IFERROR(INDEX(FILTER('02_作業DB'!$P$2:$P$2000,('02_作業DB'!$D$2:$D$2000=$C"+r+")*('02_作業DB'!$O$2:$O$2000=\"着金月\")),COUNTA(FILTER('02_作業DB'!$P$2:$P$2000,('02_作業DB'!$D$2:$D$2000=$C"+r+")*('02_作業DB'!$O$2:$O$2000=\"着金月\")))),S"+r+")";
+      u.getRange("F"+r).setFormula(fF);
+      u.getRange("G"+r).setFormula(fG);
+    }
+  }
+  return { ok:true, fixed:"FILTERベースに差替・報告値数値化", expect:"栄町確度→0.95に反映されるはず" };
+}
+
+// ── カレンダー：終了イベント確認 ──────────────────────────
+function checkEndingEvents() {
+  try {
+    const now = new Date();
+    const windowMin = 26; // 25分+1分バッファ
+    const from = new Date(now.getTime() - windowMin * 60 * 1000);
+
+    // 全カレンダーを検索
+    const calendars = CalendarApp.getAllCalendars();
+    const ending = [];
+    const props = PropertiesService.getScriptProperties();
+
+    calendars.forEach(cal => {
+      if (cal.isHidden() || cal.isSelected() === false) return;
+      cal.getEvents(from, now).forEach(ev => {
+        if (ev.isAllDayEvent()) return;
+        const end = ev.getEndTime();
+        if (end < from || end > now) return;
+
+        // 重複通知防止（同じイベントを15分以内に2度聞かない）
+        const key = "asked_" + ev.getId();
+        if (props.getProperty(key)) return;
+        props.setProperty(key, "1");
+
+        // 2時間後に自動削除（PropertiesServiceは自動削除機能ないので別途）
+        ending.push({
+          title: ev.getTitle(),
+          end: formatTime(end),
+          id: ev.getId().slice(0, 20)
+        });
+      });
+    });
+
+    return { events: ending, checked_at: formatTime(now) };
+  } catch (e) {
+    return { events: [], error: e.toString() };
+  }
+}
+
+// ── 対話ログ記録 ─────────────────────────────────────────
+function logConversation(body) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName("LINE対話ログ");
+  if (!sheet) {
+    sheet = ss.insertSheet("LINE対話ログ");
+    sheet.appendRow(["日時", "送信者", "方向", "内容", "アクション"]);
+  }
+  const now = todayStr() + " " + formatTime(new Date());
+  sheet.appendRow([
+    now,
+    body.sender || "菊池",
+    body.direction || "受信",
+    body.content || "",
+    body.action_taken || ""
+  ]);
+  return { logged: true };
+}
+
+// ── 次のWBSタスク提案 ────────────────────────────────────
+function getNextTask() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName("02_全社WBS");
+  if (!sheet) return { error: "WBSシートが見つかりません" };
+
+  const data = sheet.getDataRange().getValues();
+  let headerRow = -1, colTask = 1, colStatus = -1, colFrom = -1, colDept = 0;
+  for (let i = 0; i < data.length; i++) {
+    const idx = data[i].indexOf("ステータス");
+    if (idx >= 0) {
+      headerRow = i; colStatus = idx;
+      const ti = data[i].indexOf("工程"); if (ti >= 0) colTask = ti;
+      const fi = data[i].indexOf("From"); if (fi >= 0) colFrom = fi;
+      break;
+    }
+  }
+  if (headerRow < 0) return { error: "ヘッダーが見つかりません" };
+
+  const today = new Date();
+  const priority = [], upcoming = [];
+
+  for (let i = headerRow + 1; i < data.length; i++) {
+    const task   = String(data[i][colTask]).trim();
+    const status = String(data[i][colStatus]).trim();
+    const dept   = String(data[i][colDept]).trim();
+    if (!task || /ルーティン/.test(status)) continue;
+    if (/完了|済み/.test(status)) continue;
+
+    const label = `[${dept}] ${task}`;
+    if (/最優先/.test(status)) priority.push(label);
+    else if (/対応中/.test(status)) upcoming.push(label);
+  }
+
+  const all = [...priority, ...upcoming].slice(0, 3);
+  if (all.length === 0) return { message: "対応中タスクなし" };
+
+  return {
+    suggestion: "次はこれですか？\n" + all.map((t,i) => `${i+1}. ${t}`).join("\n"),
+    tasks: all
+  };
+}
+
+// ── WBS進捗サマリー取得 ───────────────────────────────────
+function getWbsSummary() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName("02_全社WBS");
+  if (!sheet) return { error: "WBSシートが見つかりません" };
+
+  const data = sheet.getDataRange().getValues();
+
+  let headerRow = -1, colStatus = -1, colTask = 1, colDept = 0, colProgress = -1;
+  for (let i = 0; i < data.length; i++) {
+    const idx = data[i].indexOf("ステータス");
+    if (idx >= 0) {
+      headerRow  = i;
+      colStatus  = idx;
+      colTask    = data[i].indexOf("工程");    if (colTask < 0) colTask = 1;
+      colDept    = data[i].indexOf("部署");    if (colDept < 0) colDept = 0;
+      colProgress = data[i].indexOf("進捗率");
+      break;
+    }
+  }
+  if (headerRow < 0) return { error: "WBSヘッダーが見つかりません" };
+
+  const DONE     = ["完了", "済み"];
+  const PRIORITY = ["最優先"];
+  const ACTIVE   = ["対応中", "新規立ち上げ", "新規構築中", "段階拡大中", "計画中"];
+  const ROUTINE  = ["ルーティン"];
+
+  let done = 0, total = 0;
+  const priority = [], active = [];
+
+  for (let i = headerRow + 1; i < data.length; i++) {
+    const task   = String(data[i][colTask]).trim();
+    const dept   = String(data[i][colDept]).trim();
+    const status = String(data[i][colStatus]).trim();
+    if (!task || ROUTINE.some(s => status.includes(s))) continue;
+    total++;
+    if (DONE.some(s => status.includes(s))) {
+      done++;
+    } else if (PRIORITY.some(s => status.includes(s))) {
+      priority.push(`🔴 [${dept}] ${task}`);
+    } else if (ACTIVE.some(s => status.includes(s))) {
+      active.push(`🟡 [${dept}] ${task}`);
+    }
+  }
+
+  const lines = [`📊 WBS: 完了${done}/${total}件`];
+  if (priority.length) {
+    lines.push("\n🔴 最優先:");
+    priority.slice(0, 5).forEach(t => lines.push("  " + t.replace(/^🔴 /, "")));
+  }
+  if (active.length) {
+    lines.push("\n🟡 対応中:");
+    active.slice(0, 5).forEach(t => lines.push("  " + t.replace(/^🟡 /, "")));
+  }
+  if (!priority.length && !active.length) lines.push("対応中タスクなし");
+
+  return { summary: lines.join("\n"), done, total,
+           priority: priority.length, active: active.length };
+}
+
+// ── 音声報連相パース → 自動更新 ──────────────────────────
+function parseAndUpdate(text) {
+  if (!text) return { error: "textが空です" };
+  const t = text.trim();
+  const results = [];
+
+  // ① WBS完了
+  const wbsDone = t.match(/^(.+?)(?:が|を|は)?(?:終わっ|完了|できた|片付|済み|やり切|リリース|上げ)/);
+  if (wbsDone) {
+    const task = wbsDone[1].trim();
+    if (!/朝活|勉強|学習|民法|不登|KPI|他力|EQ|家族/.test(task)) {
+      results.push(updateWbs(task, "完了", "100%"));
+    }
+  }
+
+  // ② WBS対応中
+  if (!wbsDone) {
+    const wbsWip = t.match(/^(.+?)(?:に|を)?(?:着手|対応中|始め|取り掛|やり始|進め)/);
+    if (wbsWip) {
+      const task = wbsWip[1].trim();
+      if (!/朝活|勉強|学習|民法|不登|KPI|他力|EQ|家族/.test(task)) {
+        results.push(updateWbs(task, "対応中", null));
+      }
+    }
+  }
+
+  // ③ 学習ログ
+  const study = {};
+  const hm = t.match(/(?:朝活|勉強|学習)[^\d]*(\d+(?:\.\d+)?)\s*(?:時間|h|H)/);
+  if (hm) study.hours = parseFloat(hm[1]);
+  const rm = t.match(/(?:民法|不登法|択一|記述|区分|表題)[^\d]*\d+[~〜\-]?\d*\s*(?:問|p|P|ページ|頁)?/);
+  if (rm) study.range_takuitsu = rm[0].trim();
+  const mm = t.match(/ミス[^\d]*(\d+)\s*(?:個|問|つ)?/);
+  if (mm) study.miss_count = parseInt(mm[1]);
+  if (Object.keys(study).length > 0) results.push(updateStudy(study));
+
+  // ④ KPI
+  const kpiBody = {};
+  const kpiPatterns = [
+    ["tariki",   /他力[：:\s]*([○×〇✕])/],
+    ["eq",       /EQ[：:\s]*([○×〇✕])/],
+    ["chokatsu", /朝活[：:\s]*([○×〇✕])/],
+    ["sen_sabo", /戦サボ[：:\s]*([○×〇✕])/],
+    ["kazoku",   /家族[：:\s]*([○×〇✕])/],
+  ];
+  kpiPatterns.forEach(([key, pat]) => {
+    const m = t.match(pat);
+    if (m) kpiBody[key] = m[1].replace("〇","○").replace("✕","×");
+  });
+  if (/KPI.{0,10}(?:全部|全て|全達成|達成|①②③④⑤)/.test(t) && Object.keys(kpiBody).length === 0) {
+    kpiPatterns.forEach(([key]) => { kpiBody[key] = "○"; });
+  }
+  if (Object.keys(kpiBody).length > 0) results.push(updateKpi(kpiBody));
+
+  // ⑤ 日次ログ（会議・打ち合わせ系）
+  if (/(?:やった|参加|mtg|ミーティング|打ち合|会議|報告|確認|連絡|提出|送った|送信)/i.test(t)) {
+    results.push(appendLog({ content: t, category: "業務記録" }));
+  }
+
+  if (results.length === 0) return { error: "パターン未検出: " + t };
+
+  const summaries = results.map(r => {
+    const upd = (r.updated || []).join(" / ");
+    return upd || ("row=" + r.row);
+  });
+  return { parsed: t, actions: results.length, summaries };
+}
+
+// ── デバッグ：シート構造確認 ──────────────────────────
+function debugSheet(partial) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = partial ? findSheetByPartial(ss, partial) : ss.getActiveSheet();
+  if (!sheet) return { error: "シートが見つかりません: " + partial };
+  const data = sheet.getDataRange().getValues();
+  return {
+    name: sheet.getName(),
+    rows: data.length,
+    row1: data[0],
+    row2: data[1] || [],
+    row3: data[2] || [],
+    row4: data[3] || [],
+  };
+}
+
+// ── ユーティリティ ────────────────────────────────────
+function notNull(v) {
+  return v !== undefined && v !== null;
+}
+
+function findSheetByPartial(ss, partial) {
+  return ss.getSheets().find(s => s.getName().includes(partial)) || null;
+}
+
+function todayStr() {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,"0");
+  const day = String(d.getDate()).padStart(2,"0");
+  return `${y}/${m}/${day}`;
+}
+
+function dateMatches(cellVal, todayFull) {
+  if (!cellVal) return false;
+  let s;
+  if (cellVal instanceof Date) {
+    s = todayStr.call(null); // same format
+    const d = cellVal;
+    s = `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,"0")}/${String(d.getDate()).padStart(2,"0")}`;
+  } else {
+    s = String(cellVal).replace(/\s*\([月火水木金土日]\).*/, "").trim();
+  }
+  // "2026/05/15" か "05/15" のどちらでも一致
+  return s === todayFull || s === todayFull.slice(5);
+}
+
+function formatTime(d) {
+  return String(d.getHours()).padStart(2,"0") + ":" + String(d.getMinutes()).padStart(2,"0");
+}
+
+function json(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}

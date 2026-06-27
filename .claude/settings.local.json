@@ -72,7 +72,11 @@
       "mcp__794fe495-8a1a-4fce-993e-122ed2414029__get_file_permissions",
       "mcp__line-harness__manage_forms",
       "mcp__line-harness__manage_tags",
-      "mcp__line-harness__create_scenario"
+      "mcp__line-harness__create_scenario",
+      "mcp__line-harness__account_summary",
+      "mcp__line-harness__manage_rich_menus",
+      "mcp__line-harness__manage_auto_replies",
+      "mcp__line-harness__list_conversations"
     ]
   },
   "enableAllProjectMcpServers": true,

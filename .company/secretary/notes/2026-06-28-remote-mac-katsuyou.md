@@ -21,3 +21,19 @@
 
 ## 残（次の1手）
 - [ ] スマホ→自宅Macリモート起動の具体手順を claude-code-guide で裏取り→1枚手順書化（憶測配線NG）。
+
+---
+
+## 成果物（2026-06-28 朝 作成）
+### ① デッキ修正：オペモデル × Mac3台・リモート活用（8枚）
+- ファイル：`01_オペモデル_Mac3台リモート活用_260628.pptx`（KHD標準デザイン／build_remote_ops.py）
+- 保存先：Drive「KHD_営業の型_オペレーティングモデル」 https://drive.google.com/drive/folders/1gS7zjUaZb3g3Zr9b4EZIyBRVUwnf9ZMF （元 1yNkHPq の新版＝差し替え用）
+- 構成：①表紙(3台ロール) ②大原則＋旧Mac格上げ ③**Mac3台の使い分け**(旧=自宅リモート箱/新=持出打席機/ゆーし=専用) ④スマホから投げる⬜代行カタログ(物件自動提案はやらせない=羽鳥学び) ⑤**リモート起動手順(#1)** ⑥方式比較＆セキュリティ ⑦1日の流れ ⑧締め
+- 3台ロール確定（菊池6/28承認）：旧Mac=自宅常設リモート箱・git母艦・常時2セッション(03追客/01財務)／新ハイスペック=持出打席機／ゆーしMac=ゆーし専用(本体DB不可・1案件1台)。
+
+### ② #1 リモート起動 手順書（上記⑤に内包）
+- 本命＝**Claude Code 公式 Remote Control**（`claude remote-control`系→iPhone「Claude」アプリでQR読込→接続）。SSH不要・コードはMac上のまま・無料(Pro/Max)。
+- 手順5ステップ：claude更新(v2.1.51+)→Remote Control開始(QR表示)→iPhoneアプリ同アカウント→QR読取接続→`caffeinate -di &`でスリープ阻止。常時2セッションは名前付き起動→Codeタブで切替。
+- 電源OFFからの遠隔起動(WoL)は不安定→旧Mac常時起動＋スリープなしが手堅い。
+- 代替：SSH+Tailscale+Blink(⭐4)／リモートデスク(⭐3)。セキュリティ＝SSHは閉域網+鍵必須。
+- 裏取り：claude-code-guide（出典 code.claude.com/docs/remote-control 他）。⚠️コマンド正確表記はバージョンで変わる→`claude --help`で要確認。

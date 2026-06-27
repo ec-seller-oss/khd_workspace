@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Users/kikuchikenta/01_honbu_docs_automation/scripts/khd_git_sync.sh pull",
+            "timeout": 90,
+            "statusMessage": "金庫から最新を取得中 (git pull)..."
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Users/kikuchikenta/01_honbu_docs_automation/scripts/khd_git_sync.sh push",
+            "timeout": 90,
+            "statusMessage": "金庫へ保存中 (git push)..."
+          }
+        ]
+      }
+    ]
+  }
+}

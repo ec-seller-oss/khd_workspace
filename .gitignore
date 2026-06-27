@@ -8,9 +8,11 @@ scripts/khd-line-worker
 *_token.txt
 *_secret.json
 
-# ログ
+# ログ・実行時ノイズ
 scripts/logs/
+logs/
 *.log
+*.pid
 
 # Python
 __pycache__/

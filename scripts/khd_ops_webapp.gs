@@ -23,7 +23,12 @@ function doPost(e) {
   }
 }
 
-// ── appendDb02: 1行追記 ────────────────────────────────────────────────────
+// 所要4列＝常に数式で自動。日付=日付値(MM/DD)・時刻=時刻値・件数=数値書式を仕組みで保証。
+var _TIME_COLS = ["予定開始", "予定終了", "実開始", "実終了"];
+var _COUNT_COLS = ["提案数", "GIVE数", "相談数"];
+var _FORMULA_COLS = ["予定所要(分)", "実所要(分)", "予実差分(分)", "達成率%"];
+
+// ── appendDb02: 1行追記（日付/時刻/所要/件数を自動整形）────────────────────
 function appendDb02(body) {
   const ss = SpreadsheetApp.openById((body && body.hostId) || COCKPIT_ID);
   var sh = _findDb02Sheet(ss);
@@ -31,53 +36,53 @@ function appendDb02(body) {
   var info = _getHeaders(sh);
   if (!info) return { error: "ヘッダ(日付)が見つからない", sheet: sh.getName() };
   if (body.headers_only) return { ok: true, sheet: sh.getName(), header_row: info.hRow, headers: info.headers };
+  var H = info.headers;
+
+  var iDate = _findColExact(H, "日付");
+  var iKS = _findColExact(H, "予定開始"), iKE = _findColExact(H, "予定終了");
+  var iMS = _findColExact(H, "実開始"),   iME = _findColExact(H, "実終了");
+  var iPlan = _findColExact(H, "予定所要(分)"), iAct = _findColExact(H, "実所要(分)");
+  var iDiff = _findColExact(H, "予実差分(分)"), iRate = _findColExact(H, "達成率%");
+
   var row = body.row || {}, out = [], unmatched = [];
-  for (var c = 0; c < info.headers.length; c++) out.push("");
-
-  // Q(予実差分(分))・R(達成率%)は数式で埋めるため、Pythonからの静的値を無視
-  // ※完全一致で検索（部分一致だと近似列に誤マッチする）
-  var qIdx = _findColExact(info.headers, "予実差分(分)");
-  var rIdx = _findColExact(info.headers, "達成率%");
-
+  for (var c = 0; c < H.length; c++) out.push("");
   for (var key in row) {
-    var idx = _findCol(info.headers, key);
+    var idx = _findCol(H, key);
     if (idx < 0) { unmatched.push(key); continue; }
-    if (idx === qIdx || idx === rIdx) continue; // 数式列はスキップ
-    out[idx] = row[key];
+    if (_FORMULA_COLS.indexOf(H[idx]) >= 0) continue; // 所要4列は数式で埋めるので静的値は無視
+    var val = row[key];
+    if (idx === iDate) { val = _toDate(val); }
+    else if (_TIME_COLS.indexOf(H[idx]) >= 0) { var t = _toTimeFrac(val); if (t !== null) val = t; }
+    out[idx] = val;
   }
 
-  // 先頭挿入（ヘッダー直下の行2に挿入して最新が上に来るようにする）
+  // 先頭挿入（ヘッダー直下=行2。最新が上）
   var newRow = info.hRow + 1;
   sh.insertRowBefore(newRow);
-  // 日付列はテキスト書式を強制（Sheetsが "2026-06-08" を時刻に自動変換するのを防ぐ）
-  var dateColIdx = _findColExact(info.headers, "日付");
-  if (dateColIdx >= 0) {
-    sh.getRange(newRow, dateColIdx + 1).setNumberFormat('@');
-  }
-  sh.getRange(newRow, 1, 1, info.headers.length).setValues([out]);
+  sh.getRange(newRow, 1, 1, H.length).setValues([out]);
 
-  // O列(予定所要(分))・P列(実所要(分))を使って Q・R に数式を挿入
-  // ※完全一致キーを使う（"実所要"だけだと"実所要分"(M列)に誤マッチするため）
-  var oIdx = _findColExact(info.headers, "予定所要(分)");
-  var pIdx = _findColExact(info.headers, "実所要(分)");
-  if (oIdx >= 0 && pIdx >= 0) {
-    var oCol = _colLetter(oIdx + 1);
-    var pCol = _colLetter(pIdx + 1);
-    // Q: 予実差分 = 予定 - 実（どちらかが空なら空白）
-    if (qIdx >= 0) {
-      sh.getRange(newRow, qIdx + 1).setFormula(
-        '=IF(OR(' + oCol + newRow + '="",' + pCol + newRow + '=""),"",'+oCol+newRow+'-'+pCol+newRow+')'
-      );
-    }
-    // R: 達成率% = 実/予定×100（実が空または0なら空白）
-    if (rIdx >= 0) {
-      sh.getRange(newRow, rIdx + 1).setFormula(
-        '=IF(OR(' + pCol + newRow + '="",' + pCol + newRow + '=0,' + oCol + newRow + '=""),"",ROUND('+pCol+newRow+'/'+oCol+newRow+'*100,1))'
-      );
-    }
-  }
+  // 書式：日付=MM/DD、時刻=HH:mm、件数=0（崩れ防止を仕組みで保証）
+  if (iDate >= 0) sh.getRange(newRow, iDate + 1).setNumberFormat("MM/DD");
+  _TIME_COLS.forEach(function (n) { var ix = _findColExact(H, n); if (ix >= 0) sh.getRange(newRow, ix + 1).setNumberFormat("HH:mm"); });
+  _COUNT_COLS.forEach(function (n) { var ix = _findColExact(H, n); if (ix >= 0) sh.getRange(newRow, ix + 1).setNumberFormat("0"); });
 
-  return { ok: true, appended_row: newRow, sheet: sh.getName(), headers: info.headers, unmatched: unmatched };
+  // 所要4列を自動数式で挿入（列は名前解決＝列移動に強い）
+  _writeDurationFormulas(sh, newRow, iKS, iKE, iMS, iME, iPlan, iAct, iDiff, iRate);
+
+  return { ok: true, appended_row: newRow, sheet: sh.getName(), headers: H, unmatched: unmatched };
+}
+
+// 予定所要/実所要/予実差分/達成率% を1行に数式で書き込む
+function _writeDurationFormulas(sh, r, iKS, iKE, iMS, iME, iPlan, iAct, iDiff, iRate) {
+  function L(ix) { return _colLetter(ix + 1); }
+  if (iPlan >= 0 && iKS >= 0 && iKE >= 0)
+    sh.getRange(r, iPlan + 1).setFormula('=IF(' + L(iKS) + r + '="","",ROUND((' + L(iKE) + r + '-' + L(iKS) + r + ')*1440,0))').setNumberFormat("0");
+  if (iAct >= 0 && iMS >= 0 && iME >= 0)
+    sh.getRange(r, iAct + 1).setFormula('=IF(' + L(iMS) + r + '="","",ROUND((' + L(iME) + r + '-' + L(iMS) + r + ')*1440,0))').setNumberFormat("0");
+  if (iDiff >= 0 && iPlan >= 0 && iAct >= 0)
+    sh.getRange(r, iDiff + 1).setFormula('=IF(OR(' + L(iPlan) + r + '="",' + L(iAct) + r + '=""),"",' + L(iPlan) + r + '-' + L(iAct) + r + ')').setNumberFormat("0");
+  if (iRate >= 0 && iPlan >= 0 && iAct >= 0)
+    sh.getRange(r, iRate + 1).setFormula('=IF(OR(' + L(iAct) + r + '="",' + L(iAct) + r + '=0,' + L(iPlan) + r + '="",' + L(iPlan) + r + '=0),"",ROUND(' + L(iAct) + r + '/' + L(iPlan) + r + '*100,1))').setNumberFormat("0");
 }
 
 // ── readDb02: 指定日付の全行を返す ────────────────────────────────────────
@@ -90,7 +95,6 @@ function readDb02(body) {
   if (!info) return { error: "ヘッダ(日付)が見つからない" };
 
   var targetDate = (body.date || "").toString().replace(/-/g, "/");
-  // "2026/06/07" → 短縮形 "06/07" も許容
   var shortDate = targetDate.slice(5); // "06/07"
 
   var lastRow = sh.getLastRow();
@@ -110,7 +114,6 @@ function readDb02(body) {
     } else {
       cellStr = String(cellVal).trim().replace(/-/g, "/");
     }
-    // フル一致 or 短縮一致
     if (!targetDate || cellStr === targetDate || cellStr.slice(-5) === shortDate) {
       var rowObj = {};
       for (var c = 0; c < info.headers.length; c++) {
@@ -124,34 +127,34 @@ function readDb02(body) {
   return { ok: true, rows: results, headers: info.headers, scanned: data.length };
 }
 
-// ── updateDb02: キーワードで行を特定して列を上書き ────────────────────────
-// body: { date, keyword, row_number (行番号直指定), updates: {列名:値} }
+// ── updateDb02: キーワード/行番号で行を特定して列を上書き（日付/時刻も整形）──
+// body: { date, keyword, row_number, updates: {列名:値} }
 function updateDb02(body) {
   const ss = SpreadsheetApp.openById((body && body.hostId) || COCKPIT_ID);
   var sh = _findDb02Sheet(ss);
   if (!sh) return { error: "02_作業DBが見つからない" };
   var info = _getHeaders(sh);
   if (!info) return { error: "ヘッダ(日付)が見つからない" };
+  var H = info.headers;
 
   var targetRowNum = body.row_number || null;
   var targetDate = (body.date || "").toString().replace(/-/g, "/");
   var shortDate = targetDate.slice(-5);
   var keyword = (body.keyword || "").toString();
   var updates = body.updates || {};
-  var dateColIdx = _findCol(info.headers, "日付");
-  var contentColIdx = _findCol(info.headers, "内容");
+  var dateColIdx = _findCol(H, "日付");
+  var contentColIdx = _findCol(H, "内容");
 
   var matchedRow = -1;
   if (targetRowNum) {
     matchedRow = targetRowNum;
   } else {
-    // スキャンして一致行を探す
     var lastRow = sh.getLastRow();
     var startRow = info.hRow + 1;
     var chunkSize = 500;
     outer: for (var s = startRow; s <= lastRow; s += chunkSize) {
       var end = Math.min(s + chunkSize - 1, lastRow);
-      var data = sh.getRange(s, 1, end - s + 1, info.headers.length).getValues();
+      var data = sh.getRange(s, 1, end - s + 1, H.length).getValues();
       for (var i = 0; i < data.length; i++) {
         var cellVal = data[i][dateColIdx];
         var cellStr = "";
@@ -170,24 +173,45 @@ function updateDb02(body) {
 
   if (matchedRow < 0) return { ok: true, matched: false, note: "該当行なし", date: targetDate, keyword: keyword };
 
-  // 対象行を更新
-  var rowData = sh.getRange(matchedRow, 1, 1, info.headers.length).getValues()[0];
+  var rowData = sh.getRange(matchedRow, 1, 1, H.length).getValues()[0];
   var applied = [];
   for (var key in updates) {
-    var idx = _findCol(info.headers, key);
-    if (idx >= 0) { rowData[idx] = updates[key]; applied.push(key); }
+    var idx = _findCol(H, key);
+    if (idx < 0) continue;
+    if (_FORMULA_COLS.indexOf(H[idx]) >= 0) continue; // 所要4列は数式で持つので静的上書きしない
+    var val = updates[key];
+    if (H[idx] === "日付") { val = _toDate(val); }
+    else if (_TIME_COLS.indexOf(H[idx]) >= 0) { var t = _toTimeFrac(val); if (t !== null) val = t; }
+    rowData[idx] = val; applied.push(key);
   }
-  sh.getRange(matchedRow, 1, 1, info.headers.length).setValues([rowData]);
+  sh.getRange(matchedRow, 1, 1, H.length).setValues([rowData]);
+
+  // 書式の再保証
+  var di = _findColExact(H, "日付"); if (di >= 0) sh.getRange(matchedRow, di + 1).setNumberFormat("MM/DD");
+  _TIME_COLS.forEach(function (n) { var ix = _findColExact(H, n); if (ix >= 0) sh.getRange(matchedRow, ix + 1).setNumberFormat("HH:mm"); });
+  _COUNT_COLS.forEach(function (n) { var ix = _findColExact(H, n); if (ix >= 0) sh.getRange(matchedRow, ix + 1).setNumberFormat("0"); });
+
+  // 行に所要数式が無ければ補完（古い行・手追加行の救済）
+  var iPlan = _findColExact(H, "予定所要(分)"), iAct = _findColExact(H, "実所要(分)");
+  var needFormula = false;
+  if (iPlan >= 0 && !String(sh.getRange(matchedRow, iPlan + 1).getFormula())) needFormula = true;
+  if (iAct >= 0 && !String(sh.getRange(matchedRow, iAct + 1).getFormula())) needFormula = true;
+  if (needFormula) {
+    _writeDurationFormulas(sh, matchedRow,
+      _findColExact(H, "予定開始"), _findColExact(H, "予定終了"),
+      _findColExact(H, "実開始"), _findColExact(H, "実終了"),
+      iPlan, iAct, _findColExact(H, "予実差分(分)"), _findColExact(H, "達成率%"));
+  }
+
   return { ok: true, matched: true, updated_row: matchedRow, applied: applied };
 }
 
 // ── deleteDb02Rows: 指定行番号リストを削除（降順で処理） ─────────────────
-// body: { row_numbers: [1024, 1025, ...] }
 function deleteDb02Rows(body) {
   const ss = SpreadsheetApp.openById((body && body.hostId) || COCKPIT_ID);
   var sh = _findDb02Sheet(ss);
   if (!sh) return { error: "02_作業DBが見つからない" };
-  var rows = (body.row_numbers || []).slice().sort(function(a,b){ return b-a; }); // 降順
+  var rows = (body.row_numbers || []).slice().sort(function(a,b){ return b-a; });
   var deleted = [];
   for (var i = 0; i < rows.length; i++) {
     var rn = parseInt(rows[i]);
@@ -196,48 +220,38 @@ function deleteDb02Rows(body) {
   return { ok: true, deleted: deleted };
 }
 
-// ── fixQrFormulas: 全データ行のQ(予実差分)・R(達成率%)を数式で上書き ────────
-// body: { host_id, from_row(省略時=ヘッダ+1) }
+// ── fixQrFormulas: 全データ行の所要4列を数式で上書き（既存行の一括修復用）──
+// body: { from_row(省略時=ヘッダ+1) }  ※A列(日付)もMM/DDに揃える
 function fixQrFormulas(body) {
   const ss = SpreadsheetApp.openById((body && body.hostId) || COCKPIT_ID);
   var sh = _findDb02Sheet(ss);
   if (!sh) return { error: "02_作業DBが見つからない" };
   var info = _getHeaders(sh);
   if (!info) return { error: "ヘッダ(日付)が見つからない" };
+  var H = info.headers;
 
-  // 完全一致で列を特定（部分一致だと誤マッチするため）
-  var oIdx = _findColExact(info.headers, "予定所要(分)");
-  var pIdx = _findColExact(info.headers, "実所要(分)");
-  var qIdx = _findColExact(info.headers, "予実差分(分)");
-  var rIdx = _findColExact(info.headers, "達成率%");
-  if (oIdx < 0 || pIdx < 0) return { error: "予定所要(分)/実所要(分)列が見つからない" };
-  if (qIdx < 0 && rIdx < 0) return { error: "予実差分(分)/達成率%列が見つからない" };
+  var iKS = _findColExact(H, "予定開始"), iKE = _findColExact(H, "予定終了");
+  var iMS = _findColExact(H, "実開始"),   iME = _findColExact(H, "実終了");
+  var iPlan = _findColExact(H, "予定所要(分)"), iAct = _findColExact(H, "実所要(分)");
+  var iDiff = _findColExact(H, "予実差分(分)"), iRate = _findColExact(H, "達成率%");
+  if (iPlan < 0 || iAct < 0) return { error: "予定所要(分)/実所要(分)列が見つからない" };
 
-  var oCol = _colLetter(oIdx + 1);
-  var pCol = _colLetter(pIdx + 1);
   var startRow = (body && body.from_row) ? parseInt(body.from_row) : info.hRow + 1;
   var lastRow  = sh.getLastRow();
   if (startRow > lastRow) return { ok: true, fixed: 0, note: "データ行なし" };
 
   var count = 0;
   for (var r = startRow; r <= lastRow; r++) {
-    if (qIdx >= 0) {
-      sh.getRange(r, qIdx + 1).setFormula(
-        '=IF(OR(' + oCol + r + '="",' + pCol + r + '=""),"",'+oCol+r+'-'+pCol+r+')'
-      );
-    }
-    if (rIdx >= 0) {
-      sh.getRange(r, rIdx + 1).setFormula(
-        '=IF(OR(' + pCol + r + '="",' + pCol + r + '=0,' + oCol + r + '=""),"",ROUND('+pCol+r+'/'+oCol+r+'*100,1))'
-      );
-    }
+    _writeDurationFormulas(sh, r, iKS, iKE, iMS, iME, iPlan, iAct, iDiff, iRate);
     count++;
   }
+  // A列(日付)を MM/DD に統一
+  var iDate = _findColExact(H, "日付");
+  if (iDate >= 0) sh.getRange(startRow, iDate + 1, lastRow - startRow + 1, 1).setNumberFormat("MM/DD");
   return { ok: true, fixed: count, from_row: startRow, to_row: lastRow };
 }
 
 // ── appendCustomer: 顧客マスターに1行追加 ─────────────────────────────────
-// body: { row: {列名:値} }  ※顧客番号は省略時に自動採番(H001〜)
 function appendCustomer(body) {
   const ss = SpreadsheetApp.openById(COCKPIT_ID);
   const sh = ss.getSheets().find(function(s) { return s.getName().indexOf("顧客マスター") >= 0; });
@@ -245,7 +259,6 @@ function appendCustomer(body) {
   const lastCol = sh.getLastColumn();
   const headers = sh.getRange(1, 1, 1, lastCol).getValues()[0].map(String);
   const lastRow = sh.getLastRow();
-  // 自動採番
   var nextNum = 9;
   var colNo = -1;
   for (var c = 0; c < headers.length; c++) { if (headers[c] === "顧客番号") { colNo = c; break; } }
@@ -280,20 +293,17 @@ function _getHeaders(sh) {
 
 function _findCol(headers, key) {
   for (var c = 0; c < headers.length; c++) { if (headers[c] === key) return c; }
-  // 部分一致フォールバック
   for (var c = 0; c < headers.length; c++) {
     if (headers[c] && (headers[c].indexOf(key) >= 0 || key.indexOf(headers[c]) >= 0)) return c;
   }
   return -1;
 }
 
-// 完全一致でヘッダ列を検索（_findColの部分一致誤マッチ防止用）
 function _findColExact(headers, key) {
   for (var c = 0; c < headers.length; c++) { if (headers[c] === key) return c; }
   return -1;
 }
 
-// 列番号(1始まり) → 列文字(A, B, ..., Z, AA, ...)
 function _colLetter(n) {
   var s = '';
   while (n > 0) {
@@ -302,4 +312,22 @@ function _colLetter(n) {
     n = Math.floor((n - 1) / 26);
   }
   return s;
+}
+
+// "2026-06-27"/"2026/6/27" → Dateオブジェクト（パース不可ならそのまま）
+function _toDate(v) {
+  if (v instanceof Date) return v;
+  var s = String(v).trim();
+  var m = s.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/);
+  if (m) return new Date(+m[1], +m[2] - 1, +m[3]);
+  return v;
+}
+
+// "13:15"/"9:00" → 時刻シリアル(0〜1の小数)。時刻でなければnull
+function _toTimeFrac(v) {
+  if (typeof v === "number") return v;
+  var s = String(v).trim();
+  var m = s.match(/^(\d{1,2}):(\d{2})$/);
+  if (m) { return (parseInt(m[1], 10) * 60 + parseInt(m[2], 10)) / 1440; }
+  return null;
 }

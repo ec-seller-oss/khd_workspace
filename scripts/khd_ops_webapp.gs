@@ -245,9 +245,30 @@ function fixQrFormulas(body) {
     _writeDurationFormulas(sh, r, iKS, iKE, iMS, iME, iPlan, iAct, iDiff, iRate);
     count++;
   }
-  // A列(日付)を MM/DD に統一
+  // A列(日付)：テキスト日付→日付値に変換してから MM/DD に統一（既存の崩れも修復）
   var iDate = _findColExact(H, "日付");
-  if (iDate >= 0) sh.getRange(startRow, iDate + 1, lastRow - startRow + 1, 1).setNumberFormat("MM/DD");
+  if (iDate >= 0) {
+    var dr = sh.getRange(startRow, iDate + 1, lastRow - startRow + 1, 1);
+    var dv = dr.getValues();
+    for (var k = 0; k < dv.length; k++) {
+      var s = dv[k][0];
+      if (typeof s === "string") { var m = String(s).match(/(\d{4})\D(\d{1,2})\D(\d{1,2})/); if (m) dv[k][0] = new Date(+m[1], +m[2] - 1, +m[3]); }
+    }
+    dr.setValues(dv);
+    dr.setNumberFormat("MM/DD");
+  }
+  // 時刻列：テキスト時刻→時刻値に変換（#VALUE!エラーの根治）してから HH:mm
+  _TIME_COLS.forEach(function (n) {
+    var ix = _findColExact(H, n); if (ix < 0) return;
+    var tr = sh.getRange(startRow, ix + 1, lastRow - startRow + 1, 1), tv = tr.getValues();
+    for (var k = 0; k < tv.length; k++) {
+      var s = tv[k][0];
+      if (typeof s === "string") { var m = String(s).match(/^(\d{1,2}):(\d{2})$/); if (m) tv[k][0] = (parseInt(m[1], 10) * 60 + parseInt(m[2], 10)) / 1440; }
+    }
+    tr.setValues(tv); tr.setNumberFormat("HH:mm");
+  });
+  // 件数列の書式も全行で再保証
+  _COUNT_COLS.forEach(function (n) { var ix = _findColExact(H, n); if (ix >= 0) sh.getRange(startRow, ix + 1, lastRow - startRow + 1, 1).setNumberFormat("0"); });
   return { ok: true, fixed: count, from_row: startRow, to_row: lastRow };
 }
 

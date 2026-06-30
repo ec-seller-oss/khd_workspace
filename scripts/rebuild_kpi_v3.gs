@@ -1,7 +1,7 @@
 function rebuildKPI2(){
   // ===== パレット（02の色＋顧客マスターCF色に整合）=====
   var HONCOL={'00家族':'#C27BA0','01経営':'#3D85C6','02資金':'#674EA7','03運営':'#6AA84F','04コンサル':'#F1C232','05物件':'#AA2E26'};
-  var CATCOL={'営業打席':'#AA2E26','仕込み・資料':'#3D85C6','会議・連絡':'#6AA84F','学習(調査士)':'#9FC5E8','家族':'#C27BA0','内務・事務':'#999999','移動':'#B45F06','その他':'#CCCCCC'};
+  var CATCOL={'営業打席':'#AA2E26','仕込み・資料':'#3D85C6','会議・連絡':'#6AA84F','学習':'#9FC5E8','家族':'#C27BA0','内務・事務':'#999999','移動':'#B45F06','その他':'#CCCCCC'};
   var EIGCOL={'提案数 ★':'#AA2E26','GIVE数':'#6AA84F','相談数':'#674EA7'};
   var SRC={'自分起点':'#6AA84F','福井':'#3D85C6','羽鳥':'#E69138','バイセル':'#999999','その他':'#CCCCCC'};
   var STG={'未接触':'#F3F3F3','接触':'#CFE2F3','ヒアリング':'#9FC5E8','提案中':'#6FA8DC','内見/商談':'#F6B26B','成約/納品':'#93C47D','失注':'#EFEFEF','保留':'#FFE599'};
@@ -20,8 +20,8 @@ function rebuildKPI2(){
   var R=2, DN="'"+db.getName()+"'!", last=db.getLastRow();
   var dC=cl(ci(db,'日付')),mC=cl(ci(db,'実所要(分)')),hC=cl(ci(db,'本部')),gIdx=ci(db,'作業カテゴリ');
   var pC=cl(ci(db,'提案数')),giC=cl(ci(db,'GIVE数')),sC=cl(ci(db,'相談数'));
-  // 学習表記ゆれ統一
-  if(last>1){var gv=db.getRange(2,gIdx,last-1,1).getValues();for(var r=0;r<gv.length;r++)if(String(gv[r][0]).trim()==='学習')gv[r][0]='学習(調査士)';db.getRange(2,gIdx,last-1,1).setValues(gv);}
+  // 学習表記ゆれ統一（学習(調査士)→学習。菊池確定=括弧なし「学習」）
+  if(last>1){var gv=db.getRange(2,gIdx,last-1,1).getValues();for(var r=0;r<gv.length;r++)if(String(gv[r][0]).trim()==='学習(調査士)')gv[r][0]='学習';db.getRange(2,gIdx,last-1,1).setValues(gv);}
   var gC=cl(gIdx);
   var KN="'"+km.getName()+"'!";
   var inC=cl(ci(km,'流入元')),stC=cl(ci(km,'ステータス')),lcC=cl(ci(km,'最終接触'));
@@ -34,8 +34,9 @@ function rebuildKPI2(){
   var cn =function(b,rng){return '=SUMIFS('+DN+rng+R+':'+rng+','+c02(b)+')';};                   // 件数(02)
   var ck =function(b,by){return '=COUNTIFS('+ckm(b)+(by?','+by:'')+')';};                         // 件数(顧客M・最終接触)
 
-  ws.clear();ws.clearFormats();ws.clearNotes();
-  var ec=ws.getCharts();for(var e=0;e<ec.length;e++)ws.removeChart(ec[e]);
+  ws.clear();ws.clearFormats();ws.clearNotes();ws.setConditionalFormatRules([]);
+  // ★グラフは消さない（位置を菊池が調整済のため）。ヘルパ位置固定→既存グラフは自動更新。
+  var hasCharts=ws.getCharts().length>0;
   var hd=['=TODAY()','=$AD$1-1','=$AD$1-(WEEKDAY($AD$1,1)-1)','=EOMONTH($AD$1,-1)+1','=EDATE($AD$1,-3)'];
   for(var i=0;i<5;i++)ws.getRange(i+1,30).setFormula(hd[i]).setNumberFormat('m/d').setFontColor('#CCC');
   ws.getRange('A1').setValue('📊 KPIダッシュボード｜成約への導線（インプット→活動→獲得→転換→成果）を期間比較').setFontWeight('bold').setFontSize(13);
@@ -54,6 +55,28 @@ function rebuildKPI2(){
   }
 
   var r=3;
+  // 🎯 必達メーター（先行KPI｜日次目標×営業日 vs 実績＝達成率を信号色で）
+  var DAYS=['1','1','NETWORKDAYS($AD$3,$AD$1)','NETWORKDAYS($AD$4,$AD$1)','NETWORKDAYS($AD$5,$AD$1)'];
+  function actHours(b){return 'SUMIFS('+MR+','+c02(b)+','+GR+',"営業打席")/60';}
+  function actCnt(b,rng){return 'SUMIFS('+DN+rng+R+':'+rng+','+c02(b)+')';}
+  var MET=[['営業打席(h)',3,function(b){return actHours(b);}],['提案数',2,function(b){return actCnt(b,pC);}],['GIVE数',1,function(b){return actCnt(b,giC);}],['相談数',1,function(b){return actCnt(b,sC);}]];
+  ws.getRange(r,1).setValue('🎯 必達メーター（先行KPI｜緑=達成/橙=もう一歩/赤=未達。B列"日次目標"は手入力で調整可）').setFontWeight('bold').setBackground('#FFF2CC').setFontColor('#7F6000');
+  ws.getRange(r,1,1,7).merge();
+  ws.getRange(r+1,1,1,7).setValues([['指標','日次目標'].concat(BKT)]).setFontWeight('bold').setBackground('#AA2E26').setFontColor('#FFF');
+  var mTop=r+2;
+  for(var mi=0;mi<MET.length;mi++){var rr=mTop+mi;
+    ws.getRange(rr,1).setValue(MET[mi][0]);
+    ws.getRange(rr,2).setValue(MET[mi][1]).setBackground('#FFF2CC').setNumberFormat('0.0');
+    var fxn=MET[mi][2];
+    for(var b=0;b<5;b++) ws.getRange(rr,3+b).setFormula('=IFERROR(('+fxn(b)+')/(B'+rr+'*'+DAYS[b]+'),0)').setNumberFormat('0%');
+  }
+  var meterRange=ws.getRange(mTop,3,MET.length,5);
+  ws.setConditionalFormatRules([
+    SpreadsheetApp.newConditionalFormatRule().whenNumberGreaterThanOrEqualTo(1).setBackground('#B6D7A8').setRanges([meterRange]).build(),
+    SpreadsheetApp.newConditionalFormatRule().whenNumberBetween(0.7,0.9999).setBackground('#FFE599').setRanges([meterRange]).build(),
+    SpreadsheetApp.newConditionalFormatRule().whenNumberLessThan(0.7).setBackground('#F4CCCC').setRanges([meterRange]).build()
+  ]);
+  r=mTop+MET.length+1;
   // ① 本部別 時間
   r=vblock(r,'①','本部別 時間(h)','インプット：リソース配分','どの本部に時間を投下したか。色=本部。右グラフ=構成比で期間比較。',
     '本部',HONS,HONCOL,function(b,it){return th(b,HR+',"'+HONS[it]+'"');},'0.0');
@@ -125,6 +148,7 @@ function rebuildKPI2(){
     if(kind==='pctcol')c.setOption('isStacked','percent');
     ws.insertChart(c.build());
   }
+  if(!hasCharts){ // ★初回だけ作成。既存があれば位置を尊重して触らない
   chart('pctcol',hpHon,HONS,HONCOL,'① 本部別 時間 構成比｜期間比較｜どの本部に時間を使ったか',2);
   chart('pctcol',hpCat,CATS,CATCOL,'② 作業カテゴリ 構成比｜暖色=営業系の比率が一目',18);
   chart('col',   hpEig,EIGS,EIGCOL,'③ 営業先行指標(件)｜赤=提案/緑=GIVE/紫=相談',34);
@@ -133,6 +157,7 @@ function rebuildKPI2(){
   ws.insertChart(ws.newChart().asLineChart().addRange(ws.getRange(hpCvr,18,6,3)).setNumHeaders(1)
     .setOption('colors',['#6AA84F','#E69138']).setOption('title','⑥ 転換率(CVR) 推移｜緑=成約率/橙=商談化率｜右肩上がりが理想')
     .setOption('legend',{position:'top'}).setOption('height',300).setOption('width',680).setPosition(82,9,0,0).build());
+  }
 
   ws.setColumnWidth(1,150);ws.setColumnWidth(7,320);
   SpreadsheetApp.flush();Logger.log('rebuildKPI2 完了');

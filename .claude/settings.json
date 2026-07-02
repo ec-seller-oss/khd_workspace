@@ -24,6 +24,18 @@
           }
         ]
       }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Users/kikuchikenta/01_honbu_docs_automation/scripts/khd_notion_log_reminder.sh",
+            "timeout": 10
+          }
+        ]
+      }
     ]
   }
 }

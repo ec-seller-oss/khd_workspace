@@ -3,8 +3,8 @@
 #  KHD_設定をそろえる.command
 #  新Mac / 2台目Mac 用 ワンクリック環境セットアップ（冪等・非破壊）
 #
-#  使い方: このリポジトリ(01_honbu_docs_automation)を git clone した後、
-#          Finder でこのファイルをダブルクリックするだけ。
+#  使い方: 新Macで下記をクローン後、Finderでこのファイルをダブルクリック:
+#     git clone git@github.com:ec-seller-oss/khd_workspace.git ~/01_honbu_docs_automation
 #
 #  やること: KHDのClaude開発環境の「設定をそろえる」
 #    ①npm設定(prefix/cache) ②PATH(~/.zshrc) ③自作CLIのsymlink
@@ -124,16 +124,14 @@ fi
 # ── 7. memory 金庫（Claudeの記憶）の clone ──────────────────
 sec "7. memory 金庫（Claudeの記憶）"
 MEM="$HOME/.claude/projects/-Users-kikuchikenta-01-honbu-docs-automation/memory"
-DRIVE_REMOTE="$HOME/Library/CloudStorage/GoogleDrive-ec-seller@kikuchi-hd.net/マイドライブ/KHD_git_remote"
+MEM_REMOTE="git@github.com:ec-seller-oss/khd_memory.git"
 if [ -d "$MEM/.git" ]; then
   ok "memory金庫は既にclone済"
-elif [ -d "$DRIVE_REMOTE/khd_memory.git" ]; then
-  mkdir -p "$(dirname "$MEM")"
-  if git clone "$DRIVE_REMOTE/khd_memory.git" "$MEM" >/dev/null 2>&1; then
-    ok "memory金庫を clone（$DRIVE_REMOTE/khd_memory.git）"
-  else warn "memory金庫のcloneに失敗（Driveの同期完了を待って再実行）"; fi
 else
-  warn "Drive金庫が見つからない → Google Drive(ec-seller)にログイン＆KHD_git_remoteをオフライン化してから再実行"
+  mkdir -p "$(dirname "$MEM")"
+  if git clone "$MEM_REMOTE" "$MEM" >/dev/null 2>&1; then
+    ok "memory金庫を clone（GitHub: ec-seller-oss/khd_memory）"
+  else warn "memory金庫のcloneに失敗（GitHubのSSH鍵設定を確認して再実行）"; fi
 fi
 
 # ── 8. 秘密情報・ログインの検証（書かない・確認だけ）─────────

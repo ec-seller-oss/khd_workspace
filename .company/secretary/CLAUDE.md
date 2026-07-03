@@ -41,7 +41,8 @@
 ## 💻 マルチMac運用ルール（2026-06-27〜・原則「1案件1台」）
 - Claude Codeの**会話履歴(セッション)はMacローカル＝2台で共有されない**。同じ案件を2台同時に進めると番号・ファイルが**分岐衝突**する（実害：二階堂さんがH118/H122に分裂・賃貸追客の条件Docが2台で重複作成）。
 - **原則＝1案件は1台だけ**。同じ顧客/案件を2台同時に触らない。
-- 同期＝Drive上のgit金庫(`KHD_git_remote`: khd_workspace.git / khd_memory.git)。**入口で自動pull・出口で自動push**（hook＋`scripts/khd_git_sync.sh`）。
+- 同期＝**GitHub非公開リポが正**（2026-07-03移行）：`git@github.com:ec-seller-oss/khd_workspace.git`（作業）／`git@github.com:ec-seller-oss/khd_memory.git`（記憶）。**入口で自動pull・出口で自動push**（hook＋`scripts/khd_git_sync.sh`／origin=GitHub）。認証＝各MacのSSH鍵をec-seller-ossに登録。
+- ⚠️旧「Drive上のgit金庫(`KHD_git_remote`)」は**廃止・信頼しない**（2026-07-03にフォルダ丸ごと未同期消失＝Drive×git金庫の構造的脆さが再発したためGitHubへ移行。データ損失は無し）。ローカルremote名`drive`は当面の保険として残置。下記の`main 2`不正ref節はDrive金庫時代の歴史的記述（GitHubでは発生しない）。
 - ⚠️**Drive×git金庫の構造的リスク**：Google Driveは「ファイルのリアルタイム同期」だが、gitの履歴はpush/pullという手続きで動く別モノ。2台同時にgitのref(`refs/heads/main`)へ書き込むと、Driveがコンフリクト時に`main 2`という不正な名前(スペース入り＝gitのref名として無効)のファイルを複製し、それが残っているとpushが全面的に失敗する（2026-07-02 workspace/memory両金庫で実際に発生・確認・復旧済）。
 - **`main 2`系の不正refが発生した場合の対処（Claude単独で実行してよい・毎回聞かない）**：①中身のコミットが現在の本流(`main`)の祖先 or 同一コミットであることを`git merge-base --is-ancestor`で確認 → ②祖先/同一ならそのまま削除 → ③削除後に通常push。**祖先でない(本流にない独自コミット)場合のみ**、データ損失の可能性があるため必ず菊池さんに確認する。
 - **push確認の運用（2026-07-02確定・菊池さんフィードバック「毎回聞かれるのはうざい」）**：fast-forwardで完了するpush（＝リモートがローカルの祖先で、単純に追いつくだけ）は**確認不要で自動実行**する。rebase時に実コンテンツの競合（コミット内容がぶつかる）が起きた場合のみ、rebaseを中断し状況を説明して確認を取る（＝データが本当にぶつかる時だけ止める）。

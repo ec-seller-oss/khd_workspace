@@ -9,6 +9,12 @@
             "command": "bash /Users/kikuchikenta/01_honbu_docs_automation/scripts/khd_git_sync.sh pull",
             "timeout": 90,
             "statusMessage": "金庫から最新を取得中 (git pull)..."
+          },
+          {
+            "type": "command",
+            "command": "bash /Users/kikuchikenta/01_honbu_docs_automation/scripts/khd_status_board.sh",
+            "timeout": 15,
+            "statusMessage": "現在地ボードを表示中..."
           }
         ]
       }

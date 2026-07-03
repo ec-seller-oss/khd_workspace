@@ -79,7 +79,8 @@
       "mcp__line-harness__list_conversations",
       "mcp__claude-in-chrome__tabs_context_mcp",
       "mcp__claude-in-chrome__navigate",
-      "mcp__claude-in-chrome__computer"
+      "mcp__claude-in-chrome__computer",
+      "Bash(mkdir -p /Users/kikuchikenta/.claude/projects/-Users-kikuchikenta-01-honbu-docs-automation/memory 2>/dev/null; ls /Users/kikuchikenta/.claude/projects/-Users-kikuchikenta-01-honbu-docs-automation/memory/ | grep -i \"shakai\\\\|hoken\\\\|santei\\\\|todokede\\\\|filing\" )"
     ]
   },
   "enableAllProjectMcpServers": true,

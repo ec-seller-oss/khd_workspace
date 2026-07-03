@@ -1,0 +1,321 @@
+#!/usr/bin/env python3
+"""KHDダッシュボード スキャナー＆更新スクリプト。
+
+作業ログDBから直近データを取得し、以下を集計してダッシュボードページを再生成:
+- 今日のスナップショット
+- 本部別 直近7日活動
+- 律速タスク（停滞中）
+- リスクキーワード未完了
+- 抜け漏れ警告（単発の続報なし、家族時間侵食）
+- 週次サマリー＆継続率
+"""
+import json
+import os
+import sys
+import time
+import urllib.request
+from collections import Counter, defaultdict
+from datetime import date, datetime, timedelta, timezone
+
+WORK_LOG_DB = "3677d27fe29580df8323eb510dcdfea7"
+DASHBOARD_PAGE = "3687d27fe295818d936cd497c606aec3"
+RULES_DB = "3687d27fe29581fe83c7d635408097cd"
+NOTION_VERSION = "2022-06-28"
+
+RISK_KEYWORDS = ["融資", "契約", "税務", "申請", "期限", "承認", "面談", "決済", "返済", "確認"]
+DEPTS_ORDER = ["00_プライベート", "01_経営管理", "02_資金調達", "03_事業運営", "04_コンサルタント", "05_物件調達", "秘書室", "全本部"]
+FAMILY_BLOCKS = [
+    ("平日夜", "18:00-20:00", lambda d, h: d.weekday() < 5 and 18 <= h < 20),
+    ("水曜午後", "水13:00-18:00", lambda d, h: d.weekday() == 2 and 13 <= h < 18),
+    ("土曜午前", "土06:00-12:00", lambda d, h: d.weekday() == 5 and 6 <= h < 12),
+    ("日曜午後", "日13:00-", lambda d, h: d.weekday() == 6 and h >= 13),
+]
+
+
+def load_token():
+    with open(os.path.expanduser("~/.claude.json")) as f:
+        return json.load(f)["mcpServers"]["notion"]["env"]["NOTION_TOKEN"]
+
+
+TOKEN = load_token()
+HEADERS = {
+    "Authorization": f"Bearer {TOKEN}",
+    "Notion-Version": NOTION_VERSION,
+    "Content-Type": "application/json",
+}
+
+
+def api(method, path, payload=None):
+    data = json.dumps(payload).encode() if payload is not None else None
+    req = urllib.request.Request(f"https://api.notion.com{path}", data=data, headers=HEADERS, method=method)
+    with urllib.request.urlopen(req) as r:
+        body = r.read()
+    return json.loads(body) if body else {}
+
+
+def rt(prop):
+    return "".join(t.get("plain_text", "") for t in (prop or []))
+
+
+def query_all(db):
+    items = []
+    cursor = None
+    while True:
+        payload = {"page_size": 100}
+        if cursor:
+            payload["start_cursor"] = cursor
+        res = api("POST", f"/v1/databases/{db}/query", payload)
+        items.extend(res.get("results", []))
+        if not res.get("has_more"):
+            break
+        cursor = res.get("next_cursor")
+    return items
+
+
+def extract_row(r):
+    p = r["properties"]
+    d = (p.get("日付", {}).get("date") or {}).get("start")
+    return {
+        "id": r["id"],
+        "title": rt(p.get("タスク名", {}).get("title")),
+        "status": (p.get("ステータス", {}).get("status") or {}).get("name", "-"),
+        "category": (p.get("カテゴリ", {}).get("select") or {}).get("name", "-"),
+        "content": rt(p.get("作業内容", {}).get("rich_text")),
+        "url": p.get("関連ページ", {}).get("url") or "",
+        "date": d,
+        "continuity": (p.get("継続状態", {}).get("select") or {}).get("name", ""),
+        "rating": (p.get("評価", {}).get("select") or {}).get("name", ""),
+        "saved_min": p.get("時短分", {}).get("number") or 0,
+    }
+
+
+def heading2(text):
+    return {"object": "block", "type": "heading_2", "heading_2": {"rich_text": [{"type": "text", "text": {"content": text}}]}}
+
+
+def heading3(text):
+    return {"object": "block", "type": "heading_3", "heading_3": {"rich_text": [{"type": "text", "text": {"content": text}}]}}
+
+
+def para(text):
+    return {"object": "block", "type": "paragraph", "paragraph": {"rich_text": [{"type": "text", "text": {"content": text}}]}}
+
+
+def bullet(text):
+    return {"object": "block", "type": "bulleted_list_item", "bulleted_list_item": {"rich_text": [{"type": "text", "text": {"content": text}}]}}
+
+
+def callout(text, emoji="📌"):
+    return {"object": "block", "type": "callout", "callout": {"icon": {"type": "emoji", "emoji": emoji}, "rich_text": [{"type": "text", "text": {"content": text}}]}}
+
+
+def divider():
+    return {"object": "block", "type": "divider", "divider": {}}
+
+
+def bar(n, max_n, width=20):
+    """ASCII進捗バー"""
+    if max_n == 0:
+        return "─" * width
+    filled = int(width * n / max_n)
+    return "▓" * filled + "░" * (width - filled)
+
+
+def build_blocks(rows, rules):
+    today = date.today()
+    blocks = []
+
+    # ========== ヘッダー ==========
+    blocks.append(callout(f"最終更新: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} / 集計対象: {len(rows)}件", "🤖"))
+
+    # ========== 1. 今日のスナップショット ==========
+    blocks.append(heading2("🎯 今日のスナップショット"))
+    today_str = today.isoformat()
+    today_rows = [r for r in rows if r["date"] == today_str]
+    today_min = sum(r["saved_min"] for r in today_rows)
+    today_cats = Counter(r["category"] for r in today_rows)
+    blocks.append(bullet(f"日付: {today_str}（{['月','火','水','木','金','土','日'][today.weekday()]}）"))
+    blocks.append(bullet(f"今日のログ件数: {len(today_rows)}件"))
+    blocks.append(bullet(f"時短分: {today_min}分（{today_min/60:.1f}時間）"))
+    if today_cats:
+        blocks.append(bullet(f"カテゴリ: " + " / ".join(f"{c}:{n}" for c, n in today_cats.most_common())))
+
+    # ========== 2. 本部別 直近7日活動 ==========
+    blocks.append(heading2("📊 本部別 直近7日活動"))
+    week_ago = (today - timedelta(days=7)).isoformat()
+    recent = [r for r in rows if r["date"] and r["date"] >= week_ago]
+    dept_counts = Counter(r["category"] for r in recent)
+    max_n = max(dept_counts.values()) if dept_counts else 0
+    for d in DEPTS_ORDER:
+        n = dept_counts.get(d, 0)
+        blocks.append(para(f"{d:20s} {bar(n, max_n)} {n}件"))
+
+    # ========== 3. 律速タスク ==========
+    blocks.append(heading2("🚨 律速・停滞中"))
+    stalled = []
+    for r in rows:
+        if r["status"] in ("進行中", "未着手", "保留") and r["date"]:
+            try:
+                d_obj = datetime.strptime(r["date"], "%Y-%m-%d").date()
+                age = (today - d_obj).days
+                if age >= 3:
+                    stalled.append((age, r))
+            except Exception:
+                pass
+    stalled.sort(key=lambda x: x[0], reverse=True)
+    if stalled:
+        for age, r in stalled[:10]:
+            blocks.append(bullet(f"[{age}日停滞] [{r['category']}] {r['title']}（ステータス: {r['status']}）"))
+    else:
+        blocks.append(para("✅ 律速タスクなし（進行中/未着手で3日以上停滞しているものはありません）"))
+
+    # 本部別 最終活動日空白
+    blocks.append(heading3("本部別 最終活動日"))
+    last_active = {}
+    for r in rows:
+        if r["date"]:
+            cat = r["category"]
+            if cat not in last_active or r["date"] > last_active[cat]:
+                last_active[cat] = r["date"]
+    for d in DEPTS_ORDER:
+        if d in last_active:
+            la = last_active[d]
+            try:
+                age = (today - datetime.strptime(la, "%Y-%m-%d").date()).days
+                mark = "⚠️" if age >= 7 else "🟢" if age <= 2 else "🟡"
+                blocks.append(bullet(f"{mark} {d}: {la}（{age}日前）"))
+            except Exception:
+                blocks.append(bullet(f"{d}: {la}"))
+        else:
+            blocks.append(bullet(f"⚪ {d}: 活動記録なし"))
+
+    # ========== 4. リスクキーワード ==========
+    blocks.append(heading2("⚠️ リスクキーワード未完了"))
+    risk_rows = []
+    for r in rows:
+        if r["status"] in ("進行中", "未着手", "保留"):
+            text = r["title"] + " " + r["content"]
+            hits = [k for k in RISK_KEYWORDS if k in text]
+            if hits:
+                risk_rows.append((hits, r))
+    if risk_rows:
+        for hits, r in risk_rows[:10]:
+            blocks.append(bullet(f"[{','.join(hits)}] [{r['category']}] {r['title']}（{r['date']}）"))
+    else:
+        blocks.append(para("✅ リスクキーワードを含む未完了タスクなし"))
+
+    # ========== 5. 抜け漏れ警告 ==========
+    blocks.append(heading2("🔍 抜け漏れ警告"))
+    # 単発判定で30日以上前のもの（フォロー忘れの可能性）
+    singles = []
+    for r in rows:
+        if r["continuity"] == "単発" and r["date"]:
+            try:
+                d_obj = datetime.strptime(r["date"], "%Y-%m-%d").date()
+                age = (today - d_obj).days
+                if 7 <= age <= 60:
+                    singles.append((age, r))
+            except Exception:
+                pass
+    singles.sort(key=lambda x: x[0])
+    if singles:
+        blocks.append(heading3("単発タスクの続報チェック"))
+        for age, r in singles[:8]:
+            blocks.append(bullet(f"[{age}日前] [{r['category']}] {r['title']} → フォローアップ必要か？"))
+
+    # 家族時間侵食検出（時刻情報がある作業ログのみ）
+    invasions = []
+    for r in rows:
+        m = None
+        import re
+        match = re.search(r"時刻:\s*(\d{1,2}):(\d{2})", r["content"])
+        if match and r["date"]:
+            h = int(match.group(1))
+            try:
+                d_obj = datetime.strptime(r["date"], "%Y-%m-%d").date()
+                for name, label, fn in FAMILY_BLOCKS:
+                    if fn(d_obj, h):
+                        invasions.append((r["date"], name, r))
+                        break
+            except Exception:
+                pass
+    if invasions:
+        blocks.append(heading3("家族時間ブロック侵食"))
+        for d_, name, r in invasions[-8:]:
+            blocks.append(bullet(f"[{d_} / {name}] {r['title']}"))
+    elif not singles:
+        blocks.append(para("✅ 抜け漏れ警告なし"))
+
+    # ========== 6. 週次サマリー ==========
+    blocks.append(heading2("📅 週次サマリー（直近7日）"))
+    week_min = sum(r["saved_min"] for r in recent)
+    rating_count = Counter(r["rating"] for r in recent if r["rating"])
+    cont_count = Counter(r["continuity"] for r in recent if r["continuity"])
+    blocks.append(bullet(f"件数: {len(recent)}件 / 時短: {week_min}分（{week_min/60:.1f}時間）"))
+    if rating_count:
+        blocks.append(bullet(f"評価: " + " / ".join(f"{k}:{v}" for k, v in rating_count.most_common())))
+    if cont_count:
+        blocks.append(bullet(f"継続状態: " + " / ".join(f"{k}:{v}" for k, v in cont_count.most_common())))
+
+    # ========== 7. 累積継続率 ==========
+    blocks.append(heading2("💪 累積継続率"))
+    total_cont = Counter(r["continuity"] for r in rows if r["continuity"])
+    total = sum(total_cont.values())
+    if total > 0:
+        running = total_cont.get("運用中", 0)
+        rate = running / total * 100
+        blocks.append(bullet(f"運用中タスク率: {rate:.1f}%（{running}/{total}）"))
+        for k in ("運用中", "中断", "単発", "未確認"):
+            v = total_cont.get(k, 0)
+            blocks.append(bullet(f"{k}: {v}件 ({v/total*100:.1f}%)"))
+
+    # ========== 8. ルールブック健全性 ==========
+    blocks.append(heading2("📕 ルールブック状態"))
+    rule_states = Counter()
+    for r in rules:
+        p = r["properties"]
+        st = (p.get("状態", {}).get("select") or {}).get("name", "不明")
+        rule_states[st] += 1
+    for k in ("有効", "試験運用", "廃止"):
+        v = rule_states.get(k, 0)
+        blocks.append(bullet(f"{k}: {v}件"))
+
+    blocks.append(divider())
+    blocks.append(para(f"自動更新中（毎時0分）／最終更新: {datetime.now().strftime('%Y-%m-%d %H:%M')}"))
+
+    return blocks
+
+
+def replace_dashboard(blocks):
+    # 既存子ブロックを取得して削除
+    children = api("GET", f"/v1/blocks/{DASHBOARD_PAGE}/children").get("results", [])
+    for b in children:
+        try:
+            api("DELETE", f"/v1/blocks/{b['id']}")
+        except urllib.error.HTTPError as e:
+            print(f"delete fail {b['id']}: {e}")
+        time.sleep(0.1)
+    # 新規子ブロック追加（Notion APIは1リクエスト100ブロック上限）
+    for i in range(0, len(blocks), 100):
+        chunk = blocks[i:i+100]
+        api("PATCH", f"/v1/blocks/{DASHBOARD_PAGE}/children", {"children": chunk})
+        time.sleep(0.3)
+
+
+def main():
+    print("Fetching work log...")
+    rows = [extract_row(r) for r in query_all(WORK_LOG_DB)]
+    print(f"  {len(rows)} rows")
+    print("Fetching rules...")
+    rules = query_all(RULES_DB)
+    print(f"  {len(rules)} rules")
+    print("Building blocks...")
+    blocks = build_blocks(rows, rules)
+    print(f"  {len(blocks)} blocks")
+    print("Updating dashboard page...")
+    replace_dashboard(blocks)
+    print(f"✓ Done: https://www.notion.so/{DASHBOARD_PAGE.replace('-','')}")
+
+
+if __name__ == "__main__":
+    main()

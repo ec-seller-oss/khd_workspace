@@ -1,0 +1,211 @@
+#!/usr/bin/env python3
+"""KHD YouTube一括アップローダー。
+
+使い方:
+  ~/Movies/khd_upload/ に NN.mp4（NN=01〜10）を配置 → khd-yt-upload 実行
+  特定の番号だけ: khd-yt-upload 03
+  ドライラン(API叩かず確認): khd-yt-upload --dry
+
+仕組み:
+  1. 動画ファイル名（NN.mp4）から番号を取得
+  2. Notion コンテンツDB から「#NN 〜」のページを検索
+  3. タイトル・説明文・タグをNotionから抽出
+  4. YouTube Data API v3 でアップロード（プライバシー=unlisted デフォルト）
+  5. アップロード結果（URL・日付・ステータス）をNotionに書き戻し
+
+前提:
+  - Google Cloud Console で YouTube Data API v3 を有効化
+  - OAuth 2.0 クライアントID（Desktop app）の credentials.json を ~/.config/khd/yt_credentials.json に配置
+  - 初回実行時にブラウザでOAuth認証 → ~/.config/khd/yt_token.pickle に保存
+  - pip install google-auth google-auth-oauthlib google-api-python-client
+"""
+import argparse
+import json
+import os
+import pickle
+import re
+import sys
+import urllib.request
+from datetime import date
+from pathlib import Path
+
+CONTENT_DB = "3687d27fe29581628d8dee2df0cf707d"
+VIDEO_DIR = Path.home() / "Movies" / "khd_upload"
+CRED_PATH = Path.home() / ".config" / "khd" / "yt_credentials.json"
+TOKEN_PATH = Path.home() / ".config" / "khd" / "yt_token.pickle"
+SCOPES = ["https://www.googleapis.com/auth/youtube.upload"]
+DEFAULT_PRIVACY = "unlisted"  # unlisted / private / public
+
+
+def load_notion_token():
+    with open(os.path.expanduser("~/.claude.json")) as f:
+        return json.load(f)["mcpServers"]["notion"]["env"]["NOTION_TOKEN"]
+
+
+def notion_api(method, path, payload=None, token=None):
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Notion-Version": "2022-06-28",
+        "Content-Type": "application/json",
+    }
+    data = json.dumps(payload).encode() if payload else None
+    req = urllib.request.Request(f"https://api.notion.com{path}", data=data, headers=headers, method=method)
+    with urllib.request.urlopen(req) as r:
+        body = r.read()
+    return json.loads(body) if body else {}
+
+
+def find_page_by_no(no, token):
+    res = notion_api("POST", f"/v1/databases/{CONTENT_DB}/query", {
+        "filter": {"property": "タイトル", "title": {"contains": f"#{no:02d} "}}
+    }, token)
+    rs = res.get("results", [])
+    return rs[0] if rs else None
+
+
+def extract_meta_from_page(page, token):
+    """ページのプロパティと本文から、YouTube投稿に必要なメタデータを抽出"""
+    p = page["properties"]
+    title = "".join(t.get("plain_text", "") for t in (p.get("タイトル", {}).get("title") or []))
+    # #NN プレフィックスを除く
+    title = re.sub(r"^#\d+\s+", "", title)
+
+    # 説明文：本文の paragraph と heading を抽出
+    children = notion_api("GET", f"/v1/blocks/{page['id']}/children", token=token).get("results", [])
+
+    desc_lines = []
+    in_description = False
+    for b in children:
+        bt = b.get("type")
+        if bt == "heading_2":
+            heading_text = "".join(t.get("plain_text", "") for t in b["heading_2"].get("rich_text", []))
+            if "説明文" in heading_text:
+                in_description = True
+                continue
+            else:
+                in_description = False
+        if in_description and bt == "paragraph":
+            txt = "".join(t.get("plain_text", "") for t in b["paragraph"].get("rich_text", []))
+            if txt:
+                desc_lines.append(txt)
+
+    description = "\n\n".join(desc_lines) if desc_lines else \
+        "".join(t.get("plain_text", "") for t in (p.get("コンセプト", {}).get("rich_text") or []))
+    description += "\n\n──\nKHD（菊池ホールディングス）公式チャンネル\nお問い合わせ: ec-seller@kikuchi-hd.net"
+
+    tags = [t["name"] for t in (p.get("タグ", {}).get("multi_select") or [])]
+    return {"title": title, "description": description, "tags": tags}
+
+
+def yt_authenticate():
+    from google_auth_oauthlib.flow import InstalledAppFlow
+    from google.auth.transport.requests import Request
+    creds = None
+    if TOKEN_PATH.exists():
+        with open(TOKEN_PATH, "rb") as f:
+            creds = pickle.load(f)
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            if not CRED_PATH.exists():
+                print(f"ERROR: {CRED_PATH} が見つかりません。", file=sys.stderr)
+                print("Google Cloud Console で OAuth credentials.json を取得して上記パスに配置してください。", file=sys.stderr)
+                sys.exit(1)
+            flow = InstalledAppFlow.from_client_secrets_file(str(CRED_PATH), SCOPES)
+            creds = flow.run_local_server(port=0)
+        TOKEN_PATH.parent.mkdir(parents=True, exist_ok=True)
+        with open(TOKEN_PATH, "wb") as f:
+            pickle.dump(creds, f)
+    return creds
+
+
+def yt_upload(creds, file_path, meta, privacy=DEFAULT_PRIVACY):
+    from googleapiclient.discovery import build
+    from googleapiclient.http import MediaFileUpload
+    service = build("youtube", "v3", credentials=creds)
+    body = {
+        "snippet": {
+            "title": meta["title"][:100],
+            "description": meta["description"][:5000],
+            "tags": meta["tags"][:15],
+            "categoryId": "22",  # People & Blogs
+            "defaultLanguage": "ja",
+        },
+        "status": {
+            "privacyStatus": privacy,
+            "selfDeclaredMadeForKids": False,
+        },
+    }
+    media = MediaFileUpload(str(file_path), chunksize=-1, resumable=True, mimetype="video/mp4")
+    req = service.videos().insert(part=",".join(body.keys()), body=body, media_body=media)
+    response = None
+    while response is None:
+        status, response = req.next_chunk()
+        if status:
+            print(f"  upload progress: {int(status.progress()*100)}%")
+    return response.get("id")
+
+
+def update_notion(page_id, video_id, token):
+    url = f"https://youtu.be/{video_id}"
+    payload = {"properties": {
+        "公開URL": {"url": url},
+        "公開済日": {"date": {"start": date.today().isoformat()}},
+        "ステータス": {"select": {"name": "公開済"}},
+    }}
+    notion_api("PATCH", f"/v1/pages/{page_id}", payload, token)
+    return url
+
+
+def process_file(file_path, notion_token, creds, dry):
+    m = re.match(r"^(\d{2})\.mp4$", file_path.name, re.IGNORECASE)
+    if not m:
+        print(f"SKIP {file_path.name}（NN.mp4 形式でない）")
+        return
+    no = int(m.group(1))
+    page = find_page_by_no(no, notion_token)
+    if not page:
+        print(f"#{no:02d} NG: Notionに該当ページなし")
+        return
+    meta = extract_meta_from_page(page, notion_token)
+    print(f"#{no:02d} {meta['title']}")
+    print(f"  desc[head]: {meta['description'][:60]}...")
+    print(f"  tags: {meta['tags']}")
+    if dry:
+        print("  (dry-run: アップロードしません)")
+        return
+    video_id = yt_upload(creds, file_path, meta)
+    url = update_notion(page["id"], video_id, notion_token)
+    print(f"  ✓ uploaded: {url}")
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("no", nargs="?", help="特定の番号のみ処理（例: 03）")
+    ap.add_argument("--dry", action="store_true", help="API叩かず確認のみ")
+    args = ap.parse_args()
+
+    VIDEO_DIR.mkdir(parents=True, exist_ok=True)
+    notion_token = load_notion_token()
+
+    if args.no:
+        targets = [VIDEO_DIR / f"{int(args.no):02d}.mp4"]
+        targets = [t for t in targets if t.exists()]
+    else:
+        targets = sorted(VIDEO_DIR.glob("*.mp4"))
+
+    if not targets:
+        print(f"対象なし。{VIDEO_DIR}/NN.mp4 を配置してください。")
+        return
+
+    creds = None if args.dry else yt_authenticate()
+    for f in targets:
+        try:
+            process_file(f, notion_token, creds, args.dry)
+        except Exception as e:
+            print(f"  ERR: {e}")
+
+
+if __name__ == "__main__":
+    main()

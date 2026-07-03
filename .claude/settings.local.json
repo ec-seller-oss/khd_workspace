@@ -76,7 +76,10 @@
       "mcp__line-harness__account_summary",
       "mcp__line-harness__manage_rich_menus",
       "mcp__line-harness__manage_auto_replies",
-      "mcp__line-harness__list_conversations"
+      "mcp__line-harness__list_conversations",
+      "mcp__claude-in-chrome__tabs_context_mcp",
+      "mcp__claude-in-chrome__navigate",
+      "mcp__claude-in-chrome__computer"
     ]
   },
   "enableAllProjectMcpServers": true,

@@ -1,0 +1,28 @@
+# トリガー付きインプット 汎用パターン集（2026-07-08）
+
+背景：調査士のながら時間システム設計から発展。菊池さんの気づき＝「カレンダー・TODOは使ってきたが、スプシは入力/DBには強いがアウトプットには向いていない。それを活かすトリガーがなかった」。既存の道具(カレンダー/TODO/スプシ/終礼)それぞれに、行動科学的に裏付けのある"if-then trigger"を後付けする設計。
+
+## 理論的裏付け
+- **実装意図(Implementation Intentions)**：Gollwitzerの「if X then Y」形式の計画は、94件のメタ分析で目標達成率を中〜大きな効果量(d=0.65)で改善する。行動の起動を「その場の意志力」から「環境の合図」に委譲するのが核。
+- **プロテジェ効果(Protégé Effect)**：人に教える前提を作るだけ（実際に教えなくても）で学習成果が上がる。想起して再構成する作業そのものが定着を生む。
+
+## パターン一覧（if-then形式）
+
+| # | 起点(if) | 既存ツール | トリガー内容(then) | 狙い |
+|---|---|---|---|---|
+| 1 | カレンダーの予定終了通知が鳴る | Googleカレンダー | 次の予定に入る前に10秒だけ声に出して直前の成果を一言で言う | 既存の"予定間バッファ"にアウトプット関門を後付け |
+| 2 | Google Tasksでチェックを入れる | TODO | チェックを入れる指を動かす前に一言ボイスメモを吹き込む(声を出すまで完了にしない) | 完了操作という既存の物理アクションにタダ乗りさせる |
+| 3 | 顧客マスター/財務シート/nippoのセルに入力する | スプシ・DB | その1行の意味を一言音声で言ってから次のセルに移る（例：「〇〇さんは今この状態だから次はこう動く」） | **今回発見したギャップの直接回答**。スプシを"静かなデータ倉庫"から"声に出す訓練場"に変える |
+| 4 | 車のエンジンをかける／ベビーカーのブレーキを外す | 物理行動(場所・動作) | 一問一答プレイリスト再生 or Gemini音声モードを開く | Gollwitzer型の正統派if-thenプランニング。意志力に頼らない |
+| 5 | 学び系のインプットを終える | 何でも | その日のうちに誰か1人(妻・宮崎さん・秘書)に3文で説明する(実際に教えなくても"準備する"だけでも効果あり) | プロテジェ効果。既存の営業「3文ルール」をそのまま流用 |
+| 6 | 終礼(夜の日報)を開く | 既存の夜の日報 | 「今日1つだけ人に説明できるようになったこと」を1行追加で書く | 既存の黙る力5問/提案スピード5問の横に6問目として統合可能 |
+
+## 見方・使い方
+- 全部を一度に入れない。まずは**#3(スプシ入力トリガー)**が今回の気づきに一番直結するので最優先で試す。次点は#1(カレンダー)、#2(TODO)は既存導線に乗るので追加コストがほぼゼロ。
+- どのパターンも「新しい習慣」ではなく「既存の操作(チェック/通知/エンジンON)に1手足すだけ」に設計してあるのがポイント（実装意図の効果が出るのはこの"既存の合図に乗せる"設計だから）。
+
+## 出典
+- Implementation Intentions: Gollwitzer's d=0.65 (2026): https://goalsandprogress.com/implementation-intentions-gollwitzer-how-to/
+- What are implementation intentions? If-then plans explained: https://www.suebehaviouraldesign.com/en/blog/implementation-intentions-explained/
+- The Protégé Effect: Why Learning By Teaching Others Is So Effective: https://www.diygenius.com/learning-by-teaching/
+- "I Was But The Learner, Now I Am The Master": Using the Protégé Effect: https://www.lwionline.org/article/i-was-learner-now-i-am-master-using-protege-effect-accelerate-learning-outcomes

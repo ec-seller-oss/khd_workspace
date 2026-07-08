@@ -38,8 +38,28 @@
 ### 運用
 朝ブリーフ or 前日夜のレビューで、その日のカレンダーから緑+場所ありの予定を自動検出し「🚃移動トリガー枠：〇〇(往復◯分)」として明示する。新規のカレンダー登録は不要（既存の朝ブリーフ処理に検出ロジックを1つ足すだけ）。
 
+## 追記(同日)：🎯アポ前85%ゲート
+Bezosの「70%ルール」(2016年株主レター)の応用。100%準備を待つのは8大ブロッカー④構想倒れの逃避パターンなので、意図的に打ち切るゲートを設計。菊池さんの基準は対人アポ用に70%より高い**85%**で校正。
+
+### 85%チェックリスト(5項目・4/5揃えばGO、2つ以下はリスケのサイン)
+1. ゴール(合格点)を一言で言えるか(このアポが終わった時、何がYESになっていればゴールか＝逆算の起点)
+2. 相手の想定質問/懸念に、その場で即答できる準備が最低1つあるか
+3. 今日この場でクロージングの一手を自分から出せる状態か(持ち帰りにしない)
+4. 次に繋ぐ場合の次のアクションを先に決めているか
+5. 持ち物・資料が物理的に揃っているか
+
+### トリガー配置(4段構え・既存トリガーと連結)
+1. アポをカレンダーに入れた瞬間→その直前に「🎯準備確認」ブロックを確保する
+2. 準備ブロックに入った瞬間→85%チェックリストを声に出して確認する
+3. 出発直前(移動トリガー・行き)→足りない項目があれば最後の1点だけ埋めてから出発する
+4. アポ終了直後(夜の言語化トリガー・営業直結行)→実際クロージングできたか、5項目のどこが甘かったかを一言
+
+準備→本番→振り返りをすべてトリガーで繋ぎ、意志力に頼らず回す設計。`.company/CLAUDE.md`に正式ルールとして反映済み。
+
 ## 出典
 - Implementation Intentions: Gollwitzer's d=0.65 (2026): https://goalsandprogress.com/implementation-intentions-gollwitzer-how-to/
 - What are implementation intentions? If-then plans explained: https://www.suebehaviouraldesign.com/en/blog/implementation-intentions-explained/
 - The Protégé Effect: Why Learning By Teaching Others Is So Effective: https://www.diygenius.com/learning-by-teaching/
 - "I Was But The Learner, Now I Am The Master": Using the Protégé Effect: https://www.lwionline.org/article/i-was-learner-now-i-am-master-using-protege-effect-accelerate-learning-outcomes
+- The Bezos 70% Rule for making decisions: https://toddhagopian.com/blog/whats-the-70-rule-and-why-does-it-work/
+- Making Better Business Decisions - The Jeff Bezos 70% Rule (LinkedIn): https://www.linkedin.com/pulse/making-better-business-decisions-jeff-bezos-70-rule-zegarelli

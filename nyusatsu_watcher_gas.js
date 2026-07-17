@@ -36,13 +36,13 @@ var SITES = [
   { name: "東北財務局 国有財産(予定)",   url: "https://lfb.mof.go.jp/tohoku/b6_baikyaku/nyuusatsu_yotei.html", type: "estate", memo: "入札予定物件＝先回り用" },
   { name: "関東財務局 国有財産売却",     url: "https://lfb.mof.go.jp/kantou/kanzai/mokuji_00001.htm", type: "estate", memo: "現在公示中の売却物件" },
   { name: "日本年金機構 入札公告",       url: "https://www.nenkin.go.jp/chotatu/nyusatsu/index.html", type: "all", memo: "物品売払い・不用品処分が稀に出る穴場" },
-  { name: "岩手中部水道企業団",          url: "https://www.iwatetyubu-suido.jp/company/company-cat/co_cat_10/", type: "all", memo: "ランクル案件の主(501はUAリトライで対応)" },
+  { name: "岩手中部水道企業団",          url: "https://www.iwatetyubu-suido.jp/company/company-cat/co_cat_10/", type: "all", memo: "⚠UAリトライ後も501。サーバ側WAFの可能性、要手動確認" },
   { name: "北上市 入札・契約",           url: "https://www.city.kitakami.iwate.jp/life/shisei/nyusatsu_keiyaku/index.html", type: "all", memo: "圏域内(参加資格あり)" },
   { name: "花巻市 入札・契約",           url: "https://www.city.hanamaki.iwate.jp/business/nyusatsu_keiyaku/index.html", type: "all", memo: "支店所在地・最優先" },
   { name: "紫波町",                      url: "https://www.town.shiwa.iwate.jp/",         type: "all",   memo: "圏域内" },
   { name: "岩手県",                      url: "https://www.pref.iwate.jp/",               type: "all",   memo: "✅動作確認済(20件)" },
   { name: "NEXCO東日本 調達",            url: "https://www.e-nexco.co.jp/bids/",          type: "all",   memo: "調達・お取引トップ" },
-  { name: "国有財産売却情報サイト",      url: "https://kokuyuzaisan.akiya-athome.jp/",    type: "estate",memo: "全国の国有財産売却DB(JR東の代替で追加)" },
+  { name: "国有財産売却情報サイト",      url: "https://kokuyuzaisan.akiya-athome.jp/",    type: "estate",memo: "⚠403(bot遮断)。自動巡回不可、要月1手動確認" },
   { name: "東京都主税局(公売)",          url: "https://www.tax.metro.tokyo.lg.jp/",       type: "all",   memo: "✅動作確認済(8件)。動産が多い" },
 ];
 
@@ -93,7 +93,7 @@ function run() {
   if (firstRun) {
     props.setProperty("initialized", "1");
     Logger.log("初期化完了：既存記事を既読登録しました（通知なし）。明日以降の新着から通知します。");
-    sendLine_("\n✅ 入札ウォッチャー初期化完了。14サイトの既存記事を既読登録しました。明日以降、新着があれば通知します。");
+    sendLine_("\n✅ 入札ウォッチャー初期化完了。15サイトの既存記事を既読登録しました。明日以降、新着があれば通知します。");
     return;
   }
   if (notifications.length === 0) { Logger.log("新着なし"); return; }
@@ -147,7 +147,7 @@ function appendPipelineRow_(pipe, site, link, hot) {
   // 数式列: M=入札上限(自動)=(J保守売却-30万利益-L諸費用)/1.1, O=契約金額=N*1.1, P=想定利益=K中央-O-L
   pipe.getRange(r, 13).setFormula("=IF(J" + r + ">0,(J" + r + "-300000-L" + r + ")/1.1,\"\")");
   pipe.getRange(r, 15).setFormula("=IF(N" + r + ">0,FLOOR(N" + r + "*1.1),\"\")");
-  pipe.getRange(r, 16).setFormula("=IF(AND(K" + r + ">0,O" + r + ">0),K" + r + "-O" + r + "-L" + r + ",\"\")");
+  pipe.getRange(r, 16).setFormula("=IF(AND(K" + r + ">0,N" + r + ">0),K" + r + "-FLOOR(N" + r + "*1.1)-L" + r + ",\"\")");
   // 定型のリスク・論点と次アクションを新着時に自動セット（手で上書きして育てる）
   pipe.getRange(r, 18).setValue("参加資格(地域要件)/現状渡し/一発入札/搬出期限/排ガス規制/修復歴 を精査");
   pipe.getRange(r, 19).setValue("公告PDFを取得→締切・最低価格を記入→勝ち筋10分判定");
@@ -166,7 +166,7 @@ function seedLandcruiser_(pipe) {
   ]]);
   pipe.getRange(r, 13).setFormula("=IF(J" + r + ">0,(J" + r + "-300000-L" + r + ")/1.1,\"\")");
   pipe.getRange(r, 15).setFormula("=IF(N" + r + ">0,FLOOR(N" + r + "*1.1),\"\")");
-  pipe.getRange(r, 16).setFormula("=IF(AND(K" + r + ">0,O" + r + ">0),K" + r + "-O" + r + "-L" + r + ",\"\")");
+  pipe.getRange(r, 16).setFormula("=IF(AND(K" + r + ">0,N" + r + ">0),K" + r + "-FLOOR(N" + r + "*1.1)-L" + r + ",\"\")");
   pipe.getRange(r, 17).setValue("旧車王(045-476-1019・実査定100〜200万)/フレックス・ドリーム/最強買取jp/向陽自販");
   pipe.getRange(r, 18).setValue("下回り40点が未評価(8/20が全て)/修復歴の有無/NOx・PM法で首都圏登録不可(保有なら花巻登録)/一発入札/9/15全額前払い/9/30搬出");
   pipe.getRange(r, 19).setValue("8/20現物確認の電話予約(0198-41-5315)＋整備士同行打診(コバック北上0197-71-1166)");

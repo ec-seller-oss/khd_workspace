@@ -12,7 +12,7 @@
 //   1. Googleスプレッドシートを新規作成（名前例: KHD_入札案件パイプライン）
 //      → URLの /d/ と /edit の間のIDを CONFIG.SPREADSHEET_ID に貼る
 //   2. script.google.com → 本文を貼り付け → LINE_NOTIFY_TOKEN を設定
-//   3. setupTrigger を1回実行（毎朝6時の自動巡回を登録）
+//   3. setupTrigger を1回実行（毎日6時・11時・17時の自動巡回=1日3回を登録）
 //   4. run を1回手動実行 → 初回は「初期化完了」ログのみ（通知なし）
 //   5. 以後、新着が出た朝だけ LINE が鳴り、スプシに行が増える
 // ============================================================
@@ -229,12 +229,18 @@ function sendLine_(message) {
   });
 }
 
+// 1日3回巡回（6時・11時・17時）。更新が集中しやすい時間帯を挟んで
+// 「まとめて読む」ペースに合わせる。時刻を変えたい場合は RUN_HOURS を編集。
+var RUN_HOURS = [6, 11, 17];
+
 function setupTrigger() {
   ScriptApp.getProjectTriggers().forEach(function (t) {
     if (t.getHandlerFunction() === "run") ScriptApp.deleteTrigger(t);
   });
-  ScriptApp.newTrigger("run").timeBased().atHour(6).everyDays(1).create();
-  Logger.log("毎朝6時のトリガーを設定しました");
+  RUN_HOURS.forEach(function (h) {
+    ScriptApp.newTrigger("run").timeBased().atHour(h).everyDays(1).create();
+  });
+  Logger.log("トリガーを設定しました：毎日 " + RUN_HOURS.join("時・") + "時 に巡回します（計" + RUN_HOURS.length + "回/日）");
 }
 
 // 動作テスト用: サイトごとの取得状況だけを確認（通知・記帳なし）

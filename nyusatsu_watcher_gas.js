@@ -25,21 +25,25 @@ var CONFIG = {
   USER_AGENT: "Mozilla/5.0 (Macintosh) KHD-Watcher/2.1",
 };
 
+// v2.2: 2026-07-17のtestFetchログを受けてURL修正
+//   404だった4件を実在URLに差し替え／JR東(403=bot遮断)を国有財産売却情報サイトに交代／
+//   北上・花巻は入札・契約ページ直リンクに変更／年金機構はスペル修正(chotatu)
 var SITES = [
-  { name: "国税庁 公売情報",            url: "https://www.koubai.nta.go.jp/",            type: "all",   memo: "税務署の差押財産。カメラ・時計・車・不動産まで全部出る" },
-  { name: "KSI官公庁オークション",       url: "https://kankocho.jp/",                     type: "all",   memo: "自治体の公売・売払いが集約" },
-  { name: "裁判所 不動産競売(BIT)",      url: "https://www.bit.courts.go.jp/",            type: "estate",memo: "競売物件。盛岡地裁管内を重点確認" },
-  { name: "東北財務局 国有財産売却",     url: "https://lfb.mof.go.jp/tohoku/kokuyu/index.html", type: "estate", memo: "国有地・庁舎跡地" },
-  { name: "関東財務局 国有財産売却",     url: "https://lfb.mof.go.jp/kantou/kokuyu/index.html", type: "estate", memo: "首都圏の国有財産" },
-  { name: "日本年金機構 調達・売却情報", url: "https://www.nenkin.go.jp/info/chotatsu/index.html", type: "all", memo: "物品売払い・宿舎売却が稀に出る穴場" },
-  { name: "岩手中部水道企業団",          url: "https://www.iwatetyubu-suido.jp/company/company-cat/co_cat_10/", type: "all", memo: "ランクル案件の主。入札情報カテゴリ直監視" },
-  { name: "北上市",                      url: "https://www.city.kitakami.iwate.jp/",      type: "all",   memo: "圏域内（参加資格あり）" },
-  { name: "花巻市",                      url: "https://www.city.hanamaki.iwate.jp/",      type: "all",   memo: "支店所在地・最優先" },
+  { name: "国税庁 公売情報",            url: "https://www.koubai.nta.go.jp/",            type: "all",   memo: "✅動作確認済(37件)。税務署の差押財産" },
+  { name: "KSI官公庁オークション",       url: "https://kankocho.jp/",                     type: "all",   memo: "⚠JS描画のため取得弱め。国税庁・自治体側でカバー" },
+  { name: "裁判所 不動産競売(BIT)",      url: "https://www.bit.courts.go.jp/",            type: "estate",memo: "✅動作確認済(10件)。盛岡地裁管内を重点確認" },
+  { name: "東北財務局 国有財産(公示中)", url: "https://lfb.mof.go.jp/tohoku/b6_baikyaku/kouji.html", type: "estate", memo: "現在公示中の一般競争入札(売却)" },
+  { name: "東北財務局 国有財産(予定)",   url: "https://lfb.mof.go.jp/tohoku/b6_baikyaku/nyuusatsu_yotei.html", type: "estate", memo: "入札予定物件＝先回り用" },
+  { name: "関東財務局 国有財産売却",     url: "https://lfb.mof.go.jp/kantou/kanzai/mokuji_00001.htm", type: "estate", memo: "現在公示中の売却物件" },
+  { name: "日本年金機構 入札公告",       url: "https://www.nenkin.go.jp/chotatu/nyusatsu/index.html", type: "all", memo: "物品売払い・不用品処分が稀に出る穴場" },
+  { name: "岩手中部水道企業団",          url: "https://www.iwatetyubu-suido.jp/company/company-cat/co_cat_10/", type: "all", memo: "ランクル案件の主(501はUAリトライで対応)" },
+  { name: "北上市 入札・契約",           url: "https://www.city.kitakami.iwate.jp/life/shisei/nyusatsu_keiyaku/index.html", type: "all", memo: "圏域内(参加資格あり)" },
+  { name: "花巻市 入札・契約",           url: "https://www.city.hanamaki.iwate.jp/business/nyusatsu_keiyaku/index.html", type: "all", memo: "支店所在地・最優先" },
   { name: "紫波町",                      url: "https://www.town.shiwa.iwate.jp/",         type: "all",   memo: "圏域内" },
-  { name: "岩手県",                      url: "https://www.pref.iwate.jp/",               type: "all",   memo: "県有財産・公用車売払い" },
-  { name: "NEXCO東日本 調達",            url: "https://www.e-nexco.co.jp/procurement/",   type: "all",   memo: "維持管理車両・備品" },
-  { name: "JR東日本 調達情報",           url: "https://www.jreast.co.jp/procurement/",    type: "all",   memo: "鉄道関連資産" },
-  { name: "東京都主税局(公売)",          url: "https://www.tax.metro.tokyo.lg.jp/",       type: "all",   memo: "都税事務所公売。動産が多い" },
+  { name: "岩手県",                      url: "https://www.pref.iwate.jp/",               type: "all",   memo: "✅動作確認済(20件)" },
+  { name: "NEXCO東日本 調達",            url: "https://www.e-nexco.co.jp/bids/",          type: "all",   memo: "調達・お取引トップ" },
+  { name: "国有財産売却情報サイト",      url: "https://kokuyuzaisan.akiya-athome.jp/",    type: "estate",memo: "全国の国有財産売却DB(JR東の代替で追加)" },
+  { name: "東京都主税局(公売)",          url: "https://www.tax.metro.tokyo.lg.jp/",       type: "all",   memo: "✅動作確認済(8件)。動産が多い" },
 ];
 
 var KEYWORDS = ["売払", "売却", "公売", "入札", "オークション", "競売", "不用品", "不要品", "官公庁"];
@@ -64,10 +68,7 @@ function run() {
   var notifications = [];
   SITES.forEach(function (site) {
     try {
-      var html = UrlFetchApp.fetch(site.url, {
-        muteHttpExceptions: true, followRedirects: true,
-        headers: { "User-Agent": CONFIG.USER_AGENT },
-      }).getContentText();
+      var html = fetchSite_(site.url).getContentText();
       var links = extractLinks_(html, site.url);
       var hits = links.filter(function (l) {
         return KEYWORDS.some(function (k) { return l.text.indexOf(k) >= 0; });
@@ -178,6 +179,19 @@ function guessKind_(text) {
   return "";
 }
 
+// UA起因のブロック(501等)対策: 非200なら標準UAなしで1回リトライ
+function fetchSite_(url) {
+  var res = UrlFetchApp.fetch(url, {
+    muteHttpExceptions: true, followRedirects: true,
+    headers: { "User-Agent": CONFIG.USER_AGENT },
+  });
+  if (res.getResponseCode() !== 200) {
+    var retry = UrlFetchApp.fetch(url, { muteHttpExceptions: true, followRedirects: true });
+    if (retry.getResponseCode() === 200) return retry;
+  }
+  return res;
+}
+
 function extractLinks_(html, baseUrl) {
   var out = [];
   var re = /<a\s[^>]*href=["']([^"'#]+)["'][^>]*>([\s\S]*?)<\/a>/gi;
@@ -227,8 +241,7 @@ function setupTrigger() {
 function testFetch() {
   SITES.forEach(function (site) {
     try {
-      var res = UrlFetchApp.fetch(site.url, { muteHttpExceptions: true, followRedirects: true,
-        headers: { "User-Agent": CONFIG.USER_AGENT } });
+      var res = fetchSite_(site.url);
       var html = res.getContentText();
       var hits = extractLinks_(html, site.url).filter(function (l) {
         return KEYWORDS.some(function (k) { return l.text.indexOf(k) >= 0; });

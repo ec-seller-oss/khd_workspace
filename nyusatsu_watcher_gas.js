@@ -18,10 +18,11 @@
 // ============================================================
 
 var CONFIG = {
-  LINE_NOTIFY_TOKEN: "YOUR_LINE_NOTIFY_TOKEN_HERE", // ← line_notify_gas.js と同じでOK
-  SPREADSHEET_ID: "YOUR_SPREADSHEET_ID_HERE",        // ← 案件パイプライン用スプシのID
+  LINE_NOTIFY_TOKEN: "YOUR_LINE_NOTIFY_TOKEN_HERE", // ← line_notify_gas.js と同じ値に差し替え
+                                                    //    （またはスクリプトプロパティ LINE_NOTIFY_TOKEN に設定すれば以後貼り替え不要）
+  SPREADSHEET_ID: "1_UPTbcKOvq9xVmsQZR6KAu5hkrREkYnsnn4BU6Eo7q8", // 03_入札案件パイプライン（設定済み）
   MAX_NOTIFY_PER_RUN: 10,
-  USER_AGENT: "Mozilla/5.0 (Macintosh) KHD-Watcher/2.0",
+  USER_AGENT: "Mozilla/5.0 (Macintosh) KHD-Watcher/2.1",
 };
 
 var SITES = [
@@ -114,6 +115,7 @@ function ensureSheets_(ss) {
     pipe.appendRow(PIPE_HEADERS);
     pipe.getRange(1, 1, 1, PIPE_HEADERS.length).setFontWeight("bold").setBackground("#F1ECE1");
     pipe.setFrozenRows(1);
+    seedLandcruiser_(pipe); // 進行中のランクル案件を1行目に自動投入
   }
   var master = ss.getSheetByName("販売先マスタ");
   if (!master) {
@@ -150,6 +152,25 @@ function appendPipelineRow_(pipe, site, link, hot) {
   pipe.getRange(r, 19).setValue("公告PDFを取得→締切・最低価格を記入→勝ち筋10分判定");
 }
 
+// 進行中のランクル案件（岩手中部水道企業団・公告148号）を初期投入
+function seedLandcruiser_(pipe) {
+  var r = pipe.getLastRow() + 1;
+  pipe.getRange(r, 1, 1, 12).setValues([[
+    "2026-07-14", "岩手中部水道企業団",
+    "公用車の売払い（ランクル100 バンVX ディーゼル5MT・H10年式・28万km・車検切れ）",
+    "https://www.iwatetyubu-suido.jp/company/15406/",
+    "車", "精査中",
+    "2026-09-07 17:00", "2026-08-20 10:00-15:00",
+    150000, 1000000, 1500000, 120000,
+  ]]);
+  pipe.getRange(r, 13).setFormula("=IF(J" + r + ">0,(J" + r + "-300000-L" + r + ")/1.1,\"\")");
+  pipe.getRange(r, 15).setFormula("=IF(N" + r + ">0,FLOOR(N" + r + "*1.1),\"\")");
+  pipe.getRange(r, 16).setFormula("=IF(AND(K" + r + ">0,O" + r + ">0),K" + r + "-O" + r + "-L" + r + ",\"\")");
+  pipe.getRange(r, 17).setValue("旧車王(045-476-1019・実査定100〜200万)/フレックス・ドリーム/最強買取jp/向陽自販");
+  pipe.getRange(r, 18).setValue("下回り40点が未評価(8/20が全て)/修復歴の有無/NOx・PM法で首都圏登録不可(保有なら花巻登録)/一発入札/9/15全額前払い/9/30搬出");
+  pipe.getRange(r, 19).setValue("8/20現物確認の電話予約(0198-41-5315)＋整備士同行打診(コバック北上0197-71-1166)");
+}
+
 function guessKind_(text) {
   if (/(公用車|車両|ランドクルーザー|ハイエース|自動車)/.test(text)) return "車";
   if (/(土地|建物|不動産|宅地)/.test(text)) return "不動産";
@@ -181,10 +202,14 @@ function hash_(s) {
 }
 
 function sendLine_(message) {
-  if (CONFIG.LINE_NOTIFY_TOKEN.indexOf("YOUR_") === 0) { Logger.log("LINEトークン未設定"); return; }
+  var token = CONFIG.LINE_NOTIFY_TOKEN;
+  if (token.indexOf("YOUR_") === 0) {
+    token = PropertiesService.getScriptProperties().getProperty("LINE_NOTIFY_TOKEN") || "";
+  }
+  if (!token) { Logger.log("LINEトークン未設定（通知スキップ・スプシ記帳は実行済み）"); return; }
   UrlFetchApp.fetch("https://notify-api.line.me/api/notify", {
     method: "post",
-    headers: { Authorization: "Bearer " + CONFIG.LINE_NOTIFY_TOKEN },
+    headers: { Authorization: "Bearer " + token },
     payload: { message: message },
     muteHttpExceptions: true,
   });

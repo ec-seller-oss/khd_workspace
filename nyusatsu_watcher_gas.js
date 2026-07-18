@@ -1,20 +1,26 @@
 // ============================================================
-// KHD 入札・公売ウォッチャー v2（穴場サイト巡回 → スプシ記帳 → LINE通知）
+// KHD 入札・公売ウォッチャー v2.5（穴場サイト巡回 → スプシ記帳 → LINE通知）
 // Google Apps Script (GAS) にコピー&ペーストして使用
 // ------------------------------------------------------------
+// v2.5の変更点（2026-07-18菊池さん指摘対応）:
+//   - 「サイトを初めて巡回した時は全部だまって既読にする」設計をやめた。
+//     初めて見るサイトは、その時点にある案件を「初期スキャン」として
+//     全部パイプラインに記帳する＝起動直後から掘り出し物を拾える。
+//   - 今後SITESに新しいサイトを追加した瞬間も、その1回目の巡回で
+//     自動的に棚卸し（初期スキャン）される＝営業直結まで最短。
 // v2の変更点:
 //   - 検知した案件を「案件パイプライン」スプシに自動で行追加
 //     （入札締切・現物確認日・想定売却額・入札上限・契約金額・想定利益を
 // 　　 数式込みでセット。巡回→記帳→通知がスプシで完結）
 //   - 「販売先マスタ」シートを自動生成（旧車王等の調査済み連絡先入り）
-//   - 初回実行は既読登録のみ（通知の洪水を防止）
 // 使い方:
 //   1. Googleスプレッドシートを新規作成（名前例: KHD_入札案件パイプライン）
 //      → URLの /d/ と /edit の間のIDを CONFIG.SPREADSHEET_ID に貼る
 //   2. script.google.com → 本文を貼り付け → LINE_NOTIFY_TOKEN を設定
 //   3. setupTrigger を1回実行（毎日6時・11時・17時の自動巡回=1日3回を登録）
-//   4. run を1回手動実行 → 初回は「初期化完了」ログのみ（通知なし）
-//   5. 以後、新着が出た朝だけ LINE が鳴り、スプシに行が増える
+//   4. run を1回手動実行 → 15サイト分の現在の案件が「初期スキャン」として
+//      一気にスプシに記帳される（掘り出し物はここで探す）。LINEにも通知が届く
+//   5. 以後は差分（新着）だけがスプシに追加され、LINEが鳴る
 // ============================================================
 
 var CONFIG = {
@@ -58,14 +64,19 @@ var PIPE_HEADERS = [
 ];
 // ステータスの推奨遷移: 新着 → 精査中 → 入札準備 → 入札済 → 落札/落選 → 売却済/撤退
 
+// 方針（2026-07-18菊池さん指摘で修正）：
+// 「初回だけは全部だまって既読にする」は掘り出し物を見ずに握りつぶす設計ミスだった。
+// → サイトごとに「このサイトを初めて見る巡回か」を判定し、初めてなら
+//   その時点で出ている案件を"初期スキャン"としてそのままパイプラインに全部記帳する。
+//   これにより①起動直後から狙い目を拾える②今後サイトを追加した瞬間もその場で棚卸しされる。
 function run() {
   var props = PropertiesService.getScriptProperties();
-  var firstRun = !props.getProperty("initialized");
   var ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
   ensureSheets_(ss);
   var pipe = ss.getSheetByName("案件パイプライン");
 
   var notifications = [];
+  var initialScanCount = 0;
   SITES.forEach(function (site) {
     try {
       var html = fetchSite_(site.url).getContentText();
@@ -74,15 +85,16 @@ function run() {
         return KEYWORDS.some(function (k) { return l.text.indexOf(k) >= 0; });
       });
       var seenKey = "seen_" + site.name;
-      var seen = JSON.parse(props.getProperty(seenKey) || "[]");
+      var seenRaw = props.getProperty(seenKey);
+      var siteFirstScan = !seenRaw; // このサイトを初めて巡回する（=このサイトの掘り出し物をまだ一度も棚卸ししていない）
+      var seen = JSON.parse(seenRaw || "[]");
       var fresh = hits.filter(function (l) { return seen.indexOf(hash_(l.text + l.href)) < 0; });
-      if (!firstRun) {
-        fresh.forEach(function (l) {
-          var hot = HOT.some(function (k) { return l.text.indexOf(k) >= 0; });
-          notifications.push({ site: site.name, text: l.text, href: l.href, hot: hot });
-          appendPipelineRow_(pipe, site, l, hot);
-        });
-      }
+      fresh.forEach(function (l) {
+        var hot = HOT.some(function (k) { return l.text.indexOf(k) >= 0; });
+        notifications.push({ site: site.name, text: l.text, href: l.href, hot: hot, firstScan: siteFirstScan });
+        appendPipelineRow_(pipe, site, l, hot, siteFirstScan);
+        if (siteFirstScan) initialScanCount++;
+      });
       var newSeen = hits.map(function (l) { return hash_(l.text + l.href); }).concat(seen).slice(0, 300);
       props.setProperty(seenKey, JSON.stringify(newSeen));
     } catch (e) {
@@ -90,20 +102,22 @@ function run() {
     }
   });
 
-  if (firstRun) {
-    props.setProperty("initialized", "1");
-    Logger.log("初期化完了：既存記事を既読登録しました（通知なし）。明日以降の新着から通知します。");
-    sendLine_("\n✅ 入札ウォッチャー初期化完了。15サイトの既存記事を既読登録しました。明日以降、新着があれば通知します。");
-    return;
-  }
   if (notifications.length === 0) { Logger.log("新着なし"); return; }
-  notifications.sort(function (a, b) { return (b.hot ? 1 : 0) - (a.hot ? 1 : 0); });
+  // 初期スキャン(掘り出し物の棚卸し)を優先、次にHOTワード命中を優先
+  notifications.sort(function (a, b) {
+    return (b.firstScan ? 2 : 0) + (b.hot ? 1 : 0) - ((a.firstScan ? 2 : 0) + (a.hot ? 1 : 0));
+  });
   var top = notifications.slice(0, CONFIG.MAX_NOTIFY_PER_RUN);
   var lines = top.map(function (n) {
-    return (n.hot ? "★" : "・") + "【" + n.site + "】" + n.text.slice(0, 60) + "\n" + n.href;
+    var mark = n.firstScan ? "🆕初期" : (n.hot ? "★" : "・");
+    return mark + "【" + n.site + "】" + n.text.slice(0, 60) + "\n" + n.href;
   });
-  var msg = "\n🔔 入札・公売 新着 " + notifications.length + "件（スプシに記帳済み）\n" + lines.join("\n") +
-            (notifications.length > top.length ? "\n…他" + (notifications.length - top.length) + "件" : "") +
+  var header = "\n🔔 入札・公売 検知 " + notifications.length + "件（スプシに記帳済み）";
+  if (initialScanCount > 0) {
+    header += "\n　うち🆕初期スキャン(このサイトを初めて棚卸し)" + initialScanCount + "件＝掘り出し物が眠っているかも、要チェック";
+  }
+  var msg = header + "\n" + lines.join("\n") +
+            (notifications.length > top.length ? "\n…他" + (notifications.length - top.length) + "件（全件はスプシで）" : "") +
             "\n📊 " + "https://docs.google.com/spreadsheets/d/" + CONFIG.SPREADSHEET_ID;
   sendLine_(msg);
 }
@@ -137,19 +151,24 @@ function ensureSheets_(ss) {
   }
 }
 
-function appendPipelineRow_(pipe, site, link, hot) {
+function appendPipelineRow_(pipe, site, link, hot, siteFirstScan) {
   var r = pipe.getLastRow() + 1;
   var kind = hot ? guessKind_(link.text) : (site.type === "estate" ? "不動産" : "");
+  // 初期スキャン(=このサイトを初めて棚卸しして見つかった既存案件)は「新着」と区別して記録。
+  // 状況が動いた/締切が近い等は自分でステータスを更新していく前提（新着→精査中→…）。
+  var status = siteFirstScan ? "初期スキャン" : "新着";
   pipe.getRange(r, 1, 1, 6).setValues([[
     Utilities.formatDate(new Date(), "Asia/Tokyo", "yyyy-MM-dd"),
-    site.name, link.text.slice(0, 100), link.href, kind, "新着",
+    site.name, link.text.slice(0, 100), link.href, kind, status,
   ]]);
   // 数式列: M=入札上限(自動)=(J保守売却-30万利益-L諸費用)/1.1, O=契約金額=N*1.1, P=想定利益=K中央-O-L
   pipe.getRange(r, 13).setFormula("=IF(J" + r + ">0,(J" + r + "-300000-L" + r + ")/1.1,\"\")");
   pipe.getRange(r, 15).setFormula("=IF(N" + r + ">0,FLOOR(N" + r + "*1.1),\"\")");
   pipe.getRange(r, 16).setFormula("=IF(AND(K" + r + ">0,N" + r + ">0),K" + r + "-FLOOR(N" + r + "*1.1)-L" + r + ",\"\")");
-  // 定型のリスク・論点と次アクションを新着時に自動セット（手で上書きして育てる）
-  pipe.getRange(r, 18).setValue("参加資格(地域要件)/現状渡し/一発入札/搬出期限/排ガス規制/修復歴 を精査");
+  // 定型のリスク・論点と次アクションを自動セット（手で上書きして育てる）
+  pipe.getRange(r, 18).setValue(siteFirstScan
+    ? "初期スキャンで検出＝掘り出し物かどうか本文を開いて確認（締切切れ・条件不一致の可能性もあり要一次選別）"
+    : "参加資格(地域要件)/現状渡し/一発入札/搬出期限/排ガス規制/修復歴 を精査");
   pipe.getRange(r, 19).setValue("公告PDFを取得→締切・最低価格を記入→勝ち筋10分判定");
 }
 
@@ -241,6 +260,24 @@ function setupTrigger() {
     ScriptApp.newTrigger("run").timeBased().atHour(h).everyDays(1).create();
   });
   Logger.log("トリガーを設定しました：毎日 " + RUN_HOURS.join("時・") + "時 に巡回します（計" + RUN_HOURS.length + "回/日）");
+}
+
+// 【1回だけ実行してください】旧v2.2/v2.3/v2.4は「初回は既読のみ」でscript
+// propertiesに全案件を既読登録済みのため、コードを貼り替えただけでは
+// 過去分（掘り出し物）が再表示されない。これを実行して既読状態をリセットしてから
+// run() を実行すると、15サイト分の現在の案件が改めて「初期スキャン」として
+// 全部パイプラインに記帳される。以後の通常運用では使わない。
+function resetSeenState() {
+  var props = PropertiesService.getScriptProperties();
+  var all = props.getProperties();
+  var cleared = 0;
+  Object.keys(all).forEach(function (k) {
+    if (k.indexOf("seen_") === 0 || k === "initialized") {
+      props.deleteProperty(k);
+      cleared++;
+    }
+  });
+  Logger.log("既読状態をリセットしました（" + cleared + "件のプロパティを削除）。次に run() を実行してください。");
 }
 
 // 動作テスト用: サイトごとの取得状況だけを確認（通知・記帳なし）

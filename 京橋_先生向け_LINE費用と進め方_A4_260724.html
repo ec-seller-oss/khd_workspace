@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<style>
+  @page { size: A4; margin: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact; }
+  body {
+    font-family: "IPAPGothic","IPAGothic",sans-serif;
+    width: 210mm; height: 297mm;
+    padding: 11mm 12mm;
+    color: #222; font-size: 9.8pt; line-height: 1.45;
+  }
+  .head { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2.5px solid #b7282e; padding-bottom: 2.5mm; }
+  .head h1 { font-size: 15pt; color: #b7282e; letter-spacing: .5px; }
+  .head .to { font-size: 9pt; margin-top: 1mm; }
+  .head .meta { font-size: 8.5pt; text-align: right; color: #555; }
+  .hero {
+    margin-top: 3.5mm; background: #fdf2f2; border: 2px solid #b7282e; border-radius: 2mm;
+    padding: 3mm 4mm; text-align: center;
+  }
+  .hero .lead { font-size: 10pt; }
+  .hero .big { font-size: 15.5pt; font-weight: bold; color: #b7282e; margin: 1mm 0; }
+  .hero .sub { font-size: 9.5pt; }
+  h2 {
+    font-size: 10.5pt; color: #fff; background: #b7282e; display: block;
+    padding: 1mm 3mm; margin: 3.5mm 0 1.8mm; border-radius: 1mm; letter-spacing: 1px;
+  }
+  table.money { width: 100%; border-collapse: collapse; }
+  table.money td, table.money th { border: 1px solid #bbb; padding: 1.2mm 2.2mm; font-size: 9.3pt; }
+  table.money th { background: #f3f3f3; width: 34mm; text-align: left; font-weight: bold; }
+  .zero { color: #b7282e; font-weight: bold; font-size: 11pt; }
+  .example {
+    margin-top: 1.8mm; display: flex; gap: 3mm;
+  }
+  .exbox { flex: 1; border: 1px solid #bbb; border-radius: 1.5mm; padding: 1.6mm 2.5mm; font-size: 8.8pt; background: #fafafa; }
+  .exbox b { color: #b7282e; }
+  .cols { display: flex; gap: 5mm; }
+  .col { flex: 1; }
+  ul { list-style: none; }
+  ul.check li { padding-left: 5mm; position: relative; margin-bottom: 1.2mm; font-size: 9.2pt; }
+  ul.check li::before { content: "✔"; position: absolute; left: 0; color: #b7282e; font-weight: bold; }
+  ul.check li .ref { color: #777; font-size: 8pt; }
+  .voice { border: 1px solid #bbb; border-radius: 1.5mm; padding: 1.5mm 2.5mm; margin-bottom: 1.5mm; font-size: 8.9pt; background: #fafafa; }
+  .voice b { color: #1a4e8a; }
+  .voice .arrow { color: #b7282e; font-weight: bold; }
+  .keep { background: #eef4fb; border: 1px solid #9ab4d4; border-radius: 1.5mm; padding: 1.6mm 2.5mm; font-size: 8.9pt; margin-top: 1.5mm; }
+  .keep b { color: #1a4e8a; }
+  .steps { display: flex; gap: 3mm; margin-top: 1.8mm; }
+  .step { flex: 1; border: 1.5px solid #b7282e; border-radius: 1.5mm; padding: 1.8mm 2.5mm; text-align: center; }
+  .step .n { display: inline-block; background: #b7282e; color: #fff; border-radius: 50%; width: 5.5mm; height: 5.5mm; line-height: 5.5mm; font-size: 9pt; font-weight: bold; margin-bottom: 1mm; }
+  .step .t { font-weight: bold; font-size: 9.5pt; }
+  .step .d { font-size: 8.3pt; color: #444; }
+  .foot { margin-top: 3mm; border-top: 1px solid #999; padding-top: 1.5mm; font-size: 8.3pt; color: #555; display: flex; justify-content: space-between; gap: 6mm; }
+  .foot div:first-child { white-space: nowrap; }
+  .foot div:last-child { text-align: right; }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <div>
+    <h1>公式LINE の「費用」と「進め方」 ── 1枚まとめ</h1>
+    <div class="to">医療法人社団順医会 京橋クリニック　山崎先生</div>
+  </div>
+  <div class="meta">2026年7月24日<br>ＫＨＤ　代表　菊池 研太</div>
+</div>
+
+<div class="hero">
+  <div class="lead">先日「LINEはお金がかかるのでは」とのお話をいただきました。私の説明不足でした。結論から——</div>
+  <div class="big">LINEの導入・利用に、お金はかかりません。</div>
+  <div class="sub">初期費用 <b>0円</b> ・ 月額 <b>0円</b> ・ 効果が数字で出なければ <b>ずっと0円</b>（合わなければ費用負担なくやめられます）</div>
+</div>
+
+<h2>① 金額 ── お金の流れのすべて（契約書ドラフトのとおり）</h2>
+<table class="money">
+  <tr><th>初期費用</th><td><span class="zero">0円</span>　（一般的なLINE構築業者は初期20万〜250万円＋月額固定が相場です）</td></tr>
+  <tr><th>月額基本料</th><td><span class="zero">0円</span>　システム・サーバー利用料も0円（自前構築のため、業者へのライセンス料が存在しません）</td></tr>
+  <tr><th>成果報酬</th><td>費用が発生するのは<b>「削減効果が数字で確認された月」だけ</b>。削減された人件費相当額の<b>40％</b>を、効果測定開始から<b>6ヶ月間のみ</b>。削減がない月は<span class="zero">0円</span>。</td></tr>
+  <tr><th>7ヶ月目以降</th><td>保守料 月5万円（月1回の打合せ・運用相談込み）。<b>不要であれば30日前の通知でいつでも解約可</b>。</td></tr>
+</table>
+<div class="example">
+  <div class="exbox">【例】月末残業などで人件費が月10万円分減った月 → 院に <b>6万円</b> が残り、当方へ4万円。<b>院の持ち出しは構造上ゼロ</b>（減った分の中から）です。</div>
+  <div class="exbox">【例】効果が出なかった月 → お支払いは <b>0円</b>。6ヶ月測って効果ゼロなら、<b>費用ゼロのまま契約終了</b>にできます。IT導入補助金の活用もこちらで支援します。</div>
+</div>
+
+<div class="cols">
+  <div class="col">
+    <h2>② 契約書の要点（安心材料）</h2>
+    <ul class="check">
+      <li><b>効果ゼロなら費用ゼロ</b>。削減が確認されない場合、いつでも費用負担なく解約できます <span class="ref">（第2条・第4条）</span></li>
+      <li>縛りは「効果測定開始から6ヶ月」だけ。以後は30日前通知で解約自由 <span class="ref">（第3条・第4条）</span></li>
+      <li><b>患者情報は原則取り扱いません</b>。3省2ガイドラインの趣旨を遵守。運用ルールの決定は院長先生 <span class="ref">（第6条）</span></li>
+      <li>医療行為・診断の判断は、すべて先生に。当方は助言・支援のみ <span class="ref">（第8条）</span></li>
+      <li>特定ツールの販売を目的としない<b>中立の立場</b>です <span class="ref">（第1条）</span></li>
+    </ul>
+  </div>
+  <div class="col">
+    <h2>③ LINEの方向性 ── スタッフの声から</h2>
+    <div class="voice"><b>「電話が鳴り止まない」</b><br><span class="arrow">→</span> よくある質問はLINEが一次対応（自動応答16件 稼働中）</div>
+    <div class="voice"><b>「紙の問診を電カルに写すのが二度手間」</b><br><span class="arrow">→</span> 来院前にスマホで問診記入（転記が減る）</div>
+    <div class="voice"><b>「CPAPの方が月末に集中し残業が大幅増」</b><br><span class="arrow">→</span> 毎月の再診リマインドを自動配信（看護師長のご意見で標準ON）</div>
+    <div class="voice"><b>「順番を取ったのに、と押し通す方が多い」</b><br><span class="arrow">→</span> 「あと◯人です」をLINEで自動通知（準備中）</div>
+    <div class="keep"><b>変えないこと</b>：当日の順番受付制はそのまま／LINEが診断することはありません／スタッフを減らす話ではなく、患者さんに向き合う時間を増やす仕組みです。<b>すでに動いており、その場でスマホでご覧いただけます。</b></div>
+  </div>
+</div>
+
+<h2>④ 進め方のご提案 ── 小さく・数字で</h2>
+<div class="steps">
+  <div class="step"><span class="n">1</span><div class="t">まず1つだけ、無料で</div><div class="d">再診リマインド または FAQ自動応答から。全部を一度にやりません</div></div>
+  <div class="step"><span class="n">2</span><div class="t">前後の数字を一緒に測る</div><div class="d">電話本数・月末残業など。測定はこちらが行い、手間をかけません</div></div>
+  <div class="step"><span class="n">3</span><div class="t">数字を見てからご判断</div><div class="d">効果が確認できた分だけお支払い。合わなければそこで終了できます</div></div>
+</div>
+
+<div class="foot">
+  <div>ＫＨＤ　菊池 研太（AI・IT活用コンサルティング）</div>
+  <div>※ 金額・条件の正式な定めは業務委託契約書（ドラフト）本文をご参照ください。ご不明点はその場でご説明します。</div>
+</div>
+
+</body>
+</html>

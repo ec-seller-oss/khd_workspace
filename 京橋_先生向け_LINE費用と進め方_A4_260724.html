@@ -8,50 +8,50 @@
   body {
     font-family: "IPAPGothic","IPAGothic",sans-serif;
     width: 210mm; height: 297mm;
-    padding: 11mm 12mm;
-    color: #222; font-size: 9.8pt; line-height: 1.45;
+    padding: 8mm 11mm;
+    color: #222; font-size: 9.4pt; line-height: 1.38;
   }
   .head { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2.5px solid #b7282e; padding-bottom: 2.5mm; }
   .head h1 { font-size: 15pt; color: #b7282e; letter-spacing: .5px; }
   .head .to { font-size: 9pt; margin-top: 1mm; }
   .head .meta { font-size: 8.5pt; text-align: right; color: #555; }
   .hero {
-    margin-top: 3.5mm; background: #fdf2f2; border: 2px solid #b7282e; border-radius: 2mm;
-    padding: 3mm 4mm; text-align: center;
+    margin-top: 2.5mm; background: #fdf2f2; border: 2px solid #b7282e; border-radius: 2mm;
+    padding: 2.2mm 3mm; text-align: center;
   }
   .hero .lead { font-size: 10pt; }
-  .hero .big { font-size: 15.5pt; font-weight: bold; color: #b7282e; margin: 1mm 0; }
+  .hero .big { font-size: 13.5pt; font-weight: bold; color: #b7282e; margin: 1mm 0; }
   .hero .sub { font-size: 9.5pt; }
   h2 {
     font-size: 10.5pt; color: #fff; background: #b7282e; display: block;
-    padding: 1mm 3mm; margin: 3.5mm 0 1.8mm; border-radius: 1mm; letter-spacing: 1px;
+    padding: .8mm 3mm; margin: 2.6mm 0 1.4mm; border-radius: 1mm; letter-spacing: 1px;
   }
   table.money { width: 100%; border-collapse: collapse; }
-  table.money td, table.money th { border: 1px solid #bbb; padding: 1.2mm 2.2mm; font-size: 9.3pt; }
+  table.money td, table.money th { border: 1px solid #bbb; padding: 1mm 2mm; font-size: 8.8pt; }
   table.money th { background: #f3f3f3; width: 34mm; text-align: left; font-weight: bold; }
   .zero { color: #b7282e; font-weight: bold; font-size: 11pt; }
   .example {
     margin-top: 1.8mm; display: flex; gap: 3mm;
   }
-  .exbox { flex: 1; border: 1px solid #bbb; border-radius: 1.5mm; padding: 1.6mm 2.5mm; font-size: 8.8pt; background: #fafafa; }
+  .exbox { flex: 1; border: 1px solid #bbb; border-radius: 1.5mm; padding: 1.3mm 2.2mm; font-size: 8.5pt; background: #fafafa; }
   .exbox b { color: #b7282e; }
   .cols { display: flex; gap: 5mm; }
   .col { flex: 1; }
   ul { list-style: none; }
-  ul.check li { padding-left: 5mm; position: relative; margin-bottom: 1.2mm; font-size: 9.2pt; }
+  ul.check li { padding-left: 5mm; position: relative; margin-bottom: 1mm; font-size: 8.8pt; }
   ul.check li::before { content: "✔"; position: absolute; left: 0; color: #b7282e; font-weight: bold; }
   ul.check li .ref { color: #777; font-size: 8pt; }
-  .voice { border: 1px solid #bbb; border-radius: 1.5mm; padding: 1.5mm 2.5mm; margin-bottom: 1.5mm; font-size: 8.9pt; background: #fafafa; }
+  .voice { border: 1px solid #bbb; border-radius: 1.5mm; padding: 1.2mm 2.2mm; margin-bottom: 1.2mm; font-size: 8.5pt; background: #fafafa; }
   .voice b { color: #1a4e8a; }
   .voice .arrow { color: #b7282e; font-weight: bold; }
-  .keep { background: #eef4fb; border: 1px solid #9ab4d4; border-radius: 1.5mm; padding: 1.6mm 2.5mm; font-size: 8.9pt; margin-top: 1.5mm; }
+  .keep { background: #eef4fb; border: 1px solid #9ab4d4; border-radius: 1.5mm; padding: 1.3mm 2.2mm; font-size: 8.5pt; margin-top: 1.2mm; }
   .keep b { color: #1a4e8a; }
   .steps { display: flex; gap: 3mm; margin-top: 1.8mm; }
-  .step { flex: 1; border: 1.5px solid #b7282e; border-radius: 1.5mm; padding: 1.8mm 2.5mm; text-align: center; }
+  .step { flex: 1; border: 1.5px solid #b7282e; border-radius: 1.5mm; padding: 1.3mm 2.2mm; text-align: center; }
   .step .n { display: inline-block; background: #b7282e; color: #fff; border-radius: 50%; width: 5.5mm; height: 5.5mm; line-height: 5.5mm; font-size: 9pt; font-weight: bold; margin-bottom: 1mm; }
   .step .t { font-weight: bold; font-size: 9.5pt; }
   .step .d { font-size: 8.3pt; color: #444; }
-  .foot { margin-top: 3mm; border-top: 1px solid #999; padding-top: 1.5mm; font-size: 8.3pt; color: #555; display: flex; justify-content: space-between; gap: 6mm; }
+  .foot { margin-top: 2mm; border-top: 1px solid #999; padding-top: 1.5mm; font-size: 8.3pt; color: #555; display: flex; justify-content: space-between; gap: 6mm; }
   .foot div:first-child { white-space: nowrap; }
   .foot div:last-child { text-align: right; }
 </style>
@@ -67,16 +67,17 @@
 </div>
 
 <div class="hero">
-  <div class="lead">先日「LINEはお金がかかるのでは」とのお話をいただきました。私の説明不足でした。結論から——</div>
-  <div class="big">LINEの導入・利用に、お金はかかりません。</div>
-  <div class="sub">初期費用 <b>0円</b> ・ 月額 <b>0円</b> ・ 効果が数字で出なければ <b>ずっと0円</b>（合わなければ費用負担なくやめられます）</div>
+  <div class="lead">先日「LINEはお金がかかるのでは」とのお話をいただきました。ご懸念はもっともです。正確にお伝えすると——</div>
+  <div class="big">当方への初期費用・月額は 0円。いま始める範囲は、LINE社への支払いも 0円です。</div>
+  <div class="sub">将来フル活用した場合のみ、LINE社への実費が <b>月5,000円ほど</b>（下表・事前にご提示します）。効果が数字で出なければ当方への報酬は <b>0円</b> のままです。</div>
 </div>
 
 <h2>① 金額 ── お金の流れのすべて（契約書ドラフトのとおり）</h2>
 <table class="money">
-  <tr><th>初期費用</th><td><span class="zero">0円</span>　（一般的なLINE構築業者は初期20万〜250万円＋月額固定が相場です）</td></tr>
-  <tr><th>月額基本料</th><td><span class="zero">0円</span>　システム・サーバー利用料も0円（自前構築のため、業者へのライセンス料が存在しません）</td></tr>
-  <tr><th>成果報酬</th><td>費用が発生するのは<b>「削減効果が数字で確認された月」だけ</b>。削減された人件費相当額の<b>40％</b>を、効果測定開始から<b>6ヶ月間のみ</b>。削減がない月は<span class="zero">0円</span>。</td></tr>
+  <tr><th>初期費用（当方へ）</th><td><span class="zero">0円</span>　（一般的なLINE構築業者は初期20万〜250万円＋月額固定が相場です）</td></tr>
+  <tr><th>月額基本料（当方へ）</th><td><span class="zero">0円</span>　システム・サーバー利用料も0円（自前構築のため、業者へのライセンス料が存在しません）</td></tr>
+  <tr><th>LINE社への料金<br>（実費・正直にお伝えします）</th><td>患者さんの質問への<b>自動応答・Web問診は何通でも無料</b>（LINE社の課金対象外）。料金が生じるのは<b>こちらから送る通知（リマインド等）だけ</b>で、月200通まで<span class="zero">0円</span>。<b>いま始める範囲は0円</b>、将来リマインドや順番通知を全患者に広げた場合で<b>月5,000円（LINE社のライトプラン）</b>が目安。※広げる前に必ず通数と金額をご提示します。</td></tr>
+  <tr><th>成果報酬（当方へ）</th><td>費用が発生するのは<b>「削減効果が数字で確認された月」だけ</b>。削減された人件費相当額の<b>40％</b>を、効果測定開始から<b>6ヶ月間のみ</b>。削減がない月は<span class="zero">0円</span>。</td></tr>
   <tr><th>7ヶ月目以降</th><td>保守料 月5万円（月1回の打合せ・運用相談込み）。<b>不要であれば30日前の通知でいつでも解約可</b>。</td></tr>
 </table>
 <div class="example">

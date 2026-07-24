@@ -8,50 +8,53 @@
   body {
     font-family: "IPAPGothic","IPAGothic",sans-serif;
     width: 297mm; height: 210mm;
-    padding: 9mm 10mm;
+    padding: 8mm 10mm;
     color: #222; font-size: 11pt; line-height: 1.4;
     display: flex; flex-direction: column;
   }
-  .head { border-bottom: 3px solid #b7282e; padding-bottom: 2.5mm; margin-bottom: 4mm; display: flex; justify-content: space-between; align-items: flex-end; }
-  .head h1 { font-size: 19pt; color: #b7282e; letter-spacing: .5px; }
+  .head { border-bottom: 3px solid #b7282e; padding-bottom: 2mm; margin-bottom: 3mm; display: flex; justify-content: space-between; align-items: flex-end; }
+  .head h1 { font-size: 20pt; color: #b7282e; letter-spacing: .5px; }
   .head .meta { font-size: 9.5pt; color: #666; text-align: right; }
 
   .ready {
     background: #f4f4f4; border: 1.5px solid #999; border-radius: 2mm;
-    padding: 2mm 4mm; margin-bottom: 4mm; font-size: 11.5pt; text-align: center;
+    padding: 2mm 4mm; margin-bottom: 3mm; font-size: 12pt; text-align: center;
   }
   .ready b { color: #2f6b2f; }
 
-  .flow { display: flex; align-items: stretch; flex: 1; margin-bottom: 4mm; }
+  .flow { display: flex; align-items: stretch; flex: 1; margin-bottom: 3mm; }
   .step {
-    flex: 1; border: 2px solid #b7282e; border-radius: 2.5mm; padding: 3mm 3mm;
+    flex: 1; border: 2px solid #b7282e; border-radius: 2.5mm; padding: 2.5mm 2.5mm;
     background: #fff; display: flex; flex-direction: column; text-align: center;
   }
-  .arrow { align-self: center; font-size: 17pt; color: #b7282e; font-weight: bold; padding: 0 1mm; flex: 0 0 auto; }
+  .arrow { align-self: center; font-size: 16pt; color: #b7282e; font-weight: bold; padding: 0 .8mm; flex: 0 0 auto; }
   .badge {
     display: block; background: #b7282e; color: #fff; font-weight: bold;
-    font-size: 11pt; border-radius: 1.2mm; padding: .8mm 0; margin-bottom: 1.5mm;
+    font-size: 12pt; border-radius: 1.2mm; padding: .7mm 0; margin-bottom: 1.2mm;
   }
-  .when { font-size: 10.5pt; color: #b7282e; font-weight: bold; }
-  .ttl { font-weight: bold; font-size: 13.5pt; margin: 1.5mm 0 2mm; line-height: 1.25; }
-  .do { font-size: 10.5pt; text-align: left; padding-left: 4.5mm; text-indent: -4.5mm; margin-bottom: 1.2mm; }
+  .when { font-size: 11pt; color: #b7282e; font-weight: bold; }
+  .ttl { font-weight: bold; font-size: 15pt; margin: 1.3mm 0 .8mm; line-height: 1.22; }
+  .pic { flex: 1; display: flex; align-items: center; justify-content: center; margin: .5mm 0 1mm; }
+  .pic svg { width: 100%; max-height: 62mm; }
+  svg text { font-family: "IPAPGothic","IPAGothic",sans-serif; }
+  .do { font-size: 10pt; text-align: left; padding-left: 4.2mm; text-indent: -4.2mm; margin-bottom: 1mm; }
   .do::before { content: "▸ "; color: #b7282e; font-weight: bold; }
   .ef {
-    margin-top: auto; background: #eef4fb; border-radius: 1.5mm;
-    padding: 1.5mm 2mm; font-size: 10pt; color: #1a4e8a; font-weight: bold;
+    background: #eef4fb; border-radius: 1.5mm; margin-top: .5mm;
+    padding: 1.8mm 2mm; font-size: 11pt; color: #1a4e8a; font-weight: bold;
   }
-  .co { margin-top: 1.5mm; font-size: 11pt; font-weight: bold; }
-  .co .z { color: #b7282e; font-size: 13pt; }
+  .co { margin-top: 1.6mm; font-size: 12pt; font-weight: bold; }
+  .co .z { color: #b7282e; font-size: 15pt; }
 
   .foot { display: flex; gap: 4mm; }
   .promise {
     flex: 1.6; border: 2px solid #b7282e; border-radius: 2mm; background: #fdf2f2;
-    padding: 2.5mm 4mm; font-size: 11.5pt; display: flex; align-items: center;
+    padding: 2.5mm 4mm; font-size: 12pt; display: flex; align-items: center;
   }
   .promise b { color: #b7282e; }
   .goal {
     flex: 1; background: #b7282e; color: #fff; border-radius: 2mm;
-    padding: 2.5mm 4mm; font-size: 12pt; font-weight: bold;
+    padding: 2.5mm 4mm; font-size: 12.5pt; font-weight: bold;
     display: flex; align-items: center; justify-content: center; text-align: center;
   }
 </style>
@@ -66,12 +69,43 @@
 <div class="ready">仕組みは<b>すでに完成・動いています</b>（メニュー・自動応答・Web問診・リマインド）。あとは始めるだけです。</div>
 
 <div class="flow">
+
   <div class="step">
     <span class="badge">STEP 1</span>
     <div class="when">開始 〜 1ヶ月</div>
     <div class="ttl">自動応答と<br>Web問診</div>
-    <div class="do">よくある質問にLINEが自動回答</div>
-    <div class="do">来院前にスマホで問診記入</div>
+    <div class="pic">
+      <svg viewBox="0 0 120 136">
+<g transform="translate(0,6)">
+        <!-- phone -->
+        <rect x="44" y="6" width="32" height="62" rx="5" fill="#fff" stroke="#b7282e" stroke-width="2.5"/>
+        <line x1="52" y1="12" x2="68" y2="12" stroke="#b7282e" stroke-width="2"/>
+        <!-- chat lines in phone -->
+        <rect x="49" y="20" width="16" height="6" rx="3" fill="#eef4fb"/>
+        <rect x="55" y="30" width="16" height="6" rx="3" fill="#fdd"/>
+        <rect x="49" y="40" width="16" height="6" rx="3" fill="#eef4fb"/>
+        <rect x="55" y="50" width="16" height="6" rx="3" fill="#fdd"/>
+        <!-- question bubble -->
+        <rect x="2" y="14" width="34" height="20" rx="5" fill="#eef4fb" stroke="#1a4e8a" stroke-width="1.8"/>
+        <path d="M32 34 L38 40 L30 34 Z" fill="#eef4fb" stroke="#1a4e8a" stroke-width="1.5"/>
+        <text x="19" y="29" text-anchor="middle" font-size="14" font-weight="bold" fill="#1a4e8a">？</text>
+        <!-- auto answer bubble -->
+        <rect x="82" y="30" width="36" height="20" rx="5" fill="#fdf2f2" stroke="#b7282e" stroke-width="1.8"/>
+        <path d="M86 50 L80 56 L90 50 Z" fill="#fdf2f2" stroke="#b7282e" stroke-width="1.5"/>
+        <text x="100" y="44" text-anchor="middle" font-size="11" font-weight="bold" fill="#b7282e">自動</text>
+        <!-- monshin form -->
+        <rect x="8" y="56" width="26" height="34" rx="2" fill="#fff" stroke="#999" stroke-width="1.8"/>
+        <line x1="12" y1="64" x2="30" y2="64" stroke="#bbb" stroke-width="2"/>
+        <line x1="12" y1="71" x2="30" y2="71" stroke="#bbb" stroke-width="2"/>
+        <line x1="12" y1="78" x2="24" y2="78" stroke="#bbb" stroke-width="2"/>
+        <path d="M20 82 L24 87 L32 76" fill="none" stroke="#2f6b2f" stroke-width="3" stroke-linecap="round"/>
+        
+        
+      </g>
+<text x="60" y="118" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">来院前にスマホで問診</text>
+<text x="60" y="132" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">質問には自動で回答</text>
+</svg>
+    </div>
     <div class="ef">電話と転記の負担が減る</div>
     <div class="co">費用 <span class="z">0円</span></div>
   </div>
@@ -81,9 +115,36 @@
     <span class="badge">STEP 2</span>
     <div class="when">2〜3ヶ月目</div>
     <div class="ttl">再診<br>リマインド</div>
-    <div class="do">CPAPの方へ毎月自動でご案内</div>
-    <div class="do">足が遠のいた方へやさしく一声</div>
-    <div class="ef">月末の混雑と残業が平準化</div>
+    <div class="pic">
+      <svg viewBox="0 0 120 136">
+<g transform="translate(0,6)">
+        <!-- calendar -->
+        <rect x="18" y="16" width="66" height="58" rx="4" fill="#fff" stroke="#b7282e" stroke-width="2.5"/>
+        <rect x="18" y="16" width="66" height="14" rx="4" fill="#b7282e"/>
+        <line x1="30" y1="10" x2="30" y2="22" stroke="#b7282e" stroke-width="3" stroke-linecap="round"/>
+        <line x1="72" y1="10" x2="72" y2="22" stroke="#b7282e" stroke-width="3" stroke-linecap="round"/>
+        <!-- grid dots -->
+        <g fill="#ccc">
+          <circle cx="30" cy="40" r="2.5"/><circle cx="44" cy="40" r="2.5"/><circle cx="58" cy="40" r="2.5"/><circle cx="72" cy="40" r="2.5"/>
+          <circle cx="30" cy="52" r="2.5"/><circle cx="44" cy="52" r="2.5"/><circle cx="72" cy="52" r="2.5"/>
+          <circle cx="30" cy="64" r="2.5"/><circle cx="44" cy="64" r="2.5"/><circle cx="58" cy="64" r="2.5"/>
+        </g>
+        <!-- marked date -->
+        <circle cx="58" cy="52" r="7.5" fill="none" stroke="#b7282e" stroke-width="2.5"/>
+        <circle cx="58" cy="52" r="3" fill="#b7282e"/>
+        <!-- bell -->
+        <path d="M100 26 c-7 0 -9 6 -9 12 l-2 8 h22 l-2 -8 c0 -6 -2 -12 -9 -12 Z" fill="#f5c542" stroke="#a07000" stroke-width="1.8"/>
+        <circle cx="100" cy="49" r="3" fill="#a07000"/>
+        <path d="M86 20 a18 18 0 0 1 28 0" fill="none" stroke="#c98a00" stroke-width="2" stroke-linecap="round"/>
+        <!-- arrow to phone-ish -->
+        
+        
+      </g>
+<text x="60" y="118" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">毎月の受診案内を</text>
+<text x="60" y="132" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">自動でお届け</text>
+</svg>
+    </div>
+    <div class="ef">月末の混雑・残業が減る</div>
     <div class="co">費用 <span class="z">0〜5千円</span>/月</div>
   </div>
   <div class="arrow">▶</div>
@@ -92,9 +153,29 @@
     <span class="badge">STEP 3</span>
     <div class="when">3〜4ヶ月目</div>
     <div class="ttl">順番の<br>お知らせ</div>
-    <div class="do">「あと◯人です」を自動通知</div>
-    <div class="do">受付システムと連携して実現</div>
-    <div class="ef">待ち時間の不満・行き違いが減る</div>
+    <div class="pic">
+      <svg viewBox="0 0 120 136">
+<g transform="translate(0,6)">
+        <!-- queue people -->
+        <g stroke="#999" stroke-width="1.5">
+          <circle cx="14" cy="34" r="7" fill="#ddd"/><path d="M4 58 a10 12 0 0 1 20 0 Z" fill="#ddd"/>
+          <circle cx="34" cy="34" r="7" fill="#ddd"/><path d="M24 58 a10 12 0 0 1 20 0 Z" fill="#ddd"/>
+          <circle cx="54" cy="34" r="7" fill="#bbb"/><path d="M44 58 a10 12 0 0 1 20 0 Z" fill="#bbb"/>
+        </g>
+        <!-- phone with notice -->
+        <rect x="78" y="16" width="30" height="56" rx="5" fill="#fff" stroke="#b7282e" stroke-width="2.5"/>
+        <line x1="85" y1="22" x2="101" y2="22" stroke="#b7282e" stroke-width="2"/>
+        <rect x="70" y="30" width="46" height="22" rx="4" fill="#fdf2f2" stroke="#b7282e" stroke-width="2"/>
+        <text x="93" y="40" text-anchor="middle" font-size="10" font-weight="bold" fill="#b7282e">あと３人</text>
+        <text x="93" y="49" text-anchor="middle" font-size="8" fill="#b7282e">です</text>
+        
+        
+      </g>
+<text x="60" y="118" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">順番が近づいたら</text>
+<text x="60" y="132" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">スマホへお知らせ</text>
+</svg>
+    </div>
+    <div class="ef">待ち時間の不満が減る</div>
     <div class="co">費用 <span class="z">5千円</span>/月</div>
   </div>
   <div class="arrow">▶</div>
@@ -103,9 +184,34 @@
     <span class="badge">STEP 4</span>
     <div class="when">4ヶ月目〜</div>
     <div class="ttl">お知らせ<br>配信</div>
-    <div class="do">掲示で伝わりにくい案内をLINEで</div>
-    <div class="do">「何で知ったか」で来院経路を分析</div>
-    <div class="ef">周知が届く・集患の判断材料に</div>
+    <div class="pic">
+      <svg viewBox="0 0 120 136">
+<g transform="translate(0,6)">
+        <!-- megaphone -->
+        <path d="M10 38 L38 28 L38 58 L10 48 Z" fill="#b7282e"/>
+        <rect x="6" y="38" width="8" height="10" rx="2" fill="#8a1a20"/>
+        <path d="M44 30 a22 22 0 0 1 0 26" fill="none" stroke="#b7282e" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M50 24 a32 32 0 0 1 0 38" fill="none" stroke="#e0a0a4" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- phones receiving -->
+        <rect x="70" y="10" width="20" height="34" rx="4" fill="#fff" stroke="#b7282e" stroke-width="2"/>
+        <rect x="73" y="16" width="14" height="7" rx="2" fill="#fdd"/>
+        <rect x="96" y="26" width="20" height="34" rx="4" fill="#fff" stroke="#b7282e" stroke-width="2"/>
+        <rect x="99" y="32" width="14" height="7" rx="2" fill="#fdd"/>
+        <!-- mini chart -->
+        <g>
+          <rect x="72" y="66" width="8" height="12" fill="#9ab4d4"/>
+          <rect x="84" y="60" width="8" height="18" fill="#1a4e8a"/>
+          <rect x="96" y="54" width="8" height="24" fill="#1a4e8a"/>
+          <line x1="68" y1="78" x2="110" y2="78" stroke="#666" stroke-width="1.5"/>
+        </g>
+        
+        
+      </g>
+<text x="60" y="118" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">大事な案内を確実に</text>
+<text x="60" y="132" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">来院経路も見える化</text>
+</svg>
+    </div>
+    <div class="ef">掲示より確実に伝わる</div>
     <div class="co">費用 追加なし</div>
   </div>
   <div class="arrow">▶</div>
@@ -114,9 +220,29 @@
     <span class="badge">STEP 5</span>
     <div class="when">半年〜</div>
     <div class="ttl">ホームページ<br>改善</div>
-    <div class="do">「お電話ください」→LINEで完結に</div>
-    <div class="do">Googleマップの情報も整備</div>
-    <div class="ef">問い合わせ電話の元から減らす</div>
+    <div class="pic">
+      <svg viewBox="0 0 120 136">
+<g transform="translate(0,6)">
+        <!-- browser -->
+        <rect x="10" y="12" width="72" height="56" rx="4" fill="#fff" stroke="#b7282e" stroke-width="2.5"/>
+        <rect x="10" y="12" width="72" height="12" rx="4" fill="#f0d5d6"/>
+        <circle cx="18" cy="18" r="2" fill="#b7282e"/><circle cx="25" cy="18" r="2" fill="#c98a00"/><circle cx="32" cy="18" r="2" fill="#2f6b2f"/>
+        <rect x="16" y="30" width="40" height="6" rx="3" fill="#ddd"/>
+        <rect x="16" y="40" width="28" height="6" rx="3" fill="#ddd"/>
+        <!-- LINE button on site -->
+        <rect x="16" y="50" width="42" height="13" rx="3" fill="#2f9e44"/>
+        <text x="37" y="59.5" text-anchor="middle" font-size="9" font-weight="bold" fill="#fff">LINEで完結</text>
+        <!-- map pin -->
+        <path d="M100 30 c-9 0 -15 7 -15 15 c0 11 15 27 15 27 s15 -16 15 -27 c0 -8 -6 -15 -15 -15 Z" fill="#b7282e"/>
+        <circle cx="100" cy="45" r="6" fill="#fff"/>
+        
+        
+      </g>
+<text x="60" y="118" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">HPからLINEで完結</text>
+<text x="60" y="132" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">地図検索にも強く</text>
+</svg>
+    </div>
+    <div class="ef">電話を元から減らす</div>
     <div class="co">費用 別途ご相談</div>
   </div>
 </div>

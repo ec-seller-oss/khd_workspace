@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<style>
+  @page { size: A4 landscape; margin: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact; }
+  body {
+    font-family: "IPAPGothic","IPAGothic",sans-serif;
+    width: 297mm; height: 210mm;
+    padding: 7mm 9mm;
+    color: #222; font-size: 8.8pt; line-height: 1.35;
+  }
+  .head { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2.5px solid #b7282e; padding-bottom: 1.8mm; margin-bottom: 2.5mm; }
+  .head h1 { font-size: 14.5pt; color: #b7282e; }
+  .head .sub { font-size: 9pt; color: #444; margin-top: .8mm; }
+  .head .meta { font-size: 8pt; color: #666; text-align: right; }
+
+  .flow { display: flex; align-items: stretch; gap: 0; margin-bottom: 2.5mm; }
+  .step {
+    flex: 1; border: 1.8px solid #b7282e; border-radius: 2mm; padding: 1.8mm 2.2mm;
+    background: #fff; display: flex; flex-direction: column; position: relative;
+  }
+  .step.done { border-color: #7a7a7a; background: #f4f4f4; }
+  .step.goal { background: #fdf2f2; border-width: 2.5px; }
+  .arrow {
+    align-self: center; font-size: 14pt; color: #b7282e; font-weight: bold;
+    padding: 0 1mm; flex: 0 0 auto;
+  }
+  .badge {
+    display: inline-block; background: #b7282e; color: #fff; font-weight: bold;
+    font-size: 8.5pt; border-radius: 1mm; padding: .4mm 1.8mm; margin-bottom: .8mm;
+  }
+  .done .badge { background: #7a7a7a; }
+  .goal .badge { background: #8a1a20; }
+  .when { font-weight: bold; font-size: 10pt; color: #b7282e; }
+  .done .when { color: #555; }
+  .ttl { font-weight: bold; font-size: 9.8pt; margin: .5mm 0 1mm; }
+  ul { list-style: none; margin-top: .3mm; }
+  li { padding-left: 3.6mm; position: relative; margin-bottom: .8mm; font-size: 8.3pt; }
+  li::before { content: "▸"; position: absolute; left: 0; color: #b7282e; }
+  .done li::before { content: "✔"; color: #4a7d4a; }
+  li.star::before { content: "★"; color: #c98a00; }
+  .carry { margin-top: auto; border-top: 1px dashed #999; padding-top: .8mm; font-size: 7.8pt; color: #555; }
+  .carry b { color: #1a4e8a; }
+
+  .row2 { display: flex; gap: 4mm; }
+  .panel { flex: 1; border: 1px solid #bbb; border-radius: 2mm; padding: 1.8mm 2.5mm; background: #fafafa; }
+  .panel h3 { font-size: 9.3pt; color: #b7282e; margin-bottom: 1mm; }
+  .panel.blue h3 { color: #1a4e8a; }
+  .panel.blue { background: #eef4fb; border-color: #9ab4d4; }
+  .kamae { display: flex; gap: 2.5mm; }
+  .kbox { flex: 1; text-align: center; border: 1.5px solid #b7282e; border-radius: 1.5mm; padding: 1.2mm 1mm; background: #fff; }
+  .kbox b { color: #b7282e; font-size: 9.3pt; display: block; }
+  .kbox span { font-size: 7.8pt; color: #444; }
+  .panel li { font-size: 8pt; }
+  .goalline { margin-top: 2.5mm; background: #b7282e; color: #fff; border-radius: 1.5mm; padding: 1.5mm 3mm; font-size: 9.3pt; text-align: center; }
+  .goalline b { font-size: 10.5pt; }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <div>
+    <h1>京橋クリニック 行動ポンチ図 ── 何を・どの順で</h1>
+    <div class="sub">方針：<b>全部聞く（台帳に貯める）× 解決は1点ずつ・数字で証明</b>　※先生の「LINEお金かかる」NGを受けた再起動プラン</div>
+  </div>
+  <div class="meta">2026-07-23 作成／KHD 菊池<br>関連: needs_daichou.tsv・ヒアリングシート・A4紙ペラ</div>
+</div>
+
+<div class="flow">
+  <div class="step done">
+    <div><span class="badge">STEP 0</span></div>
+    <div class="when">7/23(木) 済</div>
+    <div class="ttl">稼働スタート</div>
+    <ul>
+      <li>Stream Deck 稼働開始</li>
+      <li>Zoom画面共有 依頼完了</li>
+      <li>ニーズ台帳v1・A4紙・ヒアシート準備完了</li>
+    </ul>
+    <div class="carry">⚠️PCをクリニックに置き忘れ→明日回収</div>
+  </div>
+  <div class="arrow">▶</div>
+
+  <div class="step">
+    <div><span class="badge">STEP 1</span></div>
+    <div class="when">7/24(金) 昼</div>
+    <div class="ttl">訪問：回収・設定・傾聴</div>
+    <ul>
+      <li>PC回収＋看護師ほかPCへ画面共有設定</li>
+      <li class="star">先生に費用の真因を<b>聞くだけ</b>（説得しない）。費用の話が出たらA4紙を出す</li>
+      <li>「7/29は売り込みでなく実態把握」と先生に明言</li>
+    </ul>
+    <div class="carry"><b>持ち物</b>：A4紙ペラ／引く勇気（YESを取り返しに行かない）</div>
+  </div>
+  <div class="arrow">▶</div>
+
+  <div class="step">
+    <div><span class="badge">STEP 2</span></div>
+    <div class="when">7/29(水) AM</div>
+    <div class="ttl">新さん（医療事務）ヒア</div>
+    <ul>
+      <li>ベースライン数字：電話本数／月末残業h／CPAP人数／転記時間</li>
+      <li class="star">宿題2つ：「最後の1週間」「サインエコー」の意味</li>
+      <li>FAQ実値16件の最終確認・配信第1弾ネタ</li>
+    </ul>
+    <div class="carry"><b>持ち物</b>：ヒアリングシート（印刷）。売り込みゼロ</div>
+  </div>
+  <div class="arrow">▶</div>
+
+  <div class="step">
+    <div><span class="badge">STEP 3</span></div>
+    <div class="when">7/29(水) PM</div>
+    <div class="ttl">磯山さん（看護師）ヒア</div>
+    <ul>
+      <li class="star">「リマインド標準ON」の看護師長＝磯山さんか確認（味方の核）</li>
+      <li>Stream Deck入力の困りごと（画面共有済＝実画面で）</li>
+      <li>ESS正規様式の入手先／CPAP案内の頻度・文面</li>
+    </ul>
+    <div class="carry"><b>帰宅後 当日中</b>：台帳v2転記・お礼メール</div>
+  </div>
+  <div class="arrow">▶</div>
+
+  <div class="step goal">
+    <div><span class="badge">STEP 4</span></div>
+    <div class="when">8月上旬</div>
+    <div class="ttl">数字で再上程 → 1点稼働</div>
+    <ul>
+      <li>台帳v2＋ベースライン数字で先生へ<b>1枚・1点だけ</b>再提案（例：CPAP月末残業）</li>
+      <li>YESなら効果測定開始（前後比較）→ 削減確認月から成果報酬</li>
+      <li>効果が出たら次の1点へ（順番通知→HP/MEO）</li>
+    </ul>
+    <div class="carry"><b>刺し方</b>：「月末残業1点だけ、測って試させてください」</div>
+  </div>
+</div>
+
+<div class="row2">
+  <div class="panel">
+    <h3>🧭 3つの構え（全ステップ共通）</h3>
+    <div class="kamae">
+      <div class="kbox"><b>売り込まない</b><span>聞く8：話す2。提案は数字が揃ってから</span></div>
+      <div class="kbox"><b>1点ずつ</b><span>全部解決を約束しない。着手は常に1つ</span></div>
+      <div class="kbox"><b>数字で</b><span>前後比較で証明。効果ゼロなら費用ゼロ</span></div>
+    </div>
+  </div>
+  <div class="panel blue">
+    <h3>🛟 保険（最悪ケースでも負けない理由）</h3>
+    <ul>
+      <li>先生が全面NGでも：Stream Deck納品＋遠隔サポートは進行中＝信頼は積み上がる</li>
+      <li>LINEは維持費0円→<b>寝かせられる</b>。数字が貯まった時が再上程のタイミング</li>
+      <li>ニーズ台帳は横展開（次のクリニック）に使い回せる独立資産</li>
+    </ul>
+  </div>
+</div>
+
+<div class="goalline">ゴール：<b>LINE 1点稼働 → 数字で効果証明 → 成果報酬</b>　▶ その先：HP/MEO改修 → 承継・テナント・不動産（本丸）へ。入口を焦って本丸を壊さない。</div>
+
+</body>
+</html>

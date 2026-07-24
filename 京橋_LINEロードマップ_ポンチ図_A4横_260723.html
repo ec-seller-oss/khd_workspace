@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<style>
+  @page { size: A4 landscape; margin: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact; }
+  body {
+    font-family: "IPAPGothic","IPAGothic",sans-serif;
+    width: 297mm; height: 210mm;
+    padding: 7mm 9mm;
+    color: #222; font-size: 8.8pt; line-height: 1.35;
+  }
+  .head { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2.5px solid #b7282e; padding-bottom: 1.8mm; margin-bottom: 2.5mm; }
+  .head h1 { font-size: 14.5pt; color: #b7282e; }
+  .head .sub { font-size: 9pt; color: #444; margin-top: .8mm; }
+  .head .meta { font-size: 8pt; color: #666; text-align: right; }
+
+  .flow { display: flex; align-items: stretch; margin-bottom: 2.5mm; }
+  .step {
+    flex: 1; border: 1.8px solid #b7282e; border-radius: 2mm; padding: 1.6mm 2mm;
+    background: #fff; display: flex; flex-direction: column;
+  }
+  .step.done { border-color: #7a7a7a; background: #f4f4f4; }
+  .arrow { align-self: center; font-size: 13pt; color: #b7282e; font-weight: bold; padding: 0 .8mm; flex: 0 0 auto; }
+  .badge { display: inline-block; background: #b7282e; color: #fff; font-weight: bold; font-size: 8.3pt; border-radius: 1mm; padding: .4mm 1.6mm; }
+  .done .badge { background: #7a7a7a; }
+  .when { font-weight: bold; font-size: 9pt; color: #b7282e; margin-left: 1mm; display: inline; }
+  .done .when { color: #555; }
+  .ttl { font-weight: bold; font-size: 9.8pt; margin: .8mm 0 .8mm; }
+  .sec { margin-bottom: .8mm; }
+  .sec .lab { display: inline-block; font-size: 7.2pt; font-weight: bold; color: #fff; background: #8a8a8a; border-radius: .8mm; padding: 0 1.2mm; margin-bottom: .3mm; }
+  .sec .lab.do { background: #b7282e; }
+  .sec .lab.ef { background: #1a4e8a; }
+  .sec .lab.co { background: #c98a00; }
+  .sec .lab.me { background: #4a7d4a; }
+  ul { list-style: none; }
+  li { padding-left: 3.4mm; position: relative; margin-bottom: .5mm; font-size: 8.1pt; }
+  li::before { content: "▸"; position: absolute; left: 0; color: #b7282e; }
+  .done li::before { content: "✔"; color: #4a7d4a; }
+  li.star::before { content: "★"; color: #c98a00; }
+  .oneline { font-size: 8.1pt; padding-left: 3.4mm; position: relative; }
+  .oneline::before { content: "▸"; position: absolute; left: 0; color: #b7282e; }
+  .cost { font-weight: bold; }
+  .cost .z { color: #b7282e; }
+  .gate { margin-top: auto; border-top: 1px dashed #999; padding-top: .7mm; font-size: 7.6pt; color: #555; }
+  .gate b { color: #1a4e8a; }
+
+  .bottomrow { display: flex; gap: 4mm; margin-bottom: 2.5mm; }
+  .panel { flex: 1.35; border: 1px solid #9ab4d4; border-radius: 2mm; padding: 1.6mm 2.5mm; background: #eef4fb; }
+  .panel h3 { font-size: 9.3pt; color: #1a4e8a; margin-bottom: .8mm; }
+  .panel li { font-size: 8pt; }
+  .panel li::before { content: "▸"; color: #1a4e8a; }
+  .panel.rule { background: #fdf8ec; border-color: #d8bc7a; }
+  .panel.rule h3 { color: #a07000; }
+  .panel.rule li::before { color: #c98a00; }
+
+  .goalline { background: #b7282e; color: #fff; border-radius: 1.5mm; padding: 1.5mm 3mm; font-size: 9.3pt; text-align: center; }
+  .goalline b { font-size: 10.5pt; }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <div>
+    <h1>京橋クリニック 公式LINE ── スタートから何を進めていくか（1枚ロードマップ）</h1>
+    <div class="sub">進め方の原則：<b>1フェーズずつ・効果を数字で確認してから次へ・費用が変わる前に必ず提示</b></div>
+  </div>
+  <div class="meta">2026-07-23 作成／KHD 菊池<br>詳細: needs_daichou.tsv・A4費用紙ペラ</div>
+</div>
+
+<div class="flow">
+  <div class="step done">
+    <div><span class="badge">準備</span><span class="when">構築済 ✅</span></div>
+    <div class="ttl">箱はもう出来ている</div>
+    <div class="sec"><span class="lab do">できていること</span>
+      <ul>
+        <li>リッチメニュー6枠・FAQ自動応答16件</li>
+        <li>Web問診21項目・健診/化学物質フォーム</li>
+        <li>リマインド2本（CPAP・再診促し）設定済</li>
+        <li>管理画面（回答・友だち・配信）</li>
+      </ul>
+    </div>
+    <div class="gate">残り：先生のGOと院内固有値の最終確認だけ</div>
+  </div>
+  <div class="arrow">▶</div>
+
+  <div class="step">
+    <div><span class="badge">STEP 1</span><span class="when">スタート〜1ヶ月</span></div>
+    <div class="ttl">FAQ＋Web問診で開始</div>
+    <div class="sec"><span class="lab do">やること</span>
+      <ul>
+        <li>院内QR掲示・受付で友だち追加案内</li>
+        <li>質問→LINEが一次回答／来院前にスマホ問診</li>
+      </ul>
+    </div>
+    <div class="sec"><span class="lab ef">現場の変化</span><div class="oneline">電話の一次対応減・紙→電カル転記減</div></div>
+    <div class="sec"><span class="lab co">費用</span><div class="oneline cost"><span class="z">0円</span>（応答・問診は何通でも無料）</div></div>
+    <div class="sec"><span class="lab me">測る数字</span><div class="oneline">友だち数・問診記入率・電話本数</div></div>
+    <div class="gate"><b>次へ進む条件</b>：問診が現場で回っている実感＋数字</div>
+  </div>
+  <div class="arrow">▶</div>
+
+  <div class="step">
+    <div><span class="badge">STEP 2</span><span class="when">2〜3ヶ月目</span></div>
+    <div class="ttl">リマインド本格化</div>
+    <div class="sec"><span class="lab do">やること</span>
+      <ul>
+        <li>CPAP定期リマインドを全対象患者へ</li>
+        <li>再診促し（離脱フォロー）運用開始</li>
+        <li>受付：来院ごとにCPAPタグ付け直し</li>
+      </ul>
+    </div>
+    <div class="sec"><span class="lab ef">現場の変化</span><div class="oneline">月末まとめ会計の残業が平準化・取りこぼし減</div></div>
+    <div class="sec"><span class="lab co">費用</span><div class="oneline cost">月<span class="z">0〜5,000円</span>（通数次第・事前提示）</div></div>
+    <div class="sec"><span class="lab me">測る数字</span><div class="oneline">月末残業h・CPAP来院率</div></div>
+    <div class="gate"><b>ここが効果測定の本丸</b>：削減を数字で証明→成果報酬開始</div>
+  </div>
+  <div class="arrow">▶</div>
+
+  <div class="step">
+    <div><span class="badge">STEP 3</span><span class="when">3〜4ヶ月目</span></div>
+    <div class="ttl">順番通知（アイコール連携）</div>
+    <div class="sec"><span class="lab do">やること</span>
+      <ul>
+        <li class="star">前提：アイコール連携（宮崎確認中）</li>
+        <li>「あと◯人です」「受付期限◯分前」を自動通知</li>
+        <li>当日の待ち人数・目安時間を配信</li>
+      </ul>
+    </div>
+    <div class="sec"><span class="lab ef">現場の変化</span><div class="oneline">「番号取ったのに」押し通し・待ち時間クレーム減</div></div>
+    <div class="sec"><span class="lab co">費用</span><div class="oneline cost">月<span class="z">5,000円</span>（LINE社ライトプラン）</div></div>
+    <div class="sec"><span class="lab me">測る数字</span><div class="oneline">順番クレーム件数・受付の口頭説明回数</div></div>
+    <div class="gate"><b>次へ進む条件</b>：連携の技術確認OK＋費用の院内承諾</div>
+  </div>
+  <div class="arrow">▶</div>
+
+  <div class="step">
+    <div><span class="badge">STEP 4</span><span class="when">4ヶ月目〜</span></div>
+    <div class="ttl">周知配信＋集患分析</div>
+    <div class="sec"><span class="lab do">やること</span>
+      <ul>
+        <li>掲示で伝わらないお知らせをLINE配信（図解・短文）</li>
+        <li>問診「何で知ったか」を集計→集患チャネル分析</li>
+      </ul>
+    </div>
+    <div class="sec"><span class="lab ef">現場の変化</span><div class="oneline">「説明したのに読まない」が減る・集患の根拠データ化</div></div>
+    <div class="sec"><span class="lab co">費用</span><div class="oneline cost">STEP3のプラン内（追加なし目安）</div></div>
+    <div class="sec"><span class="lab me">測る数字</span><div class="oneline">配信開封反応・流入チャネル比率</div></div>
+    <div class="gate"><b>ここで貯まる数字が STEP5 の提案根拠になる</b></div>
+  </div>
+  <div class="arrow">▶</div>
+
+  <div class="step">
+    <div><span class="badge">STEP 5</span><span class="when">半年〜</span></div>
+    <div class="ttl">HP/MEO改修（別提案）</div>
+    <div class="sec"><span class="lab do">やること</span>
+      <ul>
+        <li>HPの「電話して」導線→LINE/Web完結へ改修</li>
+        <li>Googleマップ（MEO）整備・口コミ導線</li>
+        <li>ベンチ：さいとう内科の勝ち導線をTTP</li>
+      </ul>
+    </div>
+    <div class="sec"><span class="lab ef">現場の変化</span><div class="oneline">問い合わせ電話の元栓を締める・新患集患</div></div>
+    <div class="sec"><span class="lab co">費用</span><div class="oneline cost">別途見積り（STEP4の数字を根拠に提案）</div></div>
+    <div class="sec"><span class="lab me">測る数字</span><div class="oneline">HP経由の友だち追加・新患数</div></div>
+    <div class="gate"><b>1〜4の実績と数字が揃ってから</b>初めて提案する</div>
+  </div>
+</div>
+
+<div class="bottomrow">
+  <div class="panel">
+    <h3>📏 効果測定とお金の関係（全フェーズ共通）</h3>
+    <ul>
+      <li>各STEPの開始前にベースライン（電話本数・残業h等）を取り、<b>前後比較で削減を確認できた月だけ</b>成果報酬（削減額の中から）</li>
+      <li>LINE社への実費が変わるタイミング（STEP2→3）では、<b>通数と金額を先に提示して承諾を得てから</b>進む。勝手に広げない</li>
+    </ul>
+  </div>
+  <div class="panel rule">
+    <h3>⚠️ 進めない勇気（各STEPのゲート）</h3>
+    <ul>
+      <li>数字が出ていないのに次のSTEPへ進まない（全部やろうとしない）</li>
+      <li>合わなければどのSTEPでも停止できる。LINEは維持費0円なので<b>止めても損が出ない</b></li>
+    </ul>
+  </div>
+</div>
+
+<div class="goalline">ゴール：<b>現場が楽になった実績（数字）を1つずつ積む</b>　▶ その実績が 承継・テナント・不動産（本丸）とクリニック横展開の土台になる</div>
+
+</body>
+</html>

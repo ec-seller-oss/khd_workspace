@@ -1,0 +1,134 @@
+<title>今日の打席ボード — 2026-07-28</title>
+<style>
+  :root{
+    --bg:#f4f5f2; --paper:#ffffff; --ink:#22281f; --sub:#66705f;
+    --accent:#33684a; --accent-soft:#e7f0e9; --line:#dde2d8;
+    --papa:#2b5d8a; --papa-soft:#e5eef6;
+    --study:#6b4fa0; --study-soft:#ece6f5;
+    --hot:#a02020; --hot-soft:#f7e5e5;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#171a15; --paper:#20241d; --ink:#e8ebe4; --sub:#a2ab99;
+      --accent:#7dbd97; --accent-soft:#26382c; --line:#39402f;
+      --papa:#7fb2dd; --papa-soft:#213240;
+      --study:#b39ee0; --study-soft:#2c2438;
+      --hot:#e88; --hot-soft:#3c2222; }
+  }
+  :root[data-theme="dark"]{ --bg:#171a15; --paper:#20241d; --ink:#e8ebe4; --sub:#a2ab99;
+      --accent:#7dbd97; --accent-soft:#26382c; --line:#39402f;
+      --papa:#7fb2dd; --papa-soft:#213240;
+      --study:#b39ee0; --study-soft:#2c2438;
+      --hot:#e88; --hot-soft:#3c2222; }
+  :root[data-theme="light"]{ --bg:#f4f5f2; --paper:#ffffff; --ink:#22281f; --sub:#66705f;
+      --accent:#33684a; --accent-soft:#e7f0e9; --line:#dde2d8;
+      --papa:#2b5d8a; --papa-soft:#e5eef6;
+      --study:#6b4fa0; --study-soft:#ece6f5;
+      --hot:#a02020; --hot-soft:#f7e5e5; }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+    font-size:13.5px;line-height:1.6;padding:18px 12px 44px;}
+  .sheet{max-width:820px;margin:0 auto;background:var(--paper);border:1px solid var(--line);
+    border-radius:10px;padding:24px 26px 22px;}
+  header{border-bottom:2px solid var(--accent);padding-bottom:10px;margin-bottom:14px;}
+  .eyebrow{font-size:11px;letter-spacing:.14em;color:var(--accent);font-weight:700;}
+  h1{font-size:19px;margin:3px 0 4px;line-height:1.4;text-wrap:balance;}
+  .asof{font-size:12px;color:var(--sub);}
+
+  .mission{background:var(--accent-soft);border-radius:8px;padding:11px 14px;margin:14px 0;font-size:13.5px;}
+  .mission b{color:var(--accent);}
+
+  h2{font-size:13px;letter-spacing:.04em;margin:20px 0 9px;color:var(--sub);text-transform:uppercase;
+     display:flex;align-items:center;gap:7px;}
+  h2 .n{font-size:16px;}
+
+  .card{border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;
+    padding:10px 13px;margin-bottom:9px;background:var(--paper);}
+  .card.done{border-left-color:var(--sub);opacity:.6;}
+  .card .row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;}
+  .card .time{font-variant-numeric:tabular-nums;font-weight:700;color:var(--accent);font-size:13px;white-space:nowrap;}
+  .card .who{font-weight:700;font-size:14px;}
+  .card .goal{color:var(--sub);font-size:12.5px;margin-top:3px;}
+  .card .prep{margin:6px 0 0;padding-left:1.2em;font-size:12px;color:var(--ink);}
+  .card .prep li{margin-bottom:2px;}
+  .tag{display:inline-block;font-size:10px;font-weight:700;border-radius:4px;padding:1px 6px;white-space:nowrap;margin-left:6px;}
+  .tag.papa{background:var(--papa-soft);color:var(--papa);}
+
+  .lane{display:flex;gap:8px;flex-wrap:wrap;}
+  .pill{display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:20px;
+    padding:5px 11px 5px 8px;font-size:12px;background:var(--paper);}
+  .pill .time{font-variant-numeric:tabular-nums;color:var(--sub);font-size:11px;}
+  .pill.study{border-color:var(--study-soft);}
+  .pill.study .dot{background:var(--study);}
+  .pill.family{border-color:var(--accent-soft);}
+  .pill.family .dot{background:var(--accent);}
+  .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+
+  .note{background:var(--hot-soft);border-left:3px solid var(--hot);border-radius:0 8px 8px 0;
+    padding:8px 11px;font-size:12.5px;margin-top:14px;}
+  .note b{color:var(--hot);}
+  .muted{color:var(--sub);font-size:11.5px;margin-top:16px;}
+  ul.plain{margin:4px 0;padding-left:1.3em;font-size:12.5px;}
+  ul.plain li{margin-bottom:3px;}
+</style>
+
+<div class="sheet">
+  <header>
+    <div class="eyebrow">⏱ 打席エンジン ｜ 毎朝1枚 ｜ 作業DB連動（将来自動化）</div>
+    <h1>今日の打席ボード</h1>
+    <div class="asof">2026-07-28（火）｜ 停電・Wi-Fi障害明け ｜ 更新はこのURLのまま</div>
+  </header>
+
+  <p class="mission"><b>今日のセンターピン：</b>この4件の対人だけ握れれば今日は合格。それ以外（掲載作業・調査士）は⬜/🟢自走レーンで並行して回る。<b>詰め込まない＝この一枚に無いものは今日やらなくていい。</b></p>
+
+  <h2><span class="n">🟦</span> 今日の打席（対人・判断・GIVE — ここだけ集中）</h2>
+
+  <div class="card done">
+    <div class="row"><span class="time">09:00–10:00</span><span class="who">野仲さんロープレ6</span><span class="tag papa">済</span></div>
+    <div class="goal">賃貸仲介ロープレは仕上がった認識。今日はここに時間を使わず掲載作業へ回す判断でOK。</div>
+  </div>
+
+  <div class="card">
+    <div class="row"><span class="time">10:30–11:30</span><span class="who">朝日信金</span></div>
+    <div class="goal">定期積金の解約＋住所変更手続き。先方から必要書類の指定あり。</div>
+    <ol class="prep">
+      <li>会社の謄本（取得3ヶ月以内・原本）</li>
+      <li>会社の印鑑証明書（取得3ヶ月以内・原本）</li>
+      <li>R8.1月期 決算書一式（別表・決算報告書・勘定科目明細・法人概況・メール詳細等）</li>
+      <li>会社の銀行印・実印</li>
+      <li>新事務所の賃貸借契約書</li>
+      <li>定期積金の通帳</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <div class="row"><span class="time">12:30–13:30</span><span class="who">新さん（Mutsumi）ランチ</span></div>
+    <div class="goal">GIVE先行・情報収集回。院内実態のヒアリングを明日7/29の先生訪問トークに反映する。新居の話は主役にしない。</div>
+  </div>
+
+  <div class="card">
+    <div class="row"><span class="time">21:00–22:00</span><span class="who">田中様のご子息様</span></div>
+    <div class="goal">クロージング・握りは自分から。宮崎TTP＝提案は最速・持ち帰らない。</div>
+  </div>
+
+  <h2><span class="n">🟨</span> 今日中に押さえる（協働・準備はClaude側で）</h2>
+  <ul class="plain">
+    <li><b>掲載作業</b>：本日フォーカス宣言どおり。物件情報の整形・アップロードはClaudeが素材を揃える→菊池さんはログイン実行のみ。</li>
+    <li><b>昨晩の連投顧客</b>：AIで一括回答・スキル化済み。新規の追客文面が出たら送信前3秒チェックを通してから返信。</li>
+  </ul>
+
+  <h2><span class="n">🎓</span> 学習・生活ブロック（自走・確認ゼロ）</h2>
+  <div class="lane">
+    <div class="pill study"><span class="dot"></span><span class="time">07:00–07:30</span>調査士</div>
+    <div class="pill study"><span class="dot"></span><span class="time">14:30–17:30</span>調査士(試験想定)</div>
+    <div class="pill study"><span class="dot"></span><span class="time">20:00–21:00</span>調査士</div>
+    <div class="pill study"><span class="dot"></span><span class="time">20:00–21:30</span>YouTube合格道場</div>
+    <div class="pill family"><span class="dot"></span><span class="time">06:00–07:00</span>葵斗モーニング</div>
+    <div class="pill family"><span class="dot"></span><span class="time">18:00–20:00</span>親子タイム</div>
+  </div>
+
+  <div class="note"><b>今日は寝かせる話：</b>菊池家 運営状況ボード（保活の件）の共有は、Wi-Fi復旧・機嫌が平常に戻ってから。今日のセンターピン4件には含めない。</div>
+
+  <p class="muted">出所：Googleカレンダー 2026-07-28実データ（colorId=Basil=確定アポのみ抽出）＋秘書室ノート（打席エンジン 2026-06-26／9原則 2026-07-13）。現状は手動生成・将来は作業DBの朝一括登録から自動出力する設計（9原則③④）。</p>
+</div>

@@ -1,0 +1,171 @@
+<title>菊池家 運営状況ボード</title>
+<style>
+  :root{
+    --bg:#f4f5f2; --paper:#ffffff; --ink:#22281f; --sub:#66705f;
+    --accent:#33684a; --accent-soft:#e7f0e9; --line:#dde2d8;
+    --warn:#a3641a; --warn-soft:#faf0dd; --done:#0e6e5c; --wait:#8a6d1f; --wait-soft:#f5eeda;
+    --hot:#a02020; --hot-soft:#f7e5e5;
+    --papa:#2b5d8a; --papa-soft:#e5eef6; --mama:#8a3a5c; --mama-soft:#f3e6ec;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#171a15; --paper:#20241d; --ink:#e8ebe4; --sub:#a2ab99;
+      --accent:#7dbd97; --accent-soft:#26382c; --line:#39402f;
+      --warn:#e8a75a; --warn-soft:#3a2c1a; --done:#4fbfa5; --wait:#d6b95c; --wait-soft:#37301c;
+      --hot:#e88; --hot-soft:#3c2222;
+      --papa:#7fb2dd; --papa-soft:#213240; --mama:#d98cb0; --mama-soft:#3a2530; }
+  }
+  :root[data-theme="dark"]{ --bg:#171a15; --paper:#20241d; --ink:#e8ebe4; --sub:#a2ab99;
+      --accent:#7dbd97; --accent-soft:#26382c; --line:#39402f;
+      --warn:#e8a75a; --warn-soft:#3a2c1a; --done:#4fbfa5; --wait:#d6b95c; --wait-soft:#37301c;
+      --hot:#e88; --hot-soft:#3c2222;
+      --papa:#7fb2dd; --papa-soft:#213240; --mama:#d98cb0; --mama-soft:#3a2530; }
+  :root[data-theme="light"]{ --bg:#f4f5f2; --paper:#ffffff; --ink:#22281f; --sub:#66705f;
+      --accent:#33684a; --accent-soft:#e7f0e9; --line:#dde2d8;
+      --warn:#a3641a; --warn-soft:#faf0dd; --done:#0e6e5c; --wait:#8a6d1f; --wait-soft:#f5eeda;
+      --hot:#a02020; --hot-soft:#f7e5e5;
+      --papa:#2b5d8a; --papa-soft:#e5eef6; --mama:#8a3a5c; --mama-soft:#f3e6ec; }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+    font-size:13.5px;line-height:1.65;padding:18px 12px 44px;}
+  .sheet{max-width:880px;margin:0 auto;background:var(--paper);border:1px solid var(--line);
+    border-radius:10px;padding:26px 28px 24px;}
+  header{border-bottom:2px solid var(--accent);padding-bottom:10px;margin-bottom:14px;
+    display:flex;align-items:center;gap:12px;}
+  .avatar{width:44px;height:44px;border-radius:50%;background:var(--accent);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+  .eyebrow{font-size:11px;letter-spacing:.14em;color:var(--accent);font-weight:700;}
+  h1{font-size:18px;margin:2px 0 3px;line-height:1.4;text-wrap:balance;}
+  .asof{font-size:12px;color:var(--sub);}
+  h2{font-size:14.5px;margin:20px 0 8px;padding-left:9px;border-left:4px solid var(--accent);}
+  .lead{background:var(--accent-soft);border-radius:8px;padding:10px 12px;font-size:13.5px;margin:0;}
+  .lead b{color:var(--accent);}
+  .tblwrap{overflow-x:auto;}
+  table{border-collapse:collapse;width:100%;font-size:12.5px;}
+  th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top;}
+  th{background:var(--accent-soft);white-space:nowrap;font-size:11.5px;}
+  td{font-variant-numeric:tabular-nums;}
+  .chip{display:inline-block;font-size:10.5px;font-weight:700;border-radius:4px;padding:1px 7px;white-space:nowrap;color:#fff;}
+  .chip.done{background:var(--done);}
+  .chip.wait{background:var(--wait);}
+  .chip.hot{background:var(--hot);}
+  .tag{display:inline-block;font-size:10.5px;font-weight:700;border-radius:4px;padding:1px 7px;white-space:nowrap;}
+  .tag.papa{background:var(--papa-soft);color:var(--papa);}
+  .tag.mama{background:var(--mama-soft);color:var(--mama);}
+  .tag.both{background:var(--accent-soft);color:var(--accent);}
+  ul,ol{margin:4px 0;padding-left:1.4em;}
+  li{margin-bottom:5px;}
+  .note{background:var(--warn-soft);border-left:3px solid var(--warn);border-radius:0 8px 8px 0;
+    padding:8px 11px;font-size:12.5px;margin-top:10px;}
+  .note b{color:var(--warn);}
+  .muted{color:var(--sub);font-size:12px;}
+  .box{background:var(--accent-soft);border-radius:8px;padding:9px 12px;margin:6px 0;font-size:13px;}
+  .box b{color:var(--accent);}
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0;}
+  @media (max-width:640px){.duo{grid-template-columns:1fr;}}
+  .side{border:1px solid var(--line);border-radius:8px;padding:9px 12px;font-size:12.5px;}
+  .side h3{margin:0 0 6px;font-size:12.5px;}
+  .side.papa h3{color:var(--papa);}
+  .side.mama h3{color:var(--mama);}
+  .kv{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13px;}
+  .kv dt{color:var(--sub);white-space:nowrap;}
+  .kv dd{margin:0;}
+</style>
+
+<div class="sheet">
+  <header>
+    <div class="avatar">🏠</div>
+    <div>
+      <div class="eyebrow">00_プライベート・ファミリー本部 ｜ 夫婦共有ベース資料（ドラフト）</div>
+      <h1>菊池家 運営状況ボード — 事実・分担・ルールのたたき台</h1>
+      <div class="asof">2026-07-28 時点 ／ 過去記録（秘書室ノート 5〜7月）から洗い出し ／ 更新はこのURLのまま</div>
+    </div>
+  </header>
+
+  <p class="lead"><b>このボードの目的：</b>揉めたくないけど不満は溜めない、のための<b>共通の土台</b>。言い合いになった時に記憶で過去を遡るのではなく、<b>記録された事実</b>に戻ってフラットに話すためのベース。前提は<b>「ホウレンソウはお互い様」</b>— 研太側も家族先回りレーダーで矯正中（記録あり・下記④）。責める道具ではなく、次のルールを決める道具。</p>
+
+  <h2>①今回の出来事（2026-07-27〜28）— まず事実だけ</h2>
+  <div class="tblwrap"><table>
+    <tr><th>項目</th><th>内容</th></tr>
+    <tr><td>起きたこと</td><td>0歳児クラスに空きが出た<b>東陽保育園を希望園から外し、サクラサク東陽町のみ</b>で申請 — 麻梨奈さんが提出後に共有（事後報告）</td></tr>
+    <tr><td>研太の受け止め</td><td>「実質、育休延長の選択では」「提出<b>前</b>に一言ほしかった。事後報告は意味合いが違う」</td></tr>
+    <tr><td>未確認のこと</td><td>麻梨奈さんの意図（延長したいのか、園の質・相性の判断なのか）は<b>本人未確認＝推定</b>。ここを確かめてから話すのが順番</td></tr>
+  </table></div>
+
+  <div class="duo">
+    <div class="side papa">
+      <h3>研太側の視点</h3>
+      <ul>
+        <li>復職は家計設計の<b>構造解</b>として位置づけていた（③参照）— 変更は仕事と金の設計に直結する話</li>
+        <li>外部に出す書類は「出す前に共有」が筋。今回はそれが飛んだ</li>
+      </ul>
+    </div>
+    <div class="side mama">
+      <h3>麻梨奈さん側の視点（推定・要本人確認）</h3>
+      <ul>
+        <li>日々の運用（保活の情報収集・見学・応募・書類）は麻梨奈さんが実働 — 現場感で「この園は無い」と判断した可能性</li>
+        <li>ストレスと子育ての天秤で、いま復職を選べない状態かもしれない — それ自体は責める話ではない</li>
+      </ul>
+    </div>
+  </div>
+  <div class="note"><b>フラット化の一点：</b>争点は「延長するか否か」ではなく<b>「家計に響く選択を、出す前に2人で見たか」</b>。ここに絞ると、園の質の議論（麻梨奈さんの領分）と、CF設計の議論（研太の領分）を混ぜずに話せる。</div>
+
+  <h2>②菊池家インフラ分担マップ — 誰が設計し、誰が回しているか</h2>
+  <p class="muted">「ホウレンソウは俺だけの課題ではない」の根拠であり、同時に「妻の実働あってこそ」の根拠でもある両刃の表。</p>
+  <div class="tblwrap"><table>
+    <tr><th>仕組み</th><th>設計・原資</th><th>発見・応募</th><th>日々の運用</th><th>状態</th></tr>
+    <tr><td>江東区マンション購入（東陽5丁目）</td><td><span class="tag papa">研太</span></td><td>—</td><td><span class="tag both">夫婦</span></td><td><span class="chip done">稼働</span></td></tr>
+    <tr><td>近隣の児童館活用</td><td><span class="tag papa">研太</span>（立地設計）</td><td><span class="tag mama">麻梨奈</span></td><td><span class="tag mama">麻梨奈</span></td><td><span class="chip done">稼働</span></td></tr>
+    <tr><td>ベビーシッター補助金フル活用</td><td><span class="tag papa">研太</span>（制度設計図）</td><td><span class="tag both">夫婦</span></td><td><span class="tag mama">麻梨奈</span></td><td><span class="chip done">稼働</span></td></tr>
+    <tr><td>こうとうサポート（ファミサポ）</td><td><span class="tag papa">研太</span>（制度設計図）</td><td><span class="tag both">夫婦</span></td><td><span class="tag mama">麻梨奈</span></td><td><span class="chip done">稼働</span></td></tr>
+    <tr><td>こども誰でも通園制度（毎週金曜）</td><td><span class="tag papa">研太</span>（使える前提の設計）</td><td><span class="tag mama">麻梨奈</span>（発見・応募）</td><td><span class="tag mama">麻梨奈</span></td><td><span class="chip done">稼働</span></td></tr>
+    <tr><td>就労証明書（江東区R8・保活書類）</td><td><span class="tag papa">研太</span>（6/11作成）</td><td>—</td><td><span class="tag mama">麻梨奈</span>（提出）</td><td><span class="chip done">済</span></td></tr>
+    <tr><td>保育園申請（希望園の選定）</td><td><span class="tag both">夫婦のはず</span></td><td><span class="tag mama">麻梨奈</span></td><td><span class="tag mama">麻梨奈</span></td><td><span class="chip hot">今回の争点</span></td></tr>
+    <tr><td>家計・資金管理・微調整</td><td><span class="tag papa">研太</span></td><td>—</td><td><span class="tag papa">研太</span>＋<span class="tag mama">麻梨奈</span>（水道光熱）</td><td><span class="chip done">稼働</span></td></tr>
+  </table></div>
+  <p class="muted">構図：<b>研太＝設計図とお金の大元、麻梨奈さん＝発見・応募・毎日の実働</b>。どちらが欠けても回らない。だから「設計に響く変更は事前共有」「運用の中の判断は実働側に裁量」という線引きがルール化の芯になる。</p>
+
+  <h2>③お金の事実 — この選択が繋がっている数字（記録より）</h2>
+  <div class="tblwrap"><table>
+    <tr><th>事実</th><th>数字・出所</th></tr>
+    <tr><td>育休給付</td><td>月15.6万円。当初設計では<b>2027年初に終了＝家計の「崖」</b>（6/1 月初キックオフCFブリーフ）</td></tr>
+    <tr><td>復職の位置づけ</td><td>麻梨奈さん復職（手取25万+）＝<b>崖が構造的に消える「構造解」</b>（6/1 週次設計）。ただし「家族時間死守ゾーンゆえ数字で押さない」と当時から明記</td></tr>
+    <tr><td>育休延長の場合</td><td>入園不承諾なら給付は延長可（最長2歳）。月15.6万は続くが、復職手取25万+との差分と復職時期の後ズレがCF計画に乗る</td></tr>
+    <tr><td>家族の未来 逆算設計</td><td>家26.7万＋車4.2万＋留学7.7万＝<b>積立38.5万/月</b>で届く設計（6/14 子3人版逆算）。第2子2028・第3子2031想定</td></tr>
+    <tr><td>保活の当初計画</td><td>目標2027年4月入園。候補＝ドリームキッズリトル/ランド・さくらさくみらい東陽・マミー保育園東陽町ほか（6/11 就労証明書ノート）</td></tr>
+  </table></div>
+  <div class="note"><b>使い方：</b>この数字は「だから復職しろ」の武器ではない。<b>延長するならするで、崖の位置がどこにズレて、どこで吸収するか</b>を2人で見るための材料。数字で押さない、は6/1時点からの自分ルール。</div>
+
+  <h2>④過去知見 — お互い様の根拠（記録済みの研太側の課題）</h2>
+  <ul>
+    <li><b>6/11 家族先回りレーダー発足の理由</b>：「言われ／態度で示されないと気づけない」＝研太も相手目線の先回りが弱い、を自己申告して仕組みで外付け中。家事リストも「ルール化済みなのに毎回妻にLINEさせていた」実績あり</li>
+    <li><b>黙る力5問（毎晩・6/10〜）</b>：「提案より先に相手の合格点を聞いたか？（仕事・<b>妻</b>）」— 妻への適用が明記されたルールを研太自身まだ徹底できていない</li>
+    <li><b>営業ブロッカー8（6/11・LINE43本実証）</b>：長文・聞く前に提案・確認詰めすぎ — 夫婦の対話でも同じ癖が出る（分析ソースに妻・麻梨奈対話を含む）</li>
+    <li><b>5/24 先回りアピール戦略</b>：「マウンティングにやり返さない。先回りで感謝を配給」— 攻撃されたら平熱で受け流す、が既定方針</li>
+  </ul>
+  <p class="muted">結論：報連相の抜けは<b>双方向に前科がある</b>。だから今回を「妻の問題」として持ち出すとフェアでなくなり、話が拗れる。「俺もできてない、だから2人のルールにしよう」が唯一通る入り口。</p>
+
+  <h2>⑤共通ルールのたたき台 — 夫婦で合意したら確定版に昇格</h2>
+  <div class="tblwrap"><table>
+    <tr><th>#</th><th>ルール案</th><th>対象</th><th>ポイント</th></tr>
+    <tr><td>1</td><td><b>「出す前共有」</b>：役所・園・金融機関など外部に出す書類・申請は、提出前に一言（LINE1行でOK）</td><td><span class="tag both">両方</span></td><td>研太側も口座変更・借入・解約が対象。片務にしない</td></tr>
+    <tr><td>2</td><td><b>事後報告になったら</b>：過去は責めない。「次どうするか」だけ決めて終える（5分）</td><td><span class="tag both">両方</span></td><td>遡り合戦の禁止。事実確認はこのボードで</td></tr>
+    <tr><td>3</td><td><b>領分の尊重</b>：園の質・日々の運用判断は麻梨奈さんに裁量。家計・時期に響く変更だけ事前共有ライン</td><td><span class="tag both">両方</span></td><td>「全部報告しろ」にしない。線を細く引く</td></tr>
+    <tr><td>4</td><td><b>月1家族ミーティング（15分）</b>：このボードを一緒に見て更新。既存の月曜「家族先回りミッション」に乗せる</td><td><span class="tag both">両方</span></td><td>表面化する前に小出しにする仕組み</td></tr>
+    <tr><td>5</td><td><b>数字で押さない</b>：CFの話は「材料の共有」まで。結論を数字で強要しない</td><td><span class="tag papa">研太</span></td><td>6/1からの自分ルールを明文化</td></tr>
+    <tr><td>6</td><td><b>不満は3日以内に1行で</b>：溜めてから爆発ではなく、小さいうちに出す</td><td><span class="tag both">両方</span></td><td>完璧主義夫婦のハードル下げ練習</td></tr>
+  </table></div>
+
+  <h2>⑥揉めそうになった時のプロトコル</h2>
+  <ol>
+    <li><b>事実に戻る</b>：このボード①の「事実だけ」欄を一緒に見る（記憶で言い合わない）</li>
+    <li><b>意図を聞く</b>：「どういう考えだった？」を先に。推定で詰めない（黙る力5問①の実践）</li>
+    <li><b>争点を1つに絞る</b>：たいてい「事前に共有したか」だけ。園の質とお金の話を混ぜない</li>
+    <li><b>次のルールだけ決める</b>：⑤の表に1行足すか直すかして終了。勝ち負けをつけない</li>
+  </ol>
+
+  <div class="note"><b>次アクション：</b>①麻梨奈さんに意図をまず聞く（詰めずに）→ ②このボードの⑤を2人で見てルール1〜3だけでも合意 → ③合意版に更新（同一URL）。持ち出すタイミングは<b>Wi-Fi復旧して機嫌が平常に戻ってから</b>。停電・障害明けの今日は寝かせるが吉。</div>
+
+  <p class="muted" style="margin-top:14px">出所：秘書室ノート（2026-05-24 家族行事／2026-05-30 家計設計／2026-06-01 週次設計・CFブリーフ／2026-06-11 先回りレーダー・就労証明書／2026-06-14 子3人逆算）＋2026-07-28 本人談。麻梨奈さん側の意図に関する記述はすべて推定であり、本人確認までは仮置き。</p>
+</div>

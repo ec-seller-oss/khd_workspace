@@ -41,3 +41,8 @@
 
 ## 保留・未確認
 - Google Driveの参考資料2件（1gIRljEnG27aIjaS0oWE6xpkFXwRq1H9p / 153w9RP76ABBJjTEz3JuVdjXuTDKh-GGX）は読み取り承認が下りず未反映。次回承認後に取り込み
+
+## 追記（2026-08-02）
+- 家族連携 進捗ボードを作成：https://claude.ai/code/artifact/b134c945-53ea-406d-87d5-32bdf4e78251
+  - 03_宮崎×菊池ボード（0ef9a380-...）の姉妹シート。役割マップ／案件優先順／1物件から4人が稼ぐ受け渡しルート／定例ルールを掲載
+  - 更新は同一URLのまま（秘書へ一言でOK）

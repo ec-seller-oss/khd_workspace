@@ -1,0 +1,245 @@
+<title>発信＆ターゲット設計｜A4メニュー表と、相談までの動線</title>
+<style>
+  :root{
+    --bg:#f2f0ec; --paper:#fffefb; --ink:#1e1c19; --sub:#67615a; --line:#ddd8d0;
+    --mai:#8a3324; --mai-soft:#f7e8e4; --mai-line:#d9b3a9; --on-mai:#fffefb;
+    --sumi:#2a3f4d; --sumi-soft:#e5ebef;
+    --gin:#6e6a5f; --gin-soft:#efeee9;
+    --ao:#1f5f7a; --ao-soft:#e2eef2;
+    --ok:#256b45; --ok-soft:#e2f0e8;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{--bg:#131110; --paper:#1c1a18; --ink:#eae6e0; --sub:#a09992; --line:#332f2b;
+      --mai:#e0897a; --mai-soft:#341f1c; --mai-line:#6b3c34; --on-mai:#141110;
+      --sumi:#8fb0c2; --sumi-soft:#1a262e; --gin:#a9a49a; --gin-soft:#26241f;
+      --ao:#68b0c9; --ao-soft:#152c35; --ok:#68c294; --ok-soft:#15321f;}
+  }
+  :root[data-theme="dark"]{--bg:#131110; --paper:#1c1a18; --ink:#eae6e0; --sub:#a09992; --line:#332f2b;
+      --mai:#e0897a; --mai-soft:#341f1c; --mai-line:#6b3c34; --on-mai:#141110;
+      --sumi:#8fb0c2; --sumi-soft:#1a262e; --gin:#a9a49a; --gin-soft:#26241f;
+      --ao:#68b0c9; --ao-soft:#152c35; --ok:#68c294; --ok-soft:#15321f;}
+  :root[data-theme="light"]{--bg:#f2f0ec; --paper:#fffefb; --ink:#1e1c19; --sub:#67615a; --line:#ddd8d0;
+      --mai:#8a3324; --mai-soft:#f7e8e4; --mai-line:#d9b3a9; --on-mai:#fffefb;
+      --sumi:#2a3f4d; --sumi-soft:#e5ebef; --gin:#6e6a5f; --gin-soft:#efeee9;
+      --ao:#1f5f7a; --ao-soft:#e2eef2; --ok:#256b45; --ok-soft:#e2f0e8;}
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
+    font-size:13.5px;line-height:1.78;padding:22px 14px 58px;font-variant-numeric:tabular-nums}
+  .mi{font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif}
+  .sheet{max-width:1000px;margin:0 auto;background:var(--paper);border:1px solid var(--line);padding:34px 36px 36px}
+  @media (max-width:600px){.sheet{padding:22px 17px 26px}}
+  header{border-bottom:2px solid var(--mai);padding-bottom:15px}
+  .eyebrow{font-size:10.5px;letter-spacing:.2em;color:var(--mai);font-weight:700}
+  h1{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:27px;font-weight:600;
+    margin:10px 0 8px;line-height:1.45;text-wrap:balance}
+  @media (max-width:600px){h1{font-size:21px}}
+  .asof{font-size:11.5px;color:var(--sub);line-height:1.7}
+  h2{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:19px;font-weight:600;
+    margin:42px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--mai-line);
+    display:flex;gap:11px;align-items:baseline;flex-wrap:wrap}
+  h2 .k{font-family:"Hiragino Sans",sans-serif;font-size:9.5px;letter-spacing:.18em;
+    color:var(--mai);font-weight:700;border:1px solid var(--mai-line);padding:3px 8px;white-space:nowrap}
+  h3{font-size:14px;margin:28px 0 9px;font-weight:700}
+  p{margin:0 0 11px}
+  .lead{background:var(--mai-soft);padding:15px 18px;margin:0 0 4px;font-size:13px;border-left:4px solid var(--mai)}
+  .lead b{color:var(--mai)}
+  .tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:11px}
+  table{border-collapse:collapse;width:100%;font-size:12.5px;min-width:560px}
+  th,td{border-bottom:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+  thead th{border-bottom:1.5px solid var(--mai);color:var(--mai);font-size:10.5px;letter-spacing:.1em;white-space:nowrap}
+  td.c{text-align:center;white-space:nowrap} td.r{text-align:right;white-space:nowrap}
+  tr.sum td{border-top:1.5px solid var(--mai);border-bottom:none;background:var(--mai-soft);font-weight:700}
+  tr.hi td{background:var(--gin-soft)}
+  .note{border-left:3px solid var(--ao);background:var(--ao-soft);padding:12px 15px;font-size:12.5px;margin-top:13px}
+  .note b{color:var(--ao)}
+  .note.mai{border-left-color:var(--mai);background:var(--mai-soft)} .note.mai b{color:var(--mai)}
+  .note.ok{border-left-color:var(--ok);background:var(--ok-soft)} .note.ok b{color:var(--ok)}
+  .muted{color:var(--sub);font-size:11.5px}
+
+  /* A4メニュー表 */
+  .a4{border:2px solid var(--ink);margin-top:16px;background:var(--paper)}
+  .a4 .top{padding:22px 26px 18px;border-bottom:1px solid var(--line)}
+  .a4 .nm{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:25px;font-weight:600;line-height:1.35}
+  @media (max-width:600px){.a4 .nm{font-size:20px}.a4 .top{padding:18px 17px 15px}}
+  .a4 .nm span{display:block;font-size:12px;color:var(--sub);font-weight:400;
+    letter-spacing:.14em;margin-bottom:7px;font-family:"Hiragino Sans",sans-serif}
+  .a4 .pos{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:16px;
+    color:var(--mai);margin-top:11px;line-height:1.6}
+  .a4 .who{font-size:12px;color:var(--sub);margin-top:11px;line-height:1.75}
+  .a4 .who b{color:var(--ink)}
+  .a4 .mid{padding:18px 26px}
+  @media (max-width:600px){.a4 .mid{padding:15px 17px}}
+  .a4 .mh{font-size:10.5px;letter-spacing:.18em;color:var(--mai);font-weight:700;margin-bottom:12px}
+  .mrow{display:grid;grid-template-columns:26px 1fr 120px;gap:14px;padding:11px 0;
+    border-top:1px dashed var(--line);align-items:baseline}
+  .a4 .mid .mrow:first-of-type{border-top:none}
+  @media (max-width:680px){.mrow{grid-template-columns:22px 1fr;gap:8px}.mrow .pr{grid-column:2}}
+  .mrow .n{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:16px;color:var(--mai);font-weight:600}
+  .mrow .bd b{display:block;font-size:13.5px;margin-bottom:2px}
+  .mrow .bd .d{font-size:12px;color:var(--sub);line-height:1.7}
+  .mrow .pr{font-size:11.5px;text-align:right;color:var(--sub);white-space:nowrap;line-height:1.6}
+  @media (max-width:680px){.mrow .pr{text-align:left}}
+  .a4 .bot{background:var(--mai);color:var(--on-mai);padding:18px 26px}
+  @media (max-width:600px){.a4 .bot{padding:15px 17px}}
+  .a4 .bot .bh{font-size:10.5px;letter-spacing:.18em;font-weight:700;opacity:.9;margin-bottom:7px}
+  .a4 .bot .bt{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:19px;line-height:1.5;font-weight:600}
+  @media (max-width:600px){.a4 .bot .bt{font-size:16px}}
+  .a4 .bot .bs{font-size:12px;margin-top:8px;line-height:1.7;opacity:.95}
+
+  /* 動線 */
+  .flow{display:flex;flex-direction:column;gap:0;margin-top:14px}
+  .fr{display:grid;grid-template-columns:96px 1fr 150px;gap:16px;padding:14px 16px;
+    border:1px solid var(--line);border-top:none;align-items:start}
+  .flow .fr:first-child{border-top:1px solid var(--line)}
+  @media (max-width:700px){.fr{grid-template-columns:1fr;gap:5px}.fr .as{text-align:left}}
+  .fr .st{font-size:10.5px;letter-spacing:.12em;font-weight:700;color:var(--mai);line-height:1.5}
+  .fr .st em{display:block;font-style:normal;font-family:"Hiragino Mincho ProN","Yu Mincho",serif;
+    font-size:15px;color:var(--ink);letter-spacing:0}
+  .fr .bd{font-size:12.5px}
+  .fr .as{font-size:11.5px;text-align:right;color:var(--sub);white-space:nowrap;line-height:1.6}
+  .fr.stock{background:var(--ok-soft);border-color:var(--ok)}
+
+  ol.n{counter-reset:z;list-style:none;padding:0;margin:13px 0 0;display:flex;flex-direction:column;gap:11px}
+  ol.n li{counter-increment:z;position:relative;padding-left:38px;font-size:13px;line-height:1.8}
+  ol.n li::before{content:counter(z);position:absolute;left:0;top:2px;width:25px;height:25px;
+    border-radius:50%;background:var(--mai);color:var(--on-mai);display:flex;
+    align-items:center;justify-content:center;font-size:11.5px;font-weight:700}
+
+  footer{margin-top:40px;padding-top:13px;border-top:1px solid var(--line);font-size:11px;
+    color:var(--sub);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+  a{color:var(--ao)}
+  a:focus-visible{outline:2px solid var(--mai);outline-offset:2px}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="sheet">
+<header>
+  <div class="eyebrow">KHD 03事業運営本部 ／ 場づくり・発信事業部</div>
+  <h1>A4メニュー表と、相談までの動線</h1>
+  <div class="asof">2026-08-04 ／ 指標は<a href="https://claude.ai/code/artifact/6e52460f-75f4-4f12-81b6-c69efc11a4af">原動力の棚卸しボード</a>の④⑤⑨、検出仕様は<a href="https://claude.ai/code/artifact/2ace2928-f816-480d-b436-abecd354d3bf">KPI自動検出ボード</a>、金額の設計は<a href="https://claude.ai/code/artifact/45acd817-8204-469a-ba23-6c20e4d5a1f5">法人の利益最大化ボード</a></div>
+</header>
+
+<h2><span class="k">整理</span>まず「診断レター」とは何だったか — 2種類あります</h2>
+<p class="lead"><b>混乱させました。整理します。私が設計した「診断レター」と、菊池さんが欲しいと言った「A4のメニュー表」は、別物で、両方必要です。</b></p>
+<div class="tblwrap">
+<table>
+  <thead><tr><th></th><th>A4メニュー表<span class="muted">（今回作るもの）</span></th><th>診断レター<span class="muted">（前回設計したもの）</span></th></tr></thead>
+  <tbody>
+  <tr><td><b>枚数</b></td><td>1枚</td><td>2枚</td></tr>
+  <tr><td><b>宛先</b></td><td><b>誰にでも同じものを渡す</b></td><td><b>特定の1人だけに向けて書く</b></td></tr>
+  <tr><td><b>中身</b></td><td>自分は誰か＋提供できること一覧＋相談の入口</td><td>相手の現状を数字で診断＋放置した3年後＋打ち手3つ＋費用</td></tr>
+  <tr><td><b>作る時間</b></td><td><b>1回作れば使い回せる</b></td><td>1本2時間（相手ごとに毎回書く）</td></tr>
+  <tr><td><b>使う場面</b></td><td>初対面・名刺交換の後・ブログの固定ページ・LINEで送る</td><td>面談のあと、本気の相手にだけ</td></tr>
+  <tr class="sum"><td>順番</td><td colspan="2"><b>メニュー表を渡す → 反応があった人にだけ診断レターを書く</b>。メニュー表は打席を増やす道具、診断レターは決めに行く道具</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note ok"><b>そして菊池さんの指摘が正しいです——メニュー表のほうが先でした。</b>診断レターは1本2時間かかるので、いきなり書き始めると打席が増えません。<b>先に1枚を作って配り、反応があった人にだけ2時間かける</b>。これが順番です。<br>KPI④「提案・GIVEの打席数」は、<b>メニュー表を渡した数も1打席として数えます</b>。</div>
+
+<h2><span class="k">立ち位置</span>「類似の人を知らない」は、そのままポジションが空いているという意味</h2>
+<p class="lead"><b>菊池さんが「自分と似た人を知らない」と言うのは、市場から見れば「その席が空いている」ということです。</b>ライバル比較ボードの6人と照らすと、<b>3枚を同時に持とうとしているのは菊池さんだけ</b>でした（AI仕組み化 × 士業 × 医療ニッチ）。<br>ただしそれは<b>肩書きの組み合わせ</b>で、まだ言葉になっていません。<b>売り出す言葉を1つに決めます</b>。</p>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>候補</th><th>強み</th><th>弱み</th><th>判定</th></tr></thead>
+  <tbody>
+  <tr><td>AIコンサル</td><td>6人中1位・独走</td><td class="lose">言葉が飽和。誰でも名乗れる</td><td class="c">✕</td></tr>
+  <tr><td>医療×不動産の専門家</td><td>実案件あり</td><td class="lose">福井さんの領域と重なり、承継前に名乗ると角が立つ</td><td class="c">△</td></tr>
+  <tr class="hi"><td><b>家計と法人を1枚で見る、当事者の設計者</b></td><td><b>1歳児の父／給与ゼロの期間を数字で設計中／資産は上位2割／紙の年収は中央値の1/3。この組み合わせの34歳はほぼ存在しない</b></td><td>説明が1行では終わらない</td><td class="c win">◎ これで行く</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note mai"><b>この立ち位置の強さは、代替不可能性です。</b>AIコンサルは何万人もいます。医療不動産の専門家も何百人かいます。しかし<b>「子どもがいて、給与ゼロの期間を、法人と家計を連結した数字で設計しながら渡っている34歳」は、統計上ほぼいません</b>。<br>そして<b>これは資格でも実績でもなく、いま生きている状態そのもの</b>なので、誰にも真似できません。<b>1年後には菊池さん自身も名乗れなくなる（給与が入るので）——だからいま出すのが最も価値が高い</b>。</div>
+
+<h2><span class="k">成果物</span>A4メニュー表 ─ 1枚・そのまま渡せる形</h2>
+<div class="a4">
+  <div class="top">
+    <div class="nm mi"><span>KIKUCHI HOLDINGS ／ 菊池 研太</span>家計と法人を、1枚で見る。</div>
+    <div class="pos mi">数字で決められる状態にしてから、動きます。<br>診断はいつも「相手の数字」から始めます。</div>
+    <div class="who">岩手県花巻市の出身です。岩手大で<b>高校教諭の免許（理科・工業）</b>を取り、大手メーカーの研究開発から技術営業へ、飛騨の鉱山町を経て東京へ出ました。いまは<b>1歳の子の父</b>で、不動産・医療コンサル・EC・土地家屋調査士の受験を並行しています。<br><b>15歳のときの通帳から、いまも記録を続けています。</b>数字を残すことと、人に渡すことが、いちばん得意です。</div>
+  </div>
+  <div class="mid">
+    <div class="mh">できること ／ 全部、自分の事業で実際に使っている道具です</div>
+    <div class="mrow"><div class="n">1</div><div class="bd"><b>AIで、業務を仕組み化する</b><span class="d">再診リマインド・FAQ・Web問診・LINE導線。<b>クリニックで実装済み</b>——架電の負担と紙の無駄を減らし、残業を削るところから入ります</span></div><div class="pr">まず1つ無料で<br>試せます</div></div>
+    <div class="mrow"><div class="n">2</div><div class="bd"><b>クリニックの数字を診断する</b><span class="d">保険点数と地域の相場から、いまの月商が「立地の限界か、運営の余地か」を切り分けます。<b>分院を出す前の投資判断</b>までお付き合いします</span></div><div class="pr">初回30分<br>無料</div></div>
+    <div class="mrow"><div class="n">3</div><div class="bd"><b>医療テナントの物件を探し、精査する</b><span class="d">科目・坪数・動線・競合の重なりまで見ます。<b>テナントアシスト・ウインと連携</b>。物件を「見つける」より「やめる理由を先に出す」のが仕事です</span></div><div class="pr">成約時<br>要相談</div></div>
+    <div class="mrow"><div class="n">4</div><div class="bd"><b>土地・古家を目利きし、精査する</b><span class="d">相続した土地の<b>境界・面積・分筆の見通し</b>を先に出します。土地値の割合を測って「土地として買える価格」を出すのが得意です<span class="muted">（土地家屋調査士・2027年登録予定）</span></span></div><div class="pr">初回の机上査定<br>無料</div></div>
+    <div class="mrow"><div class="n">5</div><div class="bd"><b>法人と家計を1枚にする（連結の財務設計）</b><span class="d"><b>売上ゼロでも何ヶ月生きられるか</b>、役員報酬をいくらにすると手取りが最大になるか、消費税は法人と個人でどう分けるか。<b>自分の家でやっていることを、そのままお渡しします</b></span></div><div class="pr">初回30分<br>無料</div></div>
+    <div class="mrow"><div class="n">6</div><div class="bd"><b>EC・物販を立ち上げて、人に渡す</b><span class="d">韓国向け輸出を運営中。<b>自分は操作せず、任せた人が回す形</b>まで作りました。輸出免税の還付までを含めて設計します</span></div><div class="pr">要相談</div></div>
+  </div>
+  <div class="bot">
+    <div class="bh">ご相談ください</div>
+    <div class="bt mi">1〜6のうち<b>どれか1つを、無料で診断します。</b></div>
+    <div class="bs">お預かりするのは<b>30分</b>です。その場で数字を3つお出しし、<b>やらないほうがいい場合は「やめましょう」と申し上げます</b>。<br>売り込みは<b>しません</b>——お役に立てたかどうかは、お客様が決めることだと思っています。</div>
+  </div>
+</div>
+<div class="note ok"><b>設計の意図を3つだけ。</b>①<b>価格を「無料」から始める</b>——本の言うとおり、打ち手のうち1つは相手が自分でできること／無料で試せることを必ず入れる。②<b>「やめましょうと言う」を明記</b>——これが売り込みでない証明になり、返信率を上げます。③<b>人柄パートを一次資料から書いた</b>（花巻・教諭免許・15歳の通帳・1歳の子）。<b>盛っていないので、初対面で矛盾しません</b>。</div>
+<div class="note mai"><b>🟡調整が必要な箇所を2つ挙げます。</b>①<b>メニュー3（医療テナント）は福井さんとの承継関係があるため、表現を福井さんに確認してから使ってください</b>。「テナントアシスト・ウインと連携」としてありますが、承継の段取り次第で書き方が変わります。②<b>メニュー4の「土地家屋調査士・2027年登録予定」は、合格前は書けません</b>。10/18の結果が出るまでは「測量士補／調査士受験中」に差し替えてください。</div>
+
+<h2><span class="k">動線</span>構造と資産化 ─ 記事だけが減価しません</h2>
+<p class="lead"><b>「長期安定しつつ資産化できる設計」というご要望に対して、答えは1つです——記事（note）だけが、書いた分だけ積み上がって減りません。</b>面談は時間を消費し、レターは相手ごとに消えますが、<b>記事は3年後も同じ仕事をします</b>。だから動線の起点を記事に置きます。</p>
+<div class="flow">
+  <div class="fr stock">
+    <div class="st">STOCK<em>① note記事</em></div>
+    <div class="bd"><b>診断レターの公開版</b>を、固有名詞と金額を伏せて出す。1本30分。<b>書く作業は④の打席にすでに含まれているので、追加コストは伏せる手間だけ</b>。<br><b>これだけが資産です</b>——3年経っても読まれ、菊池さんが寝ていても働きます</div>
+    <div class="as">週1本<br><span class="muted">10/19開始</span></div>
+  </div>
+  <div class="fr">
+    <div class="st">FLOW<em>② X</em></div>
+    <div class="bd">記事の要約1本＋リンク。<b>プロフィールと固定ポストは「俺色X設計」で完了済み</b>——実制作だけ残っています。<b>Xで完結させない</b>（フォロワー数は数えません）</div>
+    <div class="as">記事1本につき1投稿</div>
+  </div>
+  <div class="fr stock">
+    <div class="st">STOCK<em>③ ブログ（自前）</em></div>
+    <div class="bd"><b>2019年にXserver＋Google Analyticsを契約した実績があります</b>（Web発信の技術的原点）。<b>noteは他人の土地なので、最終的にはここへ集める</b>。メニュー表を固定ページに置く</div>
+    <div class="as">🟡 11月以降<br><span class="muted">noteが10本たまってから</span></div>
+  </div>
+  <div class="fr">
+    <div class="st">CONVERT<em>④ A4メニュー表</em></div>
+    <div class="bd">記事の末尾とブログの固定ページに置く。<b>「1つ無料で診断します」の1行だけがCTA</b>。ハードルは1段しか作らない</div>
+    <div class="as">常設</div>
+  </div>
+  <div class="fr">
+    <div class="st">CLOSE<em>⑤ 30分の面談</em></div>
+    <div class="bd">その場で数字を3つ出す。<b>やらないほうがいい場合は「やめましょう」と言う</b>。ここで⑤（1対1で話した人）に1人カウント</div>
+    <div class="as">週1〜3人</div>
+  </div>
+  <div class="fr">
+    <div class="st">CLOSE<em>⑥ 診断レター</em></div>
+    <div class="bd">本気の相手にだけ、A4 2枚・2時間。OPQ分析＋ピラミッド構造。<b>受注率3%でも時間単価16,700円で成立します</b></div>
+    <div class="as">反応があった人のみ</div>
+  </div>
+</div>
+<div class="note"><b>この動線の要点は、①と③だけが上向きに積み上がることです。</b>面談もレターも「その回で消える」フロー。<b>だから記事を止めると、動線全体が細くなります</b>。逆に記事さえ止めなければ、面談が少ない週があっても翌月に効きます。<br><b>週1本を守ることだけが、この設計の生命線です</b>。</div>
+
+<h2><span class="k">相手</span>ターゲットを3つに分ける ─ 混ぜると全部薄まります</h2>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>ターゲット</th><th>定義（絞った形）</th><th>渡すメニュー</th><th>どの本部</th><th>目的</th></tr></thead>
+  <tbody>
+  <tr class="hi"><td><b>A. クリニック院長</b></td><td><b>開業3〜7年目で、分院か仕組み化を考え始めた院長</b>。開業直後と20年目は外す</td><td class="c">1・2・3</td><td class="c">04 コンサル</td><td class="c">受注<br><span class="muted">承継の実地訓練</span></td></tr>
+  <tr class="hi"><td><b>B. 相続した地主</b></td><td><b>相続して1〜3年、境界か面積が分からず売却も活用も止まっている人</b></td><td class="c">4</td><td class="c">05 物件調達</td><td class="c">受注<br><span class="muted">調査士の独占業務</span></td></tr>
+  <tr class="hi"><td><b>C. 独立を考えている親</b></td><td><b>子どもがいて、事業か資格で独立を考えている／したばかりの30代</b>。子育て一般論の人は外す</td><td class="c">5・6</td><td class="c">03 場づくり</td><td class="c win">⑨の10人<br><span class="muted">＝讃えあう仲間</span></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note mai"><b>Cだけが「顧客ではない」ターゲットです。</b>ここが今回の設計でいちばん大事な区別です。AとBはお金をもらう相手で、<b>Cはお金をもらわない相手</b>。だからCに向けた記事に売り込みを入れると、⑨は永久に埋まりません。<br><b>Cへの記事は、最後まで無料で終わらせてください。</b>メニュー表も置かない。<b>「同じところを渡っている人へ」という宛名だけで書く</b>——それが結果的に、いちばん人を集めます。</div>
+<div class="note ok"><b>Cに向けた記事の型は、1つだけ決めておきます。</b>——<b>「自分がやった数え方を、そのまま公開する」</b>。<br>①「家計は赤字だと思っていたが、数え方が間違っていた」（積立を支出に混ぜると赤字に見える／月▲14.4万が実は月+1.2万） ②「売上ゼロで何ヶ月生きられるか＝無収入寿命の計算式」（止められる固定費と止められない固定費を分けると19.2ヶ月が26ヶ月になる） ③「子ども2人を大学まで公立で育てる費用を24年で割ってみた」（年98万）。<br><b>3本とも、もう数字が出ています。新しく調べることは何もありません</b>。</div>
+
+<h2><span class="k">着手</span>順番 ─ 10/18までは、動かすのは1つだけ</h2>
+<ol class="n">
+  <li><b>【今週】A4メニュー表を1枚、確定させる。</b>上の実物から、メニュー3の表現（福井さんとの承継関係）とメニュー4の資格表記（合格前）の2箇所だけ直せば完成です。<b>PDFにして、LINEでもすぐ送れる形にしておく</b>。</li>
+  <li><b>【今週】天野先生への1通を送る。</b>メニュー表を作るより先でもいい。<b>25日止まっているのは、これが「事業」に見えていたからです</b>——メニュー表もCPOも要りません。「前回の押し売り、すみませんでした」＋AI活用のGIVEだけ。<b>⑨の1人目になります</b>。</li>
+  <li><b>【8月中・福井さんの体が動くうちに】承継の段取りを1回だけ言葉にする。</b>75歳という年齢は、待てる変数ではありません。<b>「5年以内に代表を」という話が、どこまで具体か</b>——時期・株・屋号・顧客の引き継ぎ方。<b>メニュー表の表現を決めるにも、これが先に要ります</b>。</li>
+  <li><b>【8〜10/18】記事は書き溜めるだけ。公開しない。</b>週1本の診断レターを書いたら、伏せ版を下書きに置く。<b>10/19に3本を一気に出す</b>ためのストックです。試験を1分も削らないための順番です。</li>
+  <li><b>【10/19〜11/3の16日間】発信を開始する。</b>note 3本＋Xのプロフィール書き換え＋固定ポスト。<b>唯一完全に空く期間なので、ここで一気に立ち上げる</b>。</li>
+  <li><b>【11月〜】週1本の公開を回し続ける。</b>ブログ（自前）への移設はnoteが10本たまってから。<b>媒体を増やすのは、続いていることを確認した後だけ</b>。</li>
+</ol>
+<div class="note mai"><b>最後に、いちばん危ない順番の間違いを1つ。</b>いま「発信の自動化ルーティン」が毎日回っていて、<b>一度も投稿されていない</b>と伺いました。これは<b>仕組みが先に完成して、出す判断が残った</b>状態です。<br><b>だから追加の自動化は要りません。</b>要るのは<b>10/19に3本出すという日付</b>だけ。<b>すでにある下書きを出すことが、この設計で唯一足りていない動作です</b>。</div>
+
+<footer>
+  <span>発信＆ターゲット設計 ／ 03事業運営本部・場づくり事業部 ／ 2026-08-04</span>
+  <span>関連＝<a href="https://claude.ai/code/artifact/6e52460f-75f4-4f12-81b6-c69efc11a4af">原動力の棚卸し</a> ／ <a href="https://claude.ai/code/artifact/2ace2928-f816-480d-b436-abecd354d3bf">KPI自動検出</a> ／ <a href="https://claude.ai/code/artifact/45acd817-8204-469a-ba23-6c20e4d5a1f5">法人の利益最大化</a></span>
+</footer>
+</div>

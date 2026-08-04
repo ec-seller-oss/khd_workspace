@@ -157,12 +157,11 @@
   .kr .goal .aft{display:block;font-size:11px;color:var(--sub)}
 
   ol.acts{counter-reset:c;list-style:none;padding:0;margin:14px 0 0;
-    display:flex;flex-direction:column;gap:11px}
-  ol.acts li{counter-increment:c;display:grid;grid-template-columns:28px 1fr;gap:14px;
-    font-size:13px;align-items:start}
-  ol.acts li::before{content:counter(c);width:26px;height:26px;border-radius:50%;
-    background:var(--ai);color:var(--on-ai);display:flex;align-items:center;
-    justify-content:center;font-size:12px;font-weight:700}
+    display:flex;flex-direction:column;gap:12px}
+  ol.acts li{counter-increment:c;position:relative;padding-left:40px;font-size:13px;line-height:1.8}
+  ol.acts li::before{content:counter(c);position:absolute;left:0;top:2px;
+    width:26px;height:26px;border-radius:50%;background:var(--ai);color:var(--on-ai);
+    display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
 
   footer{margin-top:44px;padding-top:14px;border-top:1px solid var(--line);
     font-size:11px;color:var(--sub);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
@@ -324,7 +323,7 @@
   <div class="dr done"><div class="yr">2016</div><div class="wh"><b>アパート経営して一階は喫茶店</b>／飲み屋のオーナーで学生を育成<span class="muted">（24歳・欲求ノート）</span></div><div class="tag ba">場＋人 ／ ほぼ実現</div></div>
   <div class="dr"><div class="yr">2021</div><div class="wh">全国各地にアウトドアのテーマパークを建設<span class="muted">（28歳・やりたい欄）</span></div><div class="tag ba">場</div></div>
   <div class="dr"><div class="yr">2021</div><div class="wh">インドに小学校／フォロワー100万／岩手・東京の2拠点<span class="muted">（28歳・初代価値観マップ「やりたいこと30」）</span></div><div class="tag ba">場＋人</div></div>
-  <div class="dr done"><div class="yr">2021</div><div class="wh"><b>弟（ゆーしさん）を雇えるような会社にする</b><span class="muted">（28歳・会社ビジョン最古）</span></div><div class="tag hito">人 ／ 実現（物販を運営）</div></div>
+  <div class="dr"><div class="yr">2021</div><div class="wh"><b>弟（菊池洸太さん）を雇えるような会社にする</b><span class="muted">（28歳・会社ビジョン最古）／年表の評価欄は「弟雇用は未了」</span></div><div class="tag hito">人 ／ <b>未了</b></div></div>
   <div class="dr"><div class="yr">2021</div><div class="wh">必要額5億円／資産5,000万の小金持ち<span class="muted">（28歳）</span></div><div class="tag kane">金 ／ 手段</div></div>
   <div class="dr"><div class="yr">2022</div><div class="wh">SNSフォロワー1万人＝<b>リアルで会える</b>無形資産 → <b>各事業のチーム化</b><span class="muted">（29歳・Q1目標0）</span></div><div class="tag hito">人 ／ 未着手</div></div>
   <div class="dr"><div class="yr">2026</div><div class="wh">スモビジサロン（天野先生と）<span class="muted">（34歳・5/27設計完了 → 構想倒れ）</span></div><div class="tag hito">人 ／ 止まっている</div></div>
@@ -339,14 +338,14 @@
 <table>
   <thead><tr><th>事業</th><th>一番内側との関係</th><th>菊池さんの立場</th><th>状態</th></tr></thead>
   <tbody>
-  <tr class="hi"><td><b>物販（韓国輸出）</b></td><td><b>弟（ゆーしさん）に仕事を渡している</b><span class="muted"><br>＝2021年の会社ビジョン「弟を雇えるような会社にする」の実現</span></td><td class="c win">GIVEする側</td><td class="c win">◎ 投下時間ほぼゼロで年160万</td></tr>
+  <tr class="hi"><td><b>物販（韓国輸出）</b></td><td><b>ゆーしさん（高校サッカー部の親友）に韓国輸出を任せている</b><span class="muted"><br>＝2021年の会社ビジョン「弟を雇えるような会社にする」の実現</span></td><td class="c win">GIVEする側</td><td class="c win">◎ 投下時間ほぼゼロで年160万</td></tr>
   <tr><td><b>277高松</b></td><td>実家圏（岩手）に足場を作った</td><td class="c">中立</td><td class="c win">◎ 年203万CF</td></tr>
   <tr class="hi"><td><b>コンサル</b></td><td><b>叔父（福井さん）の入口に乗っている</b></td><td class="c lose">もらう側</td><td class="c lose">🔴 一極依存・手触りなし</td></tr>
   <tr><td><b>オーロラ</b></td><td>自分で立ち上げ・自分で採用<span class="muted"><br>＝初めて自分がGIVEの主体になる事業</span></td><td class="c win">GIVEする側（これから）</td><td class="c">🟡 未検証</td></tr>
   </tbody>
 </table>
 </div>
-<div class="note midori"><b>4事業のうち、いちばん手離れがよく利益効率が高いのは「弟に渡した物販」で、いちばん弱いのは「叔父からもらっているコンサル」でした。</b>身内との関係が<b>渡す側</b>になっている事業は回り、<b>もらう側</b>になっている事業は回っていない。<br>そして<b>オーロラを始めた動機は「自分で入口を作れる事業が欲しかったから」</b>と前のボードで整理済み。言い換えると<b>「もらう側から渡す側に戻りたかった」</b>。菊池さんの直感は、ここでも構造を正しく掴んでいました。</div>
+<div class="note midori"><b>4事業のうち、いちばん手離れがよく利益効率が高いのは「親友に任せた物販」で、いちばん弱いのは「叔父からもらっているコンサル」でした。</b>人との関係が<b>渡す側</b>になっている事業は回り、<b>もらう側</b>になっている事業は回っていない。<br>そして<b>オーロラを始めた動機は「自分で入口を作れる事業が欲しかったから」</b>と前のボードで整理済み。言い換えると<b>「もらう側から渡す側に戻りたかった」</b>。菊池さんの直感は、ここでも構造を正しく掴んでいました。</div>
 
 <h3>そもそも、GIVEの形は「教える」でした</h3>
 <div class="quotes">
@@ -434,7 +433,7 @@
 <table>
   <thead><tr><th>本部</th><th>渡した相手</th><th>菊池さんの立場</th><th>状態</th></tr></thead>
   <tbody>
-  <tr class="hi"><td><b>03 事業運営</b><span class="muted"><br>物販・韓国輸出</span></td><td><b>ゆーしさん（弟）</b></td><td class="c win">渡している</td><td class="c win">◎ 投下時間ほぼゼロで年160万</td></tr>
+  <tr class="hi"><td><b>03 事業運営</b><span class="muted"><br>物販・韓国輸出</span></td><td><b>ゆーしさん</b><span class="muted"><br>高校サッカー部の親友</span></td><td class="c win">渡している</td><td class="c win">◎ 投下時間ほぼゼロで年160万</td></tr>
   <tr class="hi"><td><b>05 物件調達</b><span class="muted"><br>277高松</span></td><td><b>大学生協・トラステン</b></td><td class="c win">渡している</td><td class="c win">◎ 年203万CF・放置でよい</td></tr>
   <tr><td><b>01 経営管理 ／ 02 資金調達</b></td><td>AI（秘書室・財務司令塔）</td><td class="c">渡している<span class="muted">（人ではない）</span></td><td class="c">◯ 回るが、讃えあえない</td></tr>
   <tr><td><b>00 ファミリー</b></td><td>麻梨奈さん<span class="muted">（本部長。ただし報酬設計は12タブで設計中・未了）</span></td><td class="c">半分</td><td class="c">🟡 席はあるが渡しきれていない</td></tr>
@@ -464,7 +463,7 @@
 <table>
   <thead><tr><th>本部</th><th>これまでのKPI</th><th>これからのKPI（渡した相手が動いた記録）</th></tr></thead>
   <tbody>
-  <tr class="hi"><td><b>03 事業運営</b><span class="muted"><br>ゆーしさん</span></td><td>時間・提案数</td><td class="win"><b>菊池さんの指示回数（減らす）</b>／四半期に営業利益1行だけ。<b>すでに渡っているので、KPIは「触らなかった回数」</b></td></tr>
+  <tr class="hi"><td><b>03 事業運営</b><span class="muted"><br>ゆーしさん（親友）</span></td><td>時間・提案数</td><td class="win"><b>菊池さんの指示回数（減らす）</b>／四半期に営業利益1行だけ。<b>すでに渡っているので、KPIは「触らなかった回数」</b></td></tr>
   <tr><td><b>05 物件調達</b><span class="muted"><br>管理会社</span></td><td>物件数・時間</td><td class="win"><b>満室か（年1回・8月の保有レビューのみ）</b></td></tr>
   <tr><td><b>01/02 経営管理・資金調達</b><span class="muted"><br>AI</span></td><td>BS鮮度・資金繰り精度</td><td><b>月次4行を5日に更新できたか ✓/✗</b>（利益最大化ボードの4行に統合済み）</td></tr>
   <tr class="hi"><td><b>00 ファミリー</b><span class="muted"><br>麻梨奈さん</span></td><td>—</td><td class="win"><b>麻梨奈さんが自分で決めて使った回数</b>（説明のいらない枠）／2027年4月＝報酬開始の設計を完了させる</td></tr>
@@ -473,7 +472,22 @@
   </tbody>
 </table>
 </div>
-<div class="note kin"><b>06に「場づくり本部」を置くことを提案します。</b>いま空席で、そして<b>菊池さんが10年間いちばん欲しがっていたものが、この本部の中身</b>です——2016年「一階は喫茶店／学生を育成」、2021年「テーマパーク／リアルで会える1万人」、2026年「スモビジサロン」、そして今日の「讃えあう時間」。<br><b>本部にすれば、KPIが付きます。</b>⑨の10人と公開本数が、そのままこの本部の指標になります。<span class="muted">🟡06が本当に空いているかはスプレッドシートの本部番号の確認が必要です（07は本部マトリクスのタブなので、本部そのものではないと理解しています）。</span></div>
+<div class="note kin"><b>【修正】06は作りません。菊池さんの判断どおり、場づくりは03の事業運営の下に置きます。</b>理由が明快です——<b>場づくりはSNSの延長で、韓国輸出と並列に進められる</b>。本部番号を増やすと管理対象が増えるだけで、渡す相手は増えません。<br><b>そして「俺の会社はホールディングス」という位置づけが、これで筋が通りました。</b>03の下に事業部を並べ、<b>事業部ごとに売却してEXITできる形</b>にする。番号を増やさず、下にぶら下げる。</div>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>KHD（ホールディングス）</th><th>渡す相手</th><th>EXITの可能性</th></tr></thead>
+  <tbody>
+  <tr><td><b>00 ファミリー本部</b></td><td>麻梨奈さん</td><td class="c">—</td></tr>
+  <tr><td><b>01 経営管理 ／ 02 資金調達</b></td><td>AI（秘書室・財務司令塔）</td><td class="c">—</td></tr>
+  <tr class="hi"><td><b>03 事業運営本部</b><span class="muted"><br>├ 韓国輸出事業部<br>├ 場づくり・発信事業部<span class="muted">（新設）</span><br>└ オーロラ（船橋）</span></td><td>ゆーしさん（韓国）<br><b>🟡場づくりは未定</b><br>菊池さん（オーロラ）</td><td class="c win">◎ 事業部単位で売却可</td></tr>
+  <tr class="hi"><td><b>04 コンサル本部</b><span class="muted"><br>医療テナント・AIコンサル</span></td><td><b>福井さん（承継元）</b></td><td class="c">承継で<b>受け取る</b>側</td></tr>
+  <tr class="hi"><td><b>05 物件調達本部</b><span class="muted"><br>不動産・案件精査の営業</span></td><td><b>川股さん（社外・レベシェア）</b><br><span class="muted">＋トラステン（物件の持ち込み）</span></td><td class="c">案件単位</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note"><b>04について、私の分析を訂正します。</b>これまで「福井さん一極依存＝リスク」と書いてきましたが、<b>菊池さんの説明で前提が変わりました</b>——<b>75歳の福井さんから、残り5年以内に代表を承継する</b>という話でした。<br>それなら<b>依存は移行期の正常な状態</b>で、リスクではありません。正しい表現は「依存を外す」ではなく<b>「承継の準備」</b>です。<br>そして菊池さんの整理も、承継の文脈で筋が通ります——<b>①福井さん経由の客が菊池さんを選んだ時点で菊池さんの客 ②そこから紹介をもらえばそれも菊池さんの客 ③福井さんができない仕事を売主から直接受ければ直接契約</b>。<b>これは横取りではなく、承継の実地訓練です</b>。<span class="muted">🟡ただし承継が実現しなかった場合の代替ルート（自力受注）は、保険として持っておくべきです。</span></div>
+<div class="note kin"><b>05について、レベシェアの考え方は正しいです。</b>川股さんは社内の人員ではないので「渡す」ができません。<b>江藤社長型＝案件ごとに利益折半</b>が、いちばん素直な設計です。<br><b>そしてこの形の強みは、固定費がゼロなこと</b>——採用なしで組織が広がり、無収入寿命を1ヶ月も削りません。<b>いま採用せずに組織化する、という菊池さんの判断と完全に整合します</b>。<span class="muted">🟡決めるべきは折半の比率と、案件を持ち込んだ側の扱い（トラステンが持ち込んだ高松のようなケース）。次回の論点に置きます。</span></div>
+
 <div class="note midori"><b>そして本部制の完成形が、これで見えました。</b>2022年1月3日の地域おこし構想で<b>家族5人に役職を配った</b>のと同じことを、<b>家族の外にも配る</b>のが次の段階です。<br>ゆーしさん（03）は渡し済み、管理会社（05）は渡し済み、麻梨奈さん（00）は席がある、AI（01/02）は埋めている。<b>残っているのは04と06——どちらも「まだ会っていない人」に渡す本部</b>です。<br><b>2027年1月31日に数える3つの数字（616万・10人・そして自力受注の件数）は、全部「渡す相手が増えたか」を測っています。</b></div>
 
 <h2><span class="k">運用</span>日々のKPI ─ 決めました。3層・日次1分／週次5分／月次15分</h2>
@@ -483,12 +497,12 @@
   <div class="th"><span class="t">日次 ─ 毎晩、夜の合言葉のあとに</span><span class="cost">所要 1分 ／ 数えるだけ・判断しない</span></div>
   <div class="kr">
     <div class="cb jin">人的</div>
-    <div class="nm"><b>① 試験勉強の分数</b><span class="df">やった分数を数字で書くだけ。良い悪いの判定はしない</span></div>
-    <div class="goal"><b>週20時間</b><span class="aft">＝平日2h＋土日5h目安</span></div>
+    <div class="nm"><b>① 試験勉強の時間</b><span class="df"><b>カレンダー実績から自動カウント済み</b>（07本部マトリクス連動）。手入力は不要</span></div>
+    <div class="goal"><b>週35時間</b><span class="aft">＝1日5時間が最低ライン</span></div>
   </div>
   <div class="kr">
     <div class="cb jin">人的</div>
-    <div class="nm"><b>② 1日1回ピラミッド</b> ✓／✗<span class="df">メール1通を「感謝の言葉にPDF」構成で書いたか。送信前に3点だけ確認（主メッセージは冒頭か／しりてがを使っていないか／あいまい言葉はないか）</span></div>
+    <div class="nm"><b>② 1日1回ピラミッド</b> ✓／✗<span class="df"><b>Claudeが下書きまで作る</b>（専用スキルを作成）。菊池さんは微修正して送信し、「送った」と伝えるだけ。<b>Claude側が読んで自動カウント</b>する</span></div>
     <div class="goal"><b>1通</b><span class="aft">5分・4ヶ月で約120回</span></div>
   </div>
   <div class="kr">
@@ -502,13 +516,13 @@
   <div class="th"><span class="t">週次 ─ 日曜の夜に</span><span class="cost">所要 5分 ／ ここが営業と社会資本の本体</span></div>
   <div class="kr">
     <div class="cb kin">金融</div>
-    <div class="nm"><b>④ 診断レターを何本書いたか ／ うち何本を公開したか</b><span class="df">OPQ分析＋ピラミッドで A4 2枚・2時間。宛先は100件リストの上位から。<b>書いたものは固有名詞と金額を伏せて公開版にする</b>（後述「発信」）</span></div>
-    <div class="goal"><b>週1本／0本</b><span class="aft">10/19から 週2本／週1本</span></div>
+    <div class="nm"><b>④ 提案・GIVEの打席数</b><span class="df"><b>羽鳥さんが「提案数」を繰り返し言っていたのと同じ指標</b>。内訳＝(a)メニュー表を渡した人数 (b)診断レターを書いた本数 (c)公開した本数。<b>合計1つの数字で数える</b>／<a href="https://claude.ai/code/artifact/2bdb3462-780f-42bc-b548-8c7b6d3956b8">メニュー表と診断レターの設計はこちら</a></span></div>
+    <div class="goal"><b>週2打席</b><span class="aft">10/19から 週5打席</span></div>
   </div>
   <div class="kr">
     <div class="cb sha">社会</div>
-    <div class="nm"><b>⑤ 「途中にいる人」と何人話したか</b><span class="df"><b>定義</b>＝その週に（a）初めて話した人（b）久しぶりに連絡した人（c）相談された／相談した人。<b>必ず名前で記録する</b>。SNSのいいねは数えない</span></div>
-    <div class="goal"><b>週1人</b><span class="aft">11月から 週3人</span></div>
+    <div class="nm"><b>⑤ 30分以上、1対1で話した人の名前</b><span class="df"><b>定義を単純にしました</b>——「30分以上」「1対1」「その週」の3条件だけ。名前を書くだけで数は自動。<b>会議・商談・電話・DMの往復も含む</b>。SNSのいいね・一斉送信は含まない</span></div>
+    <div class="goal"><b>週1人</b><span class="aft">10/19から 週3人</span></div>
   </div>
   <div class="kr">
     <div class="cb jin">人的</div>
@@ -521,17 +535,17 @@
   <div class="th"><span class="t">月次 ─ 毎月5日</span><span class="cost">所要 15分 ／ 詳細は利益最大化ボードの4行</span></div>
   <div class="kr">
     <div class="cb kin">金融</div>
-    <div class="nm"><b>⑦ オーロラ 月商 ／ 新患数 ／ 平均来院回数 ／ CPO</b><span class="df">11/4開業後。販促費を5万→10万→15万で振って全体利益の山を探す</span></div>
-    <div class="goal"><b>月商69万</b><span class="aft">＝新患23人×5回×6,000円</span></div>
+    <div class="nm"><b>⑦ BSの純資産が先月より増えたか</b> ✓／✗<span class="df"><b>これだけにしました。</b>金は道具なので、細かく追わない。長期の目標は<b>ざっくり資産1億円</b>（2046年）——それだけ持っておけば十分</span></div>
+    <div class="goal"><b>右肩上がり</b><span class="aft">目標 1億円</span></div>
   </div>
   <div class="kr">
     <div class="cb kin">金融</div>
-    <div class="nm"><b>⑧ 法人12ヶ月ローリング現金創出力</b><span class="df">役員報酬・社保を引く前。財務司令塔で自動計算</span></div>
-    <div class="goal"><b>616万</b><span class="aft">いま188万</span></div>
+    <div class="nm"><b>⑧ オーロラの3指標</b><span class="df"><b>11/4の開業後から</b>。開業前は数えない（気が早いので外しました）。新患数／平均来院回数／販促費÷新患数＝CPO</span></div>
+    <div class="goal"><b>11月から</b><span class="aft">新患23人が目標</span></div>
   </div>
   <div class="kr">
     <div class="cb sha">社会</div>
-    <div class="nm"><b>⑨ 相互に取り組みを知っている人の累計</b><span class="df"><b>定義</b>＝菊池さんの取り組みを知っていて、<b>かつ</b>菊池さんもその人の取り組みを知っている人。<b>相互性が条件</b>——フォロワーではない</span></div>
+    <div class="nm"><b>⑨ 相互に取り組みを知っている人の累計</b><span class="df"><b>相互性が条件</b>——フォロワーではない。<b>ターゲット設計・発信の型は<a href="https://claude.ai/code/artifact/2bdb3462-780f-42bc-b548-8c7b6d3956b8">発信＆ターゲット設計ボード</a>で別途設計</b>（03本部の場づくり）</span></div>
     <div class="goal"><b>10人</b><span class="aft">2027/1/31まで</span></div>
   </div>
 </div>
@@ -635,7 +649,7 @@
   </tbody>
 </table>
 </div>
-<div class="note midori"><b>そして最後に、いちばん大事な但し書き。</b>この9行は<b>「与えた回数」を数えていません</b>。数えられないからです。23歳の「なにかを与えて、人の役に立った瞬間を感じたい」には、見返りの条件が付いていませんでした。<br>だから<b>⑤と⑨は「与えた成果」ではなく「会った回数」を数えています</b>。与えられたかどうかは、相手が決めることなので測らない。<b>菊池さんが数えるのは、打席に立った回数だけです</b>。</div>
+<div class="note midori"><b>【訂正】「与えた回数は数えない」と書きましたが、菊池さんの指摘で改めます。</b>羽鳥さんが<b>「提案数」を繰り返し言っていた</b>のは、まさに<b>GIVEの打席数を数えろ</b>ということでした。そして<b>作業DBには既に「提案数／GIVE数／相談数」の列が実在</b>します——菊池さんは4年前から正しい指標を作っていた。<br>だから④を<b>「提案・GIVEの打席数」</b>に改名し、羽鳥さんの型に戻しました。<b>数えるのは「与えられたか」（相手が決める）ではなく「与えに行った回数」（自分が決める）</b>——この区別だけを守ります。</div>
 
 <h2><span class="k">通し</span>過去・現在・未来を1枚に</h2>
 <div class="tblwrap">

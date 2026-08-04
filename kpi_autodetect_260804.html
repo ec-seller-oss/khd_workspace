@@ -1,0 +1,174 @@
+<title>KPI自動検出ボード｜対話とカレンダーから9指標を拾う仕様</title>
+<style>
+  :root{
+    --bg:#eceef0; --paper:#fdfdfe; --ink:#1a1f24; --sub:#5d6874; --line:#d9dee4;
+    --pri:#0f4c81; --pri-soft:#e4ecf4; --pri-line:#9fb8ce; --on-pri:#fdfdfe;
+    --auto:#1c6b52; --auto-soft:#e2f0eb;
+    --semi:#8a6212; --semi-soft:#f7efdc;
+    --man:#8f3030; --man-soft:#f8e6e4;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{--bg:#0f1316; --paper:#181d22; --ink:#e6eaee; --sub:#93a0ad; --line:#2b333b;
+      --pri:#6aa9d8; --pri-soft:#152532; --pri-line:#31536f; --on-pri:#0f1316;
+      --auto:#5cc39d; --auto-soft:#123128; --semi:#d7ac52; --semi-soft:#332913;
+      --man:#df8781; --man-soft:#361f1e;}
+  }
+  :root[data-theme="dark"]{--bg:#0f1316; --paper:#181d22; --ink:#e6eaee; --sub:#93a0ad; --line:#2b333b;
+      --pri:#6aa9d8; --pri-soft:#152532; --pri-line:#31536f; --on-pri:#0f1316;
+      --auto:#5cc39d; --auto-soft:#123128; --semi:#d7ac52; --semi-soft:#332913;
+      --man:#df8781; --man-soft:#361f1e;}
+  :root[data-theme="light"]{--bg:#eceef0; --paper:#fdfdfe; --ink:#1a1f24; --sub:#5d6874; --line:#d9dee4;
+      --pri:#0f4c81; --pri-soft:#e4ecf4; --pri-line:#9fb8ce; --on-pri:#fdfdfe;
+      --auto:#1c6b52; --auto-soft:#e2f0eb; --semi:#8a6212; --semi-soft:#f7efdc;
+      --man:#8f3030; --man-soft:#f8e6e4;}
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
+    font-size:13.5px;line-height:1.75;padding:22px 14px 56px;font-variant-numeric:tabular-nums}
+  .sheet{max-width:1040px;margin:0 auto;background:var(--paper);border:1px solid var(--line);
+    border-radius:6px;padding:32px 34px 34px}
+  @media (max-width:600px){.sheet{padding:22px 16px 26px}}
+  header{border-bottom:2px solid var(--pri);padding-bottom:14px;margin-bottom:4px}
+  .eyebrow{font-size:10.5px;letter-spacing:.18em;color:var(--pri);font-weight:700}
+  h1{font-size:23px;margin:9px 0 8px;line-height:1.45;font-weight:700;text-wrap:balance}
+  @media (max-width:600px){h1{font-size:19px}}
+  .asof{font-size:11.5px;color:var(--sub);line-height:1.7}
+  h2{font-size:16.5px;margin:38px 0 12px;padding-left:11px;border-left:4px solid var(--pri);font-weight:700}
+  h3{font-size:14px;margin:26px 0 9px;font-weight:700}
+  p{margin:0 0 11px}
+  .lead{background:var(--pri-soft);border-radius:5px;padding:14px 17px;margin:0 0 4px;font-size:13px}
+  .lead b{color:var(--pri)}
+  .tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:11px}
+  table{border-collapse:collapse;width:100%;font-size:12.5px;min-width:620px}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  thead th{background:var(--pri-soft);color:var(--pri);font-size:10.5px;letter-spacing:.1em;white-space:nowrap}
+  td.c{text-align:center;white-space:nowrap}
+  tr.hi td{background:var(--semi-soft)}
+  .tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;white-space:nowrap}
+  .tag.a{background:var(--auto-soft);color:var(--auto)}
+  .tag.s{background:var(--semi-soft);color:var(--semi)}
+  .tag.m{background:var(--man-soft);color:var(--man)}
+  code,.mono{font-family:var(--mono);font-size:12px;background:var(--pri-soft);
+    padding:1px 5px;border-radius:3px}
+  pre{background:var(--pri-soft);border:1px solid var(--pri-line);border-radius:5px;
+    padding:14px 16px;overflow-x:auto;font-family:var(--mono);font-size:12px;line-height:1.7;margin:11px 0 0}
+  .note{border-left:3px solid var(--pri);background:var(--pri-soft);padding:12px 15px;font-size:12.5px;margin-top:12px;border-radius:0 4px 4px 0}
+  .note b{color:var(--pri)}
+  .note.a{border-left-color:var(--auto);background:var(--auto-soft)} .note.a b{color:var(--auto)}
+  .note.m{border-left-color:var(--man);background:var(--man-soft)} .note.m b{color:var(--man)}
+  .muted{color:var(--sub);font-size:11.5px}
+  footer{margin-top:38px;padding-top:13px;border-top:1px solid var(--line);font-size:11px;
+    color:var(--sub);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+  footer a,a{color:var(--pri)}
+  a:focus-visible{outline:2px solid var(--semi);outline-offset:2px}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="sheet">
+<header>
+  <div class="eyebrow">KHD 運用仕様 ／ KPIの自動検出</div>
+  <h1>9指標を、対話とカレンダーから自動で拾う仕様</h1>
+  <div class="asof">2026-08-04 ／ 指標の定義は<a href="https://claude.ai/code/artifact/6e52460f-75f4-4f12-81b6-c69efc11a4af">原動力の棚卸しボード</a>、金額の設計は<a href="https://claude.ai/code/artifact/45acd817-8204-469a-ba23-6c20e4d5a1f5">法人の利益最大化ボード</a>、ターゲットと発信は<a href="https://claude.ai/code/artifact/2bdb3462-780f-42bc-b548-8c7b6d3956b8">発信＆ターゲット設計ボード</a>を参照</div>
+</header>
+
+<p class="lead"><b>設計の原則は1つです——菊池さんが「数える」作業を一切しないこと。</b>本部KPIが4年活きなかった理由のひとつは<b>入力そのものが仕事だった</b>ことです。だから<b>9指標のうち手入力が必要なのは1つだけ</b>にしました。<br>残りは<b>①カレンダー実績 ②Claudeとの対話ログ ③財務司令塔</b>の3ソースから自動で拾います。<b>菊池さんがやるのは「話す」「送る」「予定を入れる」——いつもの行動だけ</b>です。</p>
+
+<h2>検出仕様 — 9指標 × 3ソース</h2>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>指標</th><th>ソース</th><th>検出トリガー</th><th>自動度</th><th>実装状況</th></tr></thead>
+  <tbody>
+  <tr><td><b>① 試験勉強の時間</b><span class="muted"><br>週35時間／1日5時間</span></td><td>Googleカレンダー</td><td>「学習」カテゴリの実績時間を合計。<b>07本部マトリクスが既に集計している</b></td><td class="c"><span class="tag a">全自動</span></td><td class="c">✅ 稼働中</td></tr>
+  <tr class="hi"><td><b>② 1日1回ピラミッド</b></td><td>Claudeとの対話</td><td>菊池さんが「<b>送った</b>」と1言伝える → Claudeがその日を✓に。下書き自体もClaudeが作る（下記スキル）</td><td class="c"><span class="tag s">半自動</span></td><td class="c">🟡 スキル未作成</td></tr>
+  <tr><td><b>③ 18-20時の親子タイム</b></td><td>Googleカレンダー</td><td>18:00-20:00に他の予定が入っていなければ✓。<b>予定が入った日を数えるほうが速い</b></td><td class="c"><span class="tag a">全自動</span></td><td class="c">✅ 判定可</td></tr>
+  <tr class="hi"><td><b>④ 提案・GIVEの打席数</b><span class="muted"><br>週2打席 → 10/19から週5</span></td><td>Claudeとの対話</td><td>菊池さんの発言から<b>3種を拾う</b>——「メニュー表を渡した」「レターを書いた／送った」「公開した／投稿した」。<b>相手の名前が出れば⑤⑨にも同時反映</b></td><td class="c"><span class="tag s">半自動</span></td><td class="c">🟡 これから</td></tr>
+  <tr class="hi"><td><b>⑤ 30分以上1対1で話した人</b><span class="muted"><br>週1人 → 10/19から週3人</span></td><td>カレンダー＋対話</td><td><b>カレンダー</b>＝30分以上で参加者が1人の予定を抽出／<b>対話</b>＝「◯◯さんと話した」の言及を拾う。<b>両方から取って名寄せ</b></td><td class="c"><span class="tag s">半自動</span></td><td class="c">🟡 これから</td></tr>
+  <tr><td><b>⑥ 週35時間を超えたか</b></td><td>①の合計</td><td>①の週次集計が35時間以上か</td><td class="c"><span class="tag a">全自動</span></td><td class="c">✅ 稼働中</td></tr>
+  <tr><td><b>⑦ BSの純資産が増えたか</b><span class="muted"><br>目標＝ざっくり1億円</span></td><td>財務司令塔</td><td>月次更新後の純資産を前月と比較。<b>増減の✓／✗だけ</b></td><td class="c"><span class="tag a">全自動</span></td><td class="c">✅ 集計あり</td></tr>
+  <tr><td><b>⑧ オーロラの3指標</b><span class="muted"><br>11/4開業後から</span></td><td>予約システム／レセコン</td><td>月次売上・新患数・来院回数。<b>CPOは販促費÷新患数で自動計算</b></td><td class="c"><span class="tag m">手入力</span></td><td class="c">⏸ 11月から</td></tr>
+  <tr class="hi"><td><b>⑨ 相互認知の累計</b><span class="muted"><br>2027/1/31までに10人</span></td><td>⑤の名簿</td><td>⑤で名前が出た人のうち、<b>相互性が確認できた人を累積</b>（判定基準は下記）</td><td class="c"><span class="tag s">半自動</span></td><td class="c">🟡 これから</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note a"><b>手入力が必要なのは⑧（オーロラ）だけです。</b>しかもそれは11月4日以降で、月1回・3つの数字。<b>それ以外の8指標は、菊池さんが「話す」「送る」「予定を入れる」だけで埋まります</b>。</div>
+
+<h2>夜の1問に統合する — 「もう一言、要らない」の次に1行だけ</h2>
+<p>菊池さんは毎晩10問を<b>「もう一言、要らない」の1問に統合済み</b>です（<code>.company/CLAUDE.md</code>の🗝夜の合言葉）。ここに足すのは<b>1行だけ</b>にします。</p>
+<pre>【夜の合言葉】
+① もう一言、要らない          … 既存（そのまま）
+② 今日、誰と何をした？          … 追加（1行でよい）
+
+②の答え方の例：
+  「山田先生にメニュー表渡した。40分話した」
+  「note1本出した」
+  「今日はなし」
+
+→ Claudeがこの1行から ②④⑤⑨ を同時に判定して記録する。
+→ ①③⑥⑦ はカレンダーと財務司令塔から勝手に入る。
+→ 菊池さんが数える作業はゼロ。</pre>
+<div class="note"><b>「今日はなし」も正しい記録です。</b>✗を隠さないことが前提で、<b>✗が続いたときに設計を疑う</b>のが本来の使い方。菊池さんを責める材料にはしません。</div>
+
+<h2>②のためのClaudeスキル — 仕様</h2>
+<p>菊池さんの指示どおり、<b>下書きまでClaudeが作る</b>形にします。スキル名は <code>/pyramid</code>。</p>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>項目</th><th>仕様</th></tr></thead>
+  <tbody>
+  <tr><td>起動</td><td><code>/pyramid</code> ＋ 相手と用件を1〜2行（例：<code>/pyramid 福井さんへ 京橋の進捗報告</code>）</td></tr>
+  <tr><td>出力</td><td><b>「感謝の言葉にPDF」構成のメール下書き</b>——感謝の言葉（1-2行）→ P（主メッセージ1文・冒頭）→ D（根拠を箇条書き・3つまで）→ F（今後のアクション）</td></tr>
+  <tr><td>自動チェック</td><td>送信前に3点を機械的に検査——①主メッセージが冒頭にあるか ②「しりてが」接続詞（〜し／〜であり／〜して／〜だが）を使っていないか ③あいまい言葉（見直し／再構築／問題／適切な）がないか。<b>引っかかった箇所を指摘して直す</b></td></tr>
+  <tr><td>計測</td><td>菊池さんが<b>「送った」</b>と伝えたら、その日を②の✓として記録。<b>下書きを作っただけでは✓にしない</b>（出したかどうかが指標なので）</td></tr>
+  <tr><td>保存先</td><td><code>.company/secretary/pyramid/YYYY-MM.md</code> に月次で追記。4ヶ月後に見返して型の定着を確認する</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note m"><b>1点だけ注意します。</b>Claudeが下書きを作ると<b>「書く訓練」が薄まるリスク</b>があります。本の訓練法は「自分で書いて型を身につける」でした。<br>だから<b>Claudeは骨組み（PDFの枠と根拠の並べ替え）だけ出し、主メッセージの1文は菊池さんが書く</b>——この分担にします。<b>いちばん難しくていちばん効くのがQへの答えの1文</b>なので、そこだけは渡しません。</div>
+
+<h2>⑨の相互性の判定基準 — 3条件のうち2つ</h2>
+<p>「相互に取り組みを知っている」を運用可能にするため、判定を機械的にします。</p>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>#</th><th>条件</th><th>確認の仕方</th></tr></thead>
+  <tbody>
+  <tr><td class="c">1</td><td><b>相手が、菊池さんの取り組みを言葉にできる</b></td><td>相手から「調査士やってるんだよね」「オーロラどう？」など<b>菊池さん側の話題が振られた</b></td></tr>
+  <tr><td class="c">2</td><td><b>菊池さんが、相手の取り組みを言葉にできる</b></td><td>名前と一緒に<b>「いま何をしている人か」を1行書ける</b></td></tr>
+  <tr><td class="c">3</td><td><b>1回以上、こちらから連絡した</b></td><td>紹介・情報提供・お祝いなど、<b>用事がないのに送った記録がある</b></td></tr>
+  <tr class="hi"><td class="c">判定</td><td colspan="2"><b>3条件のうち2つ以上で「相互認知1人」にカウント</b>。名簿は <code>.company/secretary/sougo/</code> に1人1行で持つ</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note"><b>条件3が実質のハードルです。</b>「用事がないのに送った」記録があるかどうか——ここが<b>顧客と仲間を分ける線</b>です。用事だけで繋がっている人は顧客で、⑨には入りません。</div>
+
+<h2>レポートの形 — 週1回、3行だけ返します</h2>
+<pre>【週次レポート／毎週日曜の夜に自動生成】
+
+■ 人的  学習 32.5h / 35h  ✗（あと2.5h）  ピラミッド 5/7日
+■ 金融  打席 3（メニュー2・レター1・公開0）  BS 前月比 ＋
+■ 社会  1対1で話した人 2名（山田先生・天野先生）  相互認知 累計 4/10
+
+▶ 今週の一言：学習が2.5h不足。来週の火曜午前に補填枠あり。
+</pre>
+<div class="note a"><b>3行以上は返しません。</b>菊池さんは記録が得意すぎるので、レポートが長いと<b>読むことが仕事になります</b>。判断に使う数字だけを、3行で。<br><b>そして「今週の一言」だけは、必ず次の行動を1つ書きます</b>——数字を見せて終わるレポートは、自己監視の装置に戻ってしまうからです。</div>
+
+<h2>実装の順番 — 今週やるのは1つだけ</h2>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>時期</th><th>やること</th><th>誰が</th></tr></thead>
+  <tbody>
+  <tr class="hi"><td><b>今週</b></td><td><b><code>/pyramid</code> スキルを作る</b>＋夜の合言葉に②の1行を追加</td><td>Claude（菊池さんは確認だけ）</td></tr>
+  <tr><td>8月中</td><td>④⑤⑨の対話検出ルールを <code>.company/CLAUDE.md</code> に書く。カレンダーからの③の判定を組む</td><td>Claude</td></tr>
+  <tr><td>9月</td><td>週次レポート（3行）の自動生成を回し始める。<b>4週まわして続くか見る</b></td><td>Claude</td></tr>
+  <tr><td>10/19以降</td><td>打席数を週2→週5に、1対1を週1→週3に引き上げ</td><td>—</td></tr>
+  <tr><td>11/4以降</td><td>⑧オーロラの3指標を追加（唯一の手入力）</td><td>菊池さん 月1回</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note m"><b>そして最後に、この仕組み自体への歯止めを1つ。</b>これは<b>「新しい仕組みづくり」に見えます</b>——凍結リストに入れたはずのものです。<br>例外にする理由は1つだけ：<b>この仕組みは新しい数字を増やさず、既にある9指標の入力コストをゼロにするだけ</b>だからです。<b>指標を増やす提案が出てきたら、それは凍結対象</b>として断ってください。</div>
+
+<footer>
+  <span>KPI自動検出ボード ／ 秘書室作成 ／ 2026-08-04</span>
+  <span>関連＝<a href="https://claude.ai/code/artifact/6e52460f-75f4-4f12-81b6-c69efc11a4af">原動力の棚卸し</a> ／ <a href="https://claude.ai/code/artifact/45acd817-8204-469a-ba23-6c20e4d5a1f5">法人の利益最大化</a> ／ <a href="https://claude.ai/code/artifact/2bdb3462-780f-42bc-b548-8c7b6d3956b8">発信＆ターゲット設計</a></span>
+</footer>
+</div>

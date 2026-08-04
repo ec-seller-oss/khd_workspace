@@ -189,6 +189,52 @@
 
   .mermaid{background:transparent;overflow-x:auto;margin-top:10px}
 
+  /* ── 90日アクション表 ── */
+  .thisweek{border:2px solid var(--stop);border-radius:3px;padding:14px 17px;margin-top:14px;
+    display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;background:var(--stop-soft);}
+  @media (max-width:600px){.thisweek{grid-template-columns:1fr;gap:8px}}
+  .thisweek .tag{font-size:10.5px;letter-spacing:.16em;font-weight:700;color:var(--stop);
+    writing-mode:horizontal-tb;white-space:nowrap;border:1px solid var(--stop);padding:4px 9px;border-radius:2px;}
+  .thisweek .bd{font-size:13px}
+  .thisweek .bd b{color:var(--stop)}
+
+  .acts{display:flex;flex-direction:column;gap:0;margin-top:14px;
+    border:1px solid var(--line);border-radius:3px;overflow:hidden;}
+  .acts .band{background:var(--accent);color:var(--on-accent);padding:7px 15px;
+    font-size:11px;letter-spacing:.14em;font-weight:700;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+  .acts .band span{font-weight:400;letter-spacing:.04em;opacity:.85}
+  .act{display:grid;grid-template-columns:26px 1fr 250px;gap:14px;padding:13px 15px;
+    border-top:1px solid var(--line);align-items:start;}
+  .acts .band + .act{border-top:none}
+  @media (max-width:720px){.act{grid-template-columns:22px 1fr;gap:10px}.act .done{grid-column:2}}
+  .act .pr{font-size:15px;line-height:1.3;text-align:center}
+  .act .wh{font-size:12.5px}
+  .act .wh .t{font-weight:700;display:block;margin-bottom:2px}
+  .act .wh .y{color:var(--sub)}
+  .act .done{font-size:11.5px;background:var(--good-soft);border-left:3px solid var(--good);
+    padding:7px 10px;border-radius:0 2px 2px 0;}
+  .act .done b{color:var(--good);display:block;font-size:10px;letter-spacing:.12em;margin-bottom:2px}
+  .act.hot{background:var(--stop-soft)}
+  .act.hot .done{background:var(--paper)}
+
+  /* ── 書く営業の型 ── */
+  .kata{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+  @media (max-width:760px){.kata{grid-template-columns:1fr}}
+  .kata .k1{border:1px solid var(--line);border-top:4px solid var(--brass);border-radius:2px;padding:13px 15px}
+  .kata .k1 h4{margin:0 0 3px;font-size:13.5px}
+  .kata .k1 .use{font-size:10.5px;letter-spacing:.1em;color:var(--brass);font-weight:700;margin-bottom:6px}
+  .kata .k1 .bd{font-size:12px;color:var(--sub)}
+  .kata .k1 .bd b{color:var(--ink)}
+  .kata .k1 .src{font-size:11px;color:var(--sub);margin-top:7px;padding-top:7px;border-top:1px dashed var(--line)}
+
+  .letter{border:1px solid var(--accent-line);border-radius:3px;overflow:hidden;margin-top:12px}
+  .letter .lh{background:var(--accent-soft);padding:9px 15px;font-size:11.5px;font-weight:700;color:var(--accent)}
+  .letter .lr{display:grid;grid-template-columns:118px 1fr 92px;gap:14px;padding:11px 15px;
+    border-top:1px solid var(--line);font-size:12.5px;align-items:baseline}
+  @media (max-width:640px){.letter .lr{grid-template-columns:1fr;gap:4px}}
+  .letter .lr .n{font-weight:700;color:var(--accent);font-size:12px}
+  .letter .lr .tm{text-align:right;color:var(--sub);font-size:11px;white-space:nowrap}
+
   ol.steps{counter-reset:s;list-style:none;padding:0;margin:12px 0 0;display:flex;flex-direction:column;gap:9px}
   ol.steps li{counter-increment:s;display:grid;grid-template-columns:26px 1fr;gap:12px;font-size:12.5px;align-items:start}
   ol.steps li::before{content:counter(s);width:24px;height:24px;border-radius:50%;
@@ -206,7 +252,7 @@
 <header>
   <div class="eyebrow">KHD 経営設計ボード ／ 方針の組み直し</div>
   <h1>法人の利益最大化を、唯一の焦点にする</h1>
-  <div class="asof">2026-08-04（追補3） ／ 前提＝<a href="https://claude.ai/code/artifact/3cfd1521-0bf5-42a5-bb01-71e3c502c834">働き方とライフプラン設計</a>（同日版）の実額を引き継ぎ、菊池さんの新方針「高松の余剰→役員報酬→個人の与信→会社員に戻らずに借換え」を検証して全体を組み直したもの</div>
+  <div class="asof">2026-08-04（追補4） ／ 前提＝<a href="https://claude.ai/code/artifact/3cfd1521-0bf5-42a5-bb01-71e3c502c834">働き方とライフプラン設計</a>（同日版）の実額を引き継ぎ、菊池さんの新方針「高松の余剰→役員報酬→個人の与信→会社員に戻らずに借換え」を検証して全体を組み直したもの</div>
 </header>
 
 <div class="note good"><b>参照した資料について。</b>追加された本は<b>木下勝寿『売上最小化、利益最大化の法則』</b>（北の達人コーポレーション代表／2021年）。Drive の <b>30枚のページ写真を実読</b>し、第1〜6章の主要図表（無収入寿命／5段階利益管理／上限CPO・時系列LTV／演歌の戦略）を本ボードに反映しています。<span class="muted">※Google フォトのアルバムは403で開けないため、Drive 側から読みました。</span><br><b>この本の道具立ては、すでにボードの骨格です</b>——無収入寿命（44→31→20ヶ月）、5段階利益管理、そして「唯一の数字だけを追う」設計思想。今回さらに<b>上限CPO・時系列LTV・演歌の戦略・クライアント別の利益分解</b>を各事業に当て、<b>前版で置いた「限界CPO」の目安を、本来の方法に差し替えました</b>（後述の訂正）。</div>
@@ -535,16 +581,170 @@ flowchart LR
 </div>
 <div class="note good"><b>意思決定の日は、年に2日だけです。</b>1月31日（進路）と4月末（報酬）。<b>それ以外の日は、判定式の分子を上げること＝営業だけをやる</b>。これが「仕組みづくりを休んで営業に特化する」を、カレンダーに落とした形です。</div>
 
-<h2><span class="k">実行</span>この90日でやること</h2>
-<ol class="steps">
-  <li><b>【最優先・8月中】銀行に「277のローンを住宅ローン審査の返済比率から除外できるか」を当てる。</b>いまの借入先か、借換え候補行の窓口へ。<b>この回答ひとつで、Ⓐルートが成立するかが決まります</b>。役員報酬をいくらにするかの議論は、これが分かってからで間に合います。</li>
-  <li><b>【8月中】現在の住宅ローンの残高・金利・残年数を、このボードに入れる。</b>「借換えが1年遅れるコスト」が実額で出て、ⒶとⒷの比較が数字で決着します。</li>
-  <li><b>【8月中】橋本税理士に4点確認。</b>①277の建物価格と償却年数（余剰150万の精度が上がる） ②役員報酬を2027年4月に月20〜45万へ上げる場合の社会保険と手続き ③出張旅費規程を作る価値 ④物販の消費税還付の実額と課税事業者維持の可否。</li>
-  <li><b>【8〜10月】調査士試験（10/18）を最優先。</b>これは営業特化の例外です。Ⓐを選んでも調査士資格は将来の独立（池田先生モデル＝月2件で100万・営業ゼロ）に直結するので、捨てません。</li>
-  <li><b>【9〜10月】オーロラの集客設計を「新患23人/月」から逆算して作る。</b>月商69万＝新患23人 × 平均5回 × 6,000円。<b>広告は商圏を絞ったものだけ</b>（演歌の戦略）。開業後3ヶ月は販促費を5万→10万→15万で振って新患数を記録し、CPOの山を探す。</li>
-  <li><b>【11月〜】新規の仕組みづくりを凍結し、週の可処分時間の7割を営業に充てる。</b>月次で見る数字は3行だけにする。</li>
-  <li><b>【随時】麻梨奈さんに、判定式ごと共有する。</b>「1月末にこの数字を見て、こう決める」と先に伝えておけば、進路が変わっても不意打ちになりません。</li>
-</ol>
+<h2><span class="k">実行</span>この90日でやること<span class="muted" style="font-weight:400;font-size:12px">8/4 → 11/4（オーロラ開業）</span></h2>
+
+<div class="thisweek">
+  <div class="tag">今週やる、たった1つ</div>
+  <div class="bd"><b>銀行に「277のローンを、住宅ローン審査の返済比率から除外できるか」を訊く。</b>電話1本・30分。<b>この回答だけで、事業一本ルート（Ⓐ）が成立するかが決まります</b>。役員報酬をいくらにするかの議論は、これが分かるまで始める必要がありません。</div>
+</div>
+
+<div class="acts">
+  <div class="band">8月 ─ 前提を確定させる<span>決済8/14／可処分の7割は試験へ</span></div>
+
+  <div class="act hot">
+    <div class="pr">🔴</div>
+    <div class="wh"><span class="t">銀行に連帯保証4,000万の扱いを訊く</span><span class="y">いまの借入先か、借換え候補行の窓口。277は満室・イールドギャップ9.1%なので「事業性借入」として除外される可能性がある</span></div>
+    <div class="done"><b>完了の定義</b>「除外できる／できない」の一言を、行名つきでメモに残す</div>
+  </div>
+
+  <div class="act hot">
+    <div class="pr">🔴</div>
+    <div class="wh"><span class="t">住宅ローンの残高・金利・残年数を出す</span><span class="y">借換えが1年遅れるコストが実額で出て、ⒶⒷの比較が決着する</span></div>
+    <div class="done"><b>完了の定義</b>3つの数字をこのボードに追記</div>
+  </div>
+
+  <div class="act">
+    <div class="pr">🟡</div>
+    <div class="wh"><span class="t">橋本税理士に4点確認</span><span class="y">①277の建物価格と償却年数 ②2027年4月に役員報酬を月20〜45万へ上げる手続きと社会保険 ③出張旅費規程を作る価値 ④物販の還付実額と課税事業者維持</span></div>
+    <div class="done"><b>完了の定義</b>4点の回答を1枚のメモに</div>
+  </div>
+
+  <div class="act">
+    <div class="pr">💜</div>
+    <div class="wh"><span class="t">葵斗と麻梨奈さんと、平日昼間に3回出かける</span><span class="y">夫婦2人と1歳児が平日昼間に空いている組み合わせは、この夏で終わる。旅行予算 年60万は先取り固定費として確保済み</span></div>
+    <div class="done"><b>完了の定義</b>3回行った。予約は先に取る</div>
+  </div>
+
+  <div class="band">9〜10月 ─ 試験に全部寄せる<span>試験 10/18（残り75日）</span></div>
+
+  <div class="act hot">
+    <div class="pr">🔴</div>
+    <div class="wh"><span class="t">調査士試験を最優先（週20時間）</span><span class="y">営業特化の唯一の例外。Ⓐを選んでも資格は独立（池田先生モデル＝月2件100万・営業ゼロ）に直結し、<b>コンサルの福井さん依存を自分の資格に置き換える手段</b>でもある</span></div>
+    <div class="done"><b>完了の定義</b>10/18に受験。週20時間を切った週をゼロにする</div>
+  </div>
+
+  <div class="act">
+    <div class="pr">🟠</div>
+    <div class="wh"><span class="t">オーロラの集客設計を「新患23人/月」から逆算</span><span class="y">月商69万＝新患23人×平均5回×6,000円。広告は商圏を絞ったものだけ（演歌の戦略）。開業後3ヶ月の販促費を 5万→10万→15万 で振る計画を先に紙に書く</span></div>
+    <div class="done"><b>完了の定義</b>A4 1枚の集客計画。新患数の記録シートを開業前に用意</div>
+  </div>
+
+  <div class="act">
+    <div class="pr">🟢</div>
+    <div class="wh"><span class="t">診断レターの型を1本作る（週1本・2時間）</span><span class="y">後述「書いて売る技術」。試験期間中は週1本に抑える。書く相手は宛先リストの上位から</span></div>
+    <div class="done"><b>完了の定義</b>10月末までに8本。返信率を記録</div>
+  </div>
+
+  <div class="act">
+    <div class="pr">🟠</div>
+    <div class="wh"><span class="t">岩手へ1回行く（避暑＋277視察＋岩銀）</span><span class="y">東京より涼しく、277の現地確認になり、銀行の確認が窓口で片づく。もみじさんとの連携の話も前に進む</span></div>
+    <div class="done"><b>完了の定義</b>行った。銀行の回答を持ち帰る</div>
+  </div>
+
+  <div class="band">11月〜 ─ 営業に切り替える<span>11/4 オーロラ開業／判定日 2027/1/31</span></div>
+
+  <div class="act hot">
+    <div class="pr">🔴</div>
+    <div class="wh"><span class="t">新規の仕組みづくりを凍結し、可処分時間の7割を営業へ</span><span class="y">GAS・ダッシュボード・マニュアルの新規開発を止める。診断レターを週1本→<b>週2本</b>へ</span></div>
+    <div class="done"><b>完了の定義</b>凍結リストを守れた週の割合が8割以上</div>
+  </div>
+
+  <div class="act">
+    <div class="pr">🟠</div>
+    <div class="wh"><span class="t">オーロラで新患数・平均来院回数・CPOを毎月記録</span><span class="y">販促費を3水準で振り、収穫逓減の曲線から全体利益の山を探す</span></div>
+    <div class="done"><b>完了の定義</b>1月末に3ヶ月分の3指標が揃っている</div>
+  </div>
+
+  <div class="act">
+    <div class="pr">💜</div>
+    <div class="wh"><span class="t">麻梨奈さんに、判定式ごと共有する</span><span class="y">「1月末にこの数字を見て、こう決める」と先に伝えておけば、進路が変わっても不意打ちにならない</span></div>
+    <div class="done"><b>完了の定義</b>616万／411万の2つの閾値を説明した</div>
+  </div>
+</div>
+<div class="note"><b>優先の読み方：</b>🔴＝これが崩れると設計全体が動く ／ 🟠＝判定式の分子に直接効く ／ 🟢＝能力の積み上げ（急がないが止めない） ／ 💜＝家族・取り返せない時間。<b>🔴が4つだけになるように絞ってあります</b>。</div>
+
+<h2><span class="k">技術</span>「考えて書く＝営業する」を、錬成する設計</h2>
+<p class="lead"><b>これは方針として正しいと思います。</b>コンサル260万が福井さん依存であることが、いまの設計で唯一の構造的な弱点でした（原資463万のうち260万）。それを埋めるのは「人脈」でも「運」でもなく<b>「必要になったら、書いて仕事を取れる」という再現可能な能力</b>です。<br>そしてこの能力は、菊池さんの場合<b>すでに大量に実在しています</b>——京橋の提案書・診断レポート・LINE設計・Web問診票、医療コンサルのトークスクリプト、土地から新築の精査フロー、辻堂の売却戦略、277の物件概要書。<b>足りないのは能力ではなく、型として抽出されていないこと</b>です。だから設計の中身は「学ぶ」ではなく<b>「棚卸しして、標準化して、測る」</b>になります。</p>
+
+<h3>ステップ1 ─ 既存の成果物から、型を3つに絞って言語化する</h3>
+<div class="kata">
+  <div class="k1">
+    <div class="use">型A</div>
+    <h4>診断型</h4>
+    <div class="bd">相手の現状を<b>数字で診断して見せる</b>。相手が知らない自分の数字を出すのが本質。「言われて初めて気づいた」を作る</div>
+    <div class="src">既存の実例＝京橋の診断レポート／277の物件概要書／辻堂の収支試算／マイソク分析</div>
+  </div>
+  <div class="k1">
+    <div class="use">型B</div>
+    <h4>設計型</h4>
+    <div class="bd">あるべき姿を<b>図解して提示する</b>。相手が「自分では描けなかった全体像」を渡す。フローチャート1枚が主役</div>
+    <div class="src">既存の実例＝土地から新築の精査フロー／LINE導線設計／オペモデル／クリニックDX</div>
+  </div>
+  <div class="k1">
+    <div class="use">型C</div>
+    <h4>台本型</h4>
+    <div class="bd">相手が<b>そのまま使える言葉</b>を渡す。「明日から使える」が価値。実行支援の入口になり、継続契約に化けやすい</div>
+    <div class="src">既存の実例＝医療コンサルのトークスクリプト／FAQチャットボット／Web問診票／朝礼原稿</div>
+  </div>
+</div>
+<div class="note good"><b>この3つで、これまでの成果物はほぼ全部説明できます。</b>だから新しく学ぶ必要はありません。<b>次に案件が来たとき「これはA型／B型／C型のどれか」を最初に決める</b>だけで、書く時間が半分になります。ゼロから考えているように見えて、実は毎回同じ3つを作り直していた——という状態から抜けます。</div>
+
+<h3>ステップ2 ─ 1件を「診断レター A4 2枚」に標準化する（2時間で書く）</h3>
+<p>営業のたびに提案書を作り込むのは、<b>CPOが高すぎます</b>。入口は必ずこの5ブロックに固定し、受注が見えてから作り込む。</p>
+<div class="letter">
+  <div class="lh">診断レター ─ 固定フォーマット（A4 2枚 ／ 執筆 2時間）</div>
+  <div class="lr"><div class="n">① 現状</div><div>相手の数字を3つだけ出す。<b>公開情報＋既存データ資産から作る</b>（landscanner／out_screener／レセコン相場／登記）。ここが型Aの本体で、レターの説得力の8割</div><div class="tm">40分</div></div>
+  <div class="lr"><div class="n">② 放置した3年後</div><div>数字を1つだけ。「このままだと3年で◯◯万円が失われる」。<b>恐怖ではなく算数で書く</b></div><div class="tm">15分</div></div>
+  <div class="lr"><div class="n">③ 打ち手</div><div>3つ。1つは<b>相手が自分で無料でできること</b>を必ず入れる。売り込みでないことの証明になり、返信率が上がる</div><div class="tm">30分</div></div>
+  <div class="lr"><div class="n">④ 私の担当範囲と費用</div><div>金額を必ず書く。<b>書かないと比較検討に入れない</b>。110万／件を基準に、範囲を削って価格を作る</div><div class="tm">15分</div></div>
+  <div class="lr"><div class="n">⑤ 次の1歩</div><div>「30分の面談」だけ。<b>依頼のハードルは1段しか作らない</b></div><div class="tm">10分</div></div>
+</div>
+<div class="note"><b>①に既存のデータ資産を流用するのが、この設計の核です。</b>landscanner・out_screener・ec_product_ranking・レセコン画面・登記情報——<b>菊池さんはすでに「相手の数字を作れる道具」を持っています</b>。ゼロから調べる人にとって①は8時間かかりますが、菊池さんは40分でできる。<b>ここが、他の誰にも真似できない参入障壁です</b>。</div>
+
+<h3>ステップ3 ─ CPOで測る。「10本書いて1件」でも十分に成立する</h3>
+<p>本の上限CPOの考え方を、自分の営業に当てます。<b>1本＝2時間</b>を投下コストとして、受注率別に時間単価を出しました。</p>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>受注率</th><th>1件受注に必要な本数</th><th>投下時間（CPO）</th><th>案件単価</th><th>時間単価</th><th>判定</th></tr></thead>
+  <tbody>
+  <tr class="hi"><td class="c">10%</td><td class="c">10本</td><td class="c">20時間</td><td class="r">110万</td><td class="r win">55,000円/h</td><td><span class="chip good">◎ 十分</span></td></tr>
+  <tr><td class="c">5%</td><td class="c">20本</td><td class="c">40時間</td><td class="r">110万</td><td class="r win">27,500円/h</td><td><span class="chip good">◎ 十分</span></td></tr>
+  <tr><td class="c">3%</td><td class="c">33本</td><td class="c">66時間</td><td class="r">110万</td><td class="r win">16,700円/h</td><td><span class="chip good">◯ 成立</span></td></tr>
+  <tr><td class="c">1%</td><td class="c">100本</td><td class="c">200時間</td><td class="r">110万</td><td class="r">5,500円/h</td><td><span class="chip warn">△ 型が悪い</span></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note good"><b>これがいちばん励みになる数字だと思います。</b>受注率が<b>3%（33本書いて1件）でも時間単価16,700円</b>——役員報酬 月32万を160時間で割った2,000円/hの8倍です。<b>「書く営業」は、確率が低くても圧倒的に成立する</b>。<br>だから<b>断られることを織り込んで設計できます</b>。9本外れて1本当たれば勝ち、と最初から決めておけば、返信がないことは失敗ではなくただの分母になります。<b>これが「営業が怖くなくなる」唯一の方法です</b>。</div>
+<div class="note warn"><b>逆に、受注率1%を切ったら「本数」ではなく「型」か「宛先」を疑ってください。</b>本の収穫逓減と同じで、量を増やしても解決しません。直すべきは<b>①宛先リストの精度 ②①の数字の切れ味</b>のどちらかです。</div>
+
+<h3>ステップ4 ─ 宛先を絞る（演歌の戦略を、自分の営業に当てる）</h3>
+<p class="lead">本の第6章は<b>「認知を広げるな、買いそうな人だけに認知させろ」</b>。書く営業では、これは<b>「宛先リストの質が、文章の質より先に効く」</b>という意味になります。同じレターでも、宛先を間違えれば受注率は0%です。</p>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>宛先セグメント</th><th>なぜこの人か</th><th>使える型</th><th>菊池さんの武器</th><th>リスト目標</th></tr></thead>
+  <tbody>
+  <tr class="hi"><td><b>開業3〜7年目・分院を考え始めたクリニック院長</b></td><td>投資判断の直前で、数字を欲しがっている時期。既存の医療コンサル案件と同じ層</td><td class="c">A → C</td><td>京橋・船橋（オーロラ）の実例／レセコンと保険点数の相場観</td><td class="c">60件</td></tr>
+  <tr class="hi"><td><b>相続が発生した地主・古家付き土地の所有者</b></td><td>境界も面積も分からず、判断できずに止まっている。ここに<b>調査士の独占業務が直結する</b></td><td class="c">A → B</td><td>landscanner／土地値90.5%を見抜いた277の実績／<b>境界・分筆・表題登記を自分で回せる</b></td><td class="c">30件</td></tr>
+  <tr><td>医療法人の理事長（複数拠点）</td><td>拠点間の数字が見えていない。財務司令塔がそのまま商品になる</td><td class="c">B</td><td>連結BS・5段階利益管理の実装経験</td><td class="c">10件</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note good"><b>2つ目のセグメントが、この設計のいちばんの発見です。</b>相続した地主に「あなたの土地はこうなっている」を書いて渡せる人は、ほとんどいません。<b>調査士は境界確定・分筆・表題登記が独占業務</b>——つまり<b>書いた提案を、自分で実行できる根拠がある</b>。これは他の誰にも真似できない組み合わせです。<br><b>だから10月18日の試験は、資格試験であると同時に「書く営業」への最大の投資です</b>。合格すれば、このセグメントの受注率が跳ね上がります。</div>
+
+<h3>ステップ5 ─ 測るのは3つだけ。月次1行に足す</h3>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>指標</th><th>試験まで（〜10/18）</th><th>11月〜</th><th>年間換算</th><th>意味</th></tr></thead>
+  <tbody>
+  <tr><td><b>① 書いた本数</b></td><td class="c">週1本</td><td class="c win">週2本</td><td class="c">約100本</td><td>唯一、自分で完全にコントロールできる数字</td></tr>
+  <tr><td><b>② 返信率</b></td><td class="c" colspan="2">記録するだけ</td><td class="c">—</td><td>低ければ<b>宛先か①の数字</b>が悪い</td></tr>
+  <tr><td><b>③ 受注率</b></td><td class="c" colspan="2">記録するだけ</td><td class="c">3%で3件／10%で10件</td><td>3%以上なら型は正しい</td></tr>
+  <tr class="sum"><td>年間の期待値</td><td colspan="4">100本 × 受注率3% × 110万 ＝ <b>年330万</b>／受注率10%なら<b>年1,100万</b>。<b>3%でも、判定式の不足428万の8割が埋まる</b></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note good"><b>ここで営業特化の設計が一本につながりました。</b>唯一の数字は月36万（年428万）。オーロラで埋めるのが主線ですが、<b>診断レターを週2本書くだけで、受注率3%なら年330万——不足の8割を、オーロラとは別ルートで埋められます</b>。<br>つまり<b>判定式に対する保険が1本増えた</b>ということです。オーロラの集客が想定より遅れても、書く営業が動いていれば2027年1月の判定は通る。<b>「いつでも仕事を取れる能力」は、精神論ではなく、判定式の分子に効く実額の打ち手です</b>。</div>
+<div class="note stop"><b>🟡新しい本について。</b>共有いただいたアルバム（<span class="muted">AF1QipNwVZSmi…</span>）も<b>HTTP 403 で開けず、Drive にもまだ来ていません</b>。この章は、菊池さんのご指示（「考えて書く＝営業する」）と既存の成果物・『売上最小化、利益最大化の法則』の枠組みだけで組んでいます。<br><b>前回と同じ手順で読めます</b>——Drive に <code>260804_◯◯（書名）</code> のフォルダを作り、写真をアップロードしてフォルダのリンクをください。その本の型を、上のステップ1〜5に差し込み直します。</div>
 
 <h2><span class="k">🟡</span>この設計が変わる、未確定の前提</h2>
 <div class="tblwrap">
@@ -579,6 +779,7 @@ flowchart LR
 <table>
   <thead><tr><th>日付</th><th>変化</th></tr></thead>
   <tbody>
+  <tr><td>2026-08-04<br><b>追補4</b></td><td><b>①「この90日でやること」を表示から作り直し</b>＝箇条書き7項目を、月ごとの帯＋優先マーク（🔴🟠🟢💜）＋<b>「完了の定義」列</b>を持つアクション表に変更。冒頭に「今週やる、たった1つ」（銀行への連帯保証の確認）を独立表示。🔴を4つに絞った ②<b>「考えて書く＝営業する」技術の錬成設計</b>を新章として追加＝既存成果物から<b>型を3つ（診断型／設計型／台本型）に抽出</b>、<b>診断レター A4 2枚・2時間</b>の固定フォーマット化、<b>CPOで測ると受注率3%でも時間単価16,700円で成立</b>することを算出、<b>演歌の戦略で宛先を100件に絞る</b>（特に相続地主×調査士の独占業務の組み合わせ）、測る指標を3つに限定。<b>週2本×受注率3%＝年330万で、唯一の数字428万の8割が埋まる</b>＝オーロラ以外の保険ルートを設計。<span class="muted">※新しいアルバムは403＋Drive未着のため、本章は既存資産と1冊目の枠組みのみで構成。</span></td></tr>
   <tr><td>2026-08-04<br><b>追補3</b></td><td><b>「もう資産は減らないのでは」という問いを検算し、正しいと確認。</b>①<b>「資産が減らないライン」＝役員報酬 月32万</b>を特定（NISA月10万は資産形成なので、生活費30.1万＝年361万だけをカバーすればよい）。手取り305万＋物販67万＝372万で年361万を上回る ②<b>277とコンサルだけで足りる</b>＝オーロラ抜きの法人現金創出力は年463万、月32万の法人コスト438万に対し25万の余裕。<b>構造は2026/8/14の277決済で完成する</b> ③<b>ただし463万のうち260万は福井さん経由のコンサル</b>。止まれば原資は277単独の203万に落ち、役員報酬は月14.8万しか出せず生活費に月▲11.8万。<b>「解放」の土台の半分以上が他人の上に乗っていることを明記</b> ④導管が開くのは2027年4月（定期同額の窓）、11/4のオーロラ開業で原資463万は消える＝<b>自由を自分の意志で手放して別の挑戦を買っている構図</b>と整理</td></tr>
   <tr><td>2026-08-04<br><b>追補2</b></td><td><b>書籍のページ30枚（Drive）を実読し、道具立てを正しい形に入れ替え。</b>①<b>【訂正】前版の「限界CPO＝純粗利の半分」は本の方法ではなかった。</b>本（図表30）は上限ではなく<b>最適点</b>を示す——全体利益＝新規獲得件数×（LTV−CPO）で、CPOを上げると件数は増えるが一人あたり利益は減る（収穫逓減）。書籍例では売上最大化のCPO9,000円で利益は最適点の6割減 ②<b>時系列LTV</b>をオーロラに適用＝CPO4,350円は<b>初回来院で回収</b>、CPO2万円でも4回目で回収。<b>制約は「お金」ではなく「新患23人/月」</b>と特定 ③目標を「1日6人」から<b>「新患23人/月・平均来院5回・CPO4,350円」</b>に翻訳し、合格ラインの月商を75万→<b>69万</b>に精緻化 ④<b>演歌の戦略</b>＝クリニックは商圏が物理的に決まるため、認知を絞る戦略が構造的に最適と結論 ⑤<b>コンサルにクライアント別5段階利益管理</b>（図表23）を適用すべきと指摘＝紹介料・投下時間・交通費を引いた案件ごと営業利益が未分解 ⑥<b>図表6でKHDのA社／B社判定</b>＝売上10%ダウンでも利益率32%を維持する<b>B社型</b>と確認 ⑦月次の管理指標を3行→4行に組み替え</td></tr>
   <tr><td>2026-08-04<br><b>追補</b></td><td><b>追加された本を「売上最小化、利益最大化の法則」（木下勝寿）と特定し、5段階利益管理をオーロラに適用。</b>目標を月商60万と置いていたのは甘く、<b>販促費の置き場所がなかった</b>ことが判明。販促費 月10万を織り込むと<b>必要月商は75.3万＝1日6人</b>（22日稼働）。あわせて<b>限界CPO</b>を設定し、平均来院回数3回なら8,000円・5回なら14,000円・8回なら22,000円が上限と算出。<b>開業直後に測るべきは新患数より「平均来院回数」</b>であることを特定し、判明までは広告費を月5万に抑える方針を追加。<span class="muted">※Google フォトのアルバムは403で読めず、Drive の空フォルダ「260804_売上最小化利益最大化の法則」から書名を特定。ページ内容は未読。</span></td></tr>

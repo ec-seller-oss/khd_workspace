@@ -203,19 +203,19 @@
   .acts .band{background:var(--accent);color:var(--on-accent);padding:7px 15px;
     font-size:11px;letter-spacing:.14em;font-weight:700;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;}
   .acts .band span{font-weight:400;letter-spacing:.04em;opacity:.85}
-  .act{display:grid;grid-template-columns:26px 1fr 250px;gap:14px;padding:13px 15px;
+  .arow{display:grid;grid-template-columns:26px 1fr 250px;gap:14px;padding:13px 15px;
     border-top:1px solid var(--line);align-items:start;}
-  .acts .band + .act{border-top:none}
-  @media (max-width:720px){.act{grid-template-columns:22px 1fr;gap:10px}.act .done{grid-column:2}}
-  .act .pr{font-size:15px;line-height:1.3;text-align:center}
-  .act .wh{font-size:12.5px}
-  .act .wh .t{font-weight:700;display:block;margin-bottom:2px}
-  .act .wh .y{color:var(--sub)}
-  .act .done{font-size:11.5px;background:var(--good-soft);border-left:3px solid var(--good);
+  .acts .band + .arow{border-top:none}
+  @media (max-width:720px){.arow{grid-template-columns:22px 1fr;gap:10px}.arow .done{grid-column:2}}
+  .arow .pr{font-size:15px;line-height:1.3;text-align:center}
+  .arow .wh{font-size:12.5px}
+  .arow .wh .t{font-weight:700;display:block;margin-bottom:2px}
+  .arow .wh .y{color:var(--sub)}
+  .arow .done{font-size:11.5px;background:var(--good-soft);border-left:3px solid var(--good);
     padding:7px 10px;border-radius:0 2px 2px 0;}
-  .act .done b{color:var(--good);display:block;font-size:10px;letter-spacing:.12em;margin-bottom:2px}
-  .act.hot{background:var(--stop-soft)}
-  .act.hot .done{background:var(--paper)}
+  .arow .done b{color:var(--good);display:block;font-size:10px;letter-spacing:.12em;margin-bottom:2px}
+  .arow.hot{background:var(--stop-soft)}
+  .arow.hot .done{background:var(--paper)}
 
   /* ── 書く営業の型 ── */
   .kata{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
@@ -252,10 +252,10 @@
 <header>
   <div class="eyebrow">KHD 経営設計ボード ／ 方針の組み直し</div>
   <h1>法人の利益最大化を、唯一の焦点にする</h1>
-  <div class="asof">2026-08-04（追補4） ／ 前提＝<a href="https://claude.ai/code/artifact/3cfd1521-0bf5-42a5-bb01-71e3c502c834">働き方とライフプラン設計</a>（同日版）の実額を引き継ぎ、菊池さんの新方針「高松の余剰→役員報酬→個人の与信→会社員に戻らずに借換え」を検証して全体を組み直したもの</div>
+  <div class="asof">2026-08-04（追補5） ／ 前提＝<a href="https://claude.ai/code/artifact/3cfd1521-0bf5-42a5-bb01-71e3c502c834">働き方とライフプラン設計</a>（同日版）の実額を引き継ぎ、菊池さんの新方針「高松の余剰→役員報酬→個人の与信→会社員に戻らずに借換え」を検証して全体を組み直したもの</div>
 </header>
 
-<div class="note good"><b>参照した資料について。</b>追加された本は<b>木下勝寿『売上最小化、利益最大化の法則』</b>（北の達人コーポレーション代表／2021年）。Drive の <b>30枚のページ写真を実読</b>し、第1〜6章の主要図表（無収入寿命／5段階利益管理／上限CPO・時系列LTV／演歌の戦略）を本ボードに反映しています。<span class="muted">※Google フォトのアルバムは403で開けないため、Drive 側から読みました。</span><br><b>この本の道具立ては、すでにボードの骨格です</b>——無収入寿命（44→31→20ヶ月）、5段階利益管理、そして「唯一の数字だけを追う」設計思想。今回さらに<b>上限CPO・時系列LTV・演歌の戦略・クライアント別の利益分解</b>を各事業に当て、<b>前版で置いた「限界CPO」の目安を、本来の方法に差し替えました</b>（後述の訂正）。</div>
+<div class="note good"><b>参照した資料について。</b>追加された本は<b>木下勝寿『売上最小化、利益最大化の法則』</b>と<b>山崎康司『入門 考える技術・書く技術』</b>。Drive の<b>合計62枚のページ写真を実読</b>し、第1〜6章の主要図表（無収入寿命／5段階利益管理／上限CPO・時系列LTV／演歌の戦略）を本ボードに反映しています。<span class="muted">※Google フォトのアルバムは403で開けないため、Drive 側から読みました。</span><br><b>この本の道具立ては、すでにボードの骨格です</b>——無収入寿命（44→31→20ヶ月）、5段階利益管理、そして「唯一の数字だけを追う」設計思想。今回さらに<b>上限CPO・時系列LTV・演歌の戦略・クライアント別の利益分解</b>を各事業に当て、<b>前版で置いた「限界CPO」の目安を、本来の方法に差し替えました</b>（後述の訂正）。</div>
 
 <h2><span class="k">結論</span>方向性は正しい。ただし成立には条件が2つある</h2>
 <p class="lead">菊池さんの仮説——<b>「高松で余剰が出るなら役員報酬を上げる → 個人の給与が増える → 与信が良くなる → 借換えのために会社員に戻る必要がなくなる」</b>——は、税務上も与信実務上も<b>筋が通っています</b>。組み直した設計もこの線に沿っています。<br>ただし数字を入れると、成立条件が2つ出てきました。<b>①法人が生む現金を、いまの年188万から年616万まで引き上げること ②借換えが1年後ろにずれるのを受け入れること</b>。この2つを飲めるなら、会社員に戻らない道は現実に成立します。</p>
@@ -530,6 +530,112 @@ flowchart LR
   </div>
 </div>
 
+<h2><span class="k">投資</span>個人投資1,500万 ─ NISAを前倒しして株に置くべきか</h2>
+<p class="lead"><b>結論から言います。「現金で置くよりいい」という判断基準は正しいです。</b>日本の定期預金は0.1〜0.2%で、インフレ2%なら実質マイナス。待機資金を銀行に置く意味はほぼありません。<br><b>ただし、いま動かせる余裕は約200万しかありません</b>。理由は2027年4月まで給与がゼロだからです。<b>本格的な前倒しは、役員報酬の窓が開く2027年4月から</b>——これが検算の結論です。</p>
+
+<h3>動画の主張のうち、菊池さんに当てはまる部分と当てはまらない部分</h3>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>動画の主張</th><th>判定</th><th>理由</th></tr></thead>
+  <tbody>
+  <tr><td>1,500万を超えると資産の増え方が変わる</td><td class="c"><span class="chip good">◎ 当てはまる</span></td><td>複利の効き始めは事実。菊池さんはこの通過点に到達目前</td></tr>
+  <tr><td>最初の1,500万の7割は複利ではなく入金力</td><td class="c"><span class="chip good">◎ 通過済</span></td><td>菊池さんは入金力の部分を<b>法人と不動産で解いている</b>。動画の会社員モデルより先を行っている</td></tr>
+  <tr><td>待機資金を銀行に置く意味はない</td><td class="c"><span class="chip good">◎ 当てはまる</span></td><td>0.1〜0.2%。個人向け国債 変動10年（0.5%前後）が中間の選択肢</td></tr>
+  <tr><td>住宅ローンを組んで手元資金を投資に回す方が合理的</td><td class="c"><span class="chip warn">🟡 すでに実行済</span></td><td><b>岩銀3,700万＋公庫300万で不動産に投資済み。レバレッジは2.59倍</b>。ここに株のリスクを重ねる前に、二重になっていないか意識すべき</td></tr>
+  <tr class="hi"><td>毎月コツコツより早く入れた方がいい</td><td class="c"><span class="chip warn">🟡 条件つき</span></td><td><b>動画のモデルは「毎月給料が入る会社員」。菊池さんは2027年4月まで給与ゼロ</b>。現金を減らすと無収入寿命が直接縮む</td></tr>
+  <tr><td>イデコで所得控除を取るべき</td><td class="c"><span class="chip stop">✕ いまは逆効果</span></td><td><b>2026年は課税所得がほぼゼロ</b>（役員報酬5万・事業所得は戦略的赤字）。<b>節税額ゼロで口座手数料だけかかる</b></td></tr>
+  <tr><td>年利10%を前提に計算</td><td class="c"><span class="chip warn">🟡 楽観的</span></td><td>S&amp;P500の過去30年（1996-2026）は米国株の黄金期。<b>設計は5〜7%で組むべき</b></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note stop"><b>いちばん大きな違いは、動画の視聴者には事業投資の選択肢がないことです。</b>だから彼らにとってS&amp;P500の10%は最良の選択肢。<b>菊池さんは違います</b>——277のイールドギャップ<b>9.1%</b>、診断レターの時間単価<b>16,700円</b>（受注率3%で）、オーロラのCPO<b>4,350円で初回回収</b>。<br><b>つまり菊池さんにとって、S&amp;P500の10%は手持ちの選択肢の中で最も利回りが低い</b>。株は「事業に回しきれない余剰の置き場」として位置づけるのが正しく、主役ではありません。</div>
+
+<h3>【重要な訂正】無収入寿命は、2本立てで見る必要があります</h3>
+<p>ボードでは「オーロラ開業後の無収入寿命 約20ヶ月」と書いてきましたが、<b>純手元資金2,552万に株1,500万が含まれているなら、この数字は現金の裏づけがありません</b>。書籍の定義では有価証券も流動資産として算入されますが、<b>売上ゼロで生活費を払う局面は、たいてい市場も悪い</b>——だから2本並べます。</p>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>見方</th><th>分子</th><th>分母（月額固定費）</th><th>無収入寿命</th><th>意味</th></tr></thead>
+  <tbody>
+  <tr><td>① 書籍の定義どおり</td><td class="r">2,552万<span class="muted">（株込み）</span></td><td class="r">132.6万<span class="muted">（全固定費）</span></td><td class="c">19.2ヶ月</td><td>これまでの表記</td></tr>
+  <tr><td>①' 株が▲40%のとき</td><td class="r">1,952万</td><td class="r">132.6万</td><td class="c mid">14.7ヶ月</td><td>暴落と業績悪化が重なる場合</td></tr>
+  <tr class="hi"><td><b>② 現金だけ ÷ 止められない固定費</b></td><td class="r win">1,052万<span class="muted">（現金）</span></td><td class="r win">40.1万<span class="muted">（生活費30.1＋旅行5＋税理士等5）</span></td><td class="c win">26.2ヶ月</td><td><b>これが本当の生存力</b></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note good"><b>結果は、むしろ安心する数字でした。</b>②が26ヶ月あります。<b>オーロラの運営費40万は閉じれば止まり、277の返済20.5万は家賃で回る</b>ので、真に止められないのは生活費まわりの40.1万だけ。現金1,052万でこれを26ヶ月払えます。<br><b>つまり「無収入寿命20ヶ月」より、実態はむしろ強い</b>。ここが「もう減らない」という菊池さんの感覚の、もう1つの裏づけです。<span class="muted">🟡ただし純手元資金2,552万の現金／有価証券の内訳は未確認です。ここを確定させてください。</span></div>
+
+<h3>それでも、いま動かせるのは約200万だけ</h3>
+<p>現金1,052万から「向こう2年で確実に出ていくお金」を引きます。</p>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>確保しておくべき現金</th><th>金額</th><th>理由</th></tr></thead>
+  <tbody>
+  <tr><td>止められない固定費 12ヶ月分</td><td class="r">481万</td><td>2027年4月の役員報酬開始まで8ヶ月＋予備4ヶ月</td></tr>
+  <tr><td>オーロラの追加運転資金 3ヶ月</td><td class="r">120万</td><td>立ち上げが想定より遅れた場合</td></tr>
+  <tr><td>277の突発修繕・空室予備</td><td class="r">100万</td><td>築古・岩手・管理会社任せ</td></tr>
+  <tr><td>税金の支払い予備</td><td class="r">100万</td><td>法人税・住民税・固都税</td></tr>
+  <tr><td>二人目の出産・育児準備（2028）</td><td class="r">50万</td><td>🟡時期が動けばずれる</td></tr>
+  <tr class="sum"><td>必要現金 計</td><td class="r">851万</td><td>—</td></tr>
+  <tr class="hi"><td><b>いま株に回せる余裕</b></td><td class="r win">約200万</td><td>現金1,052万 − 851万</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note warn"><b>だから答えは「やっていい。ただし200万まで」です。</b>年120万の積立ペースを維持しながら、<b>200万を追加投入する</b>——あるいは<b>積立を月10万→月15万に増やす</b>（年60万増）と3年強で使い切る計算になります。<br><b>本格的な前倒しは2027年4月から</b>。役員報酬 月32万が入れば家計に毎月の余剰が生まれ、そこから積立額を上げられます。<b>いま無理に動かす必要はありません——8ヶ月待つだけです</b>。</div>
+
+<h3>「8ヶ月待つコスト」と「前倒しの価値」を実額で出す</h3>
+<p>今後1,000万を投資に回すとして、<b>年360万ペース（2.8年で投入）</b>と<b>年120万ペース（8.3年で投入）</b>を20年後で比べました。</p>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>想定利回り</th><th>前倒し（年360万）</th><th>均等（年120万）</th><th>差</th><th>コメント</th></tr></thead>
+  <tbody>
+  <tr><td class="c">5%<span class="muted">（保守）</span></td><td class="r">2,418万</td><td class="r">2,126万</td><td class="r">＋292万</td><td>+13.7%</td></tr>
+  <tr class="hi"><td class="c">7%<span class="muted">（現実的）</span></td><td class="r win">3,403万</td><td class="r">2,857万</td><td class="r win">＋546万</td><td>+19.1%／<b>ここを基準に考える</b></td></tr>
+  <tr><td class="c">10%<span class="muted">（動画の想定）</span></td><td class="r">5,619万</td><td class="r">4,421万</td><td class="r">＋1,198万</td><td>+27.1%</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note"><b>前倒しの価値は、7%想定で20年後に+546万です。</b>これは無視できない額なので、<b>「余裕ができたら早く入れる」は正しい方針</b>。ただし<b>その差は「20年後の額」であって、いま現金を削ってまで取りに行く差ではありません</b>。<br>ちなみに<b>すでに投資済みの1,500万</b>を18年（葵斗が大学に入る2044年まで）運用すると、5%で3,610万・7%で5,070万・10%で8,340万。<b>いま持っている分が、すでに教育費2,350万を大きく上回る計算です</b>。</div>
+
+<h3>イデコは「2027年4月以降」。いま始めると手数料負けします</h3>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>時期</th><th>想定税率</th><th>年掛金27.6万の節税額</th><th>口座手数料</th><th>実効</th></tr></thead>
+  <tbody>
+  <tr><td><b>2026年</b><span class="muted"><br>役員報酬5万・事業所得は戦略的赤字</span></td><td class="c">0%</td><td class="r">0万</td><td class="r">▲0.3万</td><td class="c lose">▲0.3万 ✕</td></tr>
+  <tr class="hi"><td><b>2027年4月〜</b><span class="muted"><br>役員報酬 月32万</span></td><td class="c">15%</td><td class="r">4.1万</td><td class="r">▲0.3万</td><td class="c win">＋3.8万 ✅</td></tr>
+  <tr><td>Ⓑ二刀流で給与700万</td><td class="c">30%</td><td class="r">8.3万</td><td class="r">▲0.3万</td><td class="c win">＋8.0万 ✅</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note stop"><b>動画はイデコを推していますが、菊池さんの2026年には当てはまりません。</b>イデコの節税メリットは<b>所得税率に比例</b>します。課税所得がゼロなら控除する対象がなく、<b>メリットはゼロで手数料だけ残る</b>。<br>さらにイデコは<b>60歳まで引き出せません</b>。2027年1月の判定でⒶ（事業一本）を選ぶ可能性がある人が、資金の流動性を捨てるのは筋が悪い。<b>役員報酬が上がった2027年4月以降に、NISAを埋めたうえで余力で</b>——この順序です。</div>
+
+<h3>教育費で切り崩すリスクは、18年後ではなく「これから24ヶ月」にあります</h3>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>いつ</th><th>何が起きうるか</th><th>切り崩しリスク</th></tr></thead>
+  <tbody>
+  <tr class="hi"><td><b>2026年11月〜2027年3月</b></td><td>オーロラの運営費40万/月が持ち出しに。給与ゼロが継続</td><td class="c lose">🔴 高い</td></tr>
+  <tr><td>2027年2月</td><td>セーフティ一時貸付170万の借換え</td><td class="c mid">🟠 借換え失敗時</td></tr>
+  <tr><td>2027年1月末</td><td>判定で411万未満 → 就職活動、4月まで無収入が続く</td><td class="c mid">🟠 中</td></tr>
+  <tr><td>2028年</td><td>二人目の出産。麻梨奈さんの2回目の育休</td><td class="c mid">🟠 中</td></tr>
+  <tr><td><b>2044〜2047年</b><span class="muted"><br>葵斗・二人目の大学</span></td><td>年106万×4年＝424万がピーク</td><td class="c win">🟢 低い</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note good"><b>「そんな時は起きないかも」——教育費については、ほぼ正しいです。</b>ピークは18〜21年後。<b>S&amp;P500を18年保有してマイナスで終わった歴史的期間は、ほぼ存在しません</b>。しかも教育費は<b>予測できる支出</b>なので、<b>2040年頃から必要額424万を段階的に現金化する計画を、いま決めておけばいい</b>。<br>だから正しい言い方は「起きないかも」ではなく<b>「起きるが、18年前から分かっているので準備できる」</b>です。そして<b>いま持っている1,500万が7%で回れば18年後に5,070万</b>——教育費2,350万の2倍以上。<b>教育費を理由に投資を控える必要はありません</b>。</div>
+<div class="note stop"><b>本当のリスクは、これから24ヶ月です。</b>オーロラの立ち上げ期に給与ゼロが重なる期間に、もし相場が下がっていたら、<b>「安く売る」を強いられます</b>。これが唯一避けたい事態。<br><b>だから現金851万の下限を守ることが、投資方針の本体です</b>。銘柄選びより、この線を割らないことのほうが100倍重要です。</div>
+
+<h3>結論 ─ 判断基準の言い換え</h3>
+<div class="keyfig" style="border-color:var(--accent);background:var(--accent-soft)">
+  <div class="num"><span class="big" style="color:var(--accent)">851</span><span class="unit" style="color:var(--accent)">万円 ／ 現金の下限</span></div>
+  <div class="txt">
+    <div class="cap" style="color:var(--accent)">「現金で置くよりいい」の、正しい形</div>
+    判断基準は<b>「現金 vs 株」ではなく「現金の下限851万を割るか、割らないか」</b>です。割らない範囲なら、株に置くのは合理的——<b>いまは約200万</b>。<br>
+    <b>順序はこう</b>：① 現金851万を確保 → ② 余剰を<b>NISA</b>へ（生涯枠は夫婦で3,600万、まだ余裕がある） → ③ <b>2027年4月に役員報酬 月32万</b>が入ったら積立を月15万へ → ④ <b>イデコはその後</b> → ⑤ 2040年頃から教育費分424万を段階的に現金化。<br>
+    そして忘れないでください——<b>菊池さんの最高利回りは株ではなく、オーロラと診断レターです</b>。
+  </div>
+</div>
+
 <h2><span class="k">年表</span>2026 → 2032 — 事業と家族を1本の線に</h2>
 <p class="muted">🟡二人目は2028年出産（葵斗と3歳差）を仮置き。<span class="chip flat">事業</span><span class="chip fam">家族</span><span class="chip warn">お金の判断</span>で色分けしています。</p>
 <div class="tl">
@@ -591,25 +697,25 @@ flowchart LR
 <div class="acts">
   <div class="band">8月 ─ 前提を確定させる<span>決済8/14／可処分の7割は試験へ</span></div>
 
-  <div class="act hot">
+  <div class="arow hot">
     <div class="pr">🔴</div>
     <div class="wh"><span class="t">銀行に連帯保証4,000万の扱いを訊く</span><span class="y">いまの借入先か、借換え候補行の窓口。277は満室・イールドギャップ9.1%なので「事業性借入」として除外される可能性がある</span></div>
     <div class="done"><b>完了の定義</b>「除外できる／できない」の一言を、行名つきでメモに残す</div>
   </div>
 
-  <div class="act hot">
+  <div class="arow hot">
     <div class="pr">🔴</div>
     <div class="wh"><span class="t">住宅ローンの残高・金利・残年数を出す</span><span class="y">借換えが1年遅れるコストが実額で出て、ⒶⒷの比較が決着する</span></div>
     <div class="done"><b>完了の定義</b>3つの数字をこのボードに追記</div>
   </div>
 
-  <div class="act">
+  <div class="arow">
     <div class="pr">🟡</div>
     <div class="wh"><span class="t">橋本税理士に4点確認</span><span class="y">①277の建物価格と償却年数 ②2027年4月に役員報酬を月20〜45万へ上げる手続きと社会保険 ③出張旅費規程を作る価値 ④物販の還付実額と課税事業者維持</span></div>
     <div class="done"><b>完了の定義</b>4点の回答を1枚のメモに</div>
   </div>
 
-  <div class="act">
+  <div class="arow">
     <div class="pr">💜</div>
     <div class="wh"><span class="t">葵斗と麻梨奈さんと、平日昼間に3回出かける</span><span class="y">夫婦2人と1歳児が平日昼間に空いている組み合わせは、この夏で終わる。旅行予算 年60万は先取り固定費として確保済み</span></div>
     <div class="done"><b>完了の定義</b>3回行った。予約は先に取る</div>
@@ -617,25 +723,25 @@ flowchart LR
 
   <div class="band">9〜10月 ─ 試験に全部寄せる<span>試験 10/18（残り75日）</span></div>
 
-  <div class="act hot">
+  <div class="arow hot">
     <div class="pr">🔴</div>
     <div class="wh"><span class="t">調査士試験を最優先（週20時間）</span><span class="y">営業特化の唯一の例外。Ⓐを選んでも資格は独立（池田先生モデル＝月2件100万・営業ゼロ）に直結し、<b>コンサルの福井さん依存を自分の資格に置き換える手段</b>でもある</span></div>
     <div class="done"><b>完了の定義</b>10/18に受験。週20時間を切った週をゼロにする</div>
   </div>
 
-  <div class="act">
+  <div class="arow">
     <div class="pr">🟠</div>
     <div class="wh"><span class="t">オーロラの集客設計を「新患23人/月」から逆算</span><span class="y">月商69万＝新患23人×平均5回×6,000円。広告は商圏を絞ったものだけ（演歌の戦略）。開業後3ヶ月の販促費を 5万→10万→15万 で振る計画を先に紙に書く</span></div>
     <div class="done"><b>完了の定義</b>A4 1枚の集客計画。新患数の記録シートを開業前に用意</div>
   </div>
 
-  <div class="act">
+  <div class="arow">
     <div class="pr">🟢</div>
     <div class="wh"><span class="t">診断レターの型を1本作る（週1本・2時間）</span><span class="y">後述「書いて売る技術」。試験期間中は週1本に抑える。書く相手は宛先リストの上位から</span></div>
     <div class="done"><b>完了の定義</b>10月末までに8本。返信率を記録</div>
   </div>
 
-  <div class="act">
+  <div class="arow">
     <div class="pr">🟠</div>
     <div class="wh"><span class="t">岩手へ1回行く（避暑＋277視察＋岩銀）</span><span class="y">東京より涼しく、277の現地確認になり、銀行の確認が窓口で片づく。もみじさんとの連携の話も前に進む</span></div>
     <div class="done"><b>完了の定義</b>行った。銀行の回答を持ち帰る</div>
@@ -643,19 +749,19 @@ flowchart LR
 
   <div class="band">11月〜 ─ 営業に切り替える<span>11/4 オーロラ開業／判定日 2027/1/31</span></div>
 
-  <div class="act hot">
+  <div class="arow hot">
     <div class="pr">🔴</div>
     <div class="wh"><span class="t">新規の仕組みづくりを凍結し、可処分時間の7割を営業へ</span><span class="y">GAS・ダッシュボード・マニュアルの新規開発を止める。診断レターを週1本→<b>週2本</b>へ</span></div>
     <div class="done"><b>完了の定義</b>凍結リストを守れた週の割合が8割以上</div>
   </div>
 
-  <div class="act">
+  <div class="arow">
     <div class="pr">🟠</div>
     <div class="wh"><span class="t">オーロラで新患数・平均来院回数・CPOを毎月記録</span><span class="y">販促費を3水準で振り、収穫逓減の曲線から全体利益の山を探す</span></div>
     <div class="done"><b>完了の定義</b>1月末に3ヶ月分の3指標が揃っている</div>
   </div>
 
-  <div class="act">
+  <div class="arow">
     <div class="pr">💜</div>
     <div class="wh"><span class="t">麻梨奈さんに、判定式ごと共有する</span><span class="y">「1月末にこの数字を見て、こう決める」と先に伝えておけば、進路が変わっても不意打ちにならない</span></div>
     <div class="done"><b>完了の定義</b>616万／411万の2つの閾値を説明した</div>
@@ -689,17 +795,63 @@ flowchart LR
 </div>
 <div class="note good"><b>この3つで、これまでの成果物はほぼ全部説明できます。</b>だから新しく学ぶ必要はありません。<b>次に案件が来たとき「これはA型／B型／C型のどれか」を最初に決める</b>だけで、書く時間が半分になります。ゼロから考えているように見えて、実は毎回同じ3つを作り直していた——という状態から抜けます。</div>
 
-<h3>ステップ2 ─ 1件を「診断レター A4 2枚」に標準化する（2時間で書く）</h3>
-<p>営業のたびに提案書を作り込むのは、<b>CPOが高すぎます</b>。入口は必ずこの5ブロックに固定し、受注が見えてから作り込む。</p>
-<div class="letter">
-  <div class="lh">診断レター ─ 固定フォーマット（A4 2枚 ／ 執筆 2時間）</div>
-  <div class="lr"><div class="n">① 現状</div><div>相手の数字を3つだけ出す。<b>公開情報＋既存データ資産から作る</b>（landscanner／out_screener／レセコン相場／登記）。ここが型Aの本体で、レターの説得力の8割</div><div class="tm">40分</div></div>
-  <div class="lr"><div class="n">② 放置した3年後</div><div>数字を1つだけ。「このままだと3年で◯◯万円が失われる」。<b>恐怖ではなく算数で書く</b></div><div class="tm">15分</div></div>
-  <div class="lr"><div class="n">③ 打ち手</div><div>3つ。1つは<b>相手が自分で無料でできること</b>を必ず入れる。売り込みでないことの証明になり、返信率が上がる</div><div class="tm">30分</div></div>
-  <div class="lr"><div class="n">④ 私の担当範囲と費用</div><div>金額を必ず書く。<b>書かないと比較検討に入れない</b>。110万／件を基準に、範囲を削って価格を作る</div><div class="tm">15分</div></div>
-  <div class="lr"><div class="n">⑤ 次の1歩</div><div>「30分の面談」だけ。<b>依頼のハードルは1段しか作らない</b></div><div class="tm">10分</div></div>
+<h3>ステップ2 ─ 【訂正】診断レターの構成に、致命的な欠陥がありました</h3>
+<p class="lead"><b>山崎康司『入門 考える技術・書く技術』を読んで、前版の診断レターの欠陥が2つ分かりました。</b>①<b>読み手が目指している状況（O）から始まっていない</b> ②<b>主メッセージ（結論）が冒頭になく、③打ち手まで埋まっている</b>。この本の中核は<b>OPQ分析</b>——<b>O</b>bjective（読み手が目指す望ましい状況）→ <b>P</b>roblem（現状とのギャップ）→ <b>Q</b>uestion（読み手が自然に抱く疑問）→ <b>A</b>nswer（Qへの直接の答え＝文書の主メッセージ）。<b>主メッセージは冒頭に置き、読み手のQに直接答える</b>。</p>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>OPQ</th><th>定義</th><th>クリニック院長に書く場合の例</th></tr></thead>
+  <tbody>
+  <tr><td class="c"><b>O</b><span class="muted"><br>Objective</span></td><td>読み手が目指している<b>望ましい状況</b>。困っていなくても、目標が高ければギャップは生まれる</td><td>「分院を出して、自分が現場に入らなくても回る体制にしたい」</td></tr>
+  <tr><td class="c"><b>P</b><span class="muted"><br>Problem</span></td><td>現状とOの<b>ギャップ</b>。<b>あくまで読み手にとっての問題</b>で、書き手の問題意識ではない</td><td>「いまの1院は院長依存で、月商の7割が院長の診療から出ている」</td></tr>
+  <tr><td class="c"><b>Q</b><span class="muted"><br>Question</span></td><td>Pに直面した読み手が<b>自然に抱く疑問</b>。書き手の疑問を押しつけない</td><td>「院長依存を外して分院を出すには、何から手をつければよいか？」</td></tr>
+  <tr class="hi"><td class="c"><b>A</b><span class="muted"><br>Answer</span></td><td><b>Qへの直接の答え。そのまま文書の主メッセージになり、冒頭に置く</b></td><td>「院長依存を外すには、初診の問診と再診の予約導線を先に標準化すべきです」</td></tr>
+  </tbody>
+</table>
 </div>
-<div class="note"><b>①に既存のデータ資産を流用するのが、この設計の核です。</b>landscanner・out_screener・ec_product_ranking・レセコン画面・登記情報——<b>菊池さんはすでに「相手の数字を作れる道具」を持っています</b>。ゼロから調べる人にとって①は8時間かかりますが、菊池さんは40分でできる。<b>ここが、他の誰にも真似できない参入障壁です</b>。</div>
+<div class="note stop"><b>ここで本が突きつける、いちばん痛い指摘。</b>「AがQに直接答えていない場合、Aがおかしいか、Qがおかしいか、あるいはその両方」。<br>例：Q「売上を増大させるにはどうすればよいか？」に対し、A「売上低迷の最大の原因は◯◯である」は<b>答えていません</b>（原因を訊かれていない）。正解は「売上を増大させるためには◯◯すべきである」。<b>提案が刺さらないときの原因は、たいてい文章力ではなくここです</b>。</div>
+<div class="note warn"><b>そして本が言う、いちばん実務的な一文。</b>「<b>ライティングはパソコンに向かうはるか前の段階で始まっている</b>」——読み手のOPQが分からなければ、説得力のある文書は書けない。分からないときは<b>直接聞くか、第三者を通して探る</b>。<br>つまり<b>「書く営業」の8割は、書く前の相手理解です</b>。だから平日昼間に院長に会う、地主に会う、という行動が、そのまま文章の質になります。</div>
+
+<h3>診断レター v2 ─ 固定フォーマット（A4 2枚 ／ 執筆 2時間）</h3>
+<div class="letter">
+  <div class="lh">OPQ分析＋ピラミッド構造で組み直した版</div>
+  <div class="lr"><div class="n">件名</div><div>Qに答える形で書く。<b>体言止め・名詞表現は禁止</b>（鉄則①）。「診療体制のご提案」ではなく<b>「初診の問診を標準化すれば、院長依存を外して分院を出せます」</b></div><div class="tm">5分</div></div>
+  <div class="lr"><div class="n">感謝の言葉</div><div>1〜2行。<b>自分勝手なライティングへのブレーキになる</b>（本の指摘）。主メッセージが相手に不都合な内容のとき、出合い頭の衝突を避けられる</div><div class="tm">5分</div></div>
+  <div class="lr"><div class="n">① 主メッセージ<span class="muted"><br>＝A</span></div><div><b>Qへの直接の答えを、1つの文章で。</b>「しりてが」接続詞なし（鉄則④）。あいまい言葉なし（鉄則②）。<b>結論を先に述べる</b></div><div class="tm">15分</div></div>
+  <div class="lr"><div class="n">② O ─ 目指す状況</div><div><b>相手の言葉で書く。</b>ここを外すと以降が全部ずれる。事前の面談・電話で拾った表現をそのまま使う</div><div class="tm">10分</div></div>
+  <div class="lr"><div class="n">③ P ─ ギャップ</div><div>数字3つ。<b>既存のデータ資産から作る</b>（landscanner／out_screener／レセコン相場／登記）。ここがレターの説得力の8割</div><div class="tm">40分</div></div>
+  <div class="lr"><div class="n">④ D ─ 根拠</div><div><b>3グループに要約する。</b>根拠を10個並べない——人が一度に処理できる考えは<b>5つが限界</b>（マジックナンバー7±2の下限）。帰納法で組み、各グループに要約メッセージをつける</div><div class="tm">30分</div></div>
+  <div class="lr"><div class="n">⑤ 打ち手と費用</div><div>3つ。1つは<b>相手が自分で無料でできること</b>を必ず入れる。金額を必ず書く（書かないと比較検討に入れない）</div><div class="tm">15分</div></div>
+  <div class="lr"><div class="n">⑥ F ─ 結び</div><div>本の定型をそのまま使う——<b>「本ご提案にご同意いただけるようでしたら、早急に◯◯に取りかかります」</b>。締切を押しつけず、暗に決断を促す</div><div class="tm">10分</div></div>
+</div>
+
+<h3>4つの鉄則 ─ 書く前に、自分の文章をここで殺す</h3>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>鉄則</th><th>禁止するもの</th><th>悪い例 → 修正例</th></tr></thead>
+  <tbody>
+  <tr><td class="c"><b>①</b></td><td><b>名詞表現・体言止め</b></td><td class="lose">東南アジア市場の推移 <span class="win">→ 東南アジア主要国の市場は、過去5年、年率20%近くの拡大を見せている</span></td></tr>
+  <tr><td class="c"><b>②</b></td><td><b>あいまい言葉</b><span class="muted"><br>見直し／再構築／問題／適切な</span></td><td class="lose">営業組織の見直しを提案する <span class="win">→ 東京・大阪など大都市圏の営業人員を増大させる</span></td></tr>
+  <tr><td class="c"><b>③</b></td><td><b>2文になっているメッセージ</b></td><td>文章が2つあるなら、それは<b>まだ要約されていない／絞り切れていない</b></td></tr>
+  <tr><td class="c"><b>④</b></td><td><b>「しりてが」接続詞</b><span class="muted"><br>〜し、〜であり、〜して、〜だが</span></td><td>論理関係をごまかす最大の原因。使うなら<b>ロジカル接続詞</b>（にもかかわらず／ことにより／ために）に置き換える</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note good"><b>この4つは、菊池さんの既存の成果物にそのまま当てられます。</b>スライドの見出しは体言止めが多いはずで（「オペモデルの全体像」など）、それは本の言う「中身のないメッセージ」。<b>「◯◯すれば△△になる」の形に直すだけで、同じ資料の説得力が変わります</b>。<br>そして<b>あいまい言葉は「考えるプロセス」で禁止、最終文書で意図的に使うのはOK</b>——これは本が明示している重要な区別です。政治的配慮で「撤退を視野に入れた見直し」と書くのは構わないが、<b>自分の頭の中では「撤退すべきだ」まで詰めておく</b>。</div>
+<div class="note"><b>詰め方の道具が「So What?」です。</b>本の例：「A事業は多くの<b>問題</b>を抱えている」→ So What? →「A事業の<b>見直し</b>が必要だ」→ So What? →<b>「A事業から撤退すべきだ」</b>。あいまい言葉が消えるまで繰り返す。<br>菊池さんの場合、これを<b>自分の事業判断にも使えます</b>——「オーロラは立ち上げ期だ」→ So What? →「新患23人/月に届いていない」→ So What? →「販促費の水準を3ヶ月で3回振って山を探す」。<b>判定式そのものが、So What? を3回回した結果です</b>。</div>
+
+<h3>錬成の方法 ─ 「1日1回ピラミッド」×4ヶ月</h3>
+<p class="lead"><b>この本が示す訓練法が、菊池さんの状況に完璧に合っています。</b>毎日書くメールを練習台にする「<b>感謝の言葉にPDF</b>」——<b>感謝の言葉</b>（1〜2行）→ <b>P</b>urpose（主メッセージ・冒頭に1文）→ <b>D</b>etail（根拠・箇条書き）→ <b>F</b>ollow-Through（今後のアクション）。これを<b>1日1通だけ、意識して書く</b>。それを4ヶ月続ける。</p>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>時期</th><th>訓練</th><th>1日の所要</th><th>なぜこの順序か</th></tr></thead>
+  <tbody>
+  <tr class="hi"><td><b>8〜10月</b><span class="muted"><br>試験期間</span></td><td><b>「1日1回ピラミッド」だけ。</b>毎日1通のメールを PDF 構成で書く。診断レターは週1本に抑える</td><td class="c win">5分</td><td><b>試験勉強を1分も削らずに錬成できる。</b>これがこの本を採用する最大の理由</td></tr>
+  <tr><td><b>11月〜1月</b></td><td>診断レターを<b>週2本</b>。書く前に必ずOPQを紙に書く。書いた後に4鉄則でチェック</td><td class="c">2時間×2/週</td><td>営業特化期。試験が終わって時間が戻る</td></tr>
+  <tr><td><b>2027年2月〜</b><span class="muted"><br>4ヶ月が経過</span></td><td>既存の成果物（スライド・提案書・talkscript）を<b>4鉄則で全部書き直す</b></td><td class="c">—</td><td>型が身についてから資産を磨く。<b>逆にすると時間の無駄</b></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note good"><b>「1日5分で、試験勉強を削らずに営業能力が積み上がる」——これが今回いちばん実用的な発見です。</b>菊池さんは毎日メールを書きます。その1通を意識的に書くだけでいい。<b>10月18日までの75日で75回、4ヶ月で約120回</b>。本の言う「×4ヶ月」をちょうど満たします。<br>そして<b>チェックは3つだけ</b>——①主メッセージは冒頭にあるか ②「しりてが」を使っていないか ③あいまい言葉を使っていないか。<b>送信前に読み返すのを日課にする</b>。本が言うとおり、自分勝手なメールのほとんどは書いた後に見直されていません。</div>
 
 <h3>ステップ3 ─ CPOで測る。「10本書いて1件」でも十分に成立する</h3>
 <p>本の上限CPOの考え方を、自分の営業に当てます。<b>1本＝2時間</b>を投下コストとして、受注率別に時間単価を出しました。</p>
@@ -779,6 +931,7 @@ flowchart LR
 <table>
   <thead><tr><th>日付</th><th>変化</th></tr></thead>
   <tbody>
+  <tr><td>2026-08-04<br><b>追補5</b></td><td><b>①2冊目を特定・実読＝山崎康司『入門 考える技術・書く技術』</b>（Drive 30枚→32枚を読了）。<b>【訂正】前版の診断レターに欠陥2つ</b>＝O（読み手が目指す状況）から始まっていない／主メッセージが冒頭になく③打ち手まで埋まっていた。<b>OPQ分析＋ピラミッド構造で v2 に差し替え</b>、<b>4つの鉄則</b>（名詞表現・あいまい言葉・2文・「しりてが」接続詞の禁止）、<b>So What?</b>、<b>結びの定型文</b>、訓練法<b>「1日1回ピラミッド／感謝の言葉にPDF」×4ヶ月</b>を追加＝<b>1日5分で試験勉強を削らずに錬成できる</b>ことを特定 ②<b>個人投資1,500万の方針を新章として追加</b>＝「現金で置くよりいい」は正しいが<b>いま動かせるのは約200万</b>。<b>現金の下限851万</b>を積み上げ、<b>無収入寿命を2本立てに訂正</b>（株込み19.2ヶ月／現金のみ÷止められない固定費で26.2ヶ月＝本当の生存力）。前倒しの価値は7%想定で20年後+546万。<b>イデコは2026年は節税ゼロで手数料負け</b>→2027年4月以降。<b>切り崩しリスクは18年後の教育費ではなく、これから24ヶ月</b>と特定 ③<b>表示バグ修正</b>＝新設した .act クラスが判定ゲートの .act と衝突し、テキストが縦1文字ずつに折れていたため .arow に改名</td></tr>
   <tr><td>2026-08-04<br><b>追補4</b></td><td><b>①「この90日でやること」を表示から作り直し</b>＝箇条書き7項目を、月ごとの帯＋優先マーク（🔴🟠🟢💜）＋<b>「完了の定義」列</b>を持つアクション表に変更。冒頭に「今週やる、たった1つ」（銀行への連帯保証の確認）を独立表示。🔴を4つに絞った ②<b>「考えて書く＝営業する」技術の錬成設計</b>を新章として追加＝既存成果物から<b>型を3つ（診断型／設計型／台本型）に抽出</b>、<b>診断レター A4 2枚・2時間</b>の固定フォーマット化、<b>CPOで測ると受注率3%でも時間単価16,700円で成立</b>することを算出、<b>演歌の戦略で宛先を100件に絞る</b>（特に相続地主×調査士の独占業務の組み合わせ）、測る指標を3つに限定。<b>週2本×受注率3%＝年330万で、唯一の数字428万の8割が埋まる</b>＝オーロラ以外の保険ルートを設計。<span class="muted">※新しいアルバムは403＋Drive未着のため、本章は既存資産と1冊目の枠組みのみで構成。</span></td></tr>
   <tr><td>2026-08-04<br><b>追補3</b></td><td><b>「もう資産は減らないのでは」という問いを検算し、正しいと確認。</b>①<b>「資産が減らないライン」＝役員報酬 月32万</b>を特定（NISA月10万は資産形成なので、生活費30.1万＝年361万だけをカバーすればよい）。手取り305万＋物販67万＝372万で年361万を上回る ②<b>277とコンサルだけで足りる</b>＝オーロラ抜きの法人現金創出力は年463万、月32万の法人コスト438万に対し25万の余裕。<b>構造は2026/8/14の277決済で完成する</b> ③<b>ただし463万のうち260万は福井さん経由のコンサル</b>。止まれば原資は277単独の203万に落ち、役員報酬は月14.8万しか出せず生活費に月▲11.8万。<b>「解放」の土台の半分以上が他人の上に乗っていることを明記</b> ④導管が開くのは2027年4月（定期同額の窓）、11/4のオーロラ開業で原資463万は消える＝<b>自由を自分の意志で手放して別の挑戦を買っている構図</b>と整理</td></tr>
   <tr><td>2026-08-04<br><b>追補2</b></td><td><b>書籍のページ30枚（Drive）を実読し、道具立てを正しい形に入れ替え。</b>①<b>【訂正】前版の「限界CPO＝純粗利の半分」は本の方法ではなかった。</b>本（図表30）は上限ではなく<b>最適点</b>を示す——全体利益＝新規獲得件数×（LTV−CPO）で、CPOを上げると件数は増えるが一人あたり利益は減る（収穫逓減）。書籍例では売上最大化のCPO9,000円で利益は最適点の6割減 ②<b>時系列LTV</b>をオーロラに適用＝CPO4,350円は<b>初回来院で回収</b>、CPO2万円でも4回目で回収。<b>制約は「お金」ではなく「新患23人/月」</b>と特定 ③目標を「1日6人」から<b>「新患23人/月・平均来院5回・CPO4,350円」</b>に翻訳し、合格ラインの月商を75万→<b>69万</b>に精緻化 ④<b>演歌の戦略</b>＝クリニックは商圏が物理的に決まるため、認知を絞る戦略が構造的に最適と結論 ⑤<b>コンサルにクライアント別5段階利益管理</b>（図表23）を適用すべきと指摘＝紹介料・投下時間・交通費を引いた案件ごと営業利益が未分解 ⑥<b>図表6でKHDのA社／B社判定</b>＝売上10%ダウンでも利益率32%を維持する<b>B社型</b>と確認 ⑦月次の管理指標を3行→4行に組み替え</td></tr>

@@ -1,0 +1,382 @@
+<title>点が線になる法則｜量産できるコンテンツと、社会資本の複利</title>
+<style>
+  :root{
+    --bg:#efece6; --paper:#fdfbf7; --ink:#17161a; --sub:#6a6670; --line:#dcd7ce;
+    --dot:#8d9aa8; --dot-soft:#e8ebee;
+    --line-c:#c1362f; --line-soft:#f9e6e3; --line-l:#e0a49e; --on-line:#fdfbf7;
+    --gold:#8a6a1c; --gold-soft:#f5eddb;
+    --grow:#256b52; --grow-soft:#e2f0ea;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{--bg:#100f12; --paper:#191820; --ink:#eceaf0; --sub:#9b96a4; --line:#2f2d38;
+      --dot:#6d7885; --dot-soft:#1e222a;
+      --line-c:#e8756a; --line-soft:#341c1a; --line-l:#6d332e; --on-line:#131117;
+      --gold:#d5ab55; --gold-soft:#302713; --grow:#63c39c; --grow-soft:#14322a;}
+  }
+  :root[data-theme="dark"]{--bg:#100f12; --paper:#191820; --ink:#eceaf0; --sub:#9b96a4; --line:#2f2d38;
+      --dot:#6d7885; --dot-soft:#1e222a;
+      --line-c:#e8756a; --line-soft:#341c1a; --line-l:#6d332e; --on-line:#131117;
+      --gold:#d5ab55; --gold-soft:#302713; --grow:#63c39c; --grow-soft:#14322a;}
+  :root[data-theme="light"]{--bg:#efece6; --paper:#fdfbf7; --ink:#17161a; --sub:#6a6670; --line:#dcd7ce;
+      --dot:#8d9aa8; --dot-soft:#e8ebee;
+      --line-c:#c1362f; --line-soft:#f9e6e3; --line-l:#e0a49e; --on-line:#fdfbf7;
+      --gold:#8a6a1c; --gold-soft:#f5eddb; --grow:#256b52; --grow-soft:#e2f0ea;}
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
+    font-size:13.5px;line-height:1.82;padding:26px 14px 64px;font-variant-numeric:tabular-nums}
+  .mi{font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif}
+  .sheet{max-width:1000px;margin:0 auto;background:var(--paper);border:1px solid var(--line);padding:0 0 40px}
+  .pad{padding:0 40px}
+  @media (max-width:620px){.pad{padding:0 18px}}
+
+  .hero{padding:44px 40px 34px;border-bottom:1px solid var(--line)}
+  @media (max-width:620px){.hero{padding:30px 18px 26px}}
+  .eyebrow{font-size:10.5px;letter-spacing:.24em;color:var(--line-c);font-weight:700}
+  h1{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:40px;font-weight:600;
+    margin:16px 0 0;line-height:1.34;letter-spacing:.01em;text-wrap:balance}
+  @media (max-width:620px){h1{font-size:25px}}
+  h1 em{font-style:normal;color:var(--line-c)}
+  .sub1{font-size:14px;color:var(--sub);margin-top:16px;line-height:1.85;max-width:62ch}
+  .sub1 b{color:var(--ink)}
+  .asof{font-size:11px;color:var(--sub);margin-top:18px;padding-top:14px;border-top:1px dashed var(--line)}
+
+  h2{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:22px;font-weight:600;
+    margin:52px 0 14px;line-height:1.45;display:flex;gap:13px;align-items:baseline;flex-wrap:wrap}
+  h2 .k{font-family:"Hiragino Sans",sans-serif;font-size:9.5px;letter-spacing:.2em;color:var(--line-c);
+    font-weight:700;border:1px solid var(--line-l);padding:3px 9px;white-space:nowrap}
+  h3{font-size:15px;margin:32px 0 10px;font-weight:700}
+  p{margin:0 0 12px}
+
+  .law{border-top:3px solid var(--line-c);border-bottom:1px solid var(--line);
+    padding:24px 0 22px;margin-top:16px}
+  .law .lb{font-size:10.5px;letter-spacing:.2em;color:var(--line-c);font-weight:700;margin-bottom:10px}
+  .law .lt{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:27px;
+    font-weight:600;line-height:1.5;text-wrap:balance}
+  @media (max-width:620px){.law .lt{font-size:19px}}
+  .law .ls{font-size:13px;color:var(--sub);margin-top:12px;line-height:1.85}
+  .law .ls b{color:var(--ink)}
+
+  .tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:12px}
+  table{border-collapse:collapse;width:100%;font-size:12.5px;min-width:580px}
+  th,td{border-bottom:1px solid var(--line);padding:10px 11px;text-align:left;vertical-align:top}
+  thead th{border-bottom:1.5px solid var(--line-c);color:var(--line-c);font-size:10.5px;
+    letter-spacing:.12em;white-space:nowrap}
+  td.c{text-align:center;white-space:nowrap}
+  tr.sum td{border-top:1.5px solid var(--line-c);border-bottom:none;background:var(--line-soft);font-weight:700}
+  tr.hi td{background:var(--gold-soft)}
+  .note{border-left:3px solid var(--line-c);background:var(--line-soft);padding:13px 16px;
+    font-size:12.5px;margin-top:14px}
+  .note b{color:var(--line-c)}
+  .note.g{border-left-color:var(--grow);background:var(--grow-soft)} .note.g b{color:var(--grow)}
+  .note.k{border-left-color:var(--gold);background:var(--gold-soft)} .note.k b{color:var(--gold)}
+  .muted{color:var(--sub);font-size:11.5px}
+
+  figure{margin:18px 0 0;padding:0}
+  figure svg{display:block;width:100%;max-width:100%;height:auto;color:var(--ink)}
+  figcaption{font-size:11.5px;color:var(--sub);margin-top:10px;line-height:1.75}
+  figcaption b{color:var(--ink)}
+  .figwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);
+    padding:20px 18px;background:var(--paper)}
+  .figwrap svg{min-width:700px}
+
+  .rec{border:1px solid var(--line);margin-top:11px;display:grid;
+    grid-template-columns:150px 1fr;gap:0}
+  @media (max-width:640px){.rec{grid-template-columns:1fr}}
+  .rec .rl{background:var(--dot-soft);padding:13px 15px;font-size:11.5px;font-weight:700;color:var(--sub)}
+  .rec .rr{padding:13px 16px;font-size:12.5px}
+  .rec .rr b{color:var(--line-c)}
+
+  ol.n{counter-reset:z;list-style:none;padding:0;margin:14px 0 0;display:flex;flex-direction:column;gap:12px}
+  ol.n li{counter-increment:z;position:relative;padding-left:40px;font-size:13px;line-height:1.85}
+  ol.n li::before{content:counter(z);position:absolute;left:0;top:3px;width:26px;height:26px;
+    border-radius:50%;background:var(--line-c);color:var(--on-line);display:flex;
+    align-items:center;justify-content:center;font-size:12px;font-weight:700}
+
+  footer{margin-top:48px;padding:16px 40px 0;border-top:1px solid var(--line);font-size:11px;
+    color:var(--sub);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+  @media (max-width:620px){footer{padding:16px 18px 0}}
+  a{color:var(--line-c)}
+  a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="sheet">
+<div class="hero">
+  <div class="eyebrow">構造設計の集大成 ／ 1992-2046</div>
+  <h1>散らばった点は、<em>同じ動作</em>が通っていれば、<br>あとから線になる。</h1>
+  <div class="sub1">研究職を辞めて、鉱山町から商社へ、商社から不動産へ、そして4つの事業と2つの資格へ。<b>普通なら「一貫性がない」と言われる並びです</b>。<br>それが線になったのは、志が一本だったからではありません。<b>全部に同じ動作が入っていたから</b>です——<b>決める前に、数字を出す</b>。<br>この法則は一般化できます。そして<b>菊池さんには、それを証明する1,046行の一次資料がある</b>——ここが、他の誰にも真似できない場所です。</div>
+  <div class="asof">2026-08-04 ／ 前提＝<a href="https://claude.ai/code/artifact/6e52460f-75f4-4f12-81b6-c69efc11a4af">原動力の棚卸し</a>（年表1,046行）・<a href="https://claude.ai/code/artifact/2bdb3462-780f-42bc-b548-8c7b6d3956b8">発信＆ターゲット設計</a>（8つの式）・<a href="https://claude.ai/code/artifact/b7eb8185-3f41-45b4-b508-578fe1312703">セミナー資料の改訂案</a>・<a href="https://claude.ai/code/artifact/45acd817-8204-469a-ba23-6c20e4d5a1f5">法人の利益最大化</a>・<a href="https://claude.ai/code/artifact/2ace2928-f816-480d-b436-abecd354d3bf">KPI自動検出</a></div>
+</div>
+
+<div class="pad">
+
+<h2><span class="k">法則</span>なぜ、散らばった経歴が線になったのか</h2>
+<div class="figwrap">
+<figure>
+<svg viewBox="0 0 1000 470" role="img" aria-label="研究開発・技術営業・商社営業・不動産・EC・調査士受験・1歳の父という7つの散らばった点が、それぞれ「決める前に数字を出す」という同じ動作を含んでいたため、あとから1本の線として繋がったことを示す図。一般には一貫したキャリアが線になると思われているが、実際は動作の一貫性が線を作ることを対比している" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="tl" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="10" markerHeight="8" orient="auto">
+      <polygon points="0,0 10,4 0,8" style="fill:var(--line-c)"/>
+    </marker>
+  </defs>
+
+  <text x="14" y="20" font-size="11" letter-spacing="2" style="fill:var(--dot)">① 外から見える点 ─ 一貫性がないと言われる並び</text>
+
+  <!-- 散らばった点（灰） -->
+  <circle cx="80" cy="66" r="26" fill="none" style="stroke:var(--dot)" stroke-width="1.4"/>
+  <text x="80" y="63" font-size="10" text-anchor="middle" style="fill:var(--dot)">研究</text>
+  <text x="80" y="76" font-size="10" text-anchor="middle" style="fill:var(--dot)">開発</text>
+  <text x="80" y="112" font-size="9.5" text-anchor="middle" style="fill:var(--dot)">2017</text>
+
+  <circle cx="215" cy="66" r="26" fill="none" style="stroke:var(--dot)" stroke-width="1.4"/>
+  <text x="215" y="63" font-size="10" text-anchor="middle" style="fill:var(--dot)">技術</text>
+  <text x="215" y="76" font-size="10" text-anchor="middle" style="fill:var(--dot)">営業</text>
+  <text x="215" y="112" font-size="9.5" text-anchor="middle" style="fill:var(--dot)">2019</text>
+
+  <circle cx="350" cy="66" r="26" fill="none" style="stroke:var(--dot)" stroke-width="1.4"/>
+  <text x="350" y="63" font-size="10" text-anchor="middle" style="fill:var(--dot)">商社</text>
+  <text x="350" y="76" font-size="10" text-anchor="middle" style="fill:var(--dot)">営業</text>
+  <text x="350" y="112" font-size="9.5" text-anchor="middle" style="fill:var(--dot)">2020</text>
+
+  <circle cx="485" cy="66" r="26" fill="none" style="stroke:var(--dot)" stroke-width="1.4"/>
+  <text x="485" y="70" font-size="10" text-anchor="middle" style="fill:var(--dot)">不動産</text>
+  <text x="485" y="112" font-size="9.5" text-anchor="middle" style="fill:var(--dot)">2021</text>
+
+  <circle cx="620" cy="66" r="26" fill="none" style="stroke:var(--dot)" stroke-width="1.4"/>
+  <text x="620" y="70" font-size="10" text-anchor="middle" style="fill:var(--dot)">EC</text>
+  <text x="620" y="112" font-size="9.5" text-anchor="middle" style="fill:var(--dot)">2020</text>
+
+  <circle cx="755" cy="66" r="26" fill="none" style="stroke:var(--dot)" stroke-width="1.4"/>
+  <text x="755" y="63" font-size="10" text-anchor="middle" style="fill:var(--dot)">調査士</text>
+  <text x="755" y="76" font-size="10" text-anchor="middle" style="fill:var(--dot)">受験</text>
+  <text x="755" y="112" font-size="9.5" text-anchor="middle" style="fill:var(--dot)">2026</text>
+
+  <circle cx="890" cy="66" r="26" fill="none" style="stroke:var(--dot)" stroke-width="1.4"/>
+  <text x="890" y="63" font-size="10" text-anchor="middle" style="fill:var(--dot)">1歳の</text>
+  <text x="890" y="76" font-size="10" text-anchor="middle" style="fill:var(--dot)">父</text>
+  <text x="890" y="112" font-size="9.5" text-anchor="middle" style="fill:var(--dot)">2025</text>
+
+  <!-- 各点の中に入っていた同じ動作 -->
+  <text x="14" y="152" font-size="11" letter-spacing="2" style="fill:var(--line-c)">② どの点にも、同じ動作が入っていた</text>
+
+  <line x1="80" y1="164" x2="80" y2="196" style="stroke:var(--line-c)" stroke-width="1" opacity=".5"/>
+  <text x="80" y="212" font-size="9.5" text-anchor="middle" fill="currentColor" opacity=".85">特許で数値化</text>
+  <line x1="215" y1="164" x2="215" y2="196" style="stroke:var(--line-c)" stroke-width="1" opacity=".5"/>
+  <text x="215" y="212" font-size="9.5" text-anchor="middle" fill="currentColor" opacity=".85">売上3倍の根拠</text>
+  <line x1="350" y1="164" x2="350" y2="196" style="stroke:var(--line-c)" stroke-width="1" opacity=".5"/>
+  <text x="350" y="212" font-size="9.5" text-anchor="middle" fill="currentColor" opacity=".85">診療圏の式</text>
+  <line x1="485" y1="164" x2="485" y2="196" style="stroke:var(--line-c)" stroke-width="1" opacity=".5"/>
+  <text x="485" y="212" font-size="9.5" text-anchor="middle" fill="currentColor" opacity=".85">土地値90.5%</text>
+  <line x1="620" y1="164" x2="620" y2="196" style="stroke:var(--line-c)" stroke-width="1" opacity=".5"/>
+  <text x="620" y="212" font-size="9.5" text-anchor="middle" fill="currentColor" opacity=".85">上限CPO</text>
+  <line x1="755" y1="164" x2="755" y2="196" style="stroke:var(--line-c)" stroke-width="1" opacity=".5"/>
+  <text x="755" y="212" font-size="9.5" text-anchor="middle" fill="currentColor" opacity=".85">境界を測る</text>
+  <line x1="890" y1="164" x2="890" y2="196" style="stroke:var(--line-c)" stroke-width="1" opacity=".5"/>
+  <text x="890" y="212" font-size="9.5" text-anchor="middle" fill="currentColor" opacity=".85">無収入寿命26ヶ月</text>
+
+  <!-- 線 -->
+  <path d="M54 250 L 946 250" fill="none" style="stroke:var(--line-c)" stroke-width="3" marker-end="url(#tl)"/>
+  <circle cx="80" cy="250" r="6" style="fill:var(--line-c)"/><circle cx="215" cy="250" r="6" style="fill:var(--line-c)"/>
+  <circle cx="350" cy="250" r="6" style="fill:var(--line-c)"/><circle cx="485" cy="250" r="6" style="fill:var(--line-c)"/>
+  <circle cx="620" cy="250" r="6" style="fill:var(--line-c)"/><circle cx="755" cy="250" r="6" style="fill:var(--line-c)"/>
+  <circle cx="890" cy="250" r="6" style="fill:var(--line-c)"/>
+  <text x="500" y="284" font-size="15" font-weight="700" text-anchor="middle" style="fill:var(--line-c)">決める前に、数字を出す</text>
+  <text x="500" y="304" font-size="11.5" text-anchor="middle" fill="currentColor" opacity=".8">15歳の通帳から続いている、ただ1つの動作</text>
+
+  <!-- 対比 -->
+  <text x="14" y="346" font-size="11" letter-spacing="2" fill="currentColor" opacity=".6">③ ここが、多くの人が誤解している場所</text>
+
+  <rect x="14" y="358" width="478" height="94" fill="none" style="stroke:var(--dot)" stroke-width="1.4"/>
+  <text x="34" y="384" font-size="12.5" font-weight="700" style="fill:var(--dot)">思われていること</text>
+  <text x="34" y="408" font-size="12" fill="currentColor" opacity=".85">一貫したキャリアを歩んだ人が、線になる。</text>
+  <text x="34" y="430" font-size="12" fill="currentColor" opacity=".85">だから転職や業種替えは、線を切ってしまう。</text>
+
+  <rect x="508" y="358" width="478" height="94" fill="none" style="stroke:var(--line-c)" stroke-width="2.5"/>
+  <text x="528" y="384" font-size="12.5" font-weight="700" style="fill:var(--line-c)">実際に起きていたこと</text>
+  <text x="528" y="408" font-size="12" fill="currentColor" opacity=".9">一貫性は<tspan font-weight="700">キャリアではなく、動作に宿る</tspan>。</text>
+  <text x="528" y="430" font-size="12" fill="currentColor" opacity=".9">だから業種が変わっても、線は切れない。</text>
+</svg>
+<figcaption><b>点を打っている時点では、線は見えません。</b>2017年に鉱山町で特許を書いていたとき、それが2026年の診療圏調査や土地値の計算に繋がるとは分かりませんでした。<b>繋がったのは、どの点でも同じ動作をしていたからです</b>。<br><b>そしてこれが「人生はわからないから面白い」の正体でもあります</b>——先が読めないのに繋がるのは、<b>読めない未来に対して同じ動作で応え続けていた</b>から。偶然ではなく、構造です。</figcaption>
+</figure>
+</div>
+
+<div class="law">
+  <div class="lb">伝える法則 ─ これが1本目のコンテンツ</div>
+  <div class="lt mi">一貫性は、キャリアにではなく<br>「動作」に宿る。</div>
+  <div class="ls">だから<b>経歴がバラバラでも構いません</b>。転職3回でも、業種4つでも、資格が2種類でも。<b>問いは「何をしてきたか」ではなく「どの場面でも同じことをしていたか」</b>です。<br>——そして<b>これは多くの人が抱えている悩みへの答え</b>になります。「自分の経歴には一貫性がない」と思っている人が、日本には何百万人もいます。</div>
+</div>
+
+<h2><span class="k">独自性</span>なぜ、これが菊池さんにしか書けないのか</h2>
+<p>「点が線になる」はスティーブ・ジョブズが有名にした話で、<b>言葉自体は珍しくありません</b>。ではなぜ菊池さんが書く意味があるのか——理由は1つだけです。</p>
+<div class="tblwrap">
+<table>
+  <thead><tr><th></th><th>ふつうの語り手</th><th>菊池さんの場合</th></tr></thead>
+  <tbody>
+  <tr><td><b>根拠</b></td><td>記憶と回想（あとから意味づけたもの）</td><td class="c"><b>一次資料1,046行</b><span class="muted"><br>手書きノート・mixi・Evernote・Notion・カレンダー</span></td></tr>
+  <tr class="hi"><td><b>いつ書いたか</b></td><td>成功した後に振り返って書いた</td><td class="c"><b>その時に書いていた</b><span class="muted"><br>20歳「信頼関係の取れた教師に」／23歳「与えて役に立った瞬間を」／28歳「話し相手がほしい」</span></td></tr>
+  <tr><td><b>検証可能性</b></td><td>本人しか知らない</td><td class="c"><b>日付つきで出せる</b></td></tr>
+  <tr class="sum"><td>差</td><td colspan="2"><b>ジョブズは語りましたが、菊池さんは物証を出せます。</b>「あとから意味づけた話」と「その時の文字が残っている話」は、読者にとって別物です</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note k"><b>これが「俺にしかできない形」の中身です。</b>——<b>15歳から記録していたこと自体が、コンテンツの原資になっている</b>。<br>2013年のストレングスファインダーで<b>「収集心」</b>が5資質に入り、3回の受検で一貫していました。<b>集める癖が、いま初めて商品になります</b>。真似しようとすれば15年かかるので、これは構造的に代替不可能です。</div>
+
+<h2><span class="k">量産</span>コンテンツの製造ライン ─ 1本30分、ネタは1,046通り</h2>
+<p class="lead" style="background:var(--gold-soft);padding:14px 17px;border-left:4px solid var(--gold);font-size:13px"><b>「量産」を根性でやると必ず止まります。だから工程にします。</b>菊池さんの場合、原料は年表1,046行、加工は「式を当てる」、味付けは「反直感に言い換える」——<b>3工程で1本が30分で出ます</b>。そして<b>原料が1,046行あるので、ネタ切れが構造的に起きません</b>。</p>
+<div class="rec">
+  <div class="rl">原料<br><span class="muted">STEP 1</span></div>
+  <div class="rr"><b>年表から、1点だけ取る。</b>日付と、その時に書いた文字。<b>解釈はまだ入れません</b>。<br><span class="muted">例：2011年（19歳）mixi ── 日記0件・つぶやき0件。写真4枚とコミュ参加リストだけ。</span></div>
+</div>
+<div class="rec">
+  <div class="rl">加工<br><span class="muted">STEP 2</span></div>
+  <div class="rr"><b>式か数字を1つ当てる。</b>読者が持ち帰って使えるもの。<b>これが「保存される理由」になります</b>。<br><span class="muted">例：発信を「目標」にすると4年動かず（2022年の目標→未着手）、「診断レターの副産物」にすると追加コスト30分になる。</span></div>
+</div>
+<div class="rec">
+  <div class="rl">味付け<br><span class="muted">STEP 3</span></div>
+  <div class="rr"><b>反直感の1行に言い換える。</b>これが「シェアされる理由」です。<b>正しいけど意外、を狙います</b>。<br><span class="muted">例：<b>「発信が苦手な人は、発信を目標にしてはいけない」</b></span></div>
+</div>
+<div class="rec">
+  <div class="rl">出荷<br><span class="muted">STEP 4</span></div>
+  <div class="rr"><b>OPQ順に並べて、note 1本。</b>O（読者が目指す状況）→ P（現状のギャップ）→ 主メッセージ → 根拠3つ → 次の1歩。<b>体言止め・しりてが・あいまい言葉は使わない</b>。<br><span class="muted">所要30分。<a href="https://claude.ai/code/artifact/2ace2928-f816-480d-b436-abecd354d3bf">/pyramidスキル</a>で骨組みは自動、主メッセージの1文だけ自分で書く。</span></div>
+</div>
+
+<h3>この工程で出せる10本（すでに素材が揃っているもの）</h3>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>#</th><th>反直感の1行（タイトル）</th><th>原料</th><th>持ち帰れる式・数字</th></tr></thead>
+  <tbody>
+  <tr class="hi"><td class="c">1</td><td><b>一貫性は、キャリアにではなく「動作」に宿る</b></td><td>年表1,046行</td><td>7つの点に共通する1動作</td></tr>
+  <tr class="hi"><td class="c">2</td><td><b>家計が赤字に見えるのは、積立を支出に混ぜているから</b></td><td>2026年の家計</td><td>月▲14.4万 → <b>月+1.2万</b></td></tr>
+  <tr class="hi"><td class="c">3</td><td><b>売上ゼロで何ヶ月生きられるかは、割り算1回で出る</b></td><td>自分の実額</td><td>現金÷止められない固定費＝<b>26ヶ月</b></td></tr>
+  <tr><td class="c">4</td><td><b>広告を増やすと、利益ラインは遠のく</b></td><td>オーロラの設計</td><td>販促費0/5/10/15万 → 必要月商58/64/69/75万</td></tr>
+  <tr><td class="c">5</td><td><b>売上を最大化した瞬間に、利益は6割落ちる</b></td><td>書籍の図表30＋自分の試算</td><td>CPO 6,000円で利益80万／9,000円で30万</td></tr>
+  <tr><td class="c">6</td><td><b>開業して勝てるかは、着工前に割り算で出る</b></td><td>セミナー資料</td><td>(人口×受療率)÷(競合+1)＝<b>133人/日</b></td></tr>
+  <tr><td class="c">7</td><td><b>発信が苦手な人は、発信を目標にしてはいけない</b></td><td>19歳のmixi・2022年の目標</td><td>4年未着手 → 副産物化で追加30分</td></tr>
+  <tr><td class="c">8</td><td><b>「お願いします」をやめたら、紹介が来た</b></td><td>セミナー資料</td><td>もらう側→渡す側の1動作</td></tr>
+  <tr><td class="c">9</td><td><b>役員報酬を上げても、失う金は年55万だけ</b></td><td>自分の試算</td><td>移転効率 <b>89〜97%</b></td></tr>
+  <tr><td class="c">10</td><td><b>土地は「土地値の割合」を見れば、買える価格が出る</b></td><td>277高松</td><td>土地値<b>90.5%</b>／自己資金250万で4,000万</td></tr>
+  <tr class="sum"><td class="c">—</td><td colspan="3"><b>10本 × 30分 ＝ 5時間。</b>そして<b>1・2・3・7 は「同じ立場の人（Cターゲット）」に、4・5・6・8・9・10 は顧客に届きます</b></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note"><b>「バズ」の条件を4つに分解すると、菊池さんは2つを最初から持っています。</b>①読者が自分の話だと思う（共感） ②式か数字がある（<b>保存される</b>） ③反直感（<b>シェアされる</b>） ④本人の物証がある（<b>真似されない</b>）。<br><b>②と④は既に手元にあるので、足すのは①と③だけ</b>——それが上の工程のSTEP 1（原料＝自分の話）とSTEP 3（反直感）です。<b>だから「バズを狙う」のではなく、工程を守れば自然に条件が揃います</b>。</div>
+<div class="note k"><b>そして「人生はわからないから面白い」を、どう伝えるか。</b>これは<b>主張ではなく、構造として見せます</b>。<br>——記事の中で<b>「その時はこう思っていた」を必ず引用する</b>。19歳の「追い込まれないとダメな人」、28歳の「話し相手がほしい」、29歳の「登っている時が1番楽しい」。<b>当時の本人は、それが後に何になるか知りません</b>。<br><b>読者が面白がるのは「結果」ではなく「知らずに書いていた」という事実</b>です。だから<b>成功譚として書かず、日付つきの引用を積む</b>——それだけで「わからないから面白い」は伝わります。</div>
+
+<h2><span class="k">社会資本</span>式は、渡すと増えます ─ 金融資本との決定的な違い</h2>
+<div class="figwrap">
+<figure>
+<svg viewBox="0 0 1000 400" role="img" aria-label="金融資本は渡すと自分の分が減るが、式は渡しても自分の手元に残り、渡された人が使うたびに出典として名前が付いて広がる。10人に渡すと100人に届き、やがて場が自走することを示す図" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="g1" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="9" markerHeight="7" orient="auto">
+      <polygon points="0,0 10,4 0,8" style="fill:var(--grow)"/>
+    </marker>
+    <marker id="g2" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="9" markerHeight="7" orient="auto">
+      <polygon points="0,0 10,4 0,8" style="fill:var(--dot)"/>
+    </marker>
+  </defs>
+
+  <!-- 上段：金融資本 -->
+  <text x="14" y="20" font-size="11" letter-spacing="2" style="fill:var(--dot)">金融資本 ─ 渡すと、自分の分が減る</text>
+  <rect x="14" y="32" width="130" height="52" fill="none" style="stroke:var(--dot)" stroke-width="1.4"/>
+  <text x="79" y="54" font-size="12" font-weight="700" text-anchor="middle" style="fill:var(--dot)">100万</text>
+  <text x="79" y="72" font-size="10" text-anchor="middle" style="fill:var(--dot)">自分</text>
+  <line x1="144" y1="58" x2="196" y2="58" style="stroke:var(--dot)" stroke-width="1.4" marker-end="url(#g2)"/>
+  <text x="170" y="48" font-size="10" text-anchor="middle" style="fill:var(--dot)">渡す</text>
+  <rect x="200" y="32" width="130" height="52" fill="none" style="stroke:var(--dot)" stroke-width="1.4"/>
+  <text x="265" y="54" font-size="12" font-weight="700" text-anchor="middle" style="fill:var(--dot)">0万</text>
+  <text x="265" y="72" font-size="10" text-anchor="middle" style="fill:var(--dot)">自分</text>
+  <rect x="360" y="32" width="130" height="52" fill="none" style="stroke:var(--dot)" stroke-width="1.4"/>
+  <text x="425" y="54" font-size="12" font-weight="700" text-anchor="middle" style="fill:var(--dot)">100万</text>
+  <text x="425" y="72" font-size="10" text-anchor="middle" style="fill:var(--dot)">相手</text>
+  <text x="520" y="62" font-size="12" fill="currentColor" opacity=".75">合計は変わらない。だから配れない</text>
+
+  <!-- 下段：式 -->
+  <text x="14" y="130" font-size="11" letter-spacing="2" style="fill:var(--grow)">式（＝社会資本）─ 渡しても、自分の手元に残る</text>
+  <rect x="14" y="142" width="130" height="52" fill="none" style="stroke:var(--grow)" stroke-width="2"/>
+  <text x="79" y="164" font-size="12" font-weight="700" text-anchor="middle" style="fill:var(--grow)">式を1つ</text>
+  <text x="79" y="182" font-size="10" text-anchor="middle" style="fill:var(--grow)">自分</text>
+  <line x1="144" y1="168" x2="196" y2="168" style="stroke:var(--grow)" stroke-width="1.4" marker-end="url(#g1)"/>
+  <text x="170" y="158" font-size="10" text-anchor="middle" style="fill:var(--grow)">渡す</text>
+  <rect x="200" y="142" width="130" height="52" fill="none" style="stroke:var(--grow)" stroke-width="2"/>
+  <text x="265" y="164" font-size="12" font-weight="700" text-anchor="middle" style="fill:var(--grow)">式を1つ</text>
+  <text x="265" y="182" font-size="10" text-anchor="middle" style="fill:var(--grow)">自分（減らない）</text>
+  <rect x="360" y="142" width="130" height="52" fill="none" style="stroke:var(--grow)" stroke-width="2"/>
+  <text x="425" y="164" font-size="12" font-weight="700" text-anchor="middle" style="fill:var(--grow)">式を1つ</text>
+  <text x="425" y="182" font-size="10" text-anchor="middle" style="fill:var(--grow)">相手</text>
+  <line x1="490" y1="168" x2="542" y2="168" style="stroke:var(--grow)" stroke-width="1.4" marker-end="url(#g1)"/>
+  <rect x="546" y="134" width="200" height="68" fill="none" style="stroke:var(--grow)" stroke-width="2"/>
+  <text x="646" y="158" font-size="12" font-weight="700" text-anchor="middle" style="fill:var(--grow)">相手が、誰かに使う</text>
+  <text x="646" y="178" font-size="10.5" text-anchor="middle" fill="currentColor" opacity=".85">「これ、菊池さんに教わった式で」</text>
+  <text x="646" y="194" font-size="10.5" text-anchor="middle" style="fill:var(--grow)">＝出典が付いて広がる</text>
+  <line x1="746" y1="168" x2="798" y2="168" style="stroke:var(--grow)" stroke-width="1.4" marker-end="url(#g1)"/>
+  <rect x="802" y="142" width="184" height="52" fill="none" style="stroke:var(--grow)" stroke-width="2.5"/>
+  <text x="894" y="164" font-size="12.5" font-weight="700" text-anchor="middle" style="fill:var(--grow)">増える</text>
+  <text x="894" y="182" font-size="10" text-anchor="middle" fill="currentColor" opacity=".8">合計が2つ、3つになる</text>
+
+  <!-- 3段階 -->
+  <text x="14" y="250" font-size="11" letter-spacing="2" fill="currentColor" opacity=".6">だから、社会資本は「集める」のではなく「渡す」ことで増える</text>
+
+  <rect x="14" y="262" width="308" height="118" fill="none" style="stroke:var(--grow)" stroke-width="1.4"/>
+  <text x="34" y="288" font-size="11" letter-spacing=".1em" style="fill:var(--grow)">第1段階 ─ 2026/8〜2027/1</text>
+  <text x="34" y="314" font-size="18" font-weight="700" style="fill:var(--grow)">10人に、式を渡す</text>
+  <text x="34" y="338" font-size="11.5" fill="currentColor" opacity=".85">1対1で会う＋記事で見つける</text>
+  <text x="34" y="358" font-size="11.5" fill="currentColor" opacity=".85">＝⑨の判定式（相互性3条件のうち2つ）</text>
+
+  <line x1="322" y1="320" x2="352" y2="320" style="stroke:var(--grow)" stroke-width="1.4" marker-end="url(#g1)"/>
+
+  <rect x="356" y="262" width="308" height="118" fill="none" style="stroke:var(--grow)" stroke-width="1.4"/>
+  <text x="376" y="288" font-size="11" letter-spacing=".1em" style="fill:var(--grow)">第2段階 ─ 2027〜2028</text>
+  <text x="376" y="314" font-size="18" font-weight="700" style="fill:var(--grow)">10人が、場を連れてくる</text>
+  <text x="376" y="338" font-size="11.5" fill="currentColor" opacity=".85">勉強会・サロン（03本部の場づくり）</text>
+  <text x="376" y="358" font-size="11.5" fill="currentColor" opacity=".85">＝10人 × 各10人 ＝ 100人に届く</text>
+
+  <line x1="664" y1="320" x2="694" y2="320" style="stroke:var(--grow)" stroke-width="1.4" marker-end="url(#g1)"/>
+
+  <rect x="698" y="262" width="288" height="118" fill="none" style="stroke:var(--grow)" stroke-width="2.5"/>
+  <text x="718" y="288" font-size="11" letter-spacing=".1em" style="fill:var(--grow)">第3段階 ─ 2028〜2030</text>
+  <text x="718" y="314" font-size="18" font-weight="700" style="fill:var(--grow)">場の運営を、渡す</text>
+  <text x="718" y="338" font-size="11.5" fill="currentColor" opacity=".85">自分がいなくても回る状態にする</text>
+  <text x="718" y="358" font-size="11.5" fill="currentColor" opacity=".9">＝「弟を雇える会社」の完成形</text>
+</svg>
+<figcaption><b>金融資本は渡すと自分の分が減りますが、式は渡しても手元に残ります。</b>しかも渡された人が使うとき、たいてい<b>出典が付いてきます</b>——「これ、菊池さんに教わった式で」。<b>だから式は、配るほど増える唯一の資産</b>です。<br>そして<b>これが菊池さんの原動力（GIVE）と、社会資本形成が一致する理由</b>です。無理して人脈を作るのではなく、<b>23歳から持っている「与えたい」をそのまま実行すると、社会資本が増える構造</b>になっています。</figcaption>
+</figure>
+</div>
+
+<h3>社会資本の測り方 ─ 「集めた人数」ではなく「渡した回数」で数える</h3>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>段階</th><th>数えるもの</th><th>目標</th><th>数えないもの</th></tr></thead>
+  <tbody>
+  <tr class="hi"><td><b>第1</b><span class="muted"><br>〜2027/1</span></td><td><b>式を渡した人の数</b>（名前つき）<br><span class="muted">＝④の打席数の一部</span></td><td>相互認知<b>10人</b></td><td class="muted">フォロワー数・いいね</td></tr>
+  <tr><td><b>第2</b><span class="muted"><br>2027-2028</span></td><td><b>渡した人が、誰かに渡した回数</b><br><span class="muted">＝紹介・引用・「聞いた」の報告</span></td><td>年<b>20回</b></td><td class="muted">サロンの会員数</td></tr>
+  <tr class="hi"><td><b>第3</b><span class="muted"><br>2028-2030</span></td><td><b>自分が出なくても開かれた回数</b></td><td>年<b>6回</b><span class="muted"><br>＝隔月で自走</span></td><td class="muted">売上（場は事業ではない）</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note g"><b>第3段階の指標が、この設計のいちばん奥です。</b>——<b>「自分が出なくても開かれた回数」</b>。<br>これは<a href="https://claude.ai/code/artifact/6e52460f-75f4-4f12-81b6-c69efc11a4af">原動力ボード</a>で見つけた法則そのままです：<b>渡している本部は回り、渡していない本部は回らない</b>。物販（ゆーしさん）と277（管理会社）が回っているのは、渡したから。<b>場も同じで、運営を渡した瞬間に社会資本になります</b>。<br>逆に<b>自分が主催し続ける場は、社会資本ではなく仕事</b>です。ここを混同すると、忙しくなるだけで孤独は埋まりません。</div>
+<div class="note"><b>🟡 第2段階以降は、まだ設計しません。</b>第1段階（10人）が埋まる前に場を作ると、<a href="https://claude.ai/code/artifact/6e52460f-75f4-4f12-81b6-c69efc11a4af">2026年5月のスモビジサロン</a>と同じ構想倒れになります。<b>10人が揃ってから、その10人と一緒に場の形を決めてください</b>——先に箱を作らないのが、今回の学びです。</div>
+
+<h2><span class="k">着手</span>この90日で、コンテンツについてやること</h2>
+<ol class="n">
+  <li><b>【今週・15分】法則を1行だけメモしておく。</b>「<b>一貫性は、キャリアにではなく動作に宿る</b>」。これが1本目です。<b>いま書かなくていい</b>——10/19に出すので、忘れないように置くだけ。</li>
+  <li><b>【8〜10/18】素材を溜めるだけ。公開しない。</b>週1本の診断レターを書くたび、<b>伏せ版を下書きに置く</b>。上の10本のうち、書きやすいものから。<b>試験を1分も削らないための順番です</b>。</li>
+  <li><b>【10/19〜11/3】3本を一気に出す。</b>順番は<b>①法則（動作に宿る） ②家計の数え方 ③無収入寿命</b>。①で「何の人か」を立て、②③で「式をくれる人」を証明します。</li>
+  <li><b>【11月〜】週1本。工程を守るだけ。</b>原料→式→反直感→OPQ。<b>1本30分</b>。ネタは1,046行あるので探しません。</li>
+  <li><b>【随時】記事を出したら、⑤で会った人に1通送る。</b>「この式、使えるかもしれません」。<b>これが第1段階の10人を埋める唯一の動作</b>です。記事は撒くもの、1通は渡すもの——両方やって初めて相互になります。</li>
+</ol>
+<div class="note"><b>そして、これ以上の仕組みは作らないでください。</b>製造ラインは4工程で、道具は<code>/pyramid</code>1つで足ります。<b>「発信の自動化」は既に毎日動いていて、一度も投稿されていません</b>——足りないのは仕組みではなく、<b>10/19に出すという日付</b>だけです。</div>
+
+<div class="law" style="margin-top:44px">
+  <div class="lb">ひとことで</div>
+  <div class="lt mi">点を打っているときは、線は見えない。<br>だから、動作だけ揃えておく。</div>
+  <div class="ls">研究職を辞めたときも、鉱山町で朝5時45分に本を読んでいたときも、線は見えていませんでした。<b>見えないまま、同じことをしていただけです</b>——決める前に、数字を出す。<br>そして<b>それを14年ぶん書き残していたので、いま線として見せられます</b>。<b>この「見せられる」という一点が、他の誰にもない資産</b>です。<br><b>だから、コンテンツを作る必要はありません。もう書いてあります。並べ替えて、出すだけです。</b></div>
+</div>
+
+</div>
+<footer>
+  <span>点が線になる法則 ／ 秘書室作成 ／ 2026-08-04</span>
+  <span>関連＝<a href="https://claude.ai/code/artifact/6e52460f-75f4-4f12-81b6-c69efc11a4af">原動力の棚卸し</a> ／ <a href="https://claude.ai/code/artifact/2bdb3462-780f-42bc-b548-8c7b6d3956b8">発信＆ターゲット設計</a> ／ <a href="https://claude.ai/code/artifact/b7eb8185-3f41-45b4-b508-578fe1312703">セミナー資料の改訂案</a> ／ <a href="https://claude.ai/code/artifact/2ace2928-f816-480d-b436-abecd354d3bf">KPI自動検出</a> ／ <a href="https://claude.ai/code/artifact/45acd817-8204-469a-ba23-6c20e4d5a1f5">法人の利益最大化</a></span>
+</footer>
+</div>

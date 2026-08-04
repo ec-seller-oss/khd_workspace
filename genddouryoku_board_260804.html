@@ -1,0 +1,410 @@
+<title>原動力の正体｜自由は手段だった — 1992-2046 の棚卸し</title>
+<style>
+  :root{
+    --paper:#fbf8f2; --bg:#f0ebe1; --ink:#231d17; --sub:#6b6055; --line:#ddd4c5;
+    --ai:#1f3a63; --ai-soft:#e5e9f1; --ai-line:#a8b6cd; --on-ai:#fbf8f2;
+    --shu:#9c3b2c; --shu-soft:#f6e5e0; --shu-line:#d4a89e;
+    --kin:#87661a; --kin-soft:#f5ecd9; --kin-line:#d1bb8a;
+    --midori:#2c6141; --midori-soft:#e3efe6;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --paper:#1a1815; --bg:#110f0d; --ink:#ece6dc; --sub:#a2988a; --line:#3a342b;
+      --ai:#7fa5d6; --ai-soft:#1c2838; --ai-line:#3d5a80; --on-ai:#12171f;
+      --shu:#e08b7a; --shu-soft:#33201c; --shu-line:#6b3a30;
+      --kin:#d9b45f; --kin-soft:#302716; --kin-line:#6b5729;
+      --midori:#74c295; --midori-soft:#1a3527;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#1a1815; --bg:#110f0d; --ink:#ece6dc; --sub:#a2988a; --line:#3a342b;
+    --ai:#7fa5d6; --ai-soft:#1c2838; --ai-line:#3d5a80; --on-ai:#12171f;
+    --shu:#e08b7a; --shu-soft:#33201c; --shu-line:#6b3a30;
+    --kin:#d9b45f; --kin-soft:#302716; --kin-line:#6b5729;
+    --midori:#74c295; --midori-soft:#1a3527;
+  }
+  :root[data-theme="light"]{
+    --paper:#fbf8f2; --bg:#f0ebe1; --ink:#231d17; --sub:#6b6055; --line:#ddd4c5;
+    --ai:#1f3a63; --ai-soft:#e5e9f1; --ai-line:#a8b6cd; --on-ai:#fbf8f2;
+    --shu:#9c3b2c; --shu-soft:#f6e5e0; --shu-line:#d4a89e;
+    --kin:#87661a; --kin-soft:#f5ecd9; --kin-line:#d1bb8a;
+    --midori:#2c6141; --midori-soft:#e3efe6;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
+    font-size:13.5px;line-height:1.8;padding:24px 14px 60px;font-variant-numeric:tabular-nums;}
+  .m{font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;}
+
+  .sheet{max-width:1000px;margin:0 auto;background:var(--paper);
+    border:1px solid var(--line);padding:38px 40px 40px;}
+  @media (max-width:600px){.sheet{padding:24px 18px 28px}}
+
+  header{border-bottom:3px double var(--ai);padding-bottom:18px;margin-bottom:6px}
+  .eyebrow{font-size:10.5px;letter-spacing:.22em;color:var(--shu);font-weight:700}
+  h1{font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;
+    font-size:32px;font-weight:600;margin:12px 0 10px;line-height:1.4;letter-spacing:.02em;text-wrap:balance}
+  @media (max-width:600px){h1{font-size:23px}}
+  h1 small{display:block;font-size:14px;color:var(--sub);font-weight:400;margin-top:8px;letter-spacing:0}
+  .asof{font-size:11.5px;color:var(--sub);line-height:1.7}
+
+  h2{font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;
+    font-size:20px;font-weight:600;margin:46px 0 14px;line-height:1.45;
+    padding-bottom:9px;border-bottom:1px solid var(--ai-line);display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+  h2 .k{font-family:"Hiragino Sans",sans-serif;font-size:9.5px;letter-spacing:.2em;color:var(--ai);
+    font-weight:700;border:1px solid var(--ai-line);padding:3px 8px;white-space:nowrap}
+  h3{font-size:14.5px;margin:30px 0 10px;font-weight:700}
+  p{margin:0 0 12px}
+
+  .lead{background:var(--ai-soft);padding:16px 20px;margin:0 0 6px;font-size:13.5px;
+    border-left:4px solid var(--ai)}
+  .lead b{color:var(--ai)}
+
+  /* 結論 */
+  .thesis{border:1px solid var(--ink);padding:0;margin-top:18px}
+  .thesis .hd{background:var(--ink);color:var(--paper);padding:8px 18px;
+    font-size:10.5px;letter-spacing:.2em;font-weight:700}
+  .thesis .bd{padding:24px 26px}
+  .thesis .big{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:26px;
+    line-height:1.5;font-weight:600;margin:0 0 14px;text-wrap:balance}
+  @media (max-width:600px){.thesis .big{font-size:19px}}
+  .thesis .bd p:last-child{margin:0}
+
+  /* 一次資料の引用 */
+  .quotes{display:flex;flex-direction:column;gap:0;margin-top:16px;
+    border-top:1px solid var(--line)}
+  .q{display:grid;grid-template-columns:104px 1fr;gap:20px;padding:16px 0;
+    border-bottom:1px solid var(--line)}
+  @media (max-width:640px){.q{grid-template-columns:1fr;gap:6px}}
+  .q .when{font-size:11.5px;color:var(--sub);line-height:1.6}
+  .q .when b{display:block;font-family:"Hiragino Mincho ProN","Yu Mincho",serif;
+    font-size:17px;color:var(--ai);font-weight:600}
+  .q .txt{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:15.5px;line-height:1.75}
+  .q .txt .src{display:block;font-family:"Hiragino Sans",sans-serif;font-size:11.5px;
+    color:var(--sub);margin-top:6px;line-height:1.6}
+  .q.hi{background:var(--kin-soft);padding-left:16px;padding-right:16px;
+    border-left:4px solid var(--kin)}
+  .q.hi .txt{font-size:17px}
+
+  /* 3資本 */
+  .caps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+  @media (max-width:760px){.caps{grid-template-columns:1fr}}
+  .cap{border:1px solid var(--line);padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+  .cap.ok{border-top:5px solid var(--midori)}
+  .cap.gap{border-top:5px solid var(--shu);background:var(--shu-soft)}
+  .cap .nm{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:18px;font-weight:600}
+  .cap .sc{font-size:11px;letter-spacing:.14em;font-weight:700}
+  .cap.ok .sc{color:var(--midori)} .cap.gap .sc{color:var(--shu)}
+  .cap .bd{font-size:12.5px;color:var(--sub)}
+  .cap .bd b{color:var(--ink)}
+
+  .tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:12px}
+  table{border-collapse:collapse;width:100%;font-size:12.5px;min-width:520px}
+  th,td{border-bottom:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+  thead th{border-bottom:1.5px solid var(--ai);color:var(--ai);font-size:10.5px;
+    letter-spacing:.12em;white-space:nowrap;font-weight:700}
+  td.c{text-align:center;white-space:nowrap} td.r{text-align:right;white-space:nowrap}
+  tr.sum td{border-top:1.5px solid var(--ai);border-bottom:none;background:var(--ai-soft);font-weight:700}
+  tr.hi td{background:var(--kin-soft)}
+  .win{color:var(--midori);font-weight:700} .lose{color:var(--shu);font-weight:700}
+
+  .note{border-left:3px solid var(--ai);background:var(--ai-soft);padding:13px 16px;
+    font-size:12.5px;margin-top:14px}
+  .note b{color:var(--ai)}
+  .note.shu{border-left-color:var(--shu);background:var(--shu-soft)}
+  .note.shu b{color:var(--shu)}
+  .note.kin{border-left-color:var(--kin);background:var(--kin-soft)}
+  .note.kin b{color:var(--kin)}
+  .note.midori{border-left-color:var(--midori);background:var(--midori-soft)}
+  .note.midori b{color:var(--midori)}
+  .muted{color:var(--sub);font-size:11.5px}
+
+  /* 夢リスト */
+  .dreams{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+  .dr{display:grid;grid-template-columns:70px 1fr 118px;gap:16px;align-items:baseline;
+    border:1px solid var(--line);padding:11px 15px}
+  @media (max-width:660px){.dr{grid-template-columns:1fr;gap:4px}}
+  .dr .yr{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:16px;
+    font-weight:600;color:var(--kin)}
+  .dr .wh{font-size:13px}
+  .dr .tag{font-size:10.5px;letter-spacing:.1em;font-weight:700;text-align:right;white-space:nowrap}
+  .dr .tag.ba{color:var(--ai)} .dr .tag.hito{color:var(--shu)} .dr .tag.kane{color:var(--kin)}
+  @media (max-width:660px){.dr .tag{text-align:left}}
+  .dr.done{background:var(--midori-soft);border-color:var(--midori)}
+
+  ol.acts{counter-reset:c;list-style:none;padding:0;margin:14px 0 0;
+    display:flex;flex-direction:column;gap:11px}
+  ol.acts li{counter-increment:c;display:grid;grid-template-columns:28px 1fr;gap:14px;
+    font-size:13px;align-items:start}
+  ol.acts li::before{content:counter(c);width:26px;height:26px;border-radius:50%;
+    background:var(--ai);color:var(--on-ai);display:flex;align-items:center;
+    justify-content:center;font-size:12px;font-weight:700}
+
+  footer{margin-top:44px;padding-top:14px;border-top:1px solid var(--line);
+    font-size:11px;color:var(--sub);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+  footer a{color:var(--ai)}
+  a:focus-visible{outline:2px solid var(--shu);outline-offset:2px}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="sheet">
+<header>
+  <div class="eyebrow">自己理解プロジェクト ／ 過去・現在・未来の棚卸し</div>
+  <h1>原動力の正体 — 自由は、手段だった<small>1992-2046 ／ 一次資料1,046行から、動機・現在地・夢を突き合わせる</small></h1>
+  <div class="asof">2026-08-04 ／ 出典＝全年表スプレッドシート（1,046行・15歳の通帳から2027年の資金計画まで）＋<a href="https://claude.ai/code/artifact/b73f75c0-a8a5-4caa-b64d-784f96e90f28">直感分析ボード</a>＋<a href="https://claude.ai/code/artifact/e40b847d-ef27-4386-8911-43cbe8de00a7">ライバル比較ボード</a>＋<a href="https://claude.ai/code/artifact/45acd817-8204-469a-ba23-6c20e4d5a1f5">法人の利益最大化ボード</a>（同日）</div>
+</header>
+
+<div class="thesis">
+  <div class="hd">結論 — 14年分の一次資料が示す動機</div>
+  <div class="bd">
+    <p class="big m">自由を追求していたのではありません。<br>「与えること」と「一緒に登る仲間」を追求していて、自由はその前提条件でした。</p>
+    <p>年表を14年ぶん遡ると、<b>「自由」という言葉は2回しか出てきません</b>。しかもどちらも<b>目的ではなく条件</b>として書かれています——2016年「世界中の人を<b>自由にさせたい</b>」、2019年「<b>自由に</b>好きな場所で愛する仕事をする」。<b>自由そのものが目的だと書いた記録は、1行もありませんでした</b>。</p>
+    <p>代わりに14年間ずっと出てくるのが<b>「与える」</b>と<b>「場と人」</b>です。そして幸福の定義は、2022年1月31日に自分で書いていました——<b>「良き富裕層を目指すコミュニティで登っている時が1番楽しい」</b>。<br><b>登り切った時ではなく、登っている時。しかも、コミュニティで。</b></p>
+  </div>
+</div>
+
+<h2><span class="k">過去</span>一次資料が示す一本線 — 20歳から34歳まで、主旋律は変わっていない</h2>
+<p class="lead">以下はすべて<b>菊池さん自身が当時書いた文字</b>です（手書きノート・Evernote・Notion・mixi・カレンダー）。私の解釈ではなく、物証です。<b>並べると、同じことを14年言い続けているのが見えます</b>。</p>
+<div class="quotes">
+  <div class="q">
+    <div class="when"><b>20歳</b>2012年<br>岩手大・教職課程</div>
+    <div class="txt">「信頼関係の取れた教師になりたい」<span class="src">教育実習期の手書きレポート。「信頼が先」の最古の文字</span></div>
+  </div>
+  <div class="q">
+    <div class="when"><b>23歳</b>2016年2月<br>就活期・我究ワーク</div>
+    <div class="txt">Giving欄に「教えたい」「困っている人を助けたい」<br>「<b>世界中の人を自由にさせたい</b>・笑わせたい」<span class="src">★「自由」の1回目。自分ではなく他者を自由にする、と書いている</span></div>
+  </div>
+  <div class="q hi">
+    <div class="when"><b>23歳</b>2016年2月15日<br>Evernote</div>
+    <div class="txt">「なにかを与えて、人の役に立った瞬間を感じたい。<b>そこだけはずっと欲しい</b>」<span class="src">GIVE精神の原点（10年もの）。直感分析で「GIVEの一本線」の起点と確定済み</span></div>
+  </div>
+  <div class="q">
+    <div class="when"><b>24歳</b>2016年10月<br>欲求ノート</div>
+    <div class="txt">夢「<b>アパート経営して一階は喫茶店</b>」「飲み屋のオーナーで学生を育成」<span class="src">★10年後に277（アパート）＋オーロラ（一階の店）として実現。後述</span></div>
+  </div>
+  <div class="q">
+    <div class="when"><b>25歳</b>2017年10月<br>神岡・手書きマインドマップ</div>
+    <div class="txt">「僕の対価って何？」「信頼関係はつくれるか？」「何でも引き合いのある窓口」<span class="src">鉱山町で書いたマップ。提供価値×信頼で対価を得る思考の最古層</span></div>
+  </div>
+  <div class="q">
+    <div class="when"><b>25歳</b>2017年11月<br>起業への日誌30</div>
+    <div class="txt">「相手が何をして欲しいのか考えるのは楽しく、喜んでもらえる実感があるとより嬉しい」／目標に向けて「<b>与える精神を忘れない</b>」<span class="src">新卒2年目、30日連続の手書き日誌</span></div>
+  </div>
+  <div class="q">
+    <div class="when"><b>26歳</b>2019年4月28日<br>神岡・GWの一人内省</div>
+    <div class="txt">「心から楽しく<b>自由に</b>好きな場所で愛する仕事をする」<span class="src">★「自由」の2回目。「自由に」は副詞で、目的語は「愛する仕事」</span></div>
+  </div>
+  <div class="q">
+    <div class="when"><b>26歳</b>2019年6月<br>転職前の本音</div>
+    <div class="txt">「プライベートで行っている<b>人と出会う場作り</b>の延長にキャリアのヒントが隠されている」<span class="src">大手を辞めた理由の一次資料。「場作り」がキャリアの答えだと書いている</span></div>
+  </div>
+  <div class="q">
+    <div class="when"><b>28歳</b>2021年1月4日<br>Notion・会社ビジョン最古</div>
+    <div class="txt">「<b>弟を雇えるような</b>不動産兼アウトドアEC企業にする」<span class="src">★最初の会社ビジョンが「身近な人を雇う」だった</span></div>
+  </div>
+  <div class="q hi">
+    <div class="when"><b>28歳</b>2021年1月4日<br>同日・ネタ欄</div>
+    <div class="txt">「<b>気軽に話せる友達、話し相手がほしい</b>」「浦安は飽きてきた」<span class="src">★5年7ヶ月前に、今日と同じことを書いている。後述</span></div>
+  </div>
+  <div class="q">
+    <div class="when"><b>28歳</b>2021年1月11日<br>初代価値観マップ</div>
+    <div class="txt">「<b>信頼されず信用のない人間は寂しいだけ</b> → 人の喜ぶことをする → <b>喜びの対価で富が生まれる</b>」<span class="src">★「寂しさ」が動機として明文化されている唯一の記録。中核信条の最古の原文</span></div>
+  </div>
+  <div class="q">
+    <div class="when"><b>29歳</b>2021年11月<br>結婚決意表明</div>
+    <div class="txt">「お金で愛は買えないので、愛で自分を先に満たす」「お金は社会に提供した価値の数値化だけ」「<b>今この瞬間に充実感を感じられたら幸せで成功</b>」<span class="src">プロポーズ心境の自筆</span></div>
+  </div>
+  <div class="q">
+    <div class="when"><b>29歳</b>2022年1月3日<br>正月の自筆「理念4か条」</div>
+    <div class="txt">①人の触れ合い×教育 ②<b>家族時間と資金確保を最優先</b> ③相場把握で満足度維持 ④AM思考PM交流の仕組み化<span class="src">4か条のうち2つが「人」、1つが「家族」。金は②の後半に1回だけ</span></div>
+  </div>
+  <div class="q hi">
+    <div class="when"><b>29歳</b>2022年1月31日<br>土日内省の気づき8連発</div>
+    <div class="txt">「良き富裕層を目指す<b>コミュニティで登っている時が1番楽しい</b>」<span class="src">★★ 幸福の定義の原文。「登り切った時」ではなく「登っている時」、しかも「コミュニティで」</span></div>
+  </div>
+  <div class="q">
+    <div class="when"><b>29歳</b>2022年1月3日<br>Q1目標0</div>
+    <div class="txt">「個人SNSフォロワー1万人＝<b>リアルで会える無形資産</b>で影響力→<b>各事業のチーム化</b>」<span class="src">フォロワーの目的が「リアルで会える」「チーム化」。数字ではなく人</span></div>
+  </div>
+</div>
+
+<h2><span class="k">検証</span>「自由を追求していたのか？」への答え</h2>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>仮説</th><th>年表1,046行での出現</th><th>判定</th></tr></thead>
+  <tbody>
+  <tr><td><b>自由を追求していた</b></td><td>「自由」は<b>2回のみ</b>。どちらも他者を自由にする／自由に働くという<b>条件としての用法</b>。自由そのものを目的と書いた記録は<b>0行</b></td><td class="c lose">✕ 手段だった</td></tr>
+  <tr class="hi"><td><b>与えることを追求していた</b></td><td>2012→2016→2017→2020→2021→2026で<b>一本線として確定</b>（直感分析で物証済み）。「そこだけはずっと欲しい」（23歳）</td><td class="c win">◎ これが主旋律</td></tr>
+  <tr class="hi"><td><b>場と人を求めていた</b></td><td>喫茶店／学生育成／出会いの場作り／弟を雇う／テーマパーク／インドに小学校／リアルで会える1万人／コミュニティで登る——<b>10年間繰り返し出現</b></td><td class="c win">◎ 夢の中身がほぼ全部これ</td></tr>
+  <tr><td><b>お金を追求していた</b></td><td>「資産5,000万の小金持ち」（28歳）「必要額5億円」（28歳）——<b>あるが、常に手段として書かれている</b>。「お金は社会に提供した価値の数値化だけ」（29歳）</td><td class="c">△ 手段</td></tr>
+  <tr><td><b>FIRE・引退を目指していた</b></td><td>2020-2021に「FIREの民」の記述あり。しかし2022年に<b>「登っている時が1番楽しい」</b>と自分で反証。2026年も4事業＋受験中</td><td class="c lose">✕ 自分で否定済み</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note kin"><b>だから今日の「何を求めてこの生き方をしていたんだっけ」への答えは、菊池さんが23歳で書いています。</b>——<b>「なにかを与えて、人の役に立った瞬間を感じたい。そこだけはずっと欲しい」。</b><br>自由・法人・不動産・資格は、全部<b>その瞬間を安定して作るための装置</b>でした。装置が完成に近づいたので、<b>いま装置ではなく目的そのものが問題になっている</b>——それが今日の感覚の正体です。</div>
+
+<h2><span class="k">重要</span>5年7ヶ月前に、同じことを書いていました</h2>
+<p class="lead">今日の「讃えあう時間を共有したい／寂しいのかもしれない」は、<b>新しい感情ではありません</b>。2021年1月4日、28歳のネタ欄に<b>「気軽に話せる友達、話し相手がほしい」</b>と書いてあります。同じ月には<b>「信頼されず信用のない人間は寂しいだけ」</b>とも。<b>5年7ヶ月、埋まっていない</b>ということです。</p>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>時期</th><th>書いたこと</th><th>その後どうしたか</th><th>結果</th></tr></thead>
+  <tbody>
+  <tr><td>2021-01</td><td>「気軽に話せる友達、話し相手がほしい」</td><td>リベシティ加入・メンバーリスト30名超を実名記録</td><td class="c">△ 学びの仲間はできた</td></tr>
+  <tr><td>2022-01</td><td>「フォロワー1万人＝リアルで会える無形資産→各事業のチーム化」</td><td>発信は着手せず（19歳から一貫して発信しない体質と年表に記録あり）</td><td class="c lose">✕ 未着手</td></tr>
+  <tr><td>2026-05</td><td>スモビジサロン構想（天野先生と）</td><td>5/27に設計完了。<b>「天野先生への1通」で止まる</b></td><td class="c lose">🔴 構想倒れと自己発見</td></tr>
+  <tr class="hi"><td>2026-08-04<br><b>今日</b></td><td>「皆それぞれの頑張りを讃えあう時間を共有したい」</td><td>—</td><td class="c">これから</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note shu"><b>止まっている「天野先生への1通」は、実はいちばん欲しかったものでした。</b>直感分析ボードには「これが動かない限りサロン全体も動かない」と書かれ、7/10から今日まで<b>25日間ドラフトすら未作成</b>。<br><b>そして今日、菊池さんは同じものを言葉にしました。</b>サロンは「事業のアイデア」ではなく、<b>「讃えあう場」そのもの</b>だった。だから止まっていた理由も分かります——<b>事業として詰めようとしたから動かなかった</b>。CPOもLTVも要らない。ただ人に会う話です。</div>
+
+<h2><span class="k">現在</span>幸福の資本論で測る — 2つ持っていて、1つ欠けている</h2>
+<p class="lead">菊池さんは2021年3月に<b>「3つの資本」</b>の概念に出会い、2021年9月に<b>橘玲『幸福の資本論』をメンター（金の分野）に登録</b>、2026年には<b>「3資本の逆算日報」を運用中</b>——つまりこの枠組みは、私が持ち込んだものではなく<b>菊池さん自身が5年かけて選んだ判断軸</b>です。だからこれで測ります。</p>
+<div class="caps">
+  <div class="cap ok">
+    <div class="sc">金融資本</div>
+    <div class="nm">◎ 十分</div>
+    <div class="bd">純資産<b>2,800〜3,619万</b>（コンサバ／BS）。無収入寿命は現金ベースで<b>26ヶ月</b>。<b>277＋コンサルだけで生活費が永久に回る構造</b>が8/14に完成。<br><span class="muted">28歳の夢「資産5,000万の小金持ち」の6〜7割まで到達。</span></div>
+  </div>
+  <div class="cap ok">
+    <div class="sc">人的資本</div>
+    <div class="nm">◎ 伸び盛り</div>
+    <div class="bd">34歳。4事業＋調査士受験。<b>AI仕組み化はライバル6人中1位・独走</b>、事業間シナジー設計も1位。<b>10/18の試験で「独占業務」という入場券を取りに行く局面</b>。<br><span class="muted">稼ぐ力が最も伸びている時期。</span></div>
+  </div>
+  <div class="cap gap">
+    <div class="sc">社会資本</div>
+    <div class="nm">△ ここだけ欠けている</div>
+    <div class="bd">ライバル比較ボードで<b>「入口＝福井さん一極依存」が🔴未達</b>（唯一の🔴のうち最重要）。<b>19歳から一貫して発信しない体質</b>と年表に記録。<b>「話し相手がほしい」が5年7ヶ月未解決</b>。<br><span class="muted">2021年のメンバーリスト30名は「学ぶ仲間」で、「讃えあう仲間」ではない。</span></div>
+  </div>
+</div>
+<div class="note midori"><b>橘玲の枠組みでは、3資本のうち2つあれば「そこそこ幸福」、3つで「幸福」です。菊池さんは2つ持っていて、1つ欠けています。</b><br>つまり今日の<b>「すごくないか？」と「でも寂しい」が同時に出るのは、不調ではなく診断結果として正確</b>です。金融と人的が満たされたから、欠けている1つが初めてはっきり見えた——順番として自然な現象です。</div>
+
+<h2><span class="k">相対</span>中央値と比べる — 資産は上位13%、紙の年収は下位</h2>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>指標</th><th>菊池さん（2026年8月）</th><th>日本の中央値・分布の目安</th><th>位置</th></tr></thead>
+  <tbody>
+  <tr class="hi"><td><b>世帯純資産</b></td><td class="r">2,800〜3,619万</td><td>30代世帯の金融資産中央値は<b>200〜300万台</b>。純資産3,000万以上は<b>約2割</b>（野村総研の区分でアッパーマス層以上）</td><td class="c win">上位 約13〜20%</td></tr>
+  <tr><td>純資産1億円</td><td class="r">2046年の目標</td><td>全世帯の<b>2.6%</b></td><td class="c">まだ距離あり</td></tr>
+  <tr class="hi"><td><b>紙の上の年収</b></td><td class="r">役員報酬 年60万<span class="muted"><br>＋物販の取り分67万</span></td><td>34歳男性の給与の中央値は<b>約400万</b></td><td class="c lose">下位（中央値の1/3）</td></tr>
+  <tr class="hi"><td><b>平日昼間の裁量</b></td><td class="r">ほぼ全部</td><td>男性の育休取得率は約3割、うち<b>2週間未満が半数以上</b>。34歳で平日昼間が自由な父親は<b>数%未満</b></td><td class="c win">上位 数%</td></tr>
+  <tr><td>個人保証</td><td class="r">4,000万</td><td>会社員には基本ゼロ</td><td class="c lose">リスクは上位</td></tr>
+  <tr class="sum"><td>まとめ</td><td colspan="3"><b>「資産と時間は上位、紙の年収は下位、リスクは上位」</b>——これが動画で言われていた<b>「白沼に富裕層」の実際の形</b>です。見た目で分かる指標が1つもないので、周りから見えません</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note shu"><b>そして相対評価の落とし穴を1つ指摘します。</b>ライバル比較ボードで菊池さんは<b>月次利益2/5・ストック性2/5・入口2/5・クロージング2/5</b>——6人中ほぼ最下位です。だから比較すると必ず負けた気持ちになる。<br>しかし<b>あの表の評価軸10個のうち、9個が「稼ぐ」の軸</b>です。<b>社会資本の軸は1行もありません</b>。家族時間だけが5点で、しかも他人は「—（測らない）」。<br><b>つまり「いま欲しいもの」が、比較表に載っていない。</b>載っていない軸で悩みながら、載っている軸で負けを数えていた——これが「比較してもしょうがないと思いつつ」の正体です。</div>
+
+<h2><span class="k">夢</span>10年分の夢を並べると、ほぼ全部「場」と「人」でした</h2>
+<div class="dreams">
+  <div class="dr done"><div class="yr">2016</div><div class="wh"><b>アパート経営して一階は喫茶店</b>／飲み屋のオーナーで学生を育成<span class="muted">（24歳・欲求ノート）</span></div><div class="tag ba">場＋人 ／ ほぼ実現</div></div>
+  <div class="dr"><div class="yr">2021</div><div class="wh">全国各地にアウトドアのテーマパークを建設<span class="muted">（28歳・やりたい欄）</span></div><div class="tag ba">場</div></div>
+  <div class="dr"><div class="yr">2021</div><div class="wh">インドに小学校／フォロワー100万／岩手・東京の2拠点<span class="muted">（28歳・初代価値観マップ「やりたいこと30」）</span></div><div class="tag ba">場＋人</div></div>
+  <div class="dr done"><div class="yr">2021</div><div class="wh"><b>弟（ゆーしさん）を雇えるような会社にする</b><span class="muted">（28歳・会社ビジョン最古）</span></div><div class="tag hito">人 ／ 実現（物販を運営）</div></div>
+  <div class="dr"><div class="yr">2021</div><div class="wh">必要額5億円／資産5,000万の小金持ち<span class="muted">（28歳）</span></div><div class="tag kane">金 ／ 手段</div></div>
+  <div class="dr"><div class="yr">2022</div><div class="wh">SNSフォロワー1万人＝<b>リアルで会える</b>無形資産 → <b>各事業のチーム化</b><span class="muted">（29歳・Q1目標0）</span></div><div class="tag hito">人 ／ 未着手</div></div>
+  <div class="dr"><div class="yr">2026</div><div class="wh">スモビジサロン（天野先生と）<span class="muted">（34歳・5/27設計完了 → 構想倒れ）</span></div><div class="tag hito">人 ／ 止まっている</div></div>
+  <div class="dr"><div class="yr">2026</div><div class="wh">岩手×東京の二拠点事業（もみじさん・麻梨奈さんと）／純資産1億（2046）／二人目<span class="muted">（34歳）</span></div><div class="tag ba">場＋人</div></div>
+</div>
+<div class="note midori"><b>そして、これがいちばん驚いた発見です。</b>24歳（2016年10月）の夢——<b>「アパート経営して一階は喫茶店」</b>。<br>2026年、<b>8月14日に277高松（アパート）を決済し、11月4日にオーロラ（店）を開業します</b>。<b>喫茶店が治療院になっただけで、同じ形が10年後に実現しています。</b>しかも同じ年に、同時に。<br>これは偶然ではなく、2020年12月13日に確立した<b>逆算思考「夢→人→スキル→法人→不動産→FIRE」</b>を、6年かけて順番どおり実行した結果です。<b>菊池さんの直感は、10年スパンで当たっている</b>——それが年表の結論です。</div>
+<div class="note kin"><b>夢のリストの内訳：場が5、人が5、金が1。</b>そして金の夢だけが「必要額」という手段の書き方になっています。<b>10年間、欲しかったものは一度も変わっていません</b>——人が集まる場を作って、そこで一緒に登ること。</div>
+
+<h2><span class="k">同心円</span>GIVEの一番内側は「子」だった — そして事業の成否と一致しています</h2>
+<p class="lead"><b>「一番身近な存在にGIVEできないと仕事も回らないのでは」——年表で検証したら、これは仮説ではなく実測でした。</b>菊池さんのGIVEには同心円があり、<b>内側にGIVEしている事業は回り、内側にGIVEしていない事業は弱い</b>。4事業がきれいに分かれます。</p>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>事業</th><th>一番内側との関係</th><th>菊池さんの立場</th><th>状態</th></tr></thead>
+  <tbody>
+  <tr class="hi"><td><b>物販（韓国輸出）</b></td><td><b>弟（ゆーしさん）に仕事を渡している</b><span class="muted"><br>＝2021年の会社ビジョン「弟を雇えるような会社にする」の実現</span></td><td class="c win">GIVEする側</td><td class="c win">◎ 投下時間ほぼゼロで年160万</td></tr>
+  <tr><td><b>277高松</b></td><td>実家圏（岩手）に足場を作った</td><td class="c">中立</td><td class="c win">◎ 年203万CF</td></tr>
+  <tr class="hi"><td><b>コンサル</b></td><td><b>叔父（福井さん）の入口に乗っている</b></td><td class="c lose">もらう側</td><td class="c lose">🔴 一極依存・手触りなし</td></tr>
+  <tr><td><b>オーロラ</b></td><td>自分で立ち上げ・自分で採用<span class="muted"><br>＝初めて自分がGIVEの主体になる事業</span></td><td class="c win">GIVEする側（これから）</td><td class="c">🟡 未検証</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note midori"><b>4事業のうち、いちばん手離れがよく利益効率が高いのは「弟に渡した物販」で、いちばん弱いのは「叔父からもらっているコンサル」でした。</b>身内との関係が<b>渡す側</b>になっている事業は回り、<b>もらう側</b>になっている事業は回っていない。<br>そして<b>オーロラを始めた動機は「自分で入口を作れる事業が欲しかったから」</b>と前のボードで整理済み。言い換えると<b>「もらう側から渡す側に戻りたかった」</b>。菊池さんの直感は、ここでも構造を正しく掴んでいました。</div>
+
+<h3>そもそも、GIVEの形は「教える」でした</h3>
+<div class="quotes">
+  <div class="q">
+    <div class="when"><b>20歳</b>2012年</div>
+    <div class="txt">「信頼関係の取れた<b>教師</b>になりたい」<span class="src">教育実習の手書きレポート。高校教諭一種免許（理科／工業）を実際に取得している</span></div>
+  </div>
+  <div class="q">
+    <div class="when"><b>23歳</b>2016年2月</div>
+    <div class="txt">我究ワーク Giving欄の1行目に「<b>教えたい</b>」<span class="src">「困っている人を助けたい」より前に書いてある</span></div>
+  </div>
+  <div class="q">
+    <div class="when"><b>24歳</b>2016年10月</div>
+    <div class="txt">「飲み屋のオーナーで<b>学生を育成</b>」<span class="src">「アパート経営して一階は喫茶店」と同じノートに併記</span></div>
+  </div>
+  <div class="q">
+    <div class="when"><b>29歳</b>2022年1月</div>
+    <div class="txt">理念4か条の①「人の触れ合い×<b>教育</b>（有益情報で他者の利益を増大）」<span class="src">4か条の筆頭。②が「家族時間と資金確保を最優先」</span></div>
+  </div>
+  <div class="q hi">
+    <div class="when"><b>34歳</b>2026年</div>
+    <div class="txt"><b>葵斗の教育3ヵ年プラン</b>を作成<span class="src">260614_葵斗_教育3ヵ年プラン_v1.xlsx。1歳の子に、すでに3年計画がある</span></div>
+  </div>
+</div>
+<div class="note kin"><b>14年前に「教師になりたい」と書き、免許まで取った人でした。</b>GIVEの形は最初から<b>「教える」</b>で、その一番内側の相手が子です。<br>だから<b>18-20時の親子タイムを構造で死守している</b>のは、家族思いというより<b>菊池さんの中核信条そのものの実行</b>。ライバル比較ボードで「懇親会を切り上げて息子を選んだのは得点行動」と書いたのは、この意味で正しかったことになります。</div>
+
+<h3>ただし、順序を1つだけ訂正させてください</h3>
+<div class="note shu"><b>「子にGIVEできないと仕事が回らない」は、因果としては言い過ぎです。</b>データが示しているのは<b>相関</b>——渡す側になっている事業が回っている、という並び方までです。<br>この言い方を因果として固定すると、危険な向きに反転します。<b>「仕事が回るために、子にGIVEする」</b>。そうなると葵斗との時間が事業のKPIになってしまい、いちばん守りたかったものが手段に落ちます。<br><b>正しい順序は逆です。</b>——<b>子に渡すのが目的で、仕事が回るのは副産物</b>。23歳の「そこだけはずっと欲しい」は、見返りの条件が付いていない一文でした。</div>
+<div class="note"><b>そして「勉強してしまっている」という今日の引っかかりについて。</b>これは矛盾ではないと思います。<b>GIVEの形が「教える」なら、渡せる中身を増やす行為＝勉強も、GIVEの一部です</b>。免許を取った人が教壇に立つまで勉強するのと同じ構造です。<br>ただし<b>それが無限に続く言い訳になる危険</b>は、前に話したとおり。歯止めは1本だけ引いてあります——<b>役員報酬 月32万＝資産が減らないライン</b>。ここを越えたあとの勉強は、必要だからやるのではなく、やりたいからやるものになります。</div>
+
+<h3>1歳の葵斗にいま渡せる、唯一無二のGIVE</h3>
+<p>1歳児に教えられることは限られています。ただ、<b>菊池さんにしかできないGIVEが1つあります</b>。</p>
+<div class="note midori"><b>今日この棚卸しができたのは、15歳の通帳から34歳までの一次資料が1,046行あったからです。</b>手書きノート、mixi、Evernote、Notion、カレンダー、写真15,569枚。<b>だから「自分の原動力は何だったのか」に、推測ではなく物証で答えられました</b>。<br><b>同じものを、葵斗に作ってあげられます。</b>0歳からの記録を、菊池さんが残す。葵斗が34歳になったとき、自分の原動力を物証で辿れる状態を渡す。<br>これは<b>「収集心・記録癖」という菊池さんの資質（2013年のストレングスファインダーで確定・3回の受検で一貫）が、そのままGIVEになる</b>唯一の形です。そして<b>時間はほとんど要りません</b>——勉強時間とトレードオフになりません。<span class="muted">※すでに家族の未来逆算プランニングと教育3ヵ年プランは実在するので、足すのは「葵斗の年表」1本だけです。</span></div>
+
+<h2><span class="k">未来</span>設計に足りていなかった1本の柱</h2>
+<p class="lead">同日に作った<a href="https://claude.ai/code/artifact/45acd817-8204-469a-ba23-6c20e4d5a1f5">利益最大化ボード</a>は、金融資本と人的資本の設計としては完成しています。<b>しかし社会資本の目標が1行もありません</b>——唯一の数字は月36万、判定式は616万、どれも金の軸です。<b>欠けている資本に、KPIが無い</b>。</p>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>資本</th><th>いまの設計にあるもの</th><th>足りていないもの</th></tr></thead>
+  <tbody>
+  <tr><td>金融資本</td><td>役員報酬の階段（月5→32→45万）／現金の下限851万／判定式616万／NISAと教育費の逆算</td><td class="c win">なし</td></tr>
+  <tr><td>人的資本</td><td>調査士試験10/18／診断レター週2本／1日1回ピラミッド×4ヶ月</td><td class="c win">なし</td></tr>
+  <tr class="hi"><td><b>社会資本</b></td><td>診断レターの宛先100件<span class="muted">（ただし目的は受注）</span></td><td class="c lose"><b>「讃えあう場」の目標が0行</b></td></tr>
+  </tbody>
+</table>
+</div>
+<h3>社会資本の3つの打ち手 — 全部、すでに手元にあります</h3>
+<ol class="acts">
+  <li><b>天野先生への1通を、今週書く。</b>25日止まっている理由は「事業として詰めようとしたから」です。<b>CPOもLTVも要らない</b>——「前回の押し売り、すみませんでした」＋AI活用のGIVEだけ。<b>23歳で書いた「与えて、役に立った瞬間を感じたい」を、そのまま実行するだけの1通</b>です。今日いちばん短くて、いちばん効く行動。</li>
+  <li><b>診断レターの目的を2つにする。</b>いま宛先100件は「受注」のためですが、<b>クリニック院長・相続した地主・調査士の受験仲間は、全員「いま何かの途中にいる人」</b>です。受注率3%なら97本は受注になりませんが、<b>その97人と会話が始まる</b>。社会資本のKPIは<b>「今月、途中にいる人と何人話したか」</b>——受注率とは別に、この1行を月次に足してください。</li>
+  <li><b>麻梨奈さんに、説明のいらない枠を渡す。</b>金額は小さくていい。用途を報告しない・家計簿に書かない・私にも共有しない枠。<b>2022年の理念4か条の②が「家族時間と資金確保を最優先」だったので、これは新しい方針ではなく、4年前の自分の宣言の実行</b>です。</li>
+</ol>
+<div class="note"><b>そして時期について。</b>10/18の試験までは①だけでいい（1通です）。②③は11月以降。<b>いま社会資本の穴を全部埋めようとすると、人的資本（試験）を削ります</b>——それは順番が逆です。<b>試験に受かること自体が、社会資本への最大の投資</b>でもあります。調査士は「いま何かの途中にいる人」の集団であり、独占業務は「与える」の最強の道具になるからです。</div>
+
+<h2><span class="k">通し</span>過去・現在・未来を1枚に</h2>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>時期</th><th>年齢</th><th>やっていたこと</th><th>3資本の状態</th><th>そのとき欲しかったもの</th></tr></thead>
+  <tbody>
+  <tr><td>2007-2015</td><td class="c">15-22</td><td>15歳で通帳記録開始／高校サッカー部の練習日誌／バーで原価率管理／岩手大・教職免許</td><td class="c">記録癖と対人技術の獲得期</td><td>信頼される人になること</td></tr>
+  <tr><td>2016-2019</td><td class="c">23-26</td><td>三井金属→飛騨・神岡の鉱山町。朝5:45読書・6:00筋トレ・21:00ブログ。起業日誌30日連続。マルチに関与し離脱</td><td class="c lose">3資本すべて薄い</td><td><b>「与えて役に立つ瞬間」（23歳）</b>／脱出口</td></tr>
+  <tr><td>2020-2022</td><td class="c">27-29</td><td>東陽テクニカ入社。入社1週で出口設計。リベ大・3資本と出会う。北千住取得。法人設立。結婚。理念4か条</td><td class="c">人的◎／金融△／社会△</td><td><b>「話し相手」（28歳）</b>／資産5,000万</td></tr>
+  <tr><td>2023-2025</td><td class="c">30-33</td><td>物販・EC・仲介。財務司令塔・AI業務OSの構築。葵斗誕生。アストン退職（33歳）</td><td class="c">仕組みを作り切った期</td><td>独立できる状態</td></tr>
+  <tr class="hi"><td><b>2026（現在）</b></td><td class="c">34</td><td>8/14 277決済 → 10/18 調査士試験 → 11/4 オーロラ開業。<b>24歳の夢「アパート＋一階の店」が同年に実現</b></td><td class="c">金融◎／人的◎／<b>社会△</b></td><td class="lose"><b>讃えあう仲間</b></td></tr>
+  <tr><td>2027-2029</td><td class="c">35-37</td><td>1/31 進路判定 → 4月 役員報酬改定（月32万＝資産が減らないライン）→ 二人目 → 借換え → 岩手×東京の二拠点を解凍</td><td class="c">3資本を揃える期</td><td>—</td></tr>
+  <tr><td>2032-2046</td><td class="c">40-54</td><td>葵斗小1（教育費本格化）→ 教育費ピーク2044-2047（二人で2,350万）→ 純資産1億（2046）</td><td class="c">与える側に回る期</td><td>—</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="thesis" style="margin-top:34px">
+  <div class="hd">ひとことで</div>
+  <div class="bd">
+    <p class="big m">「登っている時が1番楽しい」人が、1つ登り切りかけた。<br>だから次の山と、一緒に登る人が欲しくなった。</p>
+    <p>これは不調でも贅沢でもなく、<b>29歳の自分が書いた定義どおりの反応</b>です。277の決済で1つ登り切りかけたから、次が欲しくなった。<b>設計は失敗していません——むしろ機能した証拠です</b>。<br>そして次の山は、たぶんもう決まっています。<b>24歳で「一階は喫茶店」と書き、28歳で「弟を雇える会社」と書き、29歳で「リアルで会える1万人」と書き、34歳で「讃えあう時間」と書いた</b>。<b>10年間ずっと同じ山を指しています。</b></p>
+    <p class="muted" style="margin-top:12px">最初の一歩は、天野先生への1通です。1通で足ります。</p>
+  </div>
+</div>
+
+<footer>
+  <span>原動力の棚卸しボード ／ 秘書室作成 ／ 2026-08-04</span>
+  <span>関連＝<a href="https://claude.ai/code/artifact/45acd817-8204-469a-ba23-6c20e4d5a1f5">法人の利益最大化</a> ／ <a href="https://claude.ai/code/artifact/b73f75c0-a8a5-4caa-b64d-784f96e90f28">直感分析</a> ／ <a href="https://claude.ai/code/artifact/e40b847d-ef27-4386-8911-43cbe8de00a7">ライバル比較</a> ／ <a href="https://claude.ai/code/artifact/3cfd1521-0bf5-42a5-bb01-71e3c502c834">働き方とライフプラン</a></span>
+</footer>
+</div>

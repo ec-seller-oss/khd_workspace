@@ -133,6 +133,29 @@
   @media (max-width:660px){.dr .tag{text-align:left}}
   .dr.done{background:var(--midori-soft);border-color:var(--midori)}
 
+  /* KPI 3層 */
+  .tier{border:1px solid var(--line);margin-top:16px}
+  .tier .th{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+    background:var(--ai);color:var(--on-ai);padding:9px 16px;flex-wrap:wrap}
+  .tier .th .t{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:16px;font-weight:600}
+  .tier .th .cost{font-size:11px;letter-spacing:.1em;opacity:.9}
+  .kr{display:grid;grid-template-columns:64px 1fr 168px;gap:16px;padding:13px 16px;
+    border-top:1px solid var(--line);align-items:start}
+  .tier .th + .kr{border-top:none}
+  @media (max-width:700px){.kr{grid-template-columns:1fr;gap:5px}.kr .goal{text-align:left}}
+  .kr .cb{font-size:9.5px;letter-spacing:.1em;font-weight:700;padding:3px 6px;
+    text-align:center;white-space:nowrap;border:1px solid}
+  .kr .cb.kin{color:var(--kin);border-color:var(--kin-line);background:var(--kin-soft)}
+  .kr .cb.jin{color:var(--midori);border-color:var(--midori);background:var(--midori-soft)}
+  .kr .cb.sha{color:var(--shu);border-color:var(--shu-line);background:var(--shu-soft)}
+  .kr .cb.ie{color:var(--ai);border-color:var(--ai-line);background:var(--ai-soft)}
+  .kr .nm{font-size:13px}
+  .kr .nm b{display:block;margin-bottom:2px}
+  .kr .nm .df{color:var(--sub);font-size:11.5px;line-height:1.65}
+  .kr .goal{font-size:12px;text-align:right;white-space:nowrap;line-height:1.6}
+  .kr .goal b{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:17px;color:var(--ai)}
+  .kr .goal .aft{display:block;font-size:11px;color:var(--sub)}
+
   ol.acts{counter-reset:c;list-style:none;padding:0;margin:14px 0 0;
     display:flex;flex-direction:column;gap:11px}
   ol.acts li{counter-increment:c;display:grid;grid-template-columns:28px 1fr;gap:14px;
@@ -377,6 +400,99 @@
   <li><b>麻梨奈さんに、説明のいらない枠を渡す。</b>金額は小さくていい。用途を報告しない・家計簿に書かない・私にも共有しない枠。<b>2022年の理念4か条の②が「家族時間と資金確保を最優先」だったので、これは新しい方針ではなく、4年前の自分の宣言の実行</b>です。</li>
 </ol>
 <div class="note"><b>そして時期について。</b>10/18の試験までは①だけでいい（1通です）。②③は11月以降。<b>いま社会資本の穴を全部埋めようとすると、人的資本（試験）を削ります</b>——それは順番が逆です。<b>試験に受かること自体が、社会資本への最大の投資</b>でもあります。調査士は「いま何かの途中にいる人」の集団であり、独占業務は「与える」の最強の道具になるからです。</div>
+
+<h2><span class="k">運用</span>日々のKPI ─ 決めました。3層・日次1分／週次5分／月次15分</h2>
+<p class="lead"><b>方針は菊池さんの言葉どおりで正しいです——「社会資本を積み上げつつ、年収アップの営業あるのみ」。</b>そこに1つだけ制約を足します。<b>10/18までは試験が最優先なので、日次のKPIは1分で終わる量にしないと必ず崩れます</b>。<br>菊池さんは<b>毎晩10問を「もう一言、要らない」の1問に統合した人</b>です。同じ原則で組みました——<b>日次は3行だけ。社会資本と営業は週次に置きます</b>（毎日人に会えないので、日次に置くと必ず✗が並んで続かない）。</p>
+
+<div class="tier">
+  <div class="th"><span class="t">日次 ─ 毎晩、夜の合言葉のあとに</span><span class="cost">所要 1分 ／ 数えるだけ・判断しない</span></div>
+  <div class="kr">
+    <div class="cb jin">人的</div>
+    <div class="nm"><b>① 試験勉強の分数</b><span class="df">やった分数を数字で書くだけ。良い悪いの判定はしない</span></div>
+    <div class="goal"><b>週20時間</b><span class="aft">＝平日2h＋土日5h目安</span></div>
+  </div>
+  <div class="kr">
+    <div class="cb jin">人的</div>
+    <div class="nm"><b>② 1日1回ピラミッド</b> ✓／✗<span class="df">メール1通を「感謝の言葉にPDF」構成で書いたか。送信前に3点だけ確認（主メッセージは冒頭か／しりてがを使っていないか／あいまい言葉はないか）</span></div>
+    <div class="goal"><b>1通</b><span class="aft">5分・4ヶ月で約120回</span></div>
+  </div>
+  <div class="kr">
+    <div class="cb ie">家族</div>
+    <div class="nm"><b>③ 18-20時の親子タイム</b> ✓／✗<span class="df">中核信条の実行そのもの。守れなかった日は理由を1語だけ</span></div>
+    <div class="goal"><b>週5日以上</b><span class="aft">崩れたら他を削る</span></div>
+  </div>
+</div>
+
+<div class="tier">
+  <div class="th"><span class="t">週次 ─ 日曜の夜に</span><span class="cost">所要 5分 ／ ここが営業と社会資本の本体</span></div>
+  <div class="kr">
+    <div class="cb kin">金融</div>
+    <div class="nm"><b>④ 診断レターを何本書いたか</b><span class="df">OPQ分析＋ピラミッドで A4 2枚・2時間。宛先は100件リストの上位から</span></div>
+    <div class="goal"><b>週1本</b><span class="aft">11月から 週2本</span></div>
+  </div>
+  <div class="kr">
+    <div class="cb sha">社会</div>
+    <div class="nm"><b>⑤ 「途中にいる人」と何人話したか</b><span class="df"><b>定義</b>＝その週に（a）初めて話した人（b）久しぶりに連絡した人（c）相談された／相談した人。<b>必ず名前で記録する</b>。SNSのいいねは数えない</span></div>
+    <div class="goal"><b>週1人</b><span class="aft">11月から 週3人</span></div>
+  </div>
+  <div class="kr">
+    <div class="cb jin">人的</div>
+    <div class="nm"><b>⑥ 週の勉強時間が20時間を超えたか</b> ✓／✗<span class="df">①の合計。切った週をゼロにするのが10/18までの唯一の絶対条件</span></div>
+    <div class="goal"><b>20時間</b><span class="aft">試験までは最優先</span></div>
+  </div>
+</div>
+
+<div class="tier">
+  <div class="th"><span class="t">月次 ─ 毎月5日</span><span class="cost">所要 15分 ／ 詳細は利益最大化ボードの4行</span></div>
+  <div class="kr">
+    <div class="cb kin">金融</div>
+    <div class="nm"><b>⑦ オーロラ 月商 ／ 新患数 ／ 平均来院回数 ／ CPO</b><span class="df">11/4開業後。販促費を5万→10万→15万で振って全体利益の山を探す</span></div>
+    <div class="goal"><b>月商69万</b><span class="aft">＝新患23人×5回×6,000円</span></div>
+  </div>
+  <div class="kr">
+    <div class="cb kin">金融</div>
+    <div class="nm"><b>⑧ 法人12ヶ月ローリング現金創出力</b><span class="df">役員報酬・社保を引く前。財務司令塔で自動計算</span></div>
+    <div class="goal"><b>616万</b><span class="aft">いま188万</span></div>
+  </div>
+  <div class="kr">
+    <div class="cb sha">社会</div>
+    <div class="nm"><b>⑨ 相互に取り組みを知っている人の累計</b><span class="df"><b>定義</b>＝菊池さんの取り組みを知っていて、<b>かつ</b>菊池さんもその人の取り組みを知っている人。<b>相互性が条件</b>——フォロワーではない</span></div>
+    <div class="goal"><b>10人</b><span class="aft">2027/1/31まで</span></div>
+  </div>
+</div>
+
+<div class="note kin"><b>この⑨が、今日いちばん重要な追加です。</b>利益最大化ボードには判定式が1つだけありました——<b>法人の現金創出力616万</b>。金融資本の判定式です。<br><b>社会資本には判定式が1行もありませんでした</b>。だから⑨を置きます。<b>2027年1月31日に、616万と一緒に10人を数える</b>。同じ日に、2つの資本を答え合わせします。</div>
+<div class="note shu"><b>⑨の定義に「相互性」を入れたのは、意図があります。</b>2022年に書いた目標は「フォロワー1万人」でしたが、4年経って未着手です。理由は<b>フォロワーが欲しかったわけではなかったから</b>——同じノートに「＝<b>リアルで会える</b>無形資産で影響力→<b>各事業のチーム化</b>」と書いてあります。<br>だから数えるのは<b>片方向の1万人ではなく、双方向の10人</b>。今日の「皆それぞれの頑張りを讃えあう時間」を、そのまま数字にしたのがこの10人です。</div>
+
+<h3>数えないと決めたもの</h3>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>数えないもの</th><th>理由</th></tr></thead>
+  <tbody>
+  <tr><td>診断レターの<b>返信率・受注率</b></td><td>結果指標なので、自分でコントロールできない。<b>記録はするが目標は置かない</b>（本数だけ追う）。3%を切ったら型か宛先を見直す、という条件だけ持っておく</td></tr>
+  <tr><td>SNSのフォロワー・いいね</td><td>19歳から一貫して発信しない体質。ここを目標にすると4年間と同じく未着手で終わる。<b>⑨に置き換える</b></td></tr>
+  <tr><td>物販の日次・週次</td><td>ゆーしさんが全操作。<b>四半期に営業利益1行だけ</b>。手離れが良い事業に払うコストはこれで十分</td></tr>
+  <tr><td>277の月次</td><td>満室維持のみ。伸びない。<b>年1回（8月）の保有レビューだけ</b></td></tr>
+  <tr><td>資産評価額・株価</td><td>見ると触りたくなる。<b>四半期に無収入寿命だけ再計算</b>（現金の下限851万を割っていないかの確認）</td></tr>
+  <tr><td>他人との比較スコア</td><td>ライバル比較ボードの10軸のうち9軸が「稼ぐ」の軸で、社会資本の軸がない。<b>四半期に1回だけ開く</b>。日々見ると必ず負けた気持ちになる</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note"><b>「数えないもの」を決めるのが、この設計の本体です。</b>菊池さんは記録が得意すぎるので、放っておくと全部測れてしまいます。<b>測れる＝改善ではない</b>——直感分析ボードにも「言語化を改善と勘違いする内務逃避」（江藤レポートの指摘）と書いてありました。<br><b>日次3行・週次3行・月次3行。合計9行だけです。</b></div>
+
+<h3>時期ごとの重み — 同じ9行を、比率だけ変える</h3>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>時期</th><th>人的（試験・型）</th><th>金融（営業）</th><th>社会（人）</th><th>その時期の一言</th></tr></thead>
+  <tbody>
+  <tr class="hi"><td><b>8〜10/18</b><span class="muted"><br>あと75日</span></td><td class="c win">70%<span class="muted"><br>週20時間</span></td><td class="c">20%<span class="muted"><br>週1本</span></td><td class="c">10%<span class="muted"><br>週1人</span></td><td><b>試験に全部寄せる。</b>社会資本は<b>天野先生への1通だけ</b>やる（1通で足りる）</td></tr>
+  <tr><td><b>10/19〜11/3</b><span class="muted"><br>16日間</span></td><td class="c">10%</td><td class="c win">50%<span class="muted"><br>週2本</span></td><td class="c">40%<span class="muted"><br>週3人</span></td><td><b>唯一、完全に空く期間。</b>オーロラの集客準備と、人に会うことに全部使う</td></tr>
+  <tr><td><b>11/4〜1/31</b><span class="muted"><br>判定まで</span></td><td class="c">10%</td><td class="c win">60%<span class="muted"><br>週2本＋オーロラ</span></td><td class="c">30%<span class="muted"><br>週3人</span></td><td><b>営業特化期。</b>新規の仕組みづくりは凍結。1/31に616万と10人を数える</td></tr>
+  <tr><td><b>2027/2〜</b></td><td class="c">30%<span class="muted"><br>実務・登録</span></td><td class="c">40%</td><td class="c">30%</td><td>4月に役員報酬を改定（月32万＝資産が減らないライン）。3資本が揃い始める</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note midori"><b>そして最後に、いちばん大事な但し書き。</b>この9行は<b>「与えた回数」を数えていません</b>。数えられないからです。23歳の「なにかを与えて、人の役に立った瞬間を感じたい」には、見返りの条件が付いていませんでした。<br>だから<b>⑤と⑨は「与えた成果」ではなく「会った回数」を数えています</b>。与えられたかどうかは、相手が決めることなので測らない。<b>菊池さんが数えるのは、打席に立った回数だけです</b>。</div>
 
 <h2><span class="k">通し</span>過去・現在・未来を1枚に</h2>
 <div class="tblwrap">

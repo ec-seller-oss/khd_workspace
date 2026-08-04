@@ -1,0 +1,528 @@
+<title>法人の利益最大化｜役員報酬で自由を買う設計 2026-2032</title>
+<style>
+  :root{
+    --bg:#f1f0ea; --paper:#fdfcf9; --ink:#191f1d; --sub:#5f6b66; --line:#dedbd1;
+    --accent:#1d4f56; --accent-soft:#e2ecec; --accent-line:#9dbcbe; --on-accent:#fdfcf9;
+    --brass:#8a6516; --brass-soft:#f5edda; --brass-line:#d8bf8c;
+    --plum:#6d4370; --plum-soft:#f0e8f1; --plum-line:#c4a7c8;
+    --good:#1f6d4a; --good-soft:#e1f0e7;
+    --warn:#9c6410; --warn-soft:#f8eedb;
+    --stop:#9c2a2a; --stop-soft:#f7e5e2;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#13181a; --paper:#1b2224; --ink:#e8ebe8; --sub:#93a09b; --line:#2e3739;
+      --accent:#6fb9c0; --accent-soft:#1d363a; --accent-line:#37585c; --on-accent:#12191b;
+      --brass:#d9a852; --brass-soft:#332913; --brass-line:#6a5527;
+      --plum:#c69ccb; --plum-soft:#2b1f2e; --plum-line:#4e3a52;
+      --good:#63cd97; --good-soft:#15352a;
+      --warn:#e2aa5e; --warn-soft:#36280f;
+      --stop:#e58a85; --stop-soft:#37201f;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#13181a; --paper:#1b2224; --ink:#e8ebe8; --sub:#93a09b; --line:#2e3739;
+    --accent:#6fb9c0; --accent-soft:#1d363a; --accent-line:#37585c; --on-accent:#12191b;
+    --brass:#d9a852; --brass-soft:#332913; --brass-line:#6a5527;
+    --plum:#c69ccb; --plum-soft:#2b1f2e; --plum-line:#4e3a52;
+    --good:#63cd97; --good-soft:#15352a;
+    --warn:#e2aa5e; --warn-soft:#36280f;
+    --stop:#e58a85; --stop-soft:#37201f;
+  }
+  :root[data-theme="light"]{
+    --bg:#f1f0ea; --paper:#fdfcf9; --ink:#191f1d; --sub:#5f6b66; --line:#dedbd1;
+    --accent:#1d4f56; --accent-soft:#e2ecec; --accent-line:#9dbcbe; --on-accent:#fdfcf9;
+    --brass:#8a6516; --brass-soft:#f5edda; --brass-line:#d8bf8c;
+    --plum:#6d4370; --plum-soft:#f0e8f1; --plum-line:#c4a7c8;
+    --good:#1f6d4a; --good-soft:#e1f0e7;
+    --warn:#9c6410; --warn-soft:#f8eedb;
+    --stop:#9c2a2a; --stop-soft:#f7e5e2;
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","BIZ UDPGothic",system-ui,sans-serif;
+    font-size:13.5px; line-height:1.75; padding:22px 14px 56px;
+    font-variant-numeric:tabular-nums;
+  }
+  .mincho{font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;}
+
+  .sheet{max-width:1040px;margin:0 auto;background:var(--paper);
+    border:1px solid var(--line);border-radius:3px;padding:32px 34px 34px;
+    display:flex;flex-direction:column;gap:0;}
+  @media (max-width:600px){.sheet{padding:22px 18px 26px}}
+
+  header{border-bottom:1px solid var(--ink);padding-bottom:16px;}
+  .eyebrow{font-size:10.5px;letter-spacing:.2em;color:var(--brass);font-weight:700;}
+  header h1{font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
+    font-size:27px;font-weight:600;margin:9px 0 8px;line-height:1.45;text-wrap:balance;letter-spacing:.01em;}
+  @media (max-width:600px){header h1{font-size:21px}}
+  .asof{font-size:11.5px;color:var(--sub);line-height:1.6;}
+
+  h2{font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
+    font-size:18px;font-weight:600;margin:40px 0 12px;padding-bottom:7px;
+    border-bottom:1px solid var(--accent-line);color:var(--ink);display:flex;
+    align-items:baseline;gap:11px;flex-wrap:wrap;}
+  h2 .k{font-family:"Hiragino Sans",sans-serif;font-size:10px;letter-spacing:.16em;
+    color:var(--accent);font-weight:700;border:1px solid var(--accent-line);
+    padding:2px 7px;border-radius:2px;white-space:nowrap;}
+  h3{font-size:14px;margin:26px 0 8px;font-weight:700;}
+  p{margin:0 0 11px}
+
+  .lead{background:var(--accent-soft);border-radius:3px;padding:15px 18px;margin:0 0 4px;font-size:13px;}
+  .lead b{color:var(--accent)}
+
+  /* ── 唯一の数字 ── */
+  .keyfig{border:2px solid var(--brass);border-radius:3px;background:var(--brass-soft);
+    padding:22px 26px;display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:center;margin-top:14px;}
+  @media (max-width:640px){.keyfig{grid-template-columns:1fr;gap:14px;padding:18px}}
+  .keyfig .num{text-align:center;white-space:nowrap;}
+  .keyfig .num .big{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;
+    font-size:52px;line-height:1;font-weight:600;color:var(--brass);display:block;letter-spacing:-.02em;}
+  @media (max-width:640px){.keyfig .num .big{font-size:40px}}
+  .keyfig .num .unit{font-size:12px;color:var(--brass);font-weight:700;letter-spacing:.1em;}
+  .keyfig .txt{font-size:13px;}
+  .keyfig .txt .cap{font-size:10.5px;letter-spacing:.16em;color:var(--brass);font-weight:700;margin-bottom:5px;}
+  .keyfig .txt b{color:var(--ink)}
+
+  /* ── 階段 ── */
+  .ladder{display:flex;flex-direction:column;gap:7px;margin-top:12px;}
+  .rung{display:grid;grid-template-columns:76px 1fr 128px;gap:14px;align-items:center;
+    border:1px solid var(--line);border-left:5px solid var(--brass-line);
+    border-radius:2px;padding:12px 15px;background:var(--paper);}
+  .rung.now{border-left-color:var(--sub);background:var(--bg);}
+  .rung.goal{border-left-color:var(--brass);background:var(--brass-soft);}
+  @media (max-width:660px){
+    .rung{grid-template-columns:1fr;gap:6px;}
+    .rung .amt{text-align:left}
+  }
+  .rung .step{font-size:10.5px;letter-spacing:.12em;color:var(--brass);font-weight:700;line-height:1.4;}
+  .rung.now .step{color:var(--sub)}
+  .rung .step em{display:block;font-style:normal;font-size:13px;color:var(--ink);letter-spacing:0;font-weight:700;}
+  .rung .what{font-size:12.5px;color:var(--sub);}
+  .rung .what b{color:var(--ink)}
+  .rung .amt{text-align:right;white-space:nowrap;}
+  .rung .amt .m{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:22px;font-weight:600;}
+  .rung .amt .s{font-size:11px;color:var(--sub);display:block;line-height:1.4;}
+
+  /* ── 表 ── */
+  .tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:10px;}
+  table{border-collapse:collapse;width:100%;font-size:12.5px;min-width:520px;}
+  th,td{border-bottom:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top;}
+  thead th{background:transparent;border-bottom:1.5px solid var(--accent);color:var(--accent);
+    font-size:10.5px;letter-spacing:.1em;white-space:nowrap;font-weight:700;}
+  td.c{text-align:center;white-space:nowrap}
+  td.r{text-align:right;white-space:nowrap}
+  tr.sum td{border-top:1.5px solid var(--accent);border-bottom:none;background:var(--accent-soft);font-weight:700;}
+  tr.hi td{background:var(--good-soft);}
+  .win{color:var(--good);font-weight:700}
+  .lose{color:var(--stop);font-weight:700}
+  .mid{color:var(--warn);font-weight:700}
+
+  .chip{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:2px;white-space:nowrap;}
+  .chip.good{background:var(--good-soft);color:var(--good)}
+  .chip.warn{background:var(--warn-soft);color:var(--warn)}
+  .chip.stop{background:var(--stop-soft);color:var(--stop)}
+  .chip.flat{background:var(--accent-soft);color:var(--accent)}
+  .chip.fam{background:var(--plum-soft);color:var(--plum)}
+
+  .note{border-left:3px solid var(--accent);background:var(--accent-soft);
+    padding:12px 15px;font-size:12.5px;border-radius:0 2px 2px 0;margin-top:13px;}
+  .note b{color:var(--accent)}
+  .note.good{border-left-color:var(--good);background:var(--good-soft)}
+  .note.good b{color:var(--good)}
+  .note.warn{border-left-color:var(--warn);background:var(--warn-soft)}
+  .note.warn b{color:var(--warn)}
+  .note.stop{border-left-color:var(--stop);background:var(--stop-soft)}
+  .note.stop b{color:var(--stop)}
+  .note.fam{border-left-color:var(--plum);background:var(--plum-soft)}
+  .note.fam b{color:var(--plum)}
+  .muted{color:var(--sub);font-size:11.5px}
+
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px;}
+  @media (max-width:700px){.cols{grid-template-columns:1fr}}
+  .card{border:1px solid var(--line);border-radius:2px;padding:14px 16px;display:flex;flex-direction:column;gap:7px;}
+  .card .hd{display:flex;align-items:baseline;justify-content:space-between;gap:9px;flex-wrap:wrap;}
+  .card h4{margin:0;font-size:13px;font-weight:700;}
+  .card .bd{font-size:12.5px;color:var(--sub)}
+  .card .bd b{color:var(--ink)}
+
+  /* ── 判定ゲート ── */
+  .gate{border:1px solid var(--accent-line);border-radius:2px;overflow:hidden;margin-top:12px;}
+  .gate .gh{background:var(--accent);color:var(--on-accent);padding:11px 16px;font-size:13px;font-weight:700;}
+  .gate .gb{display:flex;flex-direction:column;}
+  .gate .row{display:grid;grid-template-columns:150px 1fr;gap:15px;padding:13px 16px;border-top:1px solid var(--line);}
+  .gate .row:first-child{border-top:none}
+  @media (max-width:640px){.gate .row{grid-template-columns:1fr;gap:5px}}
+  .gate .cond{font-weight:700;font-size:12.5px}
+  .gate .cond .sub{display:block;font-weight:400;font-size:11px;color:var(--sub)}
+  .gate .act{font-size:12.5px}
+  .gate .r-go .cond{color:var(--good)}
+  .gate .r-mid .cond{color:var(--warn)}
+  .gate .r-no .cond{color:var(--stop)}
+
+  /* ── 凍結/継続 ── */
+  .lists{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px}
+  @media (max-width:700px){.lists{grid-template-columns:1fr}}
+  .lists ul{margin:6px 0 0;padding-left:1.15em;font-size:12.5px}
+  .lists li{margin-bottom:4px}
+  .lists .hd{font-size:11px;letter-spacing:.14em;font-weight:700}
+  .freeze{border:1px solid var(--stop);border-radius:2px;padding:13px 16px}
+  .freeze .hd{color:var(--stop)}
+  .keepon{border:1px solid var(--good);border-radius:2px;padding:13px 16px}
+  .keepon .hd{color:var(--good)}
+
+  /* ── 年表 ── */
+  .tl{border-left:2px solid var(--line);margin:14px 0 0 6px;}
+  .ev{position:relative;padding:0 0 20px 26px}
+  .ev::before{content:"";position:absolute;left:-7px;top:6px;width:12px;height:12px;
+    border-radius:50%;background:var(--accent);border:3px solid var(--paper)}
+  .ev.fam::before{background:var(--plum)}
+  .ev.mon::before{background:var(--brass)}
+  .ev .yr{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:16px;font-weight:600;color:var(--accent)}
+  .ev.fam .yr{color:var(--plum)} .ev.mon .yr{color:var(--brass)}
+  .ev .ages{font-size:10.5px;color:var(--sub);margin-left:9px}
+  .ev .bd{font-size:12.5px;margin-top:1px}
+  .ev .fin{font-size:11.5px;color:var(--sub);margin-top:2px}
+
+  .mermaid{background:transparent;overflow-x:auto;margin-top:10px}
+
+  ol.steps{counter-reset:s;list-style:none;padding:0;margin:12px 0 0;display:flex;flex-direction:column;gap:9px}
+  ol.steps li{counter-increment:s;display:grid;grid-template-columns:26px 1fr;gap:12px;font-size:12.5px;align-items:start}
+  ol.steps li::before{content:counter(s);width:24px;height:24px;border-radius:50%;
+    background:var(--accent);color:var(--on-accent);display:flex;align-items:center;justify-content:center;
+    font-size:11.5px;font-weight:700}
+
+  footer{margin-top:36px;padding-top:14px;border-top:1px solid var(--line);
+    font-size:11px;color:var(--sub);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+  footer a{color:var(--accent)}
+  a:focus-visible,summary:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+  @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="sheet">
+<header>
+  <div class="eyebrow">KHD 経営設計ボード ／ 方針の組み直し</div>
+  <h1>法人の利益最大化を、唯一の焦点にする</h1>
+  <div class="asof">2026-08-04 ／ 前提＝<a href="https://claude.ai/code/artifact/3cfd1521-0bf5-42a5-bb01-71e3c502c834">働き方とライフプラン設計</a>（同日版）の実額を引き継ぎ、菊池さんの新方針「高松の余剰→役員報酬→個人の与信→会社員に戻らずに借換え」を検証して全体を組み直したもの</div>
+</header>
+
+<div class="note stop"><b>先に1点、できなかったことの報告です。</b>共有いただいた Google フォトのアルバムは <b>HTTP 403（ログイン必須）で開けず、追加された本の中身を読めていません</b>。したがってこのボードは、既存の2冊（「新マイクロ法人」「売上最小化、利益最大化の法則」）＋実額＋今回のご指示だけで組んでいます。<br>ご指示にある「仕組みづくりを休憩して営業特化するために追加した本」という位置づけは、<b>そのまま設計思想として採用</b>しました（後述「営業特化の設計」）。書名と要点を1行いただければ、その本の論点を各章に差し込み直します。</div>
+
+<h2><span class="k">結論</span>方向性は正しい。ただし成立には条件が2つある</h2>
+<p class="lead">菊池さんの仮説——<b>「高松で余剰が出るなら役員報酬を上げる → 個人の給与が増える → 与信が良くなる → 借換えのために会社員に戻る必要がなくなる」</b>——は、税務上も与信実務上も<b>筋が通っています</b>。組み直した設計もこの線に沿っています。<br>ただし数字を入れると、成立条件が2つ出てきました。<b>①法人が生む現金を、いまの年188万から年616万まで引き上げること ②借換えが1年後ろにずれるのを受け入れること</b>。この2つを飲めるなら、会社員に戻らない道は現実に成立します。</p>
+
+<div class="keyfig">
+  <div class="num"><span class="big">36</span><span class="unit">万円 ／ 月</span></div>
+  <div class="txt">
+    <div class="cap">これから追うべき、唯一の数字</div>
+    法人が毎月生む現金を、<b>いまより36万円ぶん増やす</b>。これだけで役員報酬を月45万に設定でき、家計は給与なしで自立します。<br>
+    <b>実質はオーロラ1本の話です</b>——月商20万の想定を<b>月商60万</b>に乗せれば、この36万はそのまま埋まります。営業特化とは、この1本を追うことです。
+  </div>
+</div>
+
+<h2><span class="k">検証 1</span>高松の「余剰」は、実額でいくらか</h2>
+<p>まず前提を精査します。既存ボードの「277＝年203万CF」は<b>税引前</b>の数字で、ここから法人税が引かれます。土地値割合90.5%の物件は<b>建物が小さい＝減価償却が取れない＝会計上の利益がそのまま出る</b>ため、税負担が重くなる構造です。</p>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>項目</th><th>年額</th><th>内訳・前提</th></tr></thead>
+  <tbody>
+  <tr><td>年間売上（家賃）</td><td class="r win">＋513万</td><td>大学生協・トラステン管理</td></tr>
+  <tr><td>原価・変動費</td><td class="r">▲64万</td><td>管理料・修繕・固都税</td></tr>
+  <tr><td>支払利息</td><td class="r">▲121万</td><td>岩銀3,700万×3.0%＋公庫300万×3.30%</td></tr>
+  <tr><td>減価償却</td><td class="r">▲95万</td><td>🟡建物380万（取得4,000万×9.5%）を4年償却と仮置き</td></tr>
+  <tr><td><b>会計上の利益</b></td><td class="r"><b>233万</b></td><td>ここに法人税がかかる</td></tr>
+  <tr><td>法人税等（実効23%）</td><td class="r lose">▲54万</td><td>所得800万以下・法人全体で通算</td></tr>
+  <tr><td class="muted">（元本返済 125万は費用にならない）</td><td class="r muted">—</td><td class="muted">利息121万＋元本125万＝返済246万</td></tr>
+  <tr class="sum"><td>277高松の真の余剰（税引後CF）</td><td class="r">約 150万</td><td>203万（税引前CF）− 54万（税）</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note warn"><b>ここが最初のギャップです。</b>高松は確かに稼ぎますが、<b>手元に残るのは年150万＝月12.5万</b>。役員報酬に振り向けても、社会保険料を差し引くと<b>月9万前後の増額が精一杯</b>です。<br><b>つまり「高松の余剰だけでは、役員報酬を与信に効く水準まで上げられない」</b>。高松は土台であって、エンジンではない——これが実額から出た最初の答えです。</div>
+
+<h2><span class="k">検証 2</span>役員報酬は「いくらまでなら、損をせずに上げられるか」</h2>
+<p class="lead">法人の金を個人に移すと、<b>法人税は減るが社会保険料が増える</b>。どこまでが得で、どこから割に合わなくなるのか——実額で計算しました。結論から言うと、<b>どの水準でも移転効率は88〜92%を保ちます</b>。役員報酬を上げること自体に、大きな損はありません。</p>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>役員報酬</th><th>法人の総コスト<br><span class="muted">報酬＋社保法人分</span></th><th>減る法人税<br><span class="muted">実効23%</span></th><th>法人の実質負担</th><th>個人の手取り<br><span class="muted">社保・所得税・住民税後</span></th><th>移転効率</th></tr></thead>
+  <tbody>
+  <tr><td><b>月5万</b>（現状）<span class="muted"><br>年60万</span></td><td class="r">68万</td><td class="r">▲16万</td><td class="r">53万</td><td class="r">51万</td><td class="c win">97%</td></tr>
+  <tr><td><b>月20万</b><span class="muted"><br>年240万</span></td><td class="r">274万</td><td class="r">▲63万</td><td class="r">211万</td><td class="r">194万</td><td class="c win">92%</td></tr>
+  <tr><td><b>月30万</b><span class="muted"><br>年360万</span></td><td class="r">411万</td><td class="r">▲95万</td><td class="r">316万</td><td class="r">287万</td><td class="c win">91%</td></tr>
+  <tr class="hi"><td><b>月45万</b>（自立ライン）<span class="muted"><br>年540万</span></td><td class="r">616万</td><td class="r">▲142万</td><td class="r">475万</td><td class="r">420万</td><td class="c win">89%</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note good"><b>この表がいちばん伝えたいこと：役員報酬を上げても、失う金はほとんどありません。</b>月45万にしても、法人の実質負担475万に対して個人の手取りは420万。<b>差の55万が、社会保険料の法人負担ぶん</b>です。<br>そしてその55万は<b>捨て金ではありません</b>——厚生年金の将来給付になり、健康保険の傷病手当・出産手当（二人目のとき麻梨奈さんの扶養判定にも効く）になり、そして何より<b>「年収540万の源泉徴収票」という与信の証拠になる</b>。<b>年55万で与信を買っている</b>、と読むのが正しい理解です。</div>
+<div class="note"><b>いま上げられない理由は1つだけ、タイミングです。</b>役員報酬は<b>定期同額給与</b>——事業年度開始から3ヶ月以内に決めた額を1年間動かせません。KHDは2月開始なので<b>改定できるのは毎年4月末まで</b>。第5期（2026/2〜2027/1）はすでに期限を過ぎており、<b>次のチャンスは2027年4月、その次は2028年4月</b>。年に1度しか窓が開かない、という制約が全体の時間軸を決めます。</div>
+
+<h2><span class="k">検証 3</span>与信の実務 — 代表者は「会社員」として審査されない</h2>
+<p class="lead">ここが仮説にとって最大の壁です。<b>金融機関は、法人代表者を給与所得者としては見ません。</b>年収がいくらであっても、審査は「個人＋法人の一体」で行われます。</p>
+<div class="cols">
+  <div class="card">
+    <div class="hd"><h4>会社員として借りる場合</h4><span class="chip good">審査が軽い</span></div>
+    <div class="bd">出すもの＝<b>源泉徴収票（1〜3年分）と勤続年数</b>。勤続1年で土俵に乗る。会社の業績は問われない。<br>2027/4に調査士事務所へ勤めれば、<b>2028年春に借換え審査に出せる</b>。</div>
+  </div>
+  <div class="card">
+    <div class="hd"><h4>法人代表者として借りる場合</h4><span class="chip warn">審査が重い</span></div>
+    <div class="bd">出すもの＝本人の源泉徴収票＋<b>法人の決算書2〜3期分</b>。法人が赤字なら、個人の年収が高くても否決されうる。<br>さらに<b>代表者個人の連帯保証が、個人の負債として合算される場合がある</b>。</div>
+  </div>
+</div>
+<div class="note stop"><b>🔴 最優先の確認事項：連帯保証4,000万の扱い。</b>岩銀3,700万＋公庫300万は<b>菊池さん個人の連帯保証つき</b>です。住宅ローンの審査でこれが個人債務として返済比率に算入されると、年収540万では<b>まず通りません</b>。<br>ただし実務上、<b>収益物件のローンは「事業性借入」として返済比率の計算から除外する金融機関があります</b>——277が満室で家賃が返済を上回っていることを、確定申告書と賃貸借契約で示せる場合です。277はイールドギャップ9.1%で回っているので、条件は満たしています。<br><b>この「除外してもらえるか」の一点で、設計全体が変わります。</b>役員報酬を上げるより先に、これを銀行に当てるべきです（後述の実行順で1番に置きました）。</div>
+
+<h3>借換えが可能になる時期 — 2つのルートの比較</h3>
+<p>役員報酬を上げても、<b>源泉徴収票は暦年で作られる</b>という事実が効いてきます。2027年4月に月45万へ改定すると、2027年分の源泉徴収票は「5万×3ヶ月＋45万×9ヶ月＝420万」で満額になりません。満額540万が載るのは<b>2028年分から</b>。</p>
+<pre class="mermaid">
+flowchart LR
+  S["2026/8<br/>いま"] --> A["2027/4<br/>役員報酬を月45万へ改定<br/>（定期同額・年1回の窓）"]
+  S --> B["2027/4<br/>調査士事務所へ勤務<br/>＋役員報酬 月20万"]
+  A --> A2["2028/1期末<br/>第6期 決算"]
+  A2 --> A3["2029/1期末<br/>第7期 決算"]
+  A3 --> A4["2029年春<br/>決算書2期＋源泉2年<br/>借換え審査"]
+  B --> B2["2028年春<br/>勤続1年＋源泉1年<br/>借換え審査"]
+  A4 --> Z["借換え完了"]
+  B2 --> Z
+</pre>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>ルート</th><th>借換え審査に出せる時期</th><th>審査の通りやすさ</th><th>時間の自由</th><th>2027年の世帯収入</th></tr></thead>
+  <tbody>
+  <tr><td><b>Ⓐ 事業一本</b><br><span class="muted">会社員に戻らない・役員報酬 月45万</span></td><td class="c mid">2029年春<br><span class="muted">（1年後ろ倒し）</span></td><td class="c mid">決算書2期＋保証の壁</td><td class="c win">◎ 完全に自由</td><td class="r">540万＋物販67万</td></tr>
+  <tr class="hi"><td><b>Ⓑ 二刀流</b><br><span class="muted">事務所勤務＋代表・役員報酬 月20万</span></td><td class="c win">2028年春<br><span class="muted">（既存プランどおり）</span></td><td class="c win">給与所得者ルートが使える</td><td class="c">△ 平日は拘束</td><td class="r win">700万＋240万＋67万</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note good"><b>これが今回いちばん重要な発見です。</b>「会社員に戻らない」を選ぶと、<b>借換えは1年遅れます</b>。逆に言えば、<b>払うコストは「1年ぶんの金利差」だけ</b>。<br>🟡ここを判断するのに、現在の住宅ローンの<b>残高・金利・残年数</b>が要ります。仮に残高3,000万・金利差0.8%なら1年ぶんの遅れは約24万——<b>「時間の自由」を24万で買えるなら、Ⓐは十分ありえます</b>。逆に金利差が大きいなら、Ⓑで先に借換えて、そのあと独立するのが賢い。<b>数字が出れば即決できる論点です</b>。</div>
+
+<h2><span class="k">設計</span>役員報酬の階段 — いつ、いくらに上げるか</h2>
+<p class="lead">改定の窓は年1回（4月末）。だから<b>4段の階段</b>としてあらかじめ決めておき、その年の4月に「上れるか」だけを判定します。各段の右側が<b>その段に上るために法人が生んでいなければならない現金</b>（役員報酬・社保を引く前）です。</p>
+<div class="ladder">
+  <div class="rung now">
+    <div class="step">現在地<em>第5期</em></div>
+    <div class="what"><b>月5万を据置</b>（改定期限を過ぎているため変更不可）。法人に現金を貯め、277の決済とオーロラ開業を通す年。<span class="muted">法人の現金創出力＝年188万（役員報酬前）</span></div>
+    <div class="amt"><span class="m">月 5万</span><span class="s">必要 年 68万<br>✅ 達成済</span></div>
+  </div>
+  <div class="rung">
+    <div class="step">1段目<em>2027/4</em></div>
+    <div class="what"><b>月20万へ改定。</b>個人の所得税・住民税が年12万で収まる「税ロスがほぼ出ない」上限帯。<b>社会保険に本格加入し、厚生年金・健康保険の実績を作り始める</b>。二刀流ならこの段。</div>
+    <div class="amt"><span class="m">月 20万</span><span class="s">必要 年 274万<br>不足 年86万（月7万）</span></div>
+  </div>
+  <div class="rung">
+    <div class="step">2段目<em>2028/4</em></div>
+    <div class="what"><b>月30万へ改定。</b>2028年分の源泉徴収票が満額360万で出る。二人目の出産年——健保の出産関連給付と、扶養の設計がここで効く。</div>
+    <div class="amt"><span class="m">月 30万</span><span class="s">必要 年 411万<br>不足 年223万（月19万）</span></div>
+  </div>
+  <div class="rung goal">
+    <div class="step">3段目<em>2029/4 以降</em></div>
+    <div class="what"><b>月45万＝会社員に戻らなくてよくなるライン。</b>手取り420万が、家計の必要額414万（生活費30.1万＋NISA10万−物販5.6万）を初めて上回る。<b>ここに立てば、給与所得がなくても家計は自立する</b>。</div>
+    <div class="amt"><span class="m">月 45万</span><span class="s">必要 年 616万<br>不足 年428万（月36万）</span></div>
+  </div>
+</div>
+<div class="note"><b>階段の読み方：</b>いまの法人は役員報酬を引く前で<b>年188万</b>の現金を生みます（第6期 税引後+95万＋税25万＋現行報酬60万＋社保8.5万から逆算）。<b>1段目までは「あと月7万」——射程内です。</b>3段目までは「あと月36万」。これが冒頭の唯一の数字です。</div>
+
+<h2><span class="k">営業</span>唯一の数字 月36万を、どこから取るか</h2>
+<p class="lead"><b>「仕組みづくりを休憩して営業に特化する」——この判断を、私は全面的に支持します。</b>2冊目の本の指摘どおり、<b>会計技術で富は生まれない</b>。財務司令塔も秘書室も自動化もすでに動いており、これ以上作っても月36万は1円も埋まりません。埋まるのは営業だけです。</p>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>取りに行く先</th><th>いまの想定</th><th>目標</th><th>増える月次利益</th><th>難易度・現実性</th></tr></thead>
+  <tbody>
+  <tr class="hi"><td><b>オーロラ（船橋）</b><br><span class="muted">自分で立ち上げ・自分の裁量</span></td><td class="r">月商20万<br><span class="muted">運転費40万 → 月▲20万</span></td><td class="r win">月商60万</td><td class="c win">＋40万</td><td>★ <b>これ1本で36万を超える。</b>単価6,000円なら月100回。開業11/4から14ヶ月で到達できるか</td></tr>
+  <tr><td><b>コンサル（医療テナント）</b><br><span class="muted">110万/件・福井さん経由</span></td><td class="r">年260万<br><span class="muted">≒2.4件</span></td><td class="r">年480万<br><span class="muted">≒4.4件</span></td><td class="c">＋18万</td><td>△ <b>自力の入口が要る。</b>福井さん依存のままでは目標にできない</td></tr>
+  <tr><td><b>物販（韓国輸出）</b><br><span class="muted">ゆーしさん運営・手離れ最良</span></td><td class="r">波あり<br><span class="muted">1-6月 月4〜15万／7月〜ゼロ</span></td><td class="r">波を均す</td><td class="c">＋0〜5万</td><td>◯ <b>撤退123ASINの出品停止だけ実施。</b>これ以上は触らない</td></tr>
+  <tr><td><b>277高松</b></td><td class="r">満室</td><td class="r">満室維持</td><td class="c">±0</td><td>— <b>伸びない。触らない</b></td></tr>
+  <tr class="sum"><td>結論</td><td colspan="4"><b>月36万の8割以上が、オーロラの集客ひとつにかかっている。</b>営業特化とは「オーロラを月商60万に乗せること」の言い換えです</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>凍結するもの／続けるもの</h3>
+<div class="lists">
+  <div class="freeze">
+    <div class="hd">⛔ 2027年1月末まで凍結</div>
+    <ul>
+      <li>新しい GAS・ダッシュボード・自動化パイプラインの<b>新規開発</b></li>
+      <li>新しいマニュアル・スライド生成の仕組みづくり</li>
+      <li>BS・負債・不動産評価の精緻化（<span class="muted">前ボードの宿題。急がない</span>）</li>
+      <li><b>月額固定費を増やす投資</b>＝オーロラ2店舗目・新規物件・採用</li>
+      <li>岩手×東京の二拠点構想の具体化（<span class="muted">着手は2028年以降</span>）</li>
+    </ul>
+  </div>
+  <div class="keepon">
+    <div class="hd">✅ 動かし続けるもの（月30分以内）</div>
+    <ul>
+      <li>財務司令塔の月次更新（<b>毎月5日</b>）</li>
+      <li>秘書室の日報・朝ブリーフ（<span class="muted">すでに自動</span>）</li>
+      <li>調査士の学習（<b>10/18まで最優先</b>）</li>
+      <li>橋本税理士への四半期確認</li>
+      <li>NISA 月10万の自動積立</li>
+    </ul>
+  </div>
+</div>
+<div class="note warn"><b>凍結の理由をはっきりさせておきます。</b>仕組みづくりは「効いている実感」が早いので中毒性があります。しかし<b>すでに作った仕組みが月36万を生んでいない以上、次の仕組みも生みません</b>。<br>逆に、<b>凍結は永久ではありません</b>——2027年1月末の判定を通過したら、必要な仕組みだけを作り直す。<b>いまは「作る自分」を止めて「売る自分」に全部渡す期間</b>、という時限措置です。</div>
+
+<h3>月次の管理は、この3行だけ</h3>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>毎月5日に見る数字</th><th>いま</th><th>2027/1末の合格ライン</th><th>取り方</th></tr></thead>
+  <tbody>
+  <tr><td><b>① オーロラ 月商</b></td><td class="r">開業前</td><td class="r win">60万</td><td>レセコン／予約システムの月次売上1行</td></tr>
+  <tr><td><b>② コンサル 受注残</b></td><td class="r">🟡</td><td class="r">2件以上</td><td>契約済＋商談中の件数</td></tr>
+  <tr><td><b>③ 法人12ヶ月ローリング現金創出力</b><br><span class="muted">役員報酬・社保を引く前</span></td><td class="r">188万</td><td class="r win">616万</td><td>財務司令塔で自動計算</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note"><b>①②③以外は、月次では見ません。</b>物販は四半期に1回、営業利益1行だけ。無収入寿命は四半期に1回。<b>管理指標を3行に絞ることが、営業特化の実体です</b>——見る数字を減らさないと、時間は営業に移りません。</div>
+
+<h2><span class="k">判定</span>2027年1月末 — 会社員に戻るかを、数字で決める日</h2>
+<p class="lead">「戻る／戻らない」を気分で決めないために、<b>判定日と判定式を先に固定します</b>。判定日は<b>2027年1月31日</b>——第5期の期末であり、4月の役員報酬改定の3ヶ月前で、就職活動にも間に合う唯一のタイミングです。</p>
+<div class="gate">
+  <div class="gh">判定式：直近12ヶ月の「法人の現金創出力（役員報酬・社保を引く前）」は、いくらか</div>
+  <div class="gb">
+    <div class="row r-go">
+      <div class="cond">616万 以上<span class="sub">＝オーロラ月商60万を達成</span></div>
+      <div class="act"><b>就職しない。Ⓐ事業一本へ。</b>2027年4月に役員報酬を<b>月45万</b>に改定。家計は給与なしで自立する。借換えは2029年春に法人ルートで臨む。<b>菊池さんの仮説が、そのまま現実になった状態です</b>。</div>
+    </div>
+    <div class="row r-mid">
+      <div class="cond">411万 〜 616万<span class="sub">＝オーロラは黒字だが自立には届かず</span></div>
+      <div class="act"><b>Ⓑ二刀流。</b>調査士事務所へ勤務しつつ、役員報酬を<b>月20〜30万</b>に改定。世帯収入は最も厚くなり（給与700万＋報酬240〜360万）、<b>借換えは2028年春に給与所得者ルートで最短で通す</b>。通した後に独立を再判断する。</div>
+    </div>
+    <div class="row r-no">
+      <div class="cond">411万 未満<span class="sub">＝オーロラが立ち上がっていない</span></div>
+      <div class="act"><b>Ⓑ二刀流＋役員報酬は月5万据置。</b>法人の現金を減らさず、オーロラの黒字化に集中。役員報酬の階段は2028年4月に1年ずらす。<b>この場合でも、既存プラン（2028年春の借換え）は一切傷つきません</b>。</div>
+    </div>
+  </div>
+</div>
+<div class="note good"><b>この判定式のいいところは、どの分岐でも家計が壊れないことです。</b>最悪の分岐（411万未満）でも、既存プランどおり2027年4月に就職し、2028年春に借換える。<b>つまり「事業一本を狙う」ことに、下振れリスクがありません</b>——狙って届かなければ、元の計画に戻るだけです。<br>だから<b>2026年8月〜2027年1月の6ヶ月は、迷わず全力で営業に振ってよい</b>。これが数字から出た許可です。</div>
+
+<h2><span class="k">生活</span>楽しく生きる側の設計 — 旅行・NISA・家族</h2>
+<p class="lead"><b>「楽しく生きる」を、我慢の対象から予算の対象に変えます。</b>いちばん効くのは、旅行費を「削るべき無駄」ではなく<b>先に確保する固定費</b>にしてしまうことです。数字で見ると、我慢してもほとんど何も改善しません。</p>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>項目</th><th>年額</th><th>月額固定費への影響</th><th>無収入寿命への影響</th><th>判定</th></tr></thead>
+  <tbody>
+  <tr><td>現状の月額固定費<span class="muted"><br>オーロラ開業後・年内ボトム</span></td><td class="r">—</td><td class="r">127.6万</td><td class="c">20.0ヶ月</td><td class="c">基準</td></tr>
+  <tr class="hi"><td><b>旅行・レジャー予算</b><span class="muted"><br>国内2回＋岩手帰省2回</span></td><td class="r">＋60万</td><td class="r">132.6万</td><td class="c win">19.2ヶ月</td><td class="c"><span class="chip good">◎ 入れる</span></td></tr>
+  <tr><td>NISA 積立<span class="muted"><br>すでに実行中・支出ではなく資産形成</span></td><td class="r">120万</td><td class="r">（据置）</td><td class="c">—</td><td class="c"><span class="chip good">◎ 継続</span></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note fam"><b>旅行を全部やめても、無収入寿命は0.8ヶ月しか伸びません。</b>20.0ヶ月が19.2ヶ月になるだけ。<b>我慢の費用対効果が、ほぼゼロ</b>ということです。<br>だから<b>年60万は先に確保して、堂々と使ってください</b>。むしろ削るべきなのは旅行ではなく「月額固定費を増やす新規投資」のほう——そちらは20ヶ月を一気に削ります。<b>止める場所を間違えないための表です</b>。</div>
+<div class="cols">
+  <div class="card">
+    <div class="hd"><h4>NISA — 増額のタイミングも階段に載せる</h4><span class="chip fam">資産形成</span></div>
+    <div class="bd">夫婦の生涯枠は<b>3,600万</b>（1,800万×2）。月10万＝年120万のペースだと消化に30年かかります。<br><b>役員報酬の階段と連動させるのが自然</b>——月20万に上がったら<b>NISAも月15万</b>へ、月45万に上がったら<b>月20万</b>へ。<b>増えた報酬の3分の1を自動で積立に回す</b>と決めておけば、生活水準だけが上がるのを防げます。</div>
+  </div>
+  <div class="card">
+    <div class="hd"><h4>岩手帰省は、277の視察を兼ねる</h4><span class="chip warn">🟡要確認</span></div>
+    <div class="bd">277は岩手（菊池さんの実家圏）。<b>出張旅費規程を整備すれば、物件視察としての交通費を法人負担にできる可能性</b>があります。<br>ただし<b>家族同行分は原則対象外</b>で、私的旅行との按分が論点。<b>橋本税理士に「出張旅費規程を作る価値があるか」を確認</b>してください。使えれば年10〜20万の可処分が増えます。</div>
+  </div>
+</div>
+
+<h2><span class="k">年表</span>2026 → 2032 — 事業と家族を1本の線に</h2>
+<p class="muted">🟡二人目は2028年出産（葵斗と3歳差）を仮置き。<span class="chip flat">事業</span><span class="chip fam">家族</span><span class="chip warn">お金の判断</span>で色分けしています。</p>
+<div class="tl">
+  <div class="ev">
+    <div class="yr">2026<span class="ages">研太34 ／ 麻梨奈33 ／ 葵斗1</span></div>
+    <div class="bd"><b>仕込みと、営業への切り替えの年。</b>8/14 277決済 → 10/18 調査士試験 → 11/4 オーロラ開業 → <b>11月以降は全リソースをオーロラの集客へ</b></div>
+    <div class="fin">仕組みづくりを凍結。家計 月+1.2万（積立10万を回しながら）。無収入寿命 44→20ヶ月</div>
+  </div>
+  <div class="ev mon">
+    <div class="yr">2027 <span class="ages" style="color:var(--brass)">1月末＝判定日</span></div>
+    <div class="bd"><b>分岐の年。</b>1/31 法人の現金創出力で進路を判定 → 2月 セーフティ一時貸付170万を借換え → <b>4月 役員報酬を改定（年に1度の窓）</b>／ 就職の有無はここで決まっている</div>
+    <div class="fin">Ⓐなら報酬月45万・給与なし ／ Ⓑなら給与700万＋報酬月20〜30万。どちらでも家計は黒字化</div>
+  </div>
+  <div class="ev fam">
+    <div class="yr">2028<span class="ages">研太36 ／ 麻梨奈35 ／ 葵斗3 ／ 🟡二人目0</span></div>
+    <div class="bd"><b>家族が増える年。</b>4月 役員報酬を2段目へ（月30万） ／ <b>Ⓑルートなら春に借換え審査</b> ／ 🟡二人目出産・麻梨奈さん2回目の育休</div>
+    <div class="fin">健保の出産関連給付が効く。役員報酬を上げておいた効果が、ここで初めて生活実感になる</div>
+  </div>
+  <div class="ev mon">
+    <div class="yr">2029<span class="ages">研太37 ／ 葵斗4 ／ 二人目1</span></div>
+    <div class="bd"><b>Ⓐルートの借換え審査（決算書2期＋源泉2年が揃う）</b> ／ 8月 277保有3年レビュー＝売却か継続か ／ 岩手×東京の二拠点構想を解凍</div>
+    <div class="fin">教育費はまだ軽い。純資産を最も積める時期に入る</div>
+  </div>
+  <div class="ev">
+    <div class="yr">2030-2031<span class="ages">研太38-39 ／ 葵斗5-6</span></div>
+    <div class="bd">オーロラ2店舗目 or 施術者増員の投資判断（<b>固定費を増やす投資は、ここまで解禁しない</b>） ／ 岩手の空き家買取再販に着手＝調査士業とのシナジー</div>
+    <div class="fin">役員報酬 月45万を維持できていれば、会社員に戻る選択肢は完全に消える</div>
+  </div>
+  <div class="ev fam">
+    <div class="yr">2032<span class="ages">研太40 ／ 葵斗7（小1）／ 二人目4</span></div>
+    <div class="bd"><b>葵斗 小学校入学。</b>教育費が本格化（年35万/人）。住み替え（都内6,000万想定）を検討するならこのタイミング</div>
+    <div class="fin">教育費は二人で1,750万（留学込み2,350万）＝年98万ペース。長期目標＝2046年に純資産1億</div>
+  </div>
+</div>
+
+<h2><span class="k">運用</span>これを、どう管理し続けるか</h2>
+<p class="lead">設計は作った瞬間から古くなります。<b>更新の頻度と担当を決めておかないと、このボードも「作って終わった仕組み」の1つになります</b>。以下が最小の運用です。</p>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>いつ</th><th>やること</th><th>所要</th><th>どこで</th></tr></thead>
+  <tbody>
+  <tr><td><b>毎月5日</b></td><td>3行だけ更新（オーロラ月商／コンサル受注残／法人12ヶ月ローリング現金創出力）</td><td class="c">15分</td><td>財務司令塔</td></tr>
+  <tr><td><b>四半期末</b></td><td>無収入寿命の再計算／物販の営業利益1行／橋本税理士への確認</td><td class="c">30分</td><td>このボードを更新</td></tr>
+  <tr class="hi"><td><b>毎年1月31日</b></td><td><b>進路判定</b>（判定式を当てる）。Ⓐ／Ⓑ／据置を決める</td><td class="c">半日</td><td>麻梨奈さんと一緒に</td></tr>
+  <tr class="hi"><td><b>毎年4月末まで</b></td><td><b>役員報酬の改定</b>（定期同額給与の窓）。1月の判定に従って議事録を作成</td><td class="c">1時間</td><td>税理士と</td></tr>
+  <tr><td>年1回（12月）</td><td>NISA増額の判定（増えた報酬の1/3を積立へ）／翌年の旅行2回を先に予約</td><td class="c">1時間</td><td>家族会議</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note good"><b>意思決定の日は、年に2日だけです。</b>1月31日（進路）と4月末（報酬）。<b>それ以外の日は、判定式の分子を上げること＝営業だけをやる</b>。これが「仕組みづくりを休んで営業に特化する」を、カレンダーに落とした形です。</div>
+
+<h2><span class="k">実行</span>この90日でやること</h2>
+<ol class="steps">
+  <li><b>【最優先・8月中】銀行に「277のローンを住宅ローン審査の返済比率から除外できるか」を当てる。</b>いまの借入先か、借換え候補行の窓口へ。<b>この回答ひとつで、Ⓐルートが成立するかが決まります</b>。役員報酬をいくらにするかの議論は、これが分かってからで間に合います。</li>
+  <li><b>【8月中】現在の住宅ローンの残高・金利・残年数を、このボードに入れる。</b>「借換えが1年遅れるコスト」が実額で出て、ⒶとⒷの比較が数字で決着します。</li>
+  <li><b>【8月中】橋本税理士に4点確認。</b>①277の建物価格と償却年数（余剰150万の精度が上がる） ②役員報酬を2027年4月に月20〜45万へ上げる場合の社会保険と手続き ③出張旅費規程を作る価値 ④物販の消費税還付の実額と課税事業者維持の可否。</li>
+  <li><b>【8〜10月】調査士試験（10/18）を最優先。</b>これは営業特化の例外です。Ⓐを選んでも調査士資格は将来の独立（池田先生モデル＝月2件で100万・営業ゼロ）に直結するので、捨てません。</li>
+  <li><b>【9〜10月】オーロラの集客設計を、月商60万から逆算して作る。</b>単価6,000円なら月100回＝<b>1日あたり4〜5人</b>。この数字を開業前に紙に書き、11/4から日次で追う。</li>
+  <li><b>【11月〜】新規の仕組みづくりを凍結し、週の可処分時間の7割を営業に充てる。</b>月次で見る数字は3行だけにする。</li>
+  <li><b>【随時】麻梨奈さんに、判定式ごと共有する。</b>「1月末にこの数字を見て、こう決める」と先に伝えておけば、進路が変わっても不意打ちになりません。</li>
+</ol>
+
+<h2><span class="k">🟡</span>この設計が変わる、未確定の前提</h2>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>#</th><th>確認したいこと</th><th>分かると何が決まるか</th><th>誰に</th></tr></thead>
+  <tbody>
+  <tr><td>1</td><td><b>連帯保証4,000万が、住宅ローン審査で個人債務に算入されるか</b></td><td class="lose">Ⓐルートの成否そのもの</td><td>銀行</td></tr>
+  <tr><td>2</td><td>現在の住宅ローンの残高・金利・残年数</td><td>「1年遅れのコスト」＝ⒶⒷの決着</td><td>菊池さん</td></tr>
+  <tr><td>3</td><td>277の建物価格と償却年数</td><td>余剰150万の精度（±30万）</td><td>税理士</td></tr>
+  <tr><td>4</td><td>オーロラの単価と、想定来院数の根拠</td><td>月商60万の現実性＝判定式の分子</td><td>菊池さん</td></tr>
+  <tr><td>5</td><td>いま社会保険にどう加入しているか（国保／扶養／協会けんぽ）</td><td>役員報酬を上げたときの実コスト</td><td>菊池さん</td></tr>
+  <tr><td>6</td><td>コンサル年260万のうち、自力受注はいくらか</td><td>福井さん依存を外せるか</td><td>菊池さん</td></tr>
+  <tr><td>7</td><td><b>Google フォトに追加された本の書名と要点</b></td><td>営業特化の設計に、その本の論点を反映</td><td>菊池さん</td></tr>
+  <tr><td>8</td><td>二人目の希望時期（2028年仮置きでよいか）</td><td>年表の2028年以降すべて</td><td>麻梨奈さん</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2><span class="k">要約</span>ひとことで言うと</h2>
+<div class="keyfig" style="border-color:var(--accent);background:var(--accent-soft)">
+  <div class="num"><span class="big" style="color:var(--accent)">616</span><span class="unit" style="color:var(--accent)">万円 ／ 年</span></div>
+  <div class="txt">
+    <div class="cap" style="color:var(--accent)">法人が生めば、会社員に戻らなくてよくなる金額</div>
+    <b>菊池さんの仮説は正しい。</b>役員報酬を月45万まで上げれば、手取り420万が家計の必要額414万を上回り、給与なしで自立する。移転効率は89%——<b>失う金は年55万だけで、それは厚生年金と与信に変わる</b>。<br>
+    必要なのは、法人の現金創出力を<b>いまの年188万から年616万へ</b>。差は年428万＝<b>月36万</b>。<b>そのほぼ全額が、オーロラを月商60万に乗せられるかにかかっている</b>。<br>
+    判定は<b>2027年1月31日</b>。それまでの6ヶ月、やることは営業ひとつです。
+  </div>
+</div>
+
+<h2>更新ログ</h2>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>日付</th><th>変化</th></tr></thead>
+  <tbody>
+  <tr><td>2026-08-04<br><b>本版</b></td><td><b>新方針「法人の利益最大化のみを焦点にする」で全面的に組み直し。</b>①<b>高松の余剰を実額分解</b>＝税引前CF203万から法人税54万を引いた<b>年150万</b>が真の余剰。土地値90.5%物件は償却が取れず税が重い構造を指摘 ②<b>役員報酬の移転効率を4水準で試算</b>＝月5万〜45万のどこでも89〜97%。<b>上げても損はしない</b>ことを数値で確認 ③<b>与信の実務を訂正</b>＝法人代表者は給与所得者として審査されず、決算書2〜3期＋連帯保証4,000万の扱いが壁。<b>「会社員に戻らない」を選ぶと借換えは2028年春→2029年春に1年遅れる</b> ④<b>唯一の数字を月36万に確定</b>し、その8割以上がオーロラ月商60万に依存することを特定 ⑤<b>2027年1月31日の判定式</b>（616万／411万の2閾値・3分岐）を設置 ⑥旅行年60万を先取り固定費化＝無収入寿命への影響は0.8ヶ月のみ ⑦月次の管理指標を3行に絞り、意思決定日を年2日に固定</td></tr>
+  <tr><td>2026-08-04<br><span class="muted">前版</span></td><td><a href="https://claude.ai/code/artifact/3cfd1521-0bf5-42a5-bb01-71e3c502c834">働き方とライフプラン設計</a>＝2冊の本から働き方4択を比較。無収入寿命44→31→20ヶ月を実額算出。物販の評価と家計の黒字判定を訂正</td></tr>
+  </tbody>
+</table>
+</div>
+
+<footer>
+  <span>KHD 経営設計ボード ／ 秘書室作成 ／ 2026-08-04</span>
+  <span>関連＝<a href="https://claude.ai/code/artifact/3cfd1521-0bf5-42a5-bb01-71e3c502c834">働き方とライフプラン設計</a> ／ <a href="https://claude.ai/code/artifact/f38fd9c4-387c-4098-a0d5-4c1712d2290b">借入経営の通信簿</a> ／ <a href="https://claude.ai/code/artifact/d7354144-dd06-4dce-94bb-34eee44baee7">夫婦の羅針盤</a> ／ <a href="https://claude.ai/code/artifact/060a2a5d-60a3-4b4f-8cc2-bb815257b3ad">連結決算ボード</a></span>
+</footer>
+</div>

@@ -1,0 +1,275 @@
+<title>セミナー資料の尖らせ方｜医療専門不動産 v2 の構成案</title>
+<style>
+  :root{
+    --bg:#f2f0ec; --paper:#fffefb; --ink:#1e1c19; --sub:#67615a; --line:#ddd8d0;
+    --mai:#8a3324; --mai-soft:#f7e8e4; --mai-line:#d9b3a9; --on-mai:#fffefb;
+    --ao:#1f5f7a; --ao-soft:#e2eef2; --ao-line:#a3c1cf;
+    --ok:#256b45; --ok-soft:#e2f0e8;
+    --ng:#8f3030; --ng-soft:#f8e6e4;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{--bg:#131110; --paper:#1c1a18; --ink:#eae6e0; --sub:#a09992; --line:#332f2b;
+      --mai:#e0897a; --mai-soft:#341f1c; --mai-line:#6b3c34; --on-mai:#141110;
+      --ao:#68b0c9; --ao-soft:#152c35; --ao-line:#31576b;
+      --ok:#68c294; --ok-soft:#15321f; --ng:#df8781; --ng-soft:#361f1e;}
+  }
+  :root[data-theme="dark"]{--bg:#131110; --paper:#1c1a18; --ink:#eae6e0; --sub:#a09992; --line:#332f2b;
+      --mai:#e0897a; --mai-soft:#341f1c; --mai-line:#6b3c34; --on-mai:#141110;
+      --ao:#68b0c9; --ao-soft:#152c35; --ao-line:#31576b;
+      --ok:#68c294; --ok-soft:#15321f; --ng:#df8781; --ng-soft:#361f1e;}
+  :root[data-theme="light"]{--bg:#f2f0ec; --paper:#fffefb; --ink:#1e1c19; --sub:#67615a; --line:#ddd8d0;
+      --mai:#8a3324; --mai-soft:#f7e8e4; --mai-line:#d9b3a9; --on-mai:#fffefb;
+      --ao:#1f5f7a; --ao-soft:#e2eef2; --ao-line:#a3c1cf;
+      --ok:#256b45; --ok-soft:#e2f0e8; --ng:#8f3030; --ng-soft:#f8e6e4;}
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;
+    font-size:13.5px;line-height:1.78;padding:22px 14px 58px;font-variant-numeric:tabular-nums}
+  .sheet{max-width:1000px;margin:0 auto;background:var(--paper);border:1px solid var(--line);padding:34px 36px 36px}
+  @media (max-width:600px){.sheet{padding:22px 17px 26px}}
+  header{border-bottom:2px solid var(--mai);padding-bottom:15px}
+  .eyebrow{font-size:10.5px;letter-spacing:.2em;color:var(--mai);font-weight:700}
+  h1{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:27px;font-weight:600;
+    margin:10px 0 8px;line-height:1.45;text-wrap:balance}
+  @media (max-width:600px){h1{font-size:21px}}
+  .asof{font-size:11.5px;color:var(--sub);line-height:1.7}
+  h2{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:19px;font-weight:600;
+    margin:42px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--mai-line);
+    display:flex;gap:11px;align-items:baseline;flex-wrap:wrap}
+  h2 .k{font-family:"Hiragino Sans",sans-serif;font-size:9.5px;letter-spacing:.18em;
+    color:var(--mai);font-weight:700;border:1px solid var(--mai-line);padding:3px 8px;white-space:nowrap}
+  h3{font-size:14px;margin:28px 0 9px;font-weight:700}
+  p{margin:0 0 11px}
+  .lead{background:var(--mai-soft);padding:15px 18px;margin:0 0 4px;font-size:13px;border-left:4px solid var(--mai)}
+  .lead b{color:var(--mai)}
+  .tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:11px}
+  table{border-collapse:collapse;width:100%;font-size:12.5px;min-width:600px}
+  th,td{border-bottom:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+  thead th{border-bottom:1.5px solid var(--mai);color:var(--mai);font-size:10.5px;letter-spacing:.1em;white-space:nowrap}
+  td.c{text-align:center;white-space:nowrap}
+  tr.sum td{border-top:1.5px solid var(--mai);border-bottom:none;background:var(--mai-soft);font-weight:700}
+  tr.hi td{background:var(--ao-soft)}
+  .ng{color:var(--ng)} .ok{color:var(--ok);font-weight:700}
+  .note{border-left:3px solid var(--ao);background:var(--ao-soft);padding:12px 15px;font-size:12.5px;margin-top:13px}
+  .note b{color:var(--ao)}
+  .note.mai{border-left-color:var(--mai);background:var(--mai-soft)} .note.mai b{color:var(--mai)}
+  .note.ok{border-left-color:var(--ok);background:var(--ok-soft)} .note.ok b{color:var(--ok)}
+  .note.ng{border-left-color:var(--ng);background:var(--ng-soft)} .note.ng b{color:var(--ng)}
+  .muted{color:var(--sub);font-size:11.5px}
+
+  /* スライド案 */
+  .slide{border:1px solid var(--line);margin-top:12px}
+  .slide.new{border:2px solid var(--ok)}
+  .slide .sh{display:flex;justify-content:space-between;gap:12px;align-items:baseline;
+    padding:8px 15px;background:var(--ao-soft);flex-wrap:wrap}
+  .slide.new .sh{background:var(--ok-soft)}
+  .slide .sh .no{font-size:10.5px;letter-spacing:.14em;font-weight:700;color:var(--ao)}
+  .slide.new .sh .no{color:var(--ok)}
+  .slide .sh .tag{font-size:10px;font-weight:700;color:var(--sub)}
+  .slide .sb{padding:14px 17px}
+  .slide .ttl{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:18px;
+    font-weight:600;line-height:1.45;margin-bottom:8px}
+  @media (max-width:600px){.slide .ttl{font-size:15.5px}}
+  .slide .sub{font-size:12.5px;color:var(--sub);line-height:1.7}
+  .slide .sub b{color:var(--ink)}
+  .slide .was{font-size:11.5px;color:var(--sub);margin-top:9px;padding-top:9px;border-top:1px dashed var(--line)}
+  .slide .was s{color:var(--ng)}
+
+  figure{margin:16px 0 0;padding:0}
+  figure svg{display:block;width:100%;max-width:100%;height:auto;color:var(--ink)}
+  figcaption{font-size:11.5px;color:var(--sub);margin-top:9px;line-height:1.7}
+  figcaption b{color:var(--ink)}
+  .figwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);
+    padding:18px 16px;background:var(--paper)}
+  .figwrap svg{min-width:700px}
+
+  ol.n{counter-reset:z;list-style:none;padding:0;margin:13px 0 0;display:flex;flex-direction:column;gap:11px}
+  ol.n li{counter-increment:z;position:relative;padding-left:38px;font-size:13px;line-height:1.8}
+  ol.n li::before{content:counter(z);position:absolute;left:0;top:2px;width:25px;height:25px;
+    border-radius:50%;background:var(--mai);color:var(--on-mai);display:flex;
+    align-items:center;justify-content:center;font-size:11.5px;font-weight:700}
+
+  footer{margin-top:40px;padding-top:13px;border-top:1px solid var(--line);font-size:11px;
+    color:var(--sub);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+  a{color:var(--ao)}
+  a:focus-visible{outline:2px solid var(--mai);outline-offset:2px}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="sheet">
+<header>
+  <div class="eyebrow">セミナー資料の改訂 ／ 医療専門不動産のビジネスモデル（2026-05-26 実施）</div>
+  <h1>最後の1枚を、1枚目に持ってくる</h1>
+  <div class="asof">2026-08-04 ／ 原理は<a href="https://claude.ai/code/artifact/45acd817-8204-469a-ba23-6c20e4d5a1f5">利益最大化ボード</a>（OPQ分析・4鉄則・演歌の戦略）と<a href="https://claude.ai/code/artifact/2bdb3462-780f-42bc-b548-8c7b6d3956b8">発信＆ターゲット設計</a>（測れて売れる・看板の使い分け）に照らして診断</div>
+</header>
+
+<h2><span class="k">診断</span>先に、このデッキの強いところ</h2>
+<p class="lead"><b>まず率直に、これは強いデッキです。</b>削る前に、何が効いているかを確定させます——<b>直すのは構成と言葉で、中身は減らしません</b>。</p>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>効いている点</th><th>なぜ効くか</th></tr></thead>
+  <tbody>
+  <tr class="hi"><td><b>検証できる数字が実物で入っている</b></td><td>診療圏人口48,201人／65歳以上23.8%／競合7施設／自院推定133人・夜123人／外来90→130人・単価4.3千円・252日・借入1.0億。<b>「テンプレに見えるが」と自分で先に言っているのも正しい</b>——反論を先に潰しています</td></tr>
+  <tr class="hi"><td><b>計算式を公開している</b></td><td><b>(人口 × 受療率) ÷ (競合数 + 1)</b>。式を出すのは「隠さない」の証明で、いちばん信用が上がる箇所です</td></tr>
+  <tr><td><b>Before / After が1枚で対比されている</b></td><td>「お願いします」→「ご紹介します」。<b>これがデッキ全体でいちばん記憶に残る1枚</b>です</td></tr>
+  <tr><td><b>3軸マトリクス（時間×起点×収益）</b></td><td>収益が重なると案件が太くなる、を1枚で示せている。<b>5段階利益管理と同じ発想</b>です</td></tr>
+  <tr><td><b>最後の1枚が本物</b></td><td>「不動産を売るな。悩みを、刈り取れ」。<b>これが主メッセージです</b>——だから位置が問題になります（次章）</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2><span class="k">欠陥1</span>主メッセージが、最後にありました</h2>
+<p class="lead"><b>OPQ分析に照らすと、これが唯一かつ最大の構造的欠陥です。</b>本（山崎康司）の原則は<b>「主メッセージは冒頭に置き、読み手のQに直接答える」</b>。このデッキは<b>結論を最後まで温存する構成</b>で、聞き手は最後の1枚まで「で、何の話だ」を抱えたまま聞くことになります。</p>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>OPQ</th><th>聞き手（チームてっかん＝不動産の同業者）の場合</th></tr></thead>
+  <tbody>
+  <tr><td><b>O</b> 目指す状況</td><td>単発で終わらない、長期で積み上がる収益の柱がほしい</td></tr>
+  <tr><td><b>P</b> ギャップ</td><td>「現場 × 数」は消耗する。案件が切れると収入も切れる</td></tr>
+  <tr><td><b>Q</b> 抱く疑問</td><td><b>「現場×数」以外の勝ち方はあるのか。自分にも再現できるのか</b></td></tr>
+  <tr class="hi"><td><b>A</b> 答え<span class="muted"><br>＝1枚目に置くもの</span></td><td class="ok"><b>不動産を売らずに悩みから始めると、1人の医師に30年関われる</b></td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note mai"><b>今の1枚目は「医療専門不動産のビジネスモデル」です。</b>これは<b>Qへの答えではなく、話題（トピック）</b>です。本の言葉では<b>鉄則①違反の名詞表現</b>——中身のないメッセージ。<br><b>直し方は移動だけです。</b>最後の「不動産を売るな。悩みを、刈り取れ」を1枚目に持ってきて、<b>そのあと全部を「なぜそう言えるか」の根拠として並べ替える</b>。スライドは1枚も作り直さなくていい——順番だけ変えます。</div>
+
+<h2><span class="k">欠陥2</span>スライドの見出しが、ほぼ全部「体言止め」でした</h2>
+<p class="lead"><b>4つの鉄則のうち①（名詞表現・体言止めの禁止）に、13枚中11枚が引っかかります。</b>「出発点の違い」「構造的優位」「生涯収益設計」「立ち上げ期」「集客ハブ化」——<b>これは見出しではなく、目次のラベル</b>です。<b>「◯◯すると△△になる」の形に直すだけで、同じスライドの説得力が変わります</b>。</p>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>#</th><th class="ng">いま（体言止め）</th><th class="ok">改訂（1文のメッセージ）</th></tr></thead>
+  <tbody>
+  <tr class="hi"><td class="c"><b>1</b></td><td class="ng">医療専門不動産のビジネスモデル</td><td class="ok">不動産を売らずに悩みから始めると、1人の医師に30年関われる<span class="muted"><br>※最終ページから移動</span></td></tr>
+  <tr><td class="c">2</td><td class="ng">SPEAKER / 自己紹介</td><td class="ok">大叔父の宅建業を承継中です。型は借り物、実績はいま積んでいます</td></tr>
+  <tr><td class="c">3</td><td class="ng">出発点の違い</td><td class="ok">現場×数で積むか、コンサル×紹介で重ねるか</td></tr>
+  <tr><td class="c">4</td><td class="ng">構造的優位</td><td class="ok">コンサルを先に出すと、価格で比べられなくなる</td></tr>
+  <tr><td class="c">5</td><td class="ng">LTV / 生涯収益設計</td><td class="ok">1人の相談は、5本の収益に分かれて30年続く</td></tr>
+  <tr class="hi"><td class="c">6</td><td class="ng">BREAKTHROUGH / 立ち上げ期</td><td class="ok">「お願いします」をやめて「ご紹介します」に変えたら、紹介が来た</td></tr>
+  <tr><td class="c">7</td><td class="ng">HUB STRATEGY / 集客ハブ化</td><td class="ok">全部を自分でやらないと決めると、最初に電話される</td></tr>
+  <tr class="hi"><td class="c">8</td><td class="ng">TOOL 1 / 診療圏調査</td><td class="ok">（人口 × 受療率）÷（競合数 + 1）で、勝てる場所が数字で出る</td></tr>
+  <tr><td class="c">9</td><td class="ng">TOOL 2 / 事業計画書</td><td class="ok">8項目を埋めると、融資が通るかが着工前に分かる</td></tr>
+  <tr><td class="c">10</td><td class="ng">事例1 / 10年伴走</td><td class="ok">事務長の使い込みから、10年分の顧問料が生まれた</td></tr>
+  <tr><td class="c">11</td><td class="ng">事例2 / 情報網</td><td class="ok">表に出ない案件は、弁護士と同じ言葉を話せる人から来る</td></tr>
+  <tr><td class="c">12</td><td class="ng">成約の型</td><td class="ok">収益が3軸で重なるほど、案件は太くなる</td></tr>
+  <tr class="sum"><td class="c">13</td><td colspan="2"><b>最終ページは、1枚目に移動したので空きます。</b>ここに「明日やる1つ」を置きます（後述）</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note"><b>あいまい言葉（鉄則②）も3箇所あります。</b>「<b>唯一無二のポジション</b>」「<b>構造的優位</b>」「<b>長期安定収益事業の柱を構築中</b>」——どれも<b>具体が入っていないので、聞き手ごとに違う意味で受け取られます</b>。<br>本の区別を思い出してください——<b>あいまい言葉は「考えるプロセス」では禁止、最終資料で意図的に使うのはOK</b>。だから消す必要はありません。<b>ただし自分の頭の中では「唯一無二＝測れて売れる人がほぼいない」まで詰めておく</b>。詰まっていれば、質問されたときに1秒で答えられます。</div>
+
+<h2><span class="k">欠陥3</span>誰の実績か、聞き手には分かりません</h2>
+<div class="note ng"><b>これは信用に直結するので、いちばん先に直してください。</b>デッキには「<b>大叔父の宅建業法人を承継中</b>」と正しく書いてあります。ところが事例1・事例2では主語が「<b>社長</b>」になっていて、<b>その社長が誰なのかが本文中で結びついていません</b>。<br>結果として聞き手は<b>「クリニック開業140件超」「事務長を10年引き受けた」「久保田さんと初期から組んでいる」を菊池さんの実績として受け取ります</b>。実際は<b>創業者（大叔父）の実績と人脈</b>で、菊池さんの立場は<b>「社長の隣で5年、型を盗み続けた」</b>——それはデッキ自身が書いていることです。</div>
+<div class="note ok"><b>そして、分けて書くほうが強くなります。</b>木下勝寿の「<b>かっこつけない経営</b>」——自己顕示欲を捨てるほうが結果的に信用される、という指摘そのものです。<br><b>改訂案：</b>2枚目の自己紹介を<b>「型は借り物、実績はいま積んでいます」</b>と言い切る。そして<b>菊池さん自身の実績だけを別枠で並べる</b>——<b>277高松（土地値90.5%を見抜いて自己資金250万で4,000万を調達）／京橋クリニックのAI実装（再診リマインド・FAQ・Web問診）／韓国輸出（自分は操作せず年160万）／法人と家計の連結BS</b>。<br><b>「借りた型」と「自分の実績」を分けた瞬間に、聞き手は両方を信じます</b>——混ぜると、両方が疑われます。</div>
+
+<h2><span class="k">追加</span>足すべき1枚 ─ このデッキ最大の欠落は「測れて、売れる」</h2>
+<p class="lead"><b>デッキの核心は「1人の医師に30年」です。ところが30年の最後——承継・引退・自宅売却・実家の相続——が、1枚も掘られていません。</b>5本柱の5番目に「5-30年目 拡張・承継・売却」と1行あるだけ。<br><b>ここが、いま菊池さんが手に入れようとしている武器がいちばん効く場所です。</b>そして<b>デッキの主張を否定せず、そのまま延長する追加</b>になります。</p>
+
+<div class="figwrap">
+<figure>
+<svg viewBox="0 0 1000 300" role="img" aria-label="医師のライフサイクル30年のうち、開業期から拡張期までは既存のコンサルと仲介で対応できるが、承継・引退・相続の段階では境界が不明で案件が止まる。この最後の段階に土地家屋調査士の独占業務と宅建業免許の両方が必要で、両方を持つ会社がほぼないことを示す図" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="s1" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="9" markerHeight="7" orient="auto">
+      <polygon points="0,0 10,4 0,8" fill="currentColor"/>
+    </marker>
+  </defs>
+  <text x="14" y="20" font-size="11" letter-spacing="2" fill="currentColor" opacity=".6">1人の医師の30年 ─ デッキが描いているライフサイクル</text>
+
+  <line x1="14" y1="60" x2="960" y2="60" stroke="currentColor" stroke-width="1.4" marker-end="url(#s1)"/>
+  <circle cx="80" cy="60" r="5" fill="currentColor"/><circle cx="280" cy="60" r="5" fill="currentColor"/>
+  <circle cx="480" cy="60" r="5" fill="currentColor"/><circle cx="700" cy="60" r="6" style="fill:var(--mai)"/>
+  <circle cx="880" cy="60" r="6" style="fill:var(--mai)"/>
+
+  <text x="80" y="46" font-size="11.5" text-anchor="middle" fill="currentColor">0年 開業</text>
+  <text x="280" y="46" font-size="11.5" text-anchor="middle" fill="currentColor">3年 安定</text>
+  <text x="480" y="46" font-size="11.5" text-anchor="middle" fill="currentColor">5-10年 拡張</text>
+  <text x="700" y="46" font-size="11.5" font-weight="700" text-anchor="middle" style="fill:var(--mai)">20-30年 承継</text>
+  <text x="880" y="46" font-size="11.5" font-weight="700" text-anchor="middle" style="fill:var(--mai)">引退・相続</text>
+
+  <!-- 既存で取れる範囲 -->
+  <rect x="14" y="84" width="620" height="56" fill="none" stroke="currentColor" opacity=".7"/>
+  <text x="30" y="106" font-size="12" font-weight="700" fill="currentColor">いまのデッキが取れている範囲</text>
+  <text x="30" y="126" font-size="11" fill="currentColor" opacity=".8">診療圏調査・事業計画・仲介・機材紹介・顧問料 ── コンサルと宅建業免許で足りる</text>
+
+  <!-- 最後の10年 -->
+  <rect x="644" y="84" width="342" height="56" fill="none" style="stroke:var(--mai)" stroke-width="2.2"/>
+  <text x="660" y="106" font-size="12" font-weight="700" style="fill:var(--mai)">最後の10年 ── 1枚も掘られていない</text>
+  <text x="660" y="126" font-size="11" fill="currentColor" opacity=".85">自宅・実家・遊休地の売却。境界が不明で止まる</text>
+
+  <!-- 4工程 -->
+  <text x="644" y="172" font-size="11" letter-spacing="2" fill="currentColor" opacity=".6">ここで必要になる4工程</text>
+  <rect x="644" y="182" width="80" height="42" fill="none" stroke="currentColor"/>
+  <text x="684" y="200" font-size="11.5" font-weight="700" text-anchor="middle" fill="currentColor">測る</text>
+  <text x="684" y="216" font-size="9.5" text-anchor="middle" style="fill:var(--mai)">調査士【独占】</text>
+  <rect x="730" y="182" width="80" height="42" fill="none" stroke="currentColor"/>
+  <text x="770" y="200" font-size="11.5" font-weight="700" text-anchor="middle" fill="currentColor">分ける</text>
+  <text x="770" y="216" font-size="9.5" text-anchor="middle" style="fill:var(--mai)">調査士【独占】</text>
+  <rect x="816" y="182" width="80" height="42" fill="none" stroke="currentColor"/>
+  <text x="856" y="200" font-size="11.5" font-weight="700" text-anchor="middle" fill="currentColor">売る</text>
+  <text x="856" y="216" font-size="9.5" text-anchor="middle" style="fill:var(--mai)">宅建業(4)</text>
+  <rect x="902" y="182" width="84" height="42" fill="none" stroke="currentColor"/>
+  <text x="944" y="200" font-size="11.5" font-weight="700" text-anchor="middle" fill="currentColor">持つ</text>
+  <text x="944" y="216" font-size="9.5" text-anchor="middle" fill="currentColor" opacity=".7">管理・277で実証</text>
+
+  <!-- 誰ができるか -->
+  <rect x="14" y="182" width="600" height="42" fill="none" stroke="currentColor" opacity=".55"/>
+  <text x="30" y="200" font-size="11.5" fill="currentColor">一般の不動産屋＝<tspan font-weight="700">測る・分けるを外注</tspan>（数十万円＋1〜3ヶ月、そこで案件が止まる）</text>
+  <text x="30" y="216" font-size="11.5" fill="currentColor">調査士事務所＝<tspan font-weight="700">売る・持つができない</tspan>（宅建業免許がない）</text>
+
+  <rect x="14" y="238" width="972" height="46" fill="none" style="stroke:var(--ok)" stroke-width="2.5"/>
+  <text x="500" y="258" font-size="13.5" font-weight="700" text-anchor="middle" style="fill:var(--ok)">2027年以降、4工程を1社で通せる ── 測れて、売れる</text>
+  <text x="500" y="276" font-size="11" text-anchor="middle" fill="currentColor" opacity=".8">「1人の医師に30年」の最後の10年が、いちばん濃くなる。しかも競合がほぼいない</text>
+</svg>
+<figcaption><b>この1枚は、デッキの主張を否定せず延長します。</b>「1人の医師に30年」を掲げているのに、<b>最後の10年に武器がなかった</b>——そこを埋めるのが調査士です。<br>そして<b>聞き手（同業者）にとって、これがいちばん驚く情報</b>になります。測れて売れる会社はほぼないので、<b>「そこは外注でしょ」という前提が崩れる</b>からです。</figcaption>
+</figure>
+</div>
+<div class="note mai"><b>ただし出す時期に条件が2つあります。</b>①<b>10/18の調査士合格</b>——不合格ならこの1枚は「受験中」の弱い表現になります ②<b>専任の宅建士</b>——「売る」が言えないと4工程が閉じません。<br><b>だから10/19より前のセミナーでは、この1枚は「構想」として出してください。</b>「2027年にはこうなります」と将来形で言う。<b>断定は合格後から</b>です。</div>
+
+<h2><span class="k">欠陥4</span>聞き手が持ち帰れる行動が、1つもありませんでした</h2>
+<p class="lead"><b>最終ページは「ご相談・面談、お気軽にどうぞ」で終わっています。</b>これは本の言う<b>ハードルが定義されていない結び</b>です。何を相談すればいいのか、何分かかるのか、何が返ってくるのかが分からないので、<b>結果として誰も動きません</b>。</p>
+<div class="slide new">
+  <div class="sh"><span class="no">新・最終ページ</span><span class="tag">1枚目に移した「不動産を売るな」の代わりに置く</span></div>
+  <div class="sb">
+    <div class="ttl">明日、1件だけ「先に紹介」をやってみてください。</div>
+    <div class="sub"><b>今日いちばん再現できるのは、6枚目の「お願いします → ご紹介します」だけです。</b>診療圏調査も事業計画も、140件の蓄積があって初めて回るもので、明日はできません。<br><b>でも「先に紹介する」は、明日できます。</b>——士業でも業者でも、<b>案件をもらう前に、まず1件投げる</b>。それだけで立場が変わります。<br><br><b>そして、私からのGIVEを1つ置いておきます。</b><br><b>診療圏調査を、1件だけ無料でやります。</b>お預かりするのは<b>開業希望地・診療科目・診療時間案</b>の3つだけ。<b>「ここは勝てない」と出たら、そう申し上げます。</b></div>
+    <div class="was">いま＝<s>「ご相談・面談、お気軽にどうぞ」</s>／ハードルが1段に絞られておらず、返ってくるものも示されていない</div>
+  </div>
+</div>
+<div class="note ok"><b>この結びの型は、本（山崎康司）の定型そのままです。</b>「<b>本ご提案にご同意いただけるようでしたら、早急に◯◯に取りかかります</b>」——締切を押しつけず、暗に決断を促す形。<br>そして<b>「勝てないと出たらそう言う」を明記するのが、売り込みでない証明</b>になります。これは<a href="https://claude.ai/code/artifact/2bdb3462-780f-42bc-b548-8c7b6d3956b8">A4メニュー表</a>の「やめる時はやめると言う」と同じ設計です。</div>
+
+<h2><span class="k">一言</span>「刈り取れ」という言葉について</h2>
+<div class="note"><b>1点だけ、言葉の話をします。</b>「悩みを、<b>刈り取れ</b>」は、聞き手（不動産の同業者）には強く刺さる言葉です。<b>だからこのセミナーでは変えなくていいと思います</b>。<br>ただし<b>菊池さんの中核信条とは向きが逆</b>です——23歳のノートは「<b>なにかを与えて、人の役に立った瞬間を感じたい</b>」で、刈り取る（自分が収穫する）ではなく、渡す側の言葉でした。「刈り取れ」は<b>バイセル流＝現場×数の文化の言葉</b>が混ざっている可能性があります。<br><b>だから使い分けてください。</b>同業者向けには「<b>刈り取れ</b>」、顧客と<a href="https://claude.ai/code/artifact/2bdb3462-780f-42bc-b548-8c7b6d3956b8">Cターゲット（同じ立場の人）</a>向けには「<b>悩みから、始める</b>」。<b>同じ思想の、相手別の言い換え</b>です。</div>
+
+<h2><span class="k">発信</span>このデッキは、すでに記事5本です</h2>
+<p class="lead"><b>「発信で尖らせる」の答えは、これがいちばん実用的です——新しく書くものは1本もありません。</b>スライドをnoteに移すだけで5本になります。しかも<b>すべて「自分がやった数え方を公開する」型</b>で、Cターゲットにも同業者にも届きます。</p>
+<div class="tblwrap">
+<table>
+  <thead><tr><th>#</th><th>記事タイトル（Qに答える形）</th><th>元スライド</th><th>誰に刺さるか</th></tr></thead>
+  <tbody>
+  <tr class="hi"><td class="c">1</td><td><b>（人口 × 受療率）÷（競合数 + 1）── 開業前に「勝てる場所」を数字で出す式</b></td><td>8枚目<span class="muted">（実物の数字つき）</span></td><td>院長・同業者<span class="muted"><br>式を出すので強い</span></td></tr>
+  <tr class="hi"><td class="c">2</td><td><b>「お願いします」をやめて「ご紹介します」に変えたら、紹介が来るようになった</b></td><td>6枚目</td><td>同業者・独立志向の人<span class="muted"><br>誰でも明日できる</span></td></tr>
+  <tr><td class="c">3</td><td><b>事務長の使い込みから、10年分の顧問料が生まれた</b><span class="muted"><br>※創業者の事例として明記</span></td><td>10枚目</td><td>経営者・院長</td></tr>
+  <tr><td class="c">4</td><td><b>表に出ない不動産は、弁護士と同じ言葉を話せる人から来る</b></td><td>11枚目</td><td>同業者</td></tr>
+  <tr><td class="c">5</td><td><b>1人の顧客に30年関わる事業は、収益を5本に分けて設計する</b></td><td>5枚目・12枚目</td><td>独立志向の人<span class="muted"><br>＝Cターゲット</span></td></tr>
+  <tr class="sum"><td class="c">＋</td><td colspan="3"><b>合格後に6本目：</b>「測れて売れる会社がほぼない理由」（追加した1枚をそのまま記事に）</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="note ok"><b>そして、これが10/19に出す3本の中身になります。</b><a href="https://claude.ai/code/artifact/2bdb3462-780f-42bc-b548-8c7b6d3956b8">発信設計ボード</a>で「10/19〜11/3に3本を一気に出す」と決めましたが、<b>ネタを新規に用意する必要はありませんでした</b>。<br><b>1・2・5を出してください</b>——1は式を公開するので信用が立ち、2は誰でも明日できるので拡散し、5はCターゲット（子どもがいて独立を考えている30代）に直接届きます。<b>3と4は固有名詞の伏せ方を検討してから</b>。</div>
+
+<h2><span class="k">実行</span>直す順番 ─ 30分で終わる分だけ、先にやる</h2>
+<ol class="n">
+  <li><b>【15分】最後の1枚を、1枚目に移動する。</b>これだけで構成の欠陥が消えます。スライドは作り直しません。</li>
+  <li><b>【15分】自己紹介の2枚目に1行足す。</b>「<b>型は大叔父から借りたもの、実績はいま積んでいます</b>」。そして自分の実績（277・京橋のAI実装・韓国輸出・連結BS）を別枠にする。<b>信用に直結するので、ここは今日やってください</b>。</li>
+  <li><b>【30分】見出し12枚を、体言止めから1文に直す。</b>上の表をそのまま入れれば終わります。<b>本文は触りません</b>。</li>
+  <li><b>【15分】最終ページを「明日、1件だけ先に紹介を」＋診療圏調査1件無料に差し替える。</b></li>
+  <li><b>【10/19以降】「測れて、売れる」の1枚を追加する。</b>合格後に断定形で。それまでは将来形で口頭補足だけ。</li>
+  <li><b>【10/19〜11/3】記事1・2・5をnoteに出す。</b>スライドの文章をそのまま流用。1本30分。</li>
+</ol>
+<div class="note mai"><b>10/18まで、これ以上は触らないでください。</b>1〜4で合計75分です。<b>5と6は試験の後</b>。<br>そして<b>このデッキ自体はもう十分に強い</b>ので、作り直しの誘惑には乗らないでください——<b>凍結リストに入っている「新しい仕組みづくり」に、資料の作り込みも含まれます</b>。</div>
+
+<footer>
+  <span>セミナー資料の改訂案 ／ 秘書室作成 ／ 2026-08-04</span>
+  <span>関連＝<a href="https://claude.ai/code/artifact/2bdb3462-780f-42bc-b548-8c7b6d3956b8">発信＆ターゲット設計</a> ／ <a href="https://claude.ai/code/artifact/45acd817-8204-469a-ba23-6c20e4d5a1f5">法人の利益最大化</a> ／ <a href="https://claude.ai/code/artifact/6e52460f-75f4-4f12-81b6-c69efc11a4af">原動力の棚卸し</a> ／ <a href="https://claude.ai/code/artifact/2ace2928-f816-480d-b436-abecd354d3bf">KPI自動検出</a></span>
+</footer>
+</div>

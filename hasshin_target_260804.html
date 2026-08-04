@@ -88,6 +88,15 @@
   @media (max-width:600px){.a4 .bot .bt{font-size:16px}}
   .a4 .bot .bs{font-size:12px;margin-top:8px;line-height:1.7;opacity:.95}
 
+  /* 図 */
+  figure{margin:16px 0 0;padding:0}
+  figure svg{display:block;width:100%;max-width:100%;height:auto;color:var(--ink)}
+  figcaption{font-size:11.5px;color:var(--sub);margin-top:9px;line-height:1.7}
+  figcaption b{color:var(--ink)}
+  .figwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);
+    padding:18px 16px;background:var(--paper)}
+  .figwrap svg{min-width:720px}
+
   /* 動線 */
   .flow{display:flex;flex-direction:column;gap:0;margin-top:14px}
   .fr{display:grid;grid-template-columns:96px 1fr 150px;gap:16px;padding:14px 16px;
@@ -152,6 +161,124 @@
 </div>
 <div class="note mai"><b>この立ち位置の強さは、代替不可能性です。</b>AIコンサルは何万人もいます。医療不動産の専門家も何百人かいます。しかし<b>「子どもがいて、給与ゼロの期間を、法人と家計を連結した数字で設計しながら渡っている34歳」は、統計上ほぼいません</b>。<br>そして<b>これは資格でも実績でもなく、いま生きている状態そのもの</b>なので、誰にも真似できません。<b>1年後には菊池さん自身も名乗れなくなる（給与が入るので）——だからいま出すのが最も価値が高い</b>。</div>
 
+<h2><span class="k">図解</span>点が、3本の流れに束ねられて、1つの立ち位置に合流します</h2>
+<p class="lead"><b>経歴を「点の羅列」で語ると、バラバラに聞こえます——花巻、教諭免許、鉱山町、商社、通帳、不動産、EC、調査士。</b>実際には<b>3本の流れ</b>で、それが1点に合流し、そこから6つの道具が出ています。<b>この図がメニュー表の裏付けになります</b>——「なぜこの人がこれをできるのか」に、1枚で答えられる形です。</p>
+
+<div class="figwrap">
+<figure>
+<svg viewBox="0 0 1040 620" role="img" aria-label="花巻・教諭免許・研究開発の理系の流れ、技術営業と商社の営業の流れ、15歳の通帳から続く記録の流れ、この3本が「家計と法人を1枚で見る」という立ち位置に合流し、そこから6つの提供メニューが分かれ、最後に「1つだけ無料で診断」という単一の入口に集まる構造図" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="9" markerHeight="7" orient="auto">
+      <polygon points="0,0 10,4 0,8" fill="currentColor"/>
+    </marker>
+    <marker id="arM" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="10" markerHeight="8" orient="auto">
+      <polygon points="0,0 10,4 0,8" style="fill:var(--mai)"/>
+    </marker>
+  </defs>
+
+  <!-- 見出し -->
+  <text x="16" y="18" font-size="11" letter-spacing="2" fill="currentColor" opacity=".6">3本の流れ（1992-2026）</text>
+  <text x="330" y="18" font-size="11" letter-spacing="2" style="fill:var(--mai)">合流点＝立ち位置</text>
+  <text x="560" y="18" font-size="11" letter-spacing="2" fill="currentColor" opacity=".6">6つの道具</text>
+  <text x="872" y="18" font-size="11" letter-spacing="2" fill="currentColor" opacity=".6">入口はひとつ</text>
+
+  <!-- 流れ1 理系 -->
+  <rect x="16" y="34" width="230" height="140" fill="none" stroke="currentColor" stroke-width="1"/>
+  <circle cx="38" cy="56" r="10" fill="none" stroke="currentColor"/>
+  <text x="38" y="60" font-size="11" text-anchor="middle" fill="currentColor">理</text>
+  <text x="58" y="60" font-size="13" font-weight="700" fill="currentColor">理系 × 教える</text>
+  <text x="30" y="86" font-size="11.5" fill="currentColor" opacity=".85">1992　岩手県花巻市に生まれる</text>
+  <text x="30" y="108" font-size="11.5" fill="currentColor" opacity=".85">2015　岩手大／高校教諭免許（理科・工業）</text>
+  <text x="30" y="130" font-size="11.5" fill="currentColor" opacity=".85">2017　三井金属 研究開発・同期最速で特許</text>
+  <text x="30" y="158" font-size="11.5" font-weight="700" style="fill:var(--mai)">→ 難しいことを、数字で説明できる</text>
+
+  <!-- 流れ2 営業 -->
+  <rect x="16" y="204" width="230" height="140" fill="none" stroke="currentColor" stroke-width="1"/>
+  <circle cx="38" cy="226" r="10" fill="none" stroke="currentColor"/>
+  <text x="38" y="230" font-size="11" text-anchor="middle" fill="currentColor">営</text>
+  <text x="58" y="230" font-size="13" font-weight="700" fill="currentColor">営業 × 相手を読む</text>
+  <text x="30" y="256" font-size="11.5" fill="currentColor" opacity=".85">2019　技術営業／チーム売上3倍・飛騨の鉱山町</text>
+  <text x="30" y="278" font-size="11.5" fill="currentColor" opacity=".85">2020-25　東陽テクニカ／研究者・医療機関へ</text>
+  <text x="30" y="300" font-size="11.5" fill="currentColor" opacity=".85">2026　京橋クリニックでAIを実装</text>
+  <text x="30" y="328" font-size="11.5" font-weight="700" style="fill:var(--mai)">→ 相手が何で決めるかを、先に読む</text>
+
+  <!-- 流れ3 記録 -->
+  <rect x="16" y="374" width="230" height="140" fill="none" stroke="currentColor" stroke-width="1"/>
+  <circle cx="38" cy="396" r="10" fill="none" stroke="currentColor"/>
+  <text x="38" y="400" font-size="11" text-anchor="middle" fill="currentColor">記</text>
+  <text x="58" y="400" font-size="13" font-weight="700" fill="currentColor">記録 × 渡す</text>
+  <text x="30" y="426" font-size="11.5" fill="currentColor" opacity=".85">2007　15歳の通帳（いまも継続中）</text>
+  <text x="30" y="448" font-size="11.5" fill="currentColor" opacity=".85">2021　北千住を取得→売却／Amazonセラー開始</text>
+  <text x="30" y="470" font-size="11.5" fill="currentColor" opacity=".85">2026　277高松 土地値90.5%／財務司令塔</text>
+  <text x="30" y="498" font-size="11.5" font-weight="700" style="fill:var(--mai)">→ 数字を残して、人に渡す</text>
+
+  <!-- 合流の線 -->
+  <path d="M246 104 C 300 104 300 250 340 250" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#ar)"/>
+  <path d="M246 274 L 340 274" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#ar)"/>
+  <path d="M246 444 C 300 444 300 298 340 298" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#ar)"/>
+
+  <!-- 立ち位置 -->
+  <rect x="344" y="196" width="182" height="156" fill="none" style="stroke:var(--mai)" stroke-width="2.5"/>
+  <text x="435" y="232" font-size="15" font-weight="700" text-anchor="middle" style="fill:var(--mai)">家計と法人を、</text>
+  <text x="435" y="254" font-size="15" font-weight="700" text-anchor="middle" style="fill:var(--mai)">1枚で見る</text>
+  <line x1="368" y1="272" x2="502" y2="272" stroke="currentColor" opacity=".35"/>
+  <text x="435" y="294" font-size="11" text-anchor="middle" fill="currentColor" opacity=".9">1歳の子の父</text>
+  <text x="435" y="312" font-size="11" text-anchor="middle" fill="currentColor" opacity=".9">給与ゼロの期間を、</text>
+  <text x="435" y="330" font-size="11" text-anchor="middle" fill="currentColor" opacity=".9">いま数字で設計中</text>
+
+  <!-- 発散の線 -->
+  <path d="M526 274 C 560 274 560 62 596 62" fill="none" stroke="currentColor" stroke-width="1" opacity=".7" marker-end="url(#ar)"/>
+  <path d="M526 274 C 560 274 560 148 596 148" fill="none" stroke="currentColor" stroke-width="1" opacity=".7" marker-end="url(#ar)"/>
+  <path d="M526 274 C 556 274 556 234 596 234" fill="none" stroke="currentColor" stroke-width="1" opacity=".7" marker-end="url(#ar)"/>
+  <path d="M526 274 C 556 274 556 320 596 320" fill="none" stroke="currentColor" stroke-width="1" opacity=".7" marker-end="url(#ar)"/>
+  <path d="M526 274 C 560 274 560 406 596 406" fill="none" stroke="currentColor" stroke-width="1" opacity=".7" marker-end="url(#ar)"/>
+  <path d="M526 274 C 560 274 560 492 596 492" fill="none" stroke="currentColor" stroke-width="1" opacity=".7" marker-end="url(#ar)"/>
+
+  <!-- 6メニュー -->
+  <rect x="600" y="38" width="216" height="48" fill="none" stroke="currentColor"/>
+  <text x="612" y="58" font-size="12" font-weight="700" fill="currentColor">1 AIで業務を仕組み化する</text>
+  <text x="612" y="76" font-size="10.5" fill="currentColor" opacity=".65">理 ＋ 営　クリニックで実装済み</text>
+
+  <rect x="600" y="124" width="216" height="48" fill="none" stroke="currentColor"/>
+  <text x="612" y="144" font-size="12" font-weight="700" fill="currentColor">2 クリニックの数字を診断する</text>
+  <text x="612" y="162" font-size="10.5" fill="currentColor" opacity=".65">理 ＋ 営　保険点数と地域相場から</text>
+
+  <rect x="600" y="210" width="216" height="48" fill="none" stroke="currentColor"/>
+  <text x="612" y="230" font-size="12" font-weight="700" fill="currentColor">3 医療テナントを探し精査する</text>
+  <text x="612" y="248" font-size="10.5" fill="currentColor" opacity=".65">営　　　やめる理由を先に出す</text>
+
+  <rect x="600" y="296" width="216" height="48" fill="none" stroke="currentColor"/>
+  <text x="612" y="316" font-size="12" font-weight="700" fill="currentColor">4 土地・古家を目利きし精査する</text>
+  <text x="612" y="334" font-size="10.5" fill="currentColor" opacity=".65">記 ＋ 理　境界・面積・分筆の見通し</text>
+
+  <rect x="600" y="382" width="216" height="48" fill="none" style="stroke:var(--mai)" stroke-width="1.8"/>
+  <text x="612" y="402" font-size="12" font-weight="700" style="fill:var(--mai)">5 法人と家計を1枚にする</text>
+  <text x="612" y="420" font-size="10.5" fill="currentColor" opacity=".65">記　　　立ち位置がそのまま商品になる</text>
+
+  <rect x="600" y="468" width="216" height="48" fill="none" stroke="currentColor"/>
+  <text x="612" y="488" font-size="12" font-weight="700" fill="currentColor">6 ECを立ち上げて人に渡す</text>
+  <text x="612" y="506" font-size="10.5" fill="currentColor" opacity=".65">記 ＋ 営　韓国輸出／還付まで設計</text>
+
+  <!-- 入口へ -->
+  <path d="M816 62 C 852 62 852 246 872 262" fill="none" stroke="currentColor" stroke-width="1" opacity=".55"/>
+  <path d="M816 148 C 852 148 852 250 872 266" fill="none" stroke="currentColor" stroke-width="1" opacity=".55"/>
+  <path d="M816 234 L 872 270" fill="none" stroke="currentColor" stroke-width="1" opacity=".55"/>
+  <path d="M816 320 L 872 284" fill="none" stroke="currentColor" stroke-width="1" opacity=".55"/>
+  <path d="M816 406 C 852 406 852 292 872 288" fill="none" stroke="currentColor" stroke-width="1" opacity=".55"/>
+  <path d="M816 492 C 852 492 852 296 872 292" fill="none" stroke="currentColor" stroke-width="1" opacity=".55"/>
+
+  <rect x="874" y="222" width="150" height="110" fill="none" style="stroke:var(--mai)" stroke-width="2.5"/>
+  <text x="949" y="254" font-size="13" font-weight="700" text-anchor="middle" style="fill:var(--mai)">どれか1つを</text>
+  <text x="949" y="274" font-size="13" font-weight="700" text-anchor="middle" style="fill:var(--mai)">無料で診断</text>
+  <line x1="892" y1="290" x2="1006" y2="290" stroke="currentColor" opacity=".35"/>
+  <text x="949" y="310" font-size="11" text-anchor="middle" fill="currentColor" opacity=".9">30分</text>
+  <text x="949" y="326" font-size="10.5" text-anchor="middle" fill="currentColor" opacity=".7">やめる時は やめると言う</text>
+</svg>
+<figcaption><b>一見バラバラな経歴は、3本の流れに束ねられ、1つの立ち位置に合流しています。</b>6つのメニューはその立ち位置から出た枝で、各行の「理／営／記」はどの流れを主に使っているかを示します。<b>そして入口は6つではなく1つ</b>——相手に選ばせるのは「どのメニューか」だけで、依頼のハードルは1段しか作りません。<br><b>5だけを強調してあるのは、立ち位置がそのまま商品になっている唯一のメニューだから</b>です。他の5つは技術ですが、5は「いま渡っている状態」そのものなので、他の人が真似できません。</figcaption>
+</figure>
+</div>
+<div class="note ok"><b>この図の使い方を3つ。</b>①<b>A4メニュー表の裏面に印刷する</b>——「なぜこの人が？」への答えが1枚で終わります。②<b>ブログとnoteのプロフィールページに置く</b>——文章で読ませるより速い。③<b>初対面でこの図を指しながら話す</b>——3本の流れのどれに相手が食いついたかで、渡すメニューが決まります。</div>
+
 <h2><span class="k">成果物</span>A4メニュー表 ─ 1枚・そのまま渡せる形</h2>
 <div class="a4">
   <div class="top">
@@ -176,6 +303,88 @@
 </div>
 <div class="note ok"><b>設計の意図を3つだけ。</b>①<b>価格を「無料」から始める</b>——本の言うとおり、打ち手のうち1つは相手が自分でできること／無料で試せることを必ず入れる。②<b>「やめましょうと言う」を明記</b>——これが売り込みでない証明になり、返信率を上げます。③<b>人柄パートを一次資料から書いた</b>（花巻・教諭免許・15歳の通帳・1歳の子）。<b>盛っていないので、初対面で矛盾しません</b>。</div>
 <div class="note mai"><b>🟡調整が必要な箇所を2つ挙げます。</b>①<b>メニュー3（医療テナント）は福井さんとの承継関係があるため、表現を福井さんに確認してから使ってください</b>。「テナントアシスト・ウインと連携」としてありますが、承継の段取り次第で書き方が変わります。②<b>メニュー4の「土地家屋調査士・2027年登録予定」は、合格前は書けません</b>。10/18の結果が出るまでは「測量士補／調査士受験中」に差し替えてください。</div>
+
+<h2><span class="k">図解</span>記事から先が、2つに分かれます — ここを混ぜると両方が死にます</h2>
+<p class="lead"><b>「広く集客に繋がるように」というご要望に対して、いちばん大事な構造がこれです。</b>記事を読んだ人は<b>2種類</b>に分かれます——<b>お金を払う人</b>と、<b>同じところを渡っている人</b>。<b>後者に売り込むと、⑨の10人は永久に埋まりません</b>。同じ記事から出て、行き先だけを分けます。</p>
+
+<div class="figwrap">
+<figure>
+<svg viewBox="0 0 1000 380" role="img" aria-label="note記事を起点に、反応した人は顧客ルート（メニュー表→30分面談→診断レター→受注）へ進み、同じ立場の人は仲間ルート（返信やDM→相互に知る→相互認知10人）へ進む。両ルートの経験が記事のネタとして戻ってくる循環構造の図" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="a2" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="9" markerHeight="7" orient="auto">
+      <polygon points="0,0 10,4 0,8" fill="currentColor"/>
+    </marker>
+    <marker id="a2g" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="9" markerHeight="7" orient="auto">
+      <polygon points="0,0 10,4 0,8" style="fill:var(--ok)"/>
+    </marker>
+  </defs>
+
+  <!-- 起点 -->
+  <rect x="14" y="150" width="150" height="86" fill="none" style="stroke:var(--ok)" stroke-width="2.5"/>
+  <text x="89" y="180" font-size="13" font-weight="700" text-anchor="middle" style="fill:var(--ok)">note 記事</text>
+  <text x="89" y="200" font-size="10.5" text-anchor="middle" fill="currentColor" opacity=".8">週1本・30分</text>
+  <text x="89" y="220" font-size="10.5" text-anchor="middle" style="fill:var(--ok)">唯一、減らない資産</text>
+
+  <!-- 分岐点 -->
+  <circle cx="205" cy="193" r="5" fill="currentColor"/>
+  <line x1="164" y1="193" x2="200" y2="193" stroke="currentColor" stroke-width="1.4"/>
+
+  <!-- 上：顧客ルート -->
+  <path d="M205 188 C 205 110 215 96 250 96" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#a2)"/>
+  <text x="216" y="128" font-size="10.5" fill="currentColor" opacity=".8">数字が刺さった人</text>
+
+  <rect x="254" y="72" width="132" height="48" fill="none" stroke="currentColor"/>
+  <text x="320" y="94" font-size="12" font-weight="700" text-anchor="middle" fill="currentColor">A4メニュー表</text>
+  <text x="320" y="111" font-size="10" text-anchor="middle" fill="currentColor" opacity=".7">1枚・使い回す</text>
+
+  <line x1="386" y1="96" x2="430" y2="96" stroke="currentColor" stroke-width="1.4" marker-end="url(#a2)"/>
+  <rect x="434" y="72" width="132" height="48" fill="none" stroke="currentColor"/>
+  <text x="500" y="94" font-size="12" font-weight="700" text-anchor="middle" fill="currentColor">30分の面談</text>
+  <text x="500" y="111" font-size="10" text-anchor="middle" fill="currentColor" opacity=".7">数字を3つ出す</text>
+
+  <line x1="566" y1="96" x2="610" y2="96" stroke="currentColor" stroke-width="1.4" marker-end="url(#a2)"/>
+  <rect x="614" y="72" width="132" height="48" fill="none" stroke="currentColor"/>
+  <text x="680" y="94" font-size="12" font-weight="700" text-anchor="middle" fill="currentColor">診断レター</text>
+  <text x="680" y="111" font-size="10" text-anchor="middle" fill="currentColor" opacity=".7">A4 2枚・2時間</text>
+
+  <line x1="746" y1="96" x2="790" y2="96" stroke="currentColor" stroke-width="1.4" marker-end="url(#a2)"/>
+  <rect x="794" y="66" width="192" height="60" fill="none" stroke="currentColor" stroke-width="1.8"/>
+  <text x="890" y="90" font-size="13" font-weight="700" text-anchor="middle" fill="currentColor">受注（金融資本）</text>
+  <text x="890" y="110" font-size="10.5" text-anchor="middle" fill="currentColor" opacity=".75">受注率3%で時間単価16,700円</text>
+
+  <!-- 下：仲間ルート -->
+  <path d="M205 198 C 205 292 215 306 250 306" fill="none" style="stroke:var(--ok)" stroke-width="1.4" marker-end="url(#a2g)"/>
+  <text x="216" y="266" font-size="10.5" style="fill:var(--ok)">同じところを渡っている人</text>
+
+  <rect x="254" y="282" width="132" height="48" fill="none" style="stroke:var(--ok)"/>
+  <text x="320" y="304" font-size="12" font-weight="700" text-anchor="middle" style="fill:var(--ok)">返信・DM</text>
+  <text x="320" y="321" font-size="10" text-anchor="middle" fill="currentColor" opacity=".7">売り込まない</text>
+
+  <line x1="386" y1="306" x2="430" y2="306" style="stroke:var(--ok)" stroke-width="1.4" marker-end="url(#a2g)"/>
+  <rect x="434" y="282" width="132" height="48" fill="none" style="stroke:var(--ok)"/>
+  <text x="500" y="304" font-size="12" font-weight="700" text-anchor="middle" style="fill:var(--ok)">30分以上の対話</text>
+  <text x="500" y="321" font-size="10" text-anchor="middle" fill="currentColor" opacity=".7">⑤に1人カウント</text>
+
+  <line x1="566" y1="306" x2="610" y2="306" style="stroke:var(--ok)" stroke-width="1.4" marker-end="url(#a2g)"/>
+  <rect x="614" y="282" width="132" height="48" fill="none" style="stroke:var(--ok)"/>
+  <text x="680" y="304" font-size="12" font-weight="700" text-anchor="middle" style="fill:var(--ok)">相互に知る</text>
+  <text x="680" y="321" font-size="10" text-anchor="middle" fill="currentColor" opacity=".7">3条件のうち2つ</text>
+
+  <line x1="746" y1="306" x2="790" y2="306" style="stroke:var(--ok)" stroke-width="1.4" marker-end="url(#a2g)"/>
+  <rect x="794" y="276" width="192" height="60" fill="none" style="stroke:var(--ok)" stroke-width="1.8"/>
+  <text x="890" y="300" font-size="13" font-weight="700" text-anchor="middle" style="fill:var(--ok)">10人（社会資本）</text>
+  <text x="890" y="320" font-size="10.5" text-anchor="middle" fill="currentColor" opacity=".75">2027/1/31に数える</text>
+
+  <!-- 循環 -->
+  <path d="M890 126 C 890 176 520 176 89 158" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="5 4" opacity=".6" marker-end="url(#a2)"/>
+  <path d="M890 276 C 890 226 520 214 89 232" fill="none" style="stroke:var(--ok)" stroke-width="1" stroke-dasharray="5 4" opacity=".6" marker-end="url(#a2g)"/>
+  <text x="470" y="196" font-size="10.5" text-anchor="middle" fill="currentColor" opacity=".8">案件で分かった数字が、次の記事のネタになる</text>
+  <text x="470" y="210" font-size="10.5" text-anchor="middle" style="fill:var(--ok)" opacity=".9">仲間の悩みが、次の記事のネタになる</text>
+</svg>
+<figcaption><b>同じ記事から出て、行き先が2つに分かれます。</b>上（黒）が顧客ルートで金融資本に、下（緑）が仲間ルートで社会資本になります。<b>下のルートには、メニュー表を置きません</b>——ここに売り込みを入れると相互性が壊れ、⑨は永久に埋まりません。<br><b>そして点線が、この設計の生命線です。</b>両ルートの経験が記事のネタに戻ってくるので、<b>ネタ切れが構造的に起きません</b>。逆に記事を止めると、両方が同時に細ります。</figcaption>
+</figure>
+</div>
+<div class="note mai"><b>この図が示す、いちばん大事な判断。</b>「広く集客したい」と「讃えあう仲間が欲しい」は、<b>入口は同じで出口が違う</b>だけでした。だから<b>記事は1本で兼用できます</b>——書き分ける必要はありません。<br>分けるのは<b>反応があった後の対応だけ</b>。「うちもやりたい」にはメニュー表を、「うちも同じです」には自分の数字をそのまま返す。<b>この判断を間違えないために、記事の末尾にメニュー表のリンクは置くが、DMの返信では出さない</b>——それだけ守れば両方が回ります。</div>
 
 <h2><span class="k">動線</span>構造と資産化 ─ 記事だけが減価しません</h2>
 <p class="lead"><b>「長期安定しつつ資産化できる設計」というご要望に対して、答えは1つです——記事（note）だけが、書いた分だけ積み上がって減りません。</b>面談は時間を消費し、レターは相手ごとに消えますが、<b>記事は3年後も同じ仕事をします</b>。だから動線の起点を記事に置きます。</p>

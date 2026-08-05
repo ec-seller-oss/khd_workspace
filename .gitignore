@@ -26,3 +26,6 @@ line-harness-oss/
 
 # Claude一時/ツール結果
 *.tmp
+
+# KPIフックの実行時状態（注入のスロットル用。履歴に残す意味がない）
+.company/secretary/kpi/.hook_state.json

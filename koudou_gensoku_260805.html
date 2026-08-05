@@ -1,0 +1,365 @@
+<title>採点されるアウトプット — 迷いと焦りの処方箋</title>
+<style>
+:root{
+  --paper:#F0F3F7; --panel:#FFFFFF;
+  --sumi:#16283A; --sumi-2:#4A5F74; --sumi-3:#8296AB;
+  --ao:#2C6FA0; --ao-w:#DCE7F1;
+  --shu:#C2402D; --shu-w:#F7E4E0;
+  --rule:#C9D6E2; --rule-f:#E3EAF1;
+  --dead:#8296AB; --dead-w:#E7ECF1;
+  --f-min:"Hiragino Mincho ProN","Yu Mincho",YuMincho,"Noto Serif JP",serif;
+  --f-go:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",YuGothic,"Noto Sans JP",sans-serif;
+  --f-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root{--paper:#0C1A28;--panel:#122536;--sumi:#D8E4EE;--sumi-2:#9DB2C6;--sumi-3:#6C839A;
+    --ao:#6BB2DE;--ao-w:#1B354A;--shu:#E8735C;--shu-w:#3A1E19;--rule:#2A4459;--rule-f:#1B3245;
+    --dead:#6C839A;--dead-w:#1A2A38}
+}
+:root[data-theme="dark"]{--paper:#0C1A28;--panel:#122536;--sumi:#D8E4EE;--sumi-2:#9DB2C6;--sumi-3:#6C839A;
+  --ao:#6BB2DE;--ao-w:#1B354A;--shu:#E8735C;--shu-w:#3A1E19;--rule:#2A4459;--rule-f:#1B3245;
+  --dead:#6C839A;--dead-w:#1A2A38}
+:root[data-theme="light"]{--paper:#F0F3F7;--panel:#FFFFFF;--sumi:#16283A;--sumi-2:#4A5F74;--sumi-3:#8296AB;
+  --ao:#2C6FA0;--ao-w:#DCE7F1;--shu:#C2402D;--shu-w:#F7E4E0;--rule:#C9D6E2;--rule-f:#E3EAF1;
+  --dead:#8296AB;--dead-w:#E7ECF1}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--sumi);font-family:var(--f-go);
+  font-size:15px;line-height:1.85;-webkit-font-smoothing:antialiased}
+.wrap{max-width:900px;margin:0 auto;padding:0 22px 96px}
+.sheet{border-left:1px solid var(--rule);padding-left:26px}
+@media (max-width:640px){.sheet{border-left:0;padding-left:0}}
+
+header{padding:64px 0 34px;border-bottom:2px solid var(--ao)}
+.eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;color:var(--ao);margin:0 0 20px}
+h1{font-family:var(--f-min);font-weight:600;font-size:clamp(27px,4.6vw,40px);
+  line-height:1.38;margin:0;text-wrap:balance}
+.sub{margin:18px 0 0;color:var(--sumi-2);max-width:62ch}
+
+.thesis{margin:34px 0 0;padding:26px 28px;background:var(--panel);
+  border:1px solid var(--rule);border-top:3px solid var(--shu)}
+.thesis .lbl{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.16em;color:var(--shu);margin:0 0 12px}
+.thesis p{margin:0;font-family:var(--f-min);font-size:clamp(18px,2.5vw,23px);
+  line-height:1.65;font-weight:600;text-wrap:balance}
+.thesis .why{margin:16px 0 0;font-family:var(--f-go);font-size:14px;font-weight:400;
+  color:var(--sumi-2);line-height:1.8}
+
+/* ── いま迷っているときに読む3枚（サマリを先に置く） ── */
+.now{margin:34px 0 0;padding:24px;border:2px solid var(--shu);background:var(--panel)}
+.now > .h{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;color:var(--shu);margin:0 0 18px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:16px}
+.card{border:1px solid var(--rule);padding:18px;background:var(--paper)}
+.card > .st{font-family:var(--f-min);font-size:17px;font-weight:600;margin:0 0 4px}
+.card > .dx{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;color:var(--ao);margin:0 0 12px}
+.card > .rx{margin:0 0 10px;font-size:14px;line-height:1.75;font-weight:600}
+.card > .ex{margin:0;font-size:12.5px;color:var(--sumi-2);line-height:1.7}
+.now > .rule1{margin:20px 0 0;padding-top:18px;border-top:1px solid var(--rule);
+  font-family:var(--f-min);font-size:17px;font-weight:600;line-height:1.65}
+
+section{margin-top:64px}
+h2{font-family:var(--f-min);font-size:22px;font-weight:600;margin:0 0 6px;line-height:1.5;text-wrap:balance}
+h2 .n{font-family:var(--f-mono);font-size:12px;color:var(--ao);letter-spacing:.1em;
+  margin-right:12px;font-weight:400;vertical-align:.18em}
+.lead{margin:0 0 26px;color:var(--sumi-2);font-size:14.5px;max-width:64ch;
+  padding-bottom:18px;border-bottom:1px solid var(--rule-f)}
+h3{font-size:15px;font-weight:600;margin:34px 0 10px}
+p{margin:0 0 16px;max-width:66ch}
+em{font-style:normal;color:var(--shu);font-weight:600}
+a{color:var(--ao)}
+a:focus-visible{outline:2px solid var(--shu);outline-offset:3px}
+
+.tw{overflow-x:auto;margin:0 0 20px;border:1px solid var(--rule);background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:540px;font-size:13.5px}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--rule-f);vertical-align:top;line-height:1.7}
+thead th{background:var(--ao-w);font-weight:600;font-size:12px;border-bottom:1px solid var(--rule);white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}
+td.num,th.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+td.k{font-weight:600;white-space:nowrap}
+.no{color:var(--sumi-3)}
+.yes{color:var(--shu);font-weight:600}
+
+ul.plain{margin:0 0 18px;padding:0;list-style:none}
+ul.plain li{position:relative;padding-left:20px;margin-bottom:9px;max-width:66ch}
+ul.plain li::before{content:"";position:absolute;left:2px;top:.72em;width:7px;height:1px;background:var(--ao)}
+ul.danger li::before{background:var(--dead);width:9px;height:9px;top:.55em;border-radius:50%}
+
+figure{margin:26px 0;padding:22px;background:var(--panel);border:1px solid var(--rule);overflow-x:auto}
+figure svg{display:block;width:100%;height:auto;min-width:560px}
+figcaption{margin-top:16px;font-size:12.5px;color:var(--sumi-3);line-height:1.75;max-width:72ch}
+
+/* 図のインク（presentation属性でvar()を使わない） */
+.dg{font-family:var(--f-go);font-size:12px}
+.dg text{fill:var(--sumi)}
+.t-shu{fill:var(--shu)} .t-mut{fill:var(--sumi-3);font-size:10.5px} .t-dead{fill:var(--dead)}
+.bx-live{fill:var(--shu-w);stroke:var(--shu)}
+.bx-dead{fill:var(--dead-w);stroke:var(--dead);stroke-dasharray:4 3}
+.ln-live{stroke:var(--shu);stroke-width:1.5;fill:none;marker-end:url(#mL)}
+.ln-dead{stroke:var(--dead);stroke-width:1.4;fill:none;stroke-dasharray:4 3;marker-end:url(#mD)}
+.ln-x{stroke:var(--dead);stroke-width:2;fill:none}
+.hd{font-size:11.5px;letter-spacing:1.4px;font-weight:600}
+.mid{font-family:var(--f-min);font-size:14px;font-weight:600}
+
+.note{border-left:2px solid var(--ao);padding:2px 0 2px 18px;margin:0 0 20px;
+  font-size:13.5px;color:var(--sumi-2);max-width:64ch}
+.fix{border:1px solid var(--shu);border-left-width:3px;background:var(--shu-w);padding:18px 20px;margin:0 0 22px}
+.fix .h{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;color:var(--shu);margin:0 0 9px}
+.fix p:last-child{margin-bottom:0}
+
+.verdict{margin:30px 0 0;padding:20px 24px;border:1px solid var(--rule);background:var(--panel);
+  font-family:var(--f-min);font-size:17px;line-height:1.7;font-weight:600}
+.verdict span{display:block;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.16em;
+  color:var(--ao);font-weight:400;margin-bottom:10px}
+
+footer{margin-top:72px;padding-top:26px;border-top:2px solid var(--ao);
+  font-size:12.5px;color:var(--sumi-3);line-height:1.8}
+footer code{font-family:var(--f-mono);font-size:11.5px;color:var(--sumi-2)}
+</style>
+
+<div class="wrap"><div class="sheet">
+
+<header>
+  <p class="eyebrow">KHD ／ 2026-08-05 ／ 行動原則</p>
+  <h1>採点されるアウトプット<br>——迷いと焦りの処方箋</h1>
+  <p class="sub">勉強・発信・営業は同じ動作をしている。違うのは採点までのラグだけ。そこから「迷ったとき何をするか」が機械的に決まる。</p>
+</header>
+
+<div class="thesis">
+  <p class="lbl">主メッセージ</p>
+  <p>思考は捨てません。締め切りをつけて出力に変えます。</p>
+  <p class="why">立ち位置が「決める前に、数字を出す人」なので、思考は商品です。捨てると売り物がなくなる。だから「無駄に考えず動く」ではなく、<strong>考えたものを必ず外に出して採点してもらう</strong>——これが「アウトプットあるのみ」の正確な形になります。</p>
+</div>
+
+<div class="now">
+  <p class="h">いま止まっているとき、ここだけ読む</p>
+  <div class="cards">
+    <div class="card">
+      <p class="st">迷っている</p>
+      <p class="dx">診断：式にかけていない</p>
+      <p class="rx">思考が足りないのではなく、出力が足りない。式を1本回す。</p>
+      <p class="ex">イールドギャップ 10分／無収入寿命 20分／土地値割合 30分／診療圏調査 40分。<strong>迷いは40分以内に必ず終わる。</strong></p>
+    </div>
+    <div class="card">
+      <p class="st">焦っている</p>
+      <p class="dx">診断：採点が返っていない</p>
+      <p class="rx">動くのが正解。打席を1つ立てて、採点を1件発注する。</p>
+      <p class="ex">今週 ④打席は0。焦りの原因はこれ1つ。天野先生への診療圏調査で40分で0→1になる。</p>
+    </div>
+    <div class="card">
+      <p class="st">手が止まった</p>
+      <p class="dx">診断：可逆性を判定していない</p>
+      <p class="rx">可逆なら考えずに出す。不可逆なら式を全部かける。</p>
+      <p class="ex">送る・書く・投稿する・提案する・問題を解く＝可逆。買う・辞める・雇う・保証を付ける・承継＝不可逆。</p>
+    </div>
+  </div>
+  <p class="rule1">判定式：「これは誰が採点するか？」が即答できないなら、それは動きではなく逃げ。</p>
+</div>
+
+<section>
+  <h2><span class="n">01</span>3つは同じ動作で、違うのはラグだけ</h2>
+  <p class="lead">勉強・発信・営業は「先に自分の答えを出して、外から誤差を返してもらう」動作。インプットは採点されないので上達しない。</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>　</th><th>動作</th><th>採点者</th><th>返ってくるもの</th><th>採点までのラグ</th></tr></thead>
+    <tbody>
+      <tr><td class="k">勉強</td><td>問題を解く</td><td>正解</td><td>正誤</td><td class="yes">数秒</td></tr>
+      <tr><td class="k">発信</td><td>投稿する</td><td>保存数・DM</td><td>刺さったか</td><td class="yes">数時間</td></tr>
+      <tr><td class="k">営業</td><td>提案する</td><td>相手</td><td>動いたか</td><td>数日〜数週</td></tr>
+      <tr><td class="k">経営判断</td><td>意思決定する</td><td>BS・現金</td><td>増えたか</td><td class="no">数ヶ月〜数年</td></tr>
+    </tbody>
+  </table></div>
+
+  <p><strong>ラグが短いほど上達が速い。</strong>ここから、これまで別物として扱っていた2つが同じ棚に入ります——営業100打席が回るのに1年かかるとして、投稿100本の採点は3〜4ヶ月で返ってくる。<em>発信は営業の高速版</em>です。10/19以降、発信を「営業とは別の作業」として時間を取り合わせる必要がありません。</p>
+
+  <p class="note">経営判断のラグが一番長いのは、それが<strong>不可逆</strong>だからです。ラグの長さと不可逆性はほぼ一致する。だから「時間をかけて考えるべきもの」を選ぶ基準は、重要度ではなく<strong>ラグの長さ</strong>で決まります。</p>
+</section>
+
+<section>
+  <h2><span class="n">02</span>採点されないアウトプットが、一番危ない</h2>
+  <p class="lead">手が動き、成果物が残り、疲れる。それでも誰も採点していない。アウトプットの形をしたインプット。</p>
+
+  <figure>
+    <svg viewBox="0 0 710 250" role="img" aria-label="左は採点ループ（出力する→採点者がいる→誤差が返る→直して次を出す）が閉じていて上達する図。右は空回りループで、採点者がいないため誤差が返らず、戻りの矢印が×で断たれていて上達しない図。">
+      <defs>
+        <marker id="mL" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" class="t-shu"/>
+        </marker>
+        <marker id="mD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" class="t-dead"/>
+        </marker>
+      </defs>
+      <g class="dg">
+        <!-- 左：採点ループ -->
+        <text x="10" y="18" class="t-shu hd">採点ループ ── 上達する</text>
+        <rect x="14" y="38" width="126" height="38" class="bx-live"/>
+        <text x="34" y="62">出力する</text>
+        <rect x="196" y="38" width="126" height="38" class="bx-live"/>
+        <text x="212" y="62">採点者がいる</text>
+        <rect x="196" y="158" width="126" height="38" class="bx-live"/>
+        <text x="216" y="182">誤差が返る</text>
+        <rect x="14" y="158" width="126" height="38" class="bx-live"/>
+        <text x="26" y="182">直して次を出す</text>
+        <g class="ln-live">
+          <path d="M140 57 L192 57"/>
+          <path d="M259 76 L259 154"/>
+          <path d="M196 177 L144 177"/>
+          <path d="M77 158 L77 80"/>
+        </g>
+        <text x="168" y="122" class="mid t-shu" text-anchor="middle">回る</text>
+        <text x="14" y="228" class="t-mut">問題を解く／提案する／投稿する／診断を出す</text>
+        <text x="14" y="243" class="t-mut">ラグが短いものから回すと上達が速い</text>
+
+        <!-- 右：空回り -->
+        <text x="380" y="18" class="t-dead hd">空回り ── 疲れるが上達しない</text>
+        <rect x="384" y="38" width="126" height="38" class="bx-dead"/>
+        <text x="404" y="62">作業する</text>
+        <rect x="566" y="38" width="126" height="38" class="bx-dead"/>
+        <text x="574" y="62">採点者がいない</text>
+        <rect x="566" y="158" width="126" height="38" class="bx-dead"/>
+        <text x="576" y="182">誤差が返らない</text>
+        <rect x="384" y="158" width="126" height="38" class="bx-dead"/>
+        <text x="410" y="182">直せない</text>
+        <g class="ln-dead">
+          <path d="M510 57 L562 57"/>
+          <path d="M629 76 L629 154"/>
+          <path d="M566 177 L514 177"/>
+        </g>
+        <!-- 戻りが断たれている -->
+        <path d="M447 158 L447 80" class="ln-dead"/>
+        <g class="ln-x">
+          <path d="M437 112 L457 132"/>
+          <path d="M457 112 L437 132"/>
+        </g>
+        <text x="538" y="122" class="mid t-dead" text-anchor="middle">回らない</text>
+        <text x="384" y="228" class="t-mut">資料の作り直し／仕組みの整備／情報収集／人選の吟味</text>
+        <text x="384" y="243" class="t-mut">成果物は残る。だから気づきにくい</text>
+      </g>
+    </svg>
+    <figcaption>右のループは1本だけ壊れています——<strong>採点者がいないので誤差が返らず、直せない</strong>。それ以外は左と同じで、手も動くし成果物も残るし疲れる。だから自分では見分けられません。見分ける唯一の方法が「誰が採点するか」を口に出すことです。</figcaption>
+  </figure>
+
+  <h3>焦っているときに逃げ込みやすい先</h3>
+  <ul class="plain danger">
+    <li>資料・ボード・スライドの作り直し（すでに使える状態のものを整える）</li>
+    <li>仕組みの整備・自動化（今日作った<code>kpi_engine.py</code>も<strong>この側</strong>）</li>
+    <li>情報収集（本・動画・他社事例。インプットなのに手が動くので出力に見える）</li>
+    <li>誰に渡すかの吟味（時間単価0円/h。100人分で16.7時間＝式25本ぶん）</li>
+    <li>ツールの比較・アカウント設計の作り直し</li>
+  </ul>
+
+  <div class="fix">
+    <p class="h">自己申告</p>
+    <p>今日構築したKPIエンジン（対話→台帳→翌朝ブリーフ）は、入力コストをゼロにしました。それは価値がある。ただし<strong>④打席は0のまま1件も動いていません</strong>。自動化は打席を作りません。作るのは打席の準備時間の削減だけです。仕組みを1つ作った日は、<em>その日のうちに打席を1つ立てないと空回りに分類される</em>——これを今日の教訓として残します。</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">03</span>唯一の分岐は「可逆かどうか」</h2>
+  <p class="lead">重要度ではなく可逆性で分ける。重要だから慎重に、は基準にならない。取り返せるかどうかだけが基準。</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>　</th><th>思考時間</th><th>やること</th><th>該当するもの</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="k yes">可逆</td><td class="yes">ゼロ。即やる</td>
+        <td>考えずに出す。間違えたら直す</td>
+        <td>送る・書く・投稿する・提案する・問題を解く・診断を出す・電話する・下書きを見せる</td>
+      </tr>
+      <tr>
+        <td class="k">不可逆</td><td>徹底的に。式を全部かける</td>
+        <td>式8本を全部通す。締め切りを切る</td>
+        <td>買う・売る・辞める・雇う・保証を付ける・銀行との条件確定・承継・法人の設立と廃止</td>
+      </tr>
+    </tbody>
+  </table></div>
+
+  <p>いま不可逆の側にあるのは3つだけです——<strong>2027-01-31の役員報酬判定</strong>（616万以上→Ⓐ／411〜616万→Ⓑ／未満→据置）、<strong>福井さんの承継</strong>（75歳・5年以内）、<strong>tenant-aw.jp の子会社化</strong>。ここは何時間考えてもいい。それ以外を考えている時間が、いま一番多く漏れているところです。</p>
+
+  <p class="note">未消化の次アクション12件を可逆性で分けると、<strong>11件が可逆</strong>です。可逆なものが12件のうち11件たまっているのは、思考が足りないからではありません。<em>出していないだけ</em>です。</p>
+</section>
+
+<section>
+  <h2><span class="n">04</span>「精査の上で提案」は、すでに最適解になっている</h2>
+  <p class="lead">これが「営業無双」の構造的な正体。式が8本あることの意味がここで確定する。</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>　</th><th>精査（入力）</th><th>提案（出力）</th><th>精査の時間単価</th></tr></thead>
+    <tbody>
+      <tr><td class="k no">普通の営業</td><td>調べる・考える</td><td>調べた結果を要約して話す</td><td class="no">0円/h（採点されない）</td></tr>
+      <tr><td class="k yes">菊池さんの型</td><td colspan="2"><strong>精査そのものを渡す。式が成果物なので、精査＝提案。</strong>診療圏調査40分＝打席1つ</td><td class="yes">49,500円/h</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>普通は精査と提案が分離しているので、精査した時間が0円/hになります（前に出した「吟味の時間単価は0円」がこれ）。菊池さんは<strong>式を渡す</strong>ので、分離していない。40分の精査が、そのまま40分の打席になる。</p>
+
+  <p>だから「営業無双」とは<em>よく調べてから提案する人</em>ではなく、<em>調べる行為そのものを渡してしまう人</em>のことです。式が8本あれば足り、増やす必要がないのもこの理由です——式の本数を増やすのは在庫の追加であって、打席の追加ではありません。</p>
+</section>
+
+<section>
+  <h2><span class="n">05</span>根拠は自分のデータにある</h2>
+  <p class="lead">損をしたのは考えすぎたときではない。考えたものを出力に変えないまま持っていたとき。</p>
+
+  <p><strong>1,046行の年表は、14年ぶんの思考の在庫です。そして10年間、1本も出していません。</strong>足りなかったのは思考ではなく出力でした。もし「考えすぎ」が問題なら、この14年は薄い記録になっているはずです。実際は逆で、記録の密度は他人が真似できない水準にある。だから処方箋は「考えるのをやめる」ではなく「出す」で確定します。</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>期間</th><th>思考（入力）</th><th>出力</th><th>結果</th></tr></thead>
+    <tbody>
+      <tr><td class="k">2012–2026</td><td>年表1,046行・式8本・6本部のデータ</td><td class="no">発信0本</td><td class="no">頭打ち</td></tr>
+      <tr><td class="k">2026年前半</td><td>仕組みづくり（本人が「休憩」と表現）</td><td>277取得・オーロラ開業準備</td><td>不可逆の判断は成功している</td></tr>
+      <tr><td class="k">2026-08-05</td><td>KPIエンジン構築</td><td class="no">④打席 0</td><td class="no">空回りに分類される</td></tr>
+      <tr><td class="k">今週の残り</td><td>—</td><td class="yes">診療圏調査1件（40分）</td><td class="yes">④が0→1</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2><span class="n">06</span>指標に反映する（1本も増やさない）</h2>
+  <p class="lead">この原則を自分の指標に当てはめると、直すところは1つしかない。</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>指標</th><th>採点されるか</th><th>判定</th></tr></thead>
+    <tbody>
+      <tr><td class="k">① 試験勉強の時間</td><td class="no">時間は採点されない</td><td class="no"><strong>穴がある。</strong>机に向かった時間ではなく「問題を解いていた時間」なら採点される</td></tr>
+      <tr><td class="k">② 1日1回ピラミッド</td><td class="yes">送信が計上条件</td><td class="yes">正しい</td></tr>
+      <tr><td class="k">③ 18-20時の親子タイム</td><td>採点対象ではない</td><td class="yes">聖域なのでこれで正しい</td></tr>
+      <tr><td class="k">④ 提案・GIVEの打席数</td><td class="yes">相手が採点する</td><td class="yes">正しい</td></tr>
+      <tr><td class="k">⑤ 30分以上1対1</td><td>半分（会うだけでは採点されない）</td><td>④とセットで見れば足りる</td></tr>
+      <tr><td class="k">⑦ BSの純資産</td><td class="yes">現金が採点する</td><td class="yes">正しい（ラグは長い）</td></tr>
+      <tr><td class="k">⑨ 相互認知</td><td class="yes">相手が言えるかどうか</td><td class="yes">正しい</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="fix">
+    <p class="h">保留・判断待ち（NA-20260805-12・期限 8/9）</p>
+    <p><strong>①の定義を「試験勉強の時間」→「問題を解いていた時間」に限定するか。</strong>テキスト読み・動画視聴は①に入れない。指標の本数も週35時間の目標も変わりません。中身の定義だけが変わる。<br>
+    ただし<strong>適用は8/9（来週）から</strong>にしてください。今週の途中で定義を変えると先週比が壊れ、8/2–8/4で出た「日割2.4倍」（4.17h/日 vs 1.71h/日）が読めなくなります。今週は現行定義のまま12.5h→35hを走る。</p>
+  </div>
+
+  <p class="note">在庫本数・投稿本数・保存数も「採点される数字」ですが、<strong>9指標には足しません</strong>。10/19以降しか意味を持たない数字を恒久の指標に混ぜると、死んだ列が残ります。足さないことを選ぶのが引き算です。</p>
+</section>
+
+<section>
+  <h2><span class="n">07</span>今日の適用</h2>
+  <p class="lead">原則を書いた日に打席が0なら、この原則はまだ採点されていない。</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>いま</th><th>診断</th><th>今日やること</th><th class="num">所要</th></tr></thead>
+    <tbody>
+      <tr><td class="k">① 12.5h / 35h</td><td>残り4日で1日5.62h必要</td><td>解く時間に寄せる（読む・見るは①に数えない練習を先取り）</td><td class="num">5.62h/日</td></tr>
+      <tr><td class="k">④ 打席 0 / 2</td><td class="no">焦りの原因はこれ1つ</td><td class="yes">天野先生に診療圏調査を1件（NA-03・期限8/9）。精査＝提案なので40分で打席1つ</td><td class="num">40分</td></tr>
+      <tr><td class="k">発信</td><td>10/19まで投稿しない</td><td>名前欄の1行とハイライト6つの名前を決める（NA-09）</td><td class="num">20分</td></tr>
+      <tr><td class="k">未消化 12件</td><td>11件が可逆</td><td>可逆なものは考えずに出す。期限の近い順に上から</td><td class="num">—</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="verdict">
+    <span>この1枚の使い方</span>
+    止まったら上の3枚だけ読む。迷いは式1本で40分、焦りは打席1つで解ける。
+  </div>
+</section>
+
+<footer>
+  <p><strong>関連ボード</strong>　🧬 <a href="https://claude.ai/code/artifact/93c8c218-188e-4b24-96e9-28d18fd25e42">TTP設計図</a>　📣 <a href="https://claude.ai/code/artifact/5c24cda4-0057-4584-b074-444f95411083">発信（借地と所有地）</a>　📈 <a href="https://claude.ai/code/artifact/45acd817-8204-469a-ba23-6c20e4d5a1f5">お金</a>　🧭 <a href="https://claude.ai/code/artifact/6e52460f-75f4-4f12-81b6-c69efc11a4af">指標＋原動力</a>　📡 <a href="https://claude.ai/code/artifact/2ace2928-f816-480d-b436-abecd354d3bf">計測</a>　📮 <a href="https://claude.ai/code/artifact/2bdb3462-780f-42bc-b548-8c7b6d3956b8">営業</a>　🎤 <a href="https://claude.ai/code/artifact/b7eb8185-3f41-45b4-b508-578fe1312703">資料</a>　🔴 <a href="https://claude.ai/code/artifact/238cbc5d-6ff1-438e-8e0b-83f68e01a8d9">自分</a></p>
+  <p><strong>記録</strong>　<code>.company/secretary/notes/2026-08-05-decisions.md</code>（この原則の決定ログ）／<code>scripts/kpi_engine.py</code>（9指標の台帳）／<code>.company/secretary/kpi/next_actions.jsonl</code>（未消化12件）</p>
+</footer>
+
+</div></div>

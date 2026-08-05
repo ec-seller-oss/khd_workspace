@@ -8,3 +8,4 @@
 {"id": "NA-20260805-08", "opened": "2026-08-05", "who": "自分", "what": "所有地の定義を1行で決める：自社PFに置くのは記事ではなく『名簿と式』", "status": "open", "due": "2026-08-31", "kpi": "④", "src": "dialogue"}
 {"id": "NA-20260805-09", "opened": "2026-08-05", "who": "自分", "what": "名前欄の1行とハイライト6つの名前を決める（発信の今週タスク・20分）", "status": "open", "due": "2026-08-08", "kpi": "④", "src": "dialogue"}
 {"id": "NA-20260805-10", "opened": "2026-08-05", "who": "自分", "what": "4アカウント×5-10本＋自分の過去投稿5本のスクショを渡して観察シートを埋める", "status": "open", "due": "2026-08-15", "kpi": "④", "src": "dialogue"}
+{"id": "NA-20260805-11", "opened": "2026-08-05", "who": "自分", "what": "prompts/chrome_instagram_ttp_260805.md をローカル（ログイン済みChrome）のClaudeに投げて6シートを埋める", "status": "open", "due": "2026-08-15", "kpi": "④", "src": "dialogue"}

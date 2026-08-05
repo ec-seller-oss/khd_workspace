@@ -1,0 +1,2 @@
+{"ts":"2026-08-05T00:30","date":"2026-08-01","type":"period","from":"2026-07-26","to":"2026-08-01","rec_days":7,"study_h":12.0,"jitsu_min":3600,"eigyo":6,"teian":0,"give":0,"sodan":0,"oyako_days":3,"src":"作業DB(653行)集計","note":"先週。作業DBの運用開始が7/26なので7月は記録4日のみ＝先月対比は成立しない"}
+{"ts":"2026-08-05T00:30","date":"2026-08-04","type":"period","from":"2026-08-02","to":"2026-08-04","rec_days":3,"study_h":12.5,"jitsu_min":2088,"eigyo":9,"teian":0,"give":0,"sodan":0,"oyako_days":2,"src":"作業DB(653行)集計","note":"今週の8/2-8/4分。8/5以降は日次イベントで積む"}

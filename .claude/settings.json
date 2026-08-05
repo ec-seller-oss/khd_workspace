@@ -15,6 +15,12 @@
             "command": "bash /Users/kikuchikenta/01_honbu_docs_automation/scripts/khd_status_board.sh",
             "timeout": 15,
             "statusMessage": "現在地ボードを表示中..."
+          },
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/scripts/kpi_hook.py\" --mode session",
+            "timeout": 20,
+            "statusMessage": "KPIの変動と未消化の次アクションを集計中..."
           }
         ]
       }
@@ -39,6 +45,28 @@
             "type": "command",
             "command": "bash /Users/kikuchikenta/01_honbu_docs_automation/scripts/khd_notion_log_reminder.sh",
             "timeout": 10
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/scripts/kpi_hook.py\" --mode prompt",
+            "timeout": 20
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/scripts/kpi_hook.py\" --mode stop",
+            "timeout": 25
           }
         ]
       }

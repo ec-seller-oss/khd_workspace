@@ -1,0 +1,357 @@
+<title>TTP設計図 — 観察・分解・置換・実行</title>
+<style>
+:root{
+  /* 青焼き／白焼き ── 発信ボードと同じ図面の系統 */
+  --paper:#F0F3F7; --panel:#FFFFFF;
+  --sumi:#16283A; --sumi-2:#4A5F74; --sumi-3:#8296AB;
+  --ao:#2C6FA0; --ao-w:#DCE7F1;
+  --shu:#C2402D; --shu-w:#F7E4E0;
+  --rule:#C9D6E2; --rule-f:#E3EAF1;
+  --void:#F7E9C6;      /* 要入力の枠 ── 図面の未測量部 */
+  --void-l:#B9932F;
+  --f-min:"Hiragino Mincho ProN","Yu Mincho",YuMincho,"Noto Serif JP",serif;
+  --f-go:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",YuGothic,"Noto Sans JP",sans-serif;
+  --f-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root{--paper:#0C1A28;--panel:#122536;--sumi:#D8E4EE;--sumi-2:#9DB2C6;
+    --sumi-3:#6C839A;--ao:#6BB2DE;--ao-w:#1B354A;--shu:#E8735C;--shu-w:#3A1E19;
+    --rule:#2A4459;--rule-f:#1B3245;--void:#332B14;--void-l:#D9B75C}
+}
+:root[data-theme="dark"]{--paper:#0C1A28;--panel:#122536;--sumi:#D8E4EE;--sumi-2:#9DB2C6;
+  --sumi-3:#6C839A;--ao:#6BB2DE;--ao-w:#1B354A;--shu:#E8735C;--shu-w:#3A1E19;
+  --rule:#2A4459;--rule-f:#1B3245;--void:#332B14;--void-l:#D9B75C}
+:root[data-theme="light"]{--paper:#F0F3F7;--panel:#FFFFFF;--sumi:#16283A;--sumi-2:#4A5F74;
+  --sumi-3:#8296AB;--ao:#2C6FA0;--ao-w:#DCE7F1;--shu:#C2402D;--shu-w:#F7E4E0;
+  --rule:#C9D6E2;--rule-f:#E3EAF1;--void:#F7E9C6;--void-l:#B9932F}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--sumi);font-family:var(--f-go);
+  font-size:15px;line-height:1.85;-webkit-font-smoothing:antialiased}
+.wrap{max-width:900px;margin:0 auto;padding:0 22px 96px}
+.sheet{border-left:1px solid var(--rule);padding-left:26px}
+@media (max-width:640px){.sheet{border-left:0;padding-left:0}}
+
+header{padding:64px 0 34px;border-bottom:2px solid var(--ao)}
+.eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;color:var(--ao);margin:0 0 20px}
+h1{font-family:var(--f-min);font-weight:600;font-size:clamp(27px,4.6vw,40px);
+  line-height:1.38;margin:0;text-wrap:balance}
+.sub{margin:18px 0 0;color:var(--sumi-2);max-width:62ch}
+
+.thesis{margin:34px 0 0;padding:26px 28px;background:var(--panel);
+  border:1px solid var(--rule);border-top:3px solid var(--shu)}
+.thesis .lbl{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.16em;
+  color:var(--shu);margin:0 0 12px}
+.thesis p{margin:0;font-family:var(--f-min);font-size:clamp(18px,2.5vw,23px);
+  line-height:1.65;font-weight:600;text-wrap:balance}
+.thesis .why{margin:16px 0 0;font-family:var(--f-go);font-size:14px;font-weight:400;
+  color:var(--sumi-2);line-height:1.8}
+
+section{margin-top:64px}
+h2{font-family:var(--f-min);font-size:22px;font-weight:600;margin:0 0 6px;line-height:1.5;text-wrap:balance}
+h2 .n{font-family:var(--f-mono);font-size:12px;color:var(--ao);letter-spacing:.1em;
+  margin-right:12px;font-weight:400;vertical-align:.18em}
+.lead{margin:0 0 26px;color:var(--sumi-2);font-size:14.5px;max-width:64ch;
+  padding-bottom:18px;border-bottom:1px solid var(--rule-f)}
+h3{font-size:15px;font-weight:600;margin:34px 0 10px}
+p{margin:0 0 16px;max-width:66ch}
+em{font-style:normal;color:var(--shu);font-weight:600}
+a{color:var(--ao)}
+a:focus-visible{outline:2px solid var(--shu);outline-offset:3px}
+
+.tw{overflow-x:auto;margin:0 0 20px;border:1px solid var(--rule);background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:13.5px}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--rule-f);
+  vertical-align:top;line-height:1.7}
+thead th{background:var(--ao-w);font-weight:600;font-size:12px;
+  border-bottom:1px solid var(--rule);white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}
+td.num,th.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums;
+  text-align:right;white-space:nowrap}
+td.k{font-weight:600;white-space:nowrap}
+td.w{white-space:nowrap;font-family:var(--f-mono);font-size:12px;color:var(--shu)}
+.no{color:var(--sumi-3)}
+.yes{color:var(--shu);font-weight:600}
+td.blank{background:var(--void);color:var(--void-l);font-family:var(--f-mono);
+  font-size:11.5px;text-align:center;letter-spacing:.06em}
+tr.self td{border-top:2px solid var(--shu)}
+
+ul.plain{margin:0 0 18px;padding:0;list-style:none}
+ul.plain li{position:relative;padding-left:20px;margin-bottom:9px;max-width:66ch}
+ul.plain li::before{content:"";position:absolute;left:2px;top:.72em;width:7px;height:1px;background:var(--ao)}
+
+figure{margin:26px 0;padding:22px;background:var(--panel);border:1px solid var(--rule);overflow-x:auto}
+figcaption{margin-top:16px;font-size:12.5px;color:var(--sumi-3);line-height:1.75;max-width:70ch}
+pre.mermaid{margin:0;background:transparent;text-align:center;min-width:520px}
+
+.note{border-left:2px solid var(--ao);padding:2px 0 2px 18px;margin:0 0 20px;
+  font-size:13.5px;color:var(--sumi-2);max-width:64ch}
+.fix{border:1px solid var(--shu);border-left-width:3px;background:var(--shu-w);
+  padding:18px 20px;margin:0 0 22px}
+.fix .h{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;color:var(--shu);margin:0 0 9px}
+.fix p:last-child{margin-bottom:0}
+.ask{border:1px dashed var(--void-l);background:var(--void);padding:18px 20px;margin:0 0 22px}
+.ask .h{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;color:var(--void-l);margin:0 0 9px}
+.ask p:last-child{margin-bottom:0}
+.ask code{font-family:var(--f-mono);font-size:12px}
+
+.verdict{margin:30px 0 0;padding:20px 24px;border:1px solid var(--rule);background:var(--panel);
+  font-family:var(--f-min);font-size:17px;line-height:1.7;font-weight:600}
+.verdict span{display:block;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.16em;
+  color:var(--ao);font-weight:400;margin-bottom:10px}
+
+footer{margin-top:72px;padding-top:26px;border-top:2px solid var(--ao);
+  font-size:12.5px;color:var(--sumi-3);line-height:1.8}
+footer code{font-family:var(--f-mono);font-size:11.5px;color:var(--sumi-2)}
+</style>
+
+<div class="wrap"><div class="sheet">
+
+<header>
+  <p class="eyebrow">KHD ／ 2026-08-05 ／ TTP（徹底的にパクる）の工程表</p>
+  <h1>TTP設計図<br>——観察・分解・置換・実行</h1>
+  <p class="sub">「いつ・何を・どうするか」を1枚に落とす。あわせて「名刺はもう不要か」に答える。</p>
+</header>
+
+<div class="thesis">
+  <p class="lbl">主メッセージ</p>
+  <p>TTPが失敗するのは、観察と置換の間にある「分解」を飛ばすからです。</p>
+  <p class="why">上手い人の投稿を見て、同じ見た目で作るのが観察→置換。これをやると「似ている誰か」になって終わる。間に<strong>「なぜそれが効いているのか」を1行にする分解</strong>を挟むと、見た目は全く違うのに同じ効き方をするものが作れる。フローチャートの分岐は全部、この分解のためにあります。</p>
+</div>
+
+<section>
+  <h2><span class="n">01</span>先に、この2つは今できない</h2>
+  <p class="lead">分析の材料が手元にない。ごまかして表を埋めると、以降の全工程が嘘の上に乗る。</p>
+
+  <div class="fix">
+    <p class="h">できないこと①：他者の投稿が読めない</p>
+    <p><code>instagram.com/jeremytsa</code> と <code>instagram.com/</code> の両方を実際に取得して <strong>HTTP 403</strong>。ログインしているのは菊池さんのMacで、この対話はクラウドの別コンテナにいるのでCookieが届きません。4アカウントの投稿は<strong>1本も見ていません</strong>。</p>
+  </div>
+
+  <div class="fix">
+    <p class="h">できないこと②：「俺の過去投稿」が何を指すか分からない</p>
+    <p>前に<strong>「発信は一回も投稿してない」</strong>と聞いています。なので「過去投稿」は次のどれかで、どれかによって観察の軸が変わります。<br>
+    ⓐ 個人アカウントの日常投稿（家族・食事・旅行）── 軸は「素材はあるが立ち位置がない」<br>
+    ⓑ 別チャネル（ブログ・note・メール・セミナー資料）── 軸は「長文は書けるが20秒の器がない」<br>
+    ⓒ 実は事業の投稿がある ── 軸は「何が反応したかの実測」<br>
+    以下は<strong>ⓐを仮置き</strong>して組んでいます。ⓑ・ⓒなら02の観察シートの自分の行だけ差し替えれば残りはそのまま使えます。</p>
+  </div>
+
+  <div class="ask">
+    <p class="h">1回だけ渡してもらえれば、02の表が埋まる</p>
+    <p>4アカウント × 投稿5〜10本ぶんのスクリーンショット（プロフィール画面＋投稿1枚目＋キャプション全文が見える状態）。それと菊池さんの過去投稿を5本。<strong>スクショはこのチャットに貼るだけでいい</strong>——画像は読めます。読めないのはログインが必要なWebページだけです。</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">02</span>観察シート（他者 × 自分を同じ列で並べる）</h2>
+  <p class="lead">比較は同じ列でやらないと成立しない。列は7本、これ以上増やさない。増やすと埋まらないまま放置される。</p>
+
+  <div class="tw"><table>
+    <thead><tr>
+      <th>アカウント</th><th>形式</th><th>1枚目の言葉</th><th>数字の出し方</th>
+      <th>CTA</th><th>保存される理由</th><th>真似できるか</th>
+    </tr></thead>
+    <tbody>
+      <tr><td class="k">jeremytsa</td><td class="blank">要入力</td><td class="blank">要入力</td><td class="blank">要入力</td><td class="blank">要入力</td><td class="blank">要入力</td><td class="blank">要入力</td></tr>
+      <tr><td class="k">sekine_kosho</td><td class="blank">要入力</td><td class="blank">要入力</td><td class="blank">要入力</td><td class="blank">要入力</td><td class="blank">要入力</td><td class="blank">要入力</td></tr>
+      <tr><td class="k">suenoouchi</td><td class="blank">要入力</td><td class="blank">要入力</td><td class="blank">要入力</td><td class="blank">要入力</td><td class="blank">要入力</td><td class="blank">要入力</td></tr>
+      <tr><td class="k">nagata_masaaki</td><td class="blank">要入力</td><td class="blank">要入力</td><td class="blank">要入力</td><td class="blank">要入力</td><td class="blank">要入力</td><td class="blank">要入力</td></tr>
+      <tr class="self"><td class="k">菊池さん（ⓐ日常投稿と仮置き）</td><td>写真・単発</td><td>説明なし（写真だけ）</td><td class="no">なし</td><td class="no">なし</td><td class="no">保存されない（自分の記録だから）</td><td>—</td></tr>
+    </tbody>
+  </table></div>
+
+  <p class="note">自分の行だけ先に埋めました。ここに<strong>すでに答えが出ている</strong>——日常投稿が伸びないのは内容が弱いからではなく、<em>数字とCTAの列が空</em>だから。逆に言うと、この2列を足すだけで日常投稿がそのまま在庫になります。旅行の写真に「この旅費は物販の利益67万から出しています」の1行が付くと、同じ写真が過程の数字になる。</p>
+</section>
+
+<section>
+  <h2><span class="n">03</span>TTP変換表（分解を挟んだ8つ）</h2>
+  <p class="lead">中身を見られなくても、個人アカウントで効いている型は構造から特定できる。ここは4アカウントの分析ではなく、一般に効いている型の分解です。スクショが来たら列を足さずに行を差し替える。</p>
+
+  <div class="tw"><table>
+    <thead><tr><th style="width:16%">観察（何を）</th><th style="width:26%">分解（なぜ効くか）</th><th style="width:32%">置換（菊池版）</th><th>いつ</th><th>指標</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="k">法人名ではなく個人名で立つ</td>
+        <td>不動産は誰から買っても登記は同じで、差がつくのは担当が何を先に出すかだけ。買主は会社ではなく人を探している</td>
+        <td>名前欄「菊池研太｜決める前に数字を出す」。職能を<strong>動詞</strong>で入れる（名詞にすると検索されない）</td>
+        <td class="w">8/9週</td><td>—</td>
+      </tr>
+      <tr>
+        <td class="k">Before / After</td>
+        <td>変化が20秒で伝わる唯一の型。工務店系で最強なのは施工が可視だから</td>
+        <td>可視でない商売なので<strong>数字のBefore/After</strong>に置換：「開業前の想定患者数 → 診療圏調査の実測」「売主の希望価格 → 土地値割合」。2枚組で出す</td>
+        <td class="w">9/6週</td><td>保存数</td>
+      </tr>
+      <tr>
+        <td class="k">過程の開示（施工の裏側）</td>
+        <td>真似できる情報は贈り物として受け取られ、真似できない情報は自慢として受け取られる</td>
+        <td>式の<strong>途中式をそのまま出す</strong>。513万−64万−121万−95万＝233万、税54万、手残り150万。答えだけ出さない</td>
+        <td class="w">8/16週</td><td>保存数</td>
+      </tr>
+      <tr>
+        <td class="k">定点連載（毎週同じ曜日）</td>
+        <td>次を待つ理由ができる。単発は流れるが連載は覚えられる</td>
+        <td><strong>「週1の数字」</strong>＝学習時間・打席数・BS純資産を毎週同じ曜日に出す。KPIエンジンが自動で出すので工数ゼロ</td>
+        <td class="w">10/19〜</td><td>①④⑦</td>
+      </tr>
+      <tr>
+        <td class="k">数字の開示（年商・原価）</td>
+        <td>検算できると信用が発生する。検算できない実績は嫉妬だけ生む</td>
+        <td>結果の数字ではなく<strong>過程の数字</strong>で出す。「277戸買いました」ではなく「資産が減らないラインは月32万でした」</td>
+        <td class="w">8/23週</td><td>保存数</td>
+      </tr>
+      <tr>
+        <td class="k">失敗の開示</td>
+        <td>成功談は嫉妬を、失敗談は共感を生む。かつ失敗は真似されない＝独自性が担保される</td>
+        <td>マルチ離脱／研究職をやめた判断／10年発信できなかった理由（時間を新規確保しようとしていた）／吟味の時間単価は0円だった話</td>
+        <td class="w">9/13週</td><td>DM数</td>
+      </tr>
+      <tr>
+        <td class="k">保存を促す一覧・チェックリスト</td>
+        <td>保存はアルゴリズム上いちばん強く、かつ名簿の1段前。保存した人は戻ってくる</td>
+        <td>式8本を<strong>1枚のチェックリスト</strong>に割る。A4メニュー表をそのまま分解すればいい（新規制作ゼロ）</td>
+        <td class="w">9/20週</td><td>保存数</td>
+      </tr>
+      <tr>
+        <td class="k">DMの1言指定</td>
+        <td>行動のハードルを1語まで下げる。「お気軽にご相談ください」では誰も打たない</td>
+        <td>「<strong>診断</strong>と1言送ってください。1件だけ無料で出します。やめた方がいい時は、やめた方がいいと書きます」</td>
+        <td class="w">10/19〜</td><td>④打席</td>
+      </tr>
+    </tbody>
+  </table></div>
+
+  <p class="note">この8行のうち<strong>6行は新規制作がゼロ</strong>です。すでにある式・数字・年表・A4メニュー表・KPIエンジンの出力を器に入れ替えるだけ。「発信を始める」が重く感じていたのは、新しく作るものだと思っていたからです。</p>
+</section>
+
+<section>
+  <h2><span class="n">04</span>投稿1本を作るフロー（1本20分・迷わない）</h2>
+  <p class="lead">毎朝ブリーフから始まって、投稿してKPIに入るまで。判断が要るのは2箇所だけ。</p>
+
+  <figure>
+    <pre class="mermaid">
+flowchart TD
+  A["朝のブリーフ（自動）<br/>KPI3行＋未消化＋昨日の在庫"] --> B{"昨日、台帳に<br/>在庫が入ったか"}
+  B -- いいえ --> B2["記録だけして終わり。<br/>投稿はしない"]
+  B -- はい --> C{"どの群か"}
+  C -->|"A 怖い話"| D
+  C -->|"B 式"| D
+  C -->|"C 過程の数字"| D
+  C -->|"D 10年前との照合"| D
+  C -->|"E 失敗"| D
+  D["型5行に流し込む<br/>1行目O・2行目P・4行目数字・5行目渡す<br/>（Claudeが下書き）"] --> E["3行目＝主メッセージを<br/>菊池さんが1文で書く"]
+  E --> F["4つの鉄則で削る<br/>体言止め／あいまい語／1文1メッセージ／しりてが"]
+  F --> G{"しらふで言うのが<br/>少し怖いか"}
+  G -- 怖くない --> H["B群に格下げして<br/>式として出す"]
+  G -- 怖い --> I["そのまま出す"]
+  H --> J["投稿"]
+  I --> J
+  J --> K["kpi_engine log pyramid<br/>kpi_engine log daseki --who --what"]
+  K --> L["翌朝のブリーフで<br/>保存数とDMを見る"]
+  L --> A
+
+  classDef auto fill:#DCE7F1,stroke:#2C6FA0,color:#16283A
+  classDef me fill:#F7E4E0,stroke:#C2402D,color:#16283A,font-weight:bold
+  classDef stop fill:#EDF1F5,stroke:#8296AB,color:#4A5F74
+  class A,D,F,K,L auto
+  class E,I,G me
+  class B2,H stop
+    </pre>
+    <figcaption><strong>朱色の枠が菊池さんの手を使う工程</strong>——3行目の1文、怖いかの判定、出すかどうか。それ以外は自動か下書きです。1本20分のうち、本人の時間は<strong>5分</strong>。判断が2箇所しかないので、迷って止まる余地がない。<br>ループが閉じているのが肝で、投稿がKPIに入り、KPIが翌朝のブリーフに出て、ブリーフが次の投稿の原料になる。<strong>在庫が切れない構造</strong>はここで作られます。</figcaption>
+  </figure>
+
+  <p class="note">「怖くない → B群に格下げ」の分岐を入れた理由。怖くない話を怖い話の場所に出すと薄まりますが、<strong>式として出せば十分に価値がある</strong>。捨てる必要はなく、置き場を変えるだけ。ここが引き算ではなく割り算の使い所です。</p>
+</section>
+
+<section>
+  <h2><span class="n">05</span>いつ何をするか（今日から2027-01-31まで）</h2>
+  <p class="lead">週35時間の学習と親子タイムは聖域。発信の作業はその外側に置き、週2時間を超えさせない。超える週は作業を落とす。</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>週</th><th>やること</th><th>成果物</th><th class="num">時間</th></tr></thead>
+    <tbody>
+      <tr><td class="w">8/2–8/8<br>今週</td><td>学習35時間を死守（残り4日で1日5.62h）。発信は<strong>決めるだけ</strong></td><td>名前欄の1行／ハイライト6つの名前</td><td class="num">20分</td></tr>
+      <tr><td class="w">8/9–8/15</td><td>4アカウント×5〜10本のスクショを渡して<strong>02の観察シートを埋める</strong></td><td>観察シート完成／TTP変換表の行差し替え</td><td class="num">60分</td></tr>
+      <tr><td class="w">8/16–8/22</td><td>群B（式8本）を型5行で下書き。式は既にあるので器に入れるだけ</td><td>下書き8本</td><td class="num">2.7h</td></tr>
+      <tr><td class="w">8/23–8/29</td><td>群C（過程の数字10本）を下書き。財務司令塔と277の収支から拾う</td><td>下書き10本</td><td class="num">3.3h</td></tr>
+      <tr><td class="w">8/30–9/5</td><td>群D（10年前との照合6本）を下書き。1,046行から日付つきで拾う</td><td>下書き6本</td><td class="num">2.0h</td></tr>
+      <tr><td class="w">9/6–9/12</td><td>群A（怖い話3本）。<strong>ここだけ時間をかける</strong>。書いて封をする</td><td>下書き3本</td><td class="num">3.0h</td></tr>
+      <tr><td class="w">9/13–9/19</td><td>群E（失敗3本）を下書き。<strong>30本完成</strong></td><td>下書き3本／在庫30本</td><td class="num">1.0h</td></tr>
+      <tr><td class="w">9/20–9/26</td><td>プロフィール確定。ハイライト6つの表紙。アカウントは<strong>非公開で</strong>作る</td><td>公開前の完成形</td><td class="num">1.5h</td></tr>
+      <tr><td class="w">9/27–10/3</td><td>予備週。遅れの吸収だけ。遅れていなければ<strong>触らない</strong></td><td>—</td><td class="num">0</td></tr>
+      <tr><td class="w">10/4–10/17</td><td>試験に全部寄せる。発信は台帳記録（自動）のみ。<strong>ここで触るのが最大の危険</strong></td><td>—</td><td class="num">0</td></tr>
+      <tr><td class="w">10/18（日）</td><td>宅建試験</td><td>—</td><td class="num">—</td></tr>
+      <tr><td class="w">10/19（月）</td><td><strong>公開。群Aの3本を同時に出す。</strong>セミナー資料から抜いた記事1・2・5も同日</td><td>公開／初日6本</td><td class="num">2.0h</td></tr>
+      <tr><td class="w">10/20–1/31</td><td>週5本。②1日1回ピラミッドの副産物を回すだけ。新規取材はしない</td><td>週5本</td><td class="num">週1.7h</td></tr>
+      <tr><td class="w">2027-01-31</td><td><strong>判定日</strong>。役員報酬（法人現金創出力616万以上→Ⓐ／411〜616万→Ⓑ／未満→据置）と⑨相互認知10人と、発信の合否を同じ日に見る</td><td>判定</td><td class="num">30分</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>下書き30本の総工数は<strong>約13.5時間／6週間＝週2.3時間</strong>。学習35時間・親子タイム週5日の外側で吸収できる量です。ただしこれは<em>学習時間から取ってはいけない</em>——今週の残り4日で1日5.62hが必要な状況では、8月第2週までは発信作業を1時間以内に抑えるのが正しい。</p>
+
+  <div class="verdict">
+    <span>判定式</span>
+    9/19に在庫が30本なければ、10/19の公開を1週間だけ遅らせる。本数を減らして開始することはしない。
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">06</span>「名刺はもう不要か」——8割は正しい</h2>
+  <p class="lead">名刺の仕事は4つある。そのうち3つはプロフィールが上位互換で、1つだけ物理にしか残らない。</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>名刺の仕事</th><th>名刺</th><th>プロフィール＋ハイライト6つ</th><th>判定</th></tr></thead>
+    <tbody>
+      <tr><td class="k">連絡先を渡す</td><td>会った人だけ</td><td>会っていない人にも届く</td><td class="yes">置換できる</td></tr>
+      <tr><td class="k">何の人かを伝える</td><td class="no">肩書き1行。しかも名詞</td><td>1行の立ち位置＋式6本＋物証1,046行</td><td class="yes">置換できる</td></tr>
+      <tr><td class="k">後で思い出させる</td><td class="no">引き出しで死ぬ。更新は刷り直し</td><td>保存されて再訪される。更新は即時</td><td class="yes">置換できる</td></tr>
+      <tr><td class="k">その場で手を動かして渡す</td><td class="yes">動作そのものが記憶になる</td><td class="no">対面では出せない</td><td>残る</td></tr>
+      <tr><td class="k">効果を測る</td><td class="no">不可能</td><td>保存数・DM数・④打席</td><td class="yes">置換できる</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>だから結論は「名刺を捨てる」ではなく<em>名刺で説明するのをやめる</em>。載せる情報を<strong>名前とQR1つだけ</strong>に削り、説明はプロフィールとA4メニュー表に全部移す。名刺に情報を詰めるのは、更新できない紙に資産を置く行為で、借地に建物を建てるのと同じ間違いです。</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>渡す場面</th><th>渡すもの</th><th>役割</th></tr></thead>
+    <tbody>
+      <tr><td class="k">初対面・立ち話</td><td>名刺（名前＋QR1つ）</td><td>手を動かす動作だけ。説明しない</td></tr>
+      <tr><td class="k">30分もらえた相手</td><td>A4メニュー表1枚</td><td>6メニューと人柄。⑤にカウントされる打席</td></tr>
+      <tr><td class="k">会っていない相手</td><td>プロフィール＋ハイライト</td><td>式が入口。DMに「診断」で④に入る</td></tr>
+      <tr><td class="k">式を使った相手</td><td>診断レター（OPQ版）</td><td>ここで初めて名前が名簿に載る＝所有地</td></tr>
+    </tbody>
+  </table></div>
+
+  <p class="note">効率化として見ると、いちばん効くのは名刺を減らすことではなく<strong>説明の場所を1つに寄せること</strong>です。今は説明が名刺・セミナー資料・口頭・メールに散っていて、更新すると全部作り直しになる。1箇所に寄せると、1回の更新が全部に効きます。</p>
+</section>
+
+<section>
+  <h2><span class="n">07</span>この工程で指標を1本も足さない</h2>
+  <p class="lead">在庫30本という新しい数字が出てきたが、9指標には入れない。理由がある。</p>
+
+  <p>在庫本数は<strong>10/19までしか意味を持たない一時的な数字</strong>で、恒久の指標に混ぜると1月以降ずっと死んだ列が残ります。だから在庫は次アクションDBの側で管理し、9指標は動かさない。<em>足さないことを選ぶのが引き算</em>で、ここが一番それを試される場所です。</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>この工程で動く指標</th><th>どう動くか</th><th>いつから</th></tr></thead>
+    <tbody>
+      <tr><td class="k">② 1日1回ピラミッド</td><td>投稿の型5行がそのままピラミッド。下書き期間も計上される</td><td>8/16週</td></tr>
+      <tr><td class="k">④ 提案・GIVEの打席数</td><td>DMで「診断」が来て式を渡した回数。週2→10/19から週5</td><td>10/19</td></tr>
+      <tr><td class="k">⑤ 30分以上1対1</td><td>DMから面談になった人。週1人→10/19から週3人</td><td>10/19</td></tr>
+      <tr><td class="k">⑨ 相互認知</td><td>相手が菊池さんの取り組みを言える人の累計。2027-01-31までに10人</td><td>10/19</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="verdict">
+    <span>今週の発信タスク（20分で終わる）</span>
+    名前欄の1行を決める。ハイライト6つの名前を決める。以上。投稿は1本もしない。
+  </div>
+</section>
+
+<footer>
+  <p><strong>関連ボード</strong>　📣 <a href="https://claude.ai/code/artifact/5c24cda4-0057-4584-b074-444f95411083">発信（借地と所有地）</a>　📈 <a href="https://claude.ai/code/artifact/45acd817-8204-469a-ba23-6c20e4d5a1f5">お金</a>　🧭 <a href="https://claude.ai/code/artifact/6e52460f-75f4-4f12-81b6-c69efc11a4af">指標＋原動力</a>　📡 <a href="https://claude.ai/code/artifact/2ace2928-f816-480d-b436-abecd354d3bf">計測</a>　📮 <a href="https://claude.ai/code/artifact/2bdb3462-780f-42bc-b548-8c7b6d3956b8">営業</a>　🎤 <a href="https://claude.ai/code/artifact/b7eb8185-3f41-45b4-b508-578fe1312703">資料</a>　🔴 <a href="https://claude.ai/code/artifact/238cbc5d-6ff1-438e-8e0b-83f68e01a8d9">自分</a></p>
+  <p><strong>実装</strong>　<code>scripts/kpi_engine.py</code>（9指標の台帳）／<code>scripts/kpi_hook.py</code>（対話のたびに変動を注入）／<code>.claude/skills/pyramid</code>（型5行の下書き。3行目は渡さない）</p>
+  <p>02の空欄は、スクリーンショットをこのチャットに貼れば埋まります。画像は読めます。読めないのはログインが必要なWebページだけです。</p>
+</footer>
+
+</div></div>

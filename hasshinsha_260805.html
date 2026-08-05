@@ -1,0 +1,499 @@
+<title>発信者として生きる — 借地と所有地の両輪</title>
+<style>
+:root{
+  /* 青焼き／白焼き ── 土地家屋調査士の図面の世界から取った */
+  --paper:#F0F3F7;      /* 白焼き紙。青に寄せた中性色 */
+  --panel:#FFFFFF;
+  --sumi:#16283A;       /* 墨 */
+  --sumi-2:#4A5F74;     /* 副文 */
+  --sumi-3:#8296AB;     /* 註 */
+  --ao:#2C6FA0;         /* 藍 ── 図面の線 */
+  --ao-w:#DCE7F1;       /* 藍の薄 */
+  --shu:#C2402D;        /* 朱 ── 実印。用途は「確定・所有」だけに絞る */
+  --shu-w:#F7E4E0;
+  --rule:#C9D6E2;
+  --rule-f:#E3EAF1;
+  --f-min:"Hiragino Mincho ProN","Yu Mincho",YuMincho,"Noto Serif JP",serif;
+  --f-go:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",YuGothic,"Noto Sans JP",sans-serif;
+  --f-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --paper:#0C1A28; --panel:#122536; --sumi:#D8E4EE; --sumi-2:#9DB2C6;
+    --sumi-3:#6C839A; --ao:#6BB2DE; --ao-w:#1B354A; --shu:#E8735C;
+    --shu-w:#3A1E19; --rule:#2A4459; --rule-f:#1B3245;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0C1A28; --panel:#122536; --sumi:#D8E4EE; --sumi-2:#9DB2C6;
+  --sumi-3:#6C839A; --ao:#6BB2DE; --ao-w:#1B354A; --shu:#E8735C;
+  --shu-w:#3A1E19; --rule:#2A4459; --rule-f:#1B3245;
+}
+:root[data-theme="light"]{
+  --paper:#F0F3F7; --panel:#FFFFFF; --sumi:#16283A; --sumi-2:#4A5F74;
+  --sumi-3:#8296AB; --ao:#2C6FA0; --ao-w:#DCE7F1; --shu:#C2402D;
+  --shu-w:#F7E4E0; --rule:#C9D6E2; --rule-f:#E3EAF1;
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--sumi);
+  font-family:var(--f-go);font-size:15px;line-height:1.85;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:880px;margin:0 auto;padding:0 22px 96px}
+
+/* ── 図面の耳（左の細い罫と目盛） ── */
+.sheet{position:relative;border-left:1px solid var(--rule);padding-left:26px}
+@media (max-width:640px){.sheet{border-left:0;padding-left:0}}
+
+/* ── 表題部 ── */
+header{padding:64px 0 34px;border-bottom:2px solid var(--ao)}
+.eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;
+  color:var(--ao);text-transform:uppercase;margin:0 0 20px}
+h1{font-family:var(--f-min);font-weight:600;font-size:clamp(27px,4.6vw,40px);
+  line-height:1.38;letter-spacing:.01em;margin:0;text-wrap:balance}
+.sub{margin:18px 0 0;color:var(--sumi-2);font-size:15px;max-width:62ch}
+
+/* ── 主メッセージ（1文目に置く。OPQのA） ── */
+.thesis{margin:34px 0 0;padding:26px 28px;background:var(--panel);
+  border:1px solid var(--rule);border-top:3px solid var(--shu);position:relative}
+.thesis .lbl{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.16em;
+  color:var(--shu);margin:0 0 12px}
+.thesis p{margin:0;font-family:var(--f-min);font-size:clamp(18px,2.5vw,23px);
+  line-height:1.65;font-weight:600;text-wrap:balance}
+.thesis .why{margin:16px 0 0;font-family:var(--f-go);font-size:14px;
+  font-weight:400;color:var(--sumi-2);line-height:1.8}
+
+/* ── 章 ── */
+section{margin-top:64px}
+h2{font-family:var(--f-min);font-size:22px;font-weight:600;margin:0 0 6px;
+  line-height:1.5;text-wrap:balance}
+h2 .n{font-family:var(--f-mono);font-size:12px;color:var(--ao);
+  letter-spacing:.1em;margin-right:12px;font-weight:400;vertical-align:.18em}
+.lead{margin:0 0 26px;color:var(--sumi-2);font-size:14.5px;max-width:64ch;
+  padding-bottom:18px;border-bottom:1px solid var(--rule-f)}
+h3{font-size:15px;font-weight:600;margin:34px 0 10px;color:var(--sumi)}
+p{margin:0 0 16px;max-width:66ch}
+strong{font-weight:600}
+em{font-style:normal;color:var(--shu);font-weight:600}
+a{color:var(--ao)}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--shu);outline-offset:3px}
+
+/* ── 表 ── */
+.tw{overflow-x:auto;margin:0 0 20px;border:1px solid var(--rule);background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:13.5px}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--rule-f);
+  vertical-align:top;line-height:1.7}
+thead th{background:var(--ao-w);color:var(--sumi);font-weight:600;font-size:12px;
+  letter-spacing:.04em;border-bottom:1px solid var(--rule);white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}
+td.num,th.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums;
+  text-align:right;white-space:nowrap}
+td.k{font-weight:600;white-space:nowrap}
+.no{color:var(--sumi-3)}
+.yes{color:var(--shu);font-weight:600}
+
+/* ── 箇条（番号は順序が本当にある所だけ） ── */
+ul.plain{margin:0 0 18px;padding:0;list-style:none}
+ul.plain li{position:relative;padding-left:20px;margin-bottom:9px;max-width:66ch}
+ul.plain li::before{content:"";position:absolute;left:2px;top:.72em;
+  width:7px;height:1px;background:var(--ao)}
+
+ol.steps{margin:0;padding:0;list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;position:relative;padding:0 0 22px 54px;
+  border-left:1px solid var(--rule);margin-left:13px}
+ol.steps li::before{content:counter(s,decimal-leading-zero);
+  position:absolute;left:-13px;top:0;width:26px;height:26px;
+  background:var(--paper);border:1px solid var(--ao);color:var(--ao);
+  font-family:var(--f-mono);font-size:10.5px;display:grid;place-items:center}
+ol.steps li:last-child{border-left-color:transparent;padding-bottom:0}
+ol.steps b{display:block;font-size:15px;margin-bottom:5px}
+ol.steps .when{font-family:var(--f-mono);font-size:11px;color:var(--shu);
+  letter-spacing:.06em;display:block;margin-bottom:5px}
+ol.steps p{margin:0;font-size:13.5px;color:var(--sumi-2);max-width:60ch}
+
+/* ── 図 ── */
+figure{margin:26px 0;padding:22px;background:var(--panel);
+  border:1px solid var(--rule);overflow-x:auto}
+figure svg{display:block;width:100%;height:auto;min-width:520px}
+figcaption{margin-top:16px;font-size:12.5px;color:var(--sumi-3);line-height:1.75;
+  max-width:70ch}
+
+/* ── 図のインク（SVGのpresentation属性でvar()を使わない） ── */
+.dg{font-family:var(--f-go);font-size:12px}
+.dg text{fill:var(--sumi)}
+.d-ao{fill:var(--ao)} .d-shu{fill:var(--shu)} .d-mut{fill:var(--sumi-3);font-size:10.5px}
+.s-ao{stroke:var(--ao);fill:none} .s-shu{stroke:var(--shu);fill:none}
+.s-ao-d{stroke:var(--ao);fill:none;stroke-dasharray:5 4}
+.s-shu-d{stroke:var(--shu);fill:none;stroke-dasharray:4 3;stroke-width:1.4}
+.s-ao-f{stroke:var(--ao);fill:none;stroke-width:1.4}
+.lbl-s{font-size:11px;letter-spacing:1.6px}
+.bx{font-size:12.5px;font-weight:600}
+.ar{marker-end:url(#ar)}
+.ar2{marker-end:url(#ar2)}
+
+/* ── 註記・訂正 ── */
+.note{border-left:2px solid var(--ao);padding:2px 0 2px 18px;margin:0 0 20px;
+  font-size:13.5px;color:var(--sumi-2);max-width:64ch}
+.fix{border:1px solid var(--shu);border-left-width:3px;background:var(--shu-w);
+  padding:18px 20px;margin:0 0 22px}
+.fix .h{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;
+  color:var(--shu);margin:0 0 9px}
+.fix p:last-child{margin-bottom:0}
+
+/* ── 判定の1行 ── */
+.verdict{margin:30px 0 0;padding:20px 24px;border:1px solid var(--rule);
+  background:var(--panel);font-family:var(--f-min);font-size:17px;
+  line-height:1.7;font-weight:600}
+.verdict span{display:block;font-family:var(--f-mono);font-size:10.5px;
+  letter-spacing:.16em;color:var(--ao);font-weight:400;margin-bottom:10px}
+
+/* ── 締め ── */
+footer{margin-top:72px;padding-top:26px;border-top:2px solid var(--ao);
+  font-size:12.5px;color:var(--sumi-3);line-height:1.8}
+footer code{font-family:var(--f-mono);font-size:11.5px;color:var(--sumi-2)}
+</style>
+
+<div class="wrap"><div class="sheet">
+
+<header>
+  <p class="eyebrow">KHD ／ 2026-08-05 ／ 発信設計</p>
+  <h1>発信者として生きる<br>——借地と所有地の両輪</h1>
+  <p class="sub">「パクリでいい」と「両輪でいく」という2つの見立てを検算する。前者は半分だけ正しく、後者は完全に正しい。ただし両輪には<strong>回す順番</strong>があり、そこが逆算の本体になる。</p>
+</header>
+
+<div class="thesis">
+  <p class="lbl">主メッセージ</p>
+  <p>いま作るのはアカウントではなく、在庫です。</p>
+  <p class="why">10/19（宅建試験の翌日）に発信を始めることは既に決まっている。ならば今日から10/18までの75日は、投稿する期間ではなく<strong>撮り溜める期間</strong>。発信で死ぬのは「始めた人」ではなく「在庫が切れた人」だから、逆算の起点は開設日ではなく在庫量に置く。</p>
+</div>
+
+<section>
+  <h2><span class="n">01</span>「パクリ」は半分だけ正しい</h2>
+  <p class="lead">型は借りていい。中身は借りられない。この2つを分けないと、発信は「似ている誰か」で終わる。</p>
+
+  <div class="fix">
+    <p class="h">なぜ読めないのか（ログイン済みなのに）</p>
+    <p>ログインしているのは<strong>菊池さんのMacのブラウザ</strong>で、この対話が動いているのは<strong>クラウド上の別のコンテナ</strong>です。手元のCookieはここに届かない。ローカルのClaude Codeには Claude in Chrome の接続がありますが、今のセッションにはその接続がない。実際に <code>instagram.com/jeremytsa</code> を取得したら <strong>HTTP 403</strong> が返りました。Instagramは未ログインのアクセスを本文ごと拒否します。</p>
+    <p>なので4アカウント（jeremytsa／sekine_kosho／suenoouchi／nagata_masaaki）の投稿は<strong>1本も見ていません</strong>。型を抽出したいなら、各アカウントの投稿を5〜10本スクリーンショットで渡してください。以下は投稿分析ではなく、菊池さんが自分の言葉で書いた「等身大」「担当次第」「個人アカウントが伸びる」という<strong>構造の指摘</strong>に対する検算です。</p>
+  </div>
+
+  <p>彼らから借りるべきは<em>型</em>——プライベートと事業を分けずに出す、結果ではなく過程を出す、法人名ではなく個人名で立つ。ここは丸ごと真似ていい。真似が効くのは型が普遍だからです。</p>
+
+  <p>一方で、借りられないものが3つある。ここが菊池さんの側にしかない。</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>借りられないもの</th><th>菊池さんが持っている量</th><th>これが効く理由</th></tr></thead>
+    <tbody>
+      <tr><td class="k">物証としての年表</td><td>1,046行（14年ぶん）</td><td>回想で語る人は無限にいるが、日付つきの物証で語れる人はほぼいない。「2016年にアパート経営して一階は喫茶店と書いた」が2026年に277とオーロラで同年に実現している、はねじ曲げられない</td></tr>
+      <tr><td class="k">検算できる式</td><td>8本（診療圏調査／土地値割合／イールドギャップ／無収入寿命／役員報酬の移転効率／上限CPO／5段階利益管理／事業計画8項目）</td><td>共感は流れるが、式は保存されて他人の手で再利用される。渡すたびに減らない</td></tr>
+      <tr><td class="k">法人の実データ</td><td>6本部・作業DB・BS</td><td>「儲かってます」ではなく「月32万が資産が減らないラインです」と書ける。数字は嫌味にならない（→ 03）</td></tr>
+    </tbody>
+  </table></div>
+
+  <p class="note">つまり正確な言い方はこうです。<strong>型は最短距離でパクり、在庫は誰にも真似できないものだけ出す。</strong>ライフハックが昔から好きだったのは、他人の型を高速に借りる癖のことで、それはこの戦略と矛盾しない。むしろ資質そのものです。</p>
+</section>
+
+<section>
+  <h2><span class="n">02</span>両輪の正体は「借地」と「所有地」</h2>
+  <p class="lead">流行りのプラットフォームと自社プラットフォーム。この2つを不動産の言葉に置き換えると、順番も分業も自動的に決まる。</p>
+
+  <figure>
+    <svg viewBox="0 0 720 300" role="img" aria-label="借地3区画（Instagram・YouTube・X）から矢印が右の所有地1区画へ流れ、所有地には名簿と式と受付が建っている図。所有地から借地へは式を配る戻りの矢印がある。">
+      <defs>
+        <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" class="d-ao"/>
+        </marker>
+        <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" class="d-shu"/>
+        </marker>
+      </defs>
+      <g class="dg">
+        <text x="8" y="20" class="d-ao lbl-s">借地 ── 認知をつくる（明日なくなる）</text>
+        <g class="s-ao-d">
+          <rect x="8" y="34" width="150" height="52"/>
+          <rect x="8" y="100" width="150" height="52"/>
+          <rect x="8" y="166" width="150" height="52"/>
+        </g>
+        <text x="22" y="65">Instagram</text>
+        <text x="22" y="131">YouTube / Reels</text>
+        <text x="22" y="197">X・note</text>
+        <text x="8" y="238" class="d-mut">アルゴリズムは大家の都合で変わる。</text>
+        <text x="8" y="253" class="d-mut">ここに建物（名簿・課金・資産）は建てない。</text>
+
+        <g class="s-ao-f ar">
+          <path d="M158 60 L296 60 L296 118"/>
+          <path d="M158 126 L296 126"/>
+          <path d="M158 192 L296 192 L296 134"/>
+        </g>
+        <text x="192" y="112" class="d-mut">人を集める</text>
+
+        <text x="330" y="20" class="d-shu lbl-s">所有地 ── 資産にする（消えない）</text>
+        <rect x="330" y="34" width="382" height="184" class="s-shu" stroke-width="1.6"/>
+        <text x="346" y="60" class="bx">自社プラットフォーム（tenant-aw.jp を子会社化）</text>
+        <g class="s-shu">
+          <rect x="346" y="76" width="166" height="34"/>
+          <rect x="346" y="120" width="166" height="34"/>
+          <rect x="346" y="164" width="166" height="34"/>
+        </g>
+        <text x="358" y="98">① 名簿（誰が式を使ったか）</text>
+        <text x="358" y="142">② 式8本の置き場</text>
+        <text x="358" y="186">③ A4メニュー表・診断の受付</text>
+        <text x="524" y="98" class="d-mut">連絡が取れる状態＝資産</text>
+        <text x="524" y="142" class="d-mut">渡しても減らない在庫</text>
+        <text x="524" y="186" class="d-mut">入口はここ1つに寄せる</text>
+
+        <g class="s-shu-d ar2">
+          <path d="M600 232 L112 232 L112 222"/>
+        </g>
+        <text x="112" y="254" class="d-shu" font-size="10.5">所有地で作った式を、借地にタダで撒く（＝ネタ切れが起きない構造）</text>
+      </g>
+    </svg>
+    <figcaption>借地に建物を建てないのは不動産の常識で、発信でも同じ。フォロワー数は借地の上の看板で、名簿は所有地の上の建物。<strong>順番は「借地で認知 → 所有地で名簿」で固定</strong>。自社PFを先に立てても、通りに人がいなければ誰も入らない。</figcaption>
+  </figure>
+
+  <div class="tw"><table>
+    <thead><tr><th>　</th><th>借地（流行りのPF）</th><th>所有地（自社PF）</th></tr></thead>
+    <tbody>
+      <tr><td class="k">役割</td><td>認知だけ</td><td>名簿・式・受付</td></tr>
+      <tr><td class="k">指標</td><td>保存数・DM数（フォロワー数ではない）</td><td>式を使った人の数</td></tr>
+      <tr><td class="k">失う可能性</td><td class="no">明日ゼロになりうる</td><td class="yes">消えない</td></tr>
+      <tr><td class="k">かける時間</td><td>在庫の再加工だけ（新規取材はしない）</td><td>四半期に1回の整備</td></tr>
+      <tr><td class="k">着手</td><td>2026-10-19</td><td>2027年（tenant-aw子会社化と同時）</td></tr>
+    </tbody>
+  </table></div>
+
+  <p class="note"><strong>自社PFを先に作らない理由は、時間単価です。</strong>すでに出した表で、仕組みづくりの時間単価は0円/h、オーロラ集客は60万/h。自社PFは「仕組みづくり」の側にある。借地での認知が先に立ってから作れば同じ工数が資産になり、先に作れば0円/hのまま終わる。ここは引き算の順序（①聖域確保→②割る→③下から捨てる）の③に当たります。</p>
+</section>
+
+<section>
+  <h2><span class="n">03</span>なぜ個人アカウントが伸びるのか——「担当次第」の可視化</h2>
+  <p class="lead">これは流行ではなく、不動産という商品の構造的な事実。だから流行が変わっても効き続ける。</p>
+
+  <p>不動産は、同じ物件を誰から買っても登記は同じになる。差がつくのは<strong>担当が何を先に出すか</strong>だけ。買主も売主もそれを経験的に知っているから、探しているのは会社ではなく人です。法人アカウントが伸びないのは、法人が「誰が担当か」を隠す構造を持っているからで、アルゴリズムのせいではない。</p>
+
+  <p>ここが決定的なのですが、菊池さんの立ち位置——<em>決める前に、数字を出す人</em>——は、「担当次第」という不安に対する直接の答えになっています。個人アカウントが伸びる理由と、菊池さんの1行が、同じ穴を埋めている。だから発信の主題を探す必要はない。<strong>すでにある1行を、毎回違う題材で証明するだけ</strong>です。</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>買主・売主の不安</th><th>ふつうの営業の答え</th><th>菊池さんの答え</th></tr></thead>
+    <tbody>
+      <tr><td>担当によって損するのでは</td><td class="no">「弊社は実績があります」</td><td class="yes">「やるか迷っているものを、先に数字にします」＋式8本</td></tr>
+      <tr><td>都合の悪い数字を隠すのでは</td><td class="no">「ご安心ください」</td><td class="yes">やめた方がいい時は「やめた方がいい」と書いた診断を出す</td></tr>
+      <tr><td>売った後は放置では</td><td class="no">「アフターも万全です」</td><td class="yes">測る・分ける・売る・持つの4工程を自社に置いている（管理まで続く）</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2><span class="n">04</span>「嫌味なく、等身大」を技術に落とす</h2>
+  <p class="lead">嫌味は人格の問題ではなく、文の型の問題。結果を言うと嫌味になり、過程の数字を言うと嫌味にならない。この変換は機械的にできる。</p>
+
+  <p>理由は単純で、<strong>結果は再現できないが、過程は読者が真似できる</strong>から。真似できる情報は贈り物として受け取られ、真似できない情報は自慢として受け取られる。だから「1棟買いました」は嫌味になり、「土地値割合が72%だったので買いました」は嫌味にならない。後者は読者の手元に残る。</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>嫌味になる書き方（結果）</th><th>嫌味にならない書き方（過程の数字）</th></tr></thead>
+    <tbody>
+      <tr><td class="no">277戸のアパートを買いました</td><td class="yes">513万の家賃収入から、金利121万・減価償却95万・経費64万を引いて、税引後の手残りは150万でした</td></tr>
+      <tr><td class="no">会社員に戻らなくても住宅ローンを借り換えられます</td><td class="yes">資産が減らないラインは役員報酬 月32万。手取り305万＋物販67万＝372万で、生活費361万をぎりぎり超えます</td></tr>
+      <tr><td class="no">妻とクリニックを開業します</td><td class="yes">販促費を月10万かけるなら、合格ラインの月商は69.1万。新患1人あたり4,350円までなら初回来院で回収できます</td></tr>
+      <tr><td class="no">研究職を辞めて起業して成功しました</td><td class="yes">辞めた年に書いた「アパート経営して一階は喫茶店」が、10年後に同じ年に両方実現しました。当時のメモの日付は2016年です</td></tr>
+      <tr><td class="no">15歳から貯金しています</td><td class="yes">15歳の通帳に残っている数字と、34歳のBSの純資産を並べて出します</td></tr>
+    </tbody>
+  </table></div>
+
+  <p class="note">この変換は、4つの鉄則（名詞表現・体言止め禁止／あいまい言葉禁止／1文1メッセージ／「しりてが」接続詞禁止）と同じ構造をしています。<strong>体言止めをやめると数字を書かざるを得なくなる</strong>ので、鉄則を守るだけで自動的に嫌味が抜ける。②「1日1回ピラミッド」を続けることが、そのまま発信の練習になっているということです。</p>
+
+  <h3>熱量の判定式は既にある</h3>
+  <p>「しらふで言うのが少し怖いか」。怖いものだけが熱量を持つ。この基準で在庫を並べると、いちばん強いのは<strong>マルチから離脱した話</strong>で、次が<strong>研究職を辞めた判断</strong>、その次が<strong>1,046行を14年つけ続けた事実</strong>。酒を飲んだ時に出てくる子供な自分が持っているのはこの3本で、賢い自分が持っているのは式8本。<em>何を＝子供な自分、どう＝賢い自分</em>の配役はここでも変わりません。</p>
+</section>
+
+<section>
+  <h2><span class="n">05</span>在庫は貯めるのではなく、もう出ている</h2>
+  <p class="lead">新しい習慣を1つも足さずに、1日1本の在庫が出る状態を今日作った。ここが「俺がやるべきことに集中できる仕組み化」の答えです。</p>
+
+  <p>発信が10年動かなかった原因は意志ではなく、<strong>「発信のための時間」を新規に確保しようとしていた</strong>ことです。週35時間の勉強と親子タイムを聖域にしたうえで、そこに発信を足すと必ず負ける。だから足さない。すでに回っている動作の<strong>副産物</strong>にします。</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>すでに回っている動作</th><th>出てくる在庫</th><th>加工にかかる時間</th></tr></thead>
+    <tbody>
+      <tr><td class="k">② 1日1回ピラミッド（メール1通）</td><td>送ったメールを匿名化すれば、そのまま1本の投稿</td><td class="num">3分</td></tr>
+      <tr><td class="k">④ 提案・GIVEの打席</td><td>渡した式と、相手の反応</td><td class="num">5分</td></tr>
+      <tr><td class="k">① 週35時間の勉強</td><td>調査士・宅建の論点を1つ、実務の数字に翻訳</td><td class="num">5分</td></tr>
+      <tr><td class="k">財務司令塔・作業DB</td><td>月次のBSと、6本部の実数</td><td class="num">月10分</td></tr>
+      <tr><td class="k">1,046行の年表</td><td>10年前のメモと今日の照合（＝誰も真似できない在庫）</td><td class="num">10分</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>今日入れたKPIエンジン（<code>scripts/kpi_engine.py</code>）が、この5つを日次で台帳に落とします。つまり<strong>10/19に「何を書くか」を考える必要がない</strong>。台帳の75日分を開けば、①〜⑤の欄がそのまま投稿の原料になっている状態にしてある。</p>
+
+  <div class="verdict">
+    <span>だから75日でやること</span>
+    投稿は1本もしない。台帳を毎日埋めて、在庫が75本たまった状態で10/19を迎える。
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">06</span>10/19までの逆算</h2>
+  <p class="lead">宅建試験は10/18（第3日曜）。翌日から発信を始めることは既に決めてある。ここは工程に本当の順序があるので、番号を振る。</p>
+
+  <ol class="steps">
+    <li>
+      <span class="when">8/5 — 8/8（今週）</span>
+      <b>週35時間を守る。発信の作業はゼロ</b>
+      <p>今週の学習は12.5h。残り4日で1日5.62h必要。ここを割ると発信も何も成立しないので、今週は聖域だけを守る。発信については「10/19開始・それまで投稿しない」と決めたこと自体が今週の成果。</p>
+    </li>
+    <li>
+      <span class="when">8月中</span>
+      <b>所有地の定義を1行で決める</b>
+      <p>自社PFに置くのは記事ではなく<strong>名簿と式</strong>。ここを「記事を置く場所」と定義すると、借地と役割が重なって両方死ぬ。tenant-aw.jp の子会社化は2027年でよく、いま決めるのは定義だけ（登録済：NA-20260805-08）。</p>
+    </li>
+    <li>
+      <span class="when">9月</span>
+      <b>怖い3本を、しらふで書いて封をする</b>
+      <p>マルチ離脱／研究職を辞めた判断／14年の年表。書くが出さない。10/19の1本目・2本目・3本目にする。1本目を軽いネタで始めると、そのアカウントの水準がそこで決まってしまう。</p>
+    </li>
+    <li>
+      <span class="when">10/4 — 10/18</span>
+      <b>試験に全部寄せる。在庫の加工も止める</b>
+      <p>ここで発信を触りたくなるのが最大の危険。台帳への記録（自動）だけ残し、加工はしない。</p>
+    </li>
+    <li>
+      <span class="when">10/19</span>
+      <b>個人名で開設。3本同時に出す</b>
+      <p>1本だけ出すと「試しに始めた人」になる。3本同時に出すと「溜めていた人」になる。同日にセミナー資料から抜いた記事1・2・5も出す。</p>
+    </li>
+    <li>
+      <span class="when">2027-01-31</span>
+      <b>判定する</b>
+      <p>この日は役員報酬の判定日（法人現金創出力 616万以上→Ⓐ／411〜616万→Ⓑ／411万未満→据置）と、⑨相互認知10人の期限が重なっている。発信の合否もこの日に同じ物差しで見る——フォロワー数ではなく、<strong>式を使った人が何人いたか</strong>で。</p>
+    </li>
+  </ol>
+</section>
+
+<section>
+  <h2><span class="n">07</span>発信のKPIをフォロワー数にしない</h2>
+  <p class="lead">フォロワー数は借地の上の看板で、菊池さんの資産ではない。既にある9指標に1本も足さずに、発信は測れる。</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>見たくなる数字</th><th>実際に見る数字</th><th>既存の指標</th></tr></thead>
+    <tbody>
+      <tr><td class="no">フォロワー数</td><td class="yes">式を使った人の数</td><td>④ 提案・GIVEの打席数</td></tr>
+      <tr><td class="no">いいね数</td><td class="yes">保存数と、DMで届いた質問の数</td><td>④ の内訳</td></tr>
+      <tr><td class="no">投稿本数</td><td class="yes">30分以上1対1で話せた人の数</td><td>⑤ 30分以上1対1</td></tr>
+      <tr><td class="no">バズった回数</td><td class="yes">相手が菊池さんの取り組みを言える人の累計</td><td>⑨ 相互認知（10人／2027-01-31）</td></tr>
+      <tr><td class="no">再生数</td><td class="yes">自分が出なくても開かれた回数</td><td>社会資本 第3段階の指標</td></tr>
+    </tbody>
+  </table></div>
+
+  <p class="note">バズは目標ではなく副作用として扱う。理由は、バズる確率は制御できないが、<strong>式を渡す回数は制御できる</strong>から。制御できない数字を目標に置くと、9指標の中で唯一この1本だけが運任せになり、他の8本の信頼性まで落ちます。</p>
+</section>
+
+<section>
+  <h2><span class="n">08</span>「後世に語り継ぐ」は、もう形が決まっている</h2>
+  <p class="lead">プライベートと法人経営の全部をコンテンツ化して、集まった人と一緒に仕事をする。この願いは、すでに出した2つの文と同じことを言っている。</p>
+
+  <p>20歳に書いた「信頼関係の取れた教師になりたい」と、墓碑銘の「迷ったとき、あの人は数字を出してくれた」。発信＝教えること、という定義に立てば、この2つと今回の話は完全に同じ形をしています。<strong>教える人のところに人が集まり、集まった人と仕事をする</strong>——順番はこれで固定で、逆はない。営業して人を集めてから教えるのではない。</p>
+
+  <p>そして「一緒に仕事ができればいいだけだ」という一文が、今回いちばん重要な引き算です。<strong>誰を集めるかを事前に吟味する必要が消える</strong>。吟味の時間単価は0円/h、届く人数は1/5になるだけで時間単価は49,500円のまま変わらない、というのは前に出した通り。発信で認知を広げるなら、<em>選ぶのは向こう</em>になります。式を全員に撒いて、使った人だけが名簿に残る。選別を人力でやる必要はなく、構造が選別してくれる。</p>
+
+  <div class="verdict">
+    <span>まとめ</span>
+    型は最短距離でパクり、在庫は自分にしかないものだけ出す。借地で認知を作り、所有地に名簿を置く。そして選ぶのは、向こうにやらせる。
+  </div>
+</section>
+
+
+<section>
+  <h2><span class="n">09</span>「この作り込みで十分」は、半分だけ合っている</h2>
+  <p class="lead">在庫の質は足りている。足りていないのは流通の単位。だから新しく作る必要はなく、割るだけでいい。</p>
+
+  <p>合っている方から。7枚のボードに入っている密度——277の税引後CF 150万まで分解した収支、5段階利益管理で出したオーロラの合格ライン月商69.1万、1,046行の年表から拾った2016年のメモ——は、発信で食べている人の大半が持っていない在庫です。<strong>取材せずに書ける事実を、これだけ積んでいる人はほとんどいない。</strong>ここは自信を持っていい。</p>
+
+  <p>間違っている方。ボードとSNS投稿は、<strong>読者にかけるコストが1桁違う</strong>。同じ内容でも器が違うと届かない。</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>　</th><th>ボード1枚</th><th>SNS 1本</th></tr></thead>
+    <tbody>
+      <tr><td class="k">読了までの時間</td><td class="num">約8分</td><td class="num">約20秒</td></tr>
+      <tr><td class="k">前提知識</td><td>必要（無収入寿命・上限CPO・5段階利益管理を知っている前提）</td><td class="yes">ゼロ。1本で1つだけ分かる形にする</td></tr>
+      <tr><td class="k">主張の数</td><td>8つ（章ごと）</td><td class="yes">1つ。2つ入れると0になる</td></tr>
+      <tr><td class="k">読まれる場所</td><td>座って、自分の意思で開く</td><td>並んでいる間に、意思なくすれ違う</td></tr>
+      <tr><td class="k">効く指標</td><td>意思決定できたか</td><td>保存されたか</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>つまり作業は「新しく作る」ではなく<em>割る</em>。7枚 × 平均8節 ＝ ざっくり56節。1節から投稿2本が取れるので<strong>約112本</strong>——ほぼ4ヶ月分の在庫が、すでに書き終わっている状態です。10/19までの75日にやるのは、この56節を投稿単位に割る作業だけ。</p>
+
+  <p class="note">これが探していた<strong>割り算の実技</strong>そのものです。足し算（ボードを増やす）でも掛け算（ボードを豪華にする）でもなく、同じ在庫を細かく割ると届く人数が増える。引き算（下から捨てる）と割り算（同じものを細かくする）で尖らせる、という前回の結論が、ここで具体的な作業になった。</p>
+</section>
+
+<section>
+  <h2><span class="n">10</span>菊池さんのアカウントをどう作り変えるか</h2>
+  <p class="lead">プロフィールは看板ではなく検索窓。1行の立ち位置・物証・素性・入口の4行で組む。</p>
+
+  <h3>名前欄と自己紹介（4行で固定する）</h3>
+  <div class="tw"><table>
+    <thead><tr><th>欄</th><th>入れるもの</th><th>理由</th></tr></thead>
+    <tbody>
+      <tr><td class="k">名前欄</td><td>菊池研太｜決める前に数字を出す</td><td>名前欄は検索対象。屋号だけ入れても検索されない。<strong>職能を動詞で入れる</strong></td></tr>
+      <tr><td class="k">1行目</td><td>やるか迷っているものを、先に数字にします。</td><td>立ち位置。ここを変えない。全投稿がこの1行の証明になる</td></tr>
+      <tr><td class="k">2行目</td><td>不動産／物販／韓国／クリニック開業。14年で1,046行の記録。</td><td>物証。「4事業」より「1,046行」の方が効く。検算できる数字だから</td></tr>
+      <tr><td class="k">3行目</td><td>岩手・花巻出身／教諭免許／1歳の父／研究職をやめて9年</td><td>素性。ここが「等身大」の担保。実績だけ並べると嫌味になる</td></tr>
+      <tr><td class="k">4行目</td><td>診断を1件だけ無料で。DMに「診断」と1言。</td><td>入口はA4メニュー表と同じ1つに寄せる。<strong>やめる時はやめると言っていい</strong>と添える</td></tr>
+    </tbody>
+  </table></div>
+
+  <p class="note"><strong>宅建業免許(4)と専任の宅建士は、まだ菊池さんのものではない</strong>ので、プロフィールに書かない。福井さんの個人登録は承継で移らないのが確定事項で、ここを混ぜると最初の1行から検算に落ちます。書けるのは「2027年までに承継の準備を進めている」まで。</p>
+
+  <h3>ハイライトは6つ。A4メニュー表と1対1にする</h3>
+  <ul class="plain">
+    <li><strong>診療圏調査</strong>（40分）— 院長向け。開業前に患者数を先に出す</li>
+    <li><strong>土地値割合</strong>（30分）— 地主向け。その土地がいくらなら損しないか</li>
+    <li><strong>無収入寿命</strong>（20分）— 独立志向向け。何ヶ月食えるか</li>
+    <li><strong>イールドギャップ</strong>（10分）— 投資家向け。借りて買っていいかの1行判定</li>
+    <li><strong>役員報酬の移転効率</strong>（30分）— 一人法人向け。いくら出すと手取りが最大か</li>
+    <li><strong>5段階利益管理</strong>（1時間）— 事業者向け。どの費用が利益を食っているか</li>
+  </ul>
+  <p>ハイライトを「日常」「お知らせ」「プロフィール」で組まない。<strong>ハイライト＝メニュー</strong>にすると、プロフィールを見た人がそのままDMを打てる。式の名前をそのまま見出しにするのが肝で、ここが他の発信者と最も違う点になります。</p>
+
+  <h3>投稿の型（5行。これ以外を作らない）</h3>
+  <div class="tw"><table>
+    <thead><tr><th>行</th><th>役割</th><th>例</th></tr></thead>
+    <tbody>
+      <tr><td class="k">1行目</td><td>読者がすでに同意している状態（O）</td><td>クリニックの開業は、立地で9割決まると言われます。</td></tr>
+      <tr><td class="k">2行目</td><td>それが崩れる事実（P）</td><td>ただ、立地の良さを患者数に換算しないまま契約する人が多いです。</td></tr>
+      <tr><td class="k">3行目</td><td class="yes">主メッセージ（A）＝1文。ここだけ自分で書く</td><td>半径800mの人口と競合数から、初年度の1日あたり患者数は40分で出せます。</td></tr>
+      <tr><td class="k">4行目</td><td>数字を1つだけ置く</td><td>新患23人・再来5回・単価6,000円なら、月商69.1万が合格ラインです。</td></tr>
+      <tr><td class="k">5行目</td><td>渡す。売らない</td><td>1件だけ無料で出します。やめた方がいい時は、やめた方がいいと書きます。</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">4つの鉄則（名詞表現・体言止め禁止／あいまい言葉禁止／1文1メッセージ／「しりてが」接続詞禁止）をこの5行に適用するだけで、嫌味が構造的に抜けます。<strong>3行目だけはClaudeに書かせない</strong>——ここを代筆すると、②のKPIが「AIが書いた本数」になって意味を失う。</p>
+
+  <h3>発信内容——最初の30本</h3>
+  <p>怖い順に並べる。1本目を軽いネタで始めると、そのアカウントの水準がそこで決まります。</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>群</th><th>本数</th><th>中身</th><th>他人に真似できるか</th></tr></thead>
+    <tbody>
+      <tr><td class="k">A 怖い話</td><td class="num">3</td><td>マルチから離脱した話／研究職をやめた判断／14年つけ続けた1,046行</td><td class="yes">不可能。菊池さんにしかない</td></tr>
+      <tr><td class="k">B 式</td><td class="num">8</td><td>診療圏調査・土地値割合・イールドギャップ・無収入寿命・役員報酬の移転効率・上限CPO・5段階利益管理・事業計画8項目</td><td>真似してほしい（渡すと減らない）</td></tr>
+      <tr><td class="k">C 過程の数字</td><td class="num">10</td><td>277の税引後CF150万／資産が減らないライン月32万／オーロラの合格ライン69.1万／無収入寿命26.2ヶ月／現金の下限851万／上限CPO4,350円／週35時間の進捗／BS純資産／物販67万／2027-01-31の判定式</td><td>数字は嫌味にならない</td></tr>
+      <tr><td class="k">D 10年前との照合</td><td class="num">6</td><td>2016「アパート経営して一階は喫茶店」→2026に277とオーロラ／2021「気軽に話せる友達がほしい」→今も同じ／2022「良き富裕層を目指すコミュニティで登っている時が1番楽しい」／20歳「信頼関係の取れた教師になりたい」／15歳の通帳／弟に渡したかったこと</td><td class="yes">不可能。物証がないと書けない</td></tr>
+      <tr><td class="k">E 失敗</td><td class="num">3</td><td>10年発信できなかった理由（時間を新規確保しようとしていた）／もらう本部が回らなかった話／吟味に使った時間の時間単価は0円だった話</td><td class="yes">ここが一番読まれる</td></tr>
+    </tbody>
+  </table></div>
+
+  <p>群Aを1本目・2本目・3本目に置き、以降はB→C→D→Eを回す。<strong>Bだけを出し続けると「便利な人」で終わり、AとDを混ぜると「この人から買いたい」になる</strong>。個人アカウントが伸びる理由（＝担当次第）を思い出せば、式だけでは足りないのは当然です。</p>
+
+  <div class="verdict">
+    <span>今週やること（発信について）</span>
+    1本も投稿しない。決めるのは、名前欄の1行とハイライト6つの名前だけ。
+  </div>
+</section>
+
+<footer>
+  <p><strong>関連ボード</strong>　📈 <a href="https://claude.ai/code/artifact/45acd817-8204-469a-ba23-6c20e4d5a1f5">お金</a>　🧭 <a href="https://claude.ai/code/artifact/6e52460f-75f4-4f12-81b6-c69efc11a4af">指標＋原動力</a>　📡 <a href="https://claude.ai/code/artifact/2ace2928-f816-480d-b436-abecd354d3bf">計測</a>　📮 <a href="https://claude.ai/code/artifact/2bdb3462-780f-42bc-b548-8c7b6d3956b8">営業</a>　🎤 <a href="https://claude.ai/code/artifact/b7eb8185-3f41-45b4-b508-578fe1312703">資料</a>　🔴 <a href="https://claude.ai/code/artifact/238cbc5d-6ff1-438e-8e0b-83f68e01a8d9">自分</a></p>
+  <p><strong>この設計を動かす実装</strong>　<code>scripts/kpi_engine.py</code>（9指標の台帳・追記のみ）／<code>scripts/kpi_hook.py</code>（対話のたびに変動を注入）／<code>.claude/skills/pyramid</code>（②の下書き。主メッセージの1文だけは渡さない）／<code>.company/secretary/kpi/</code>（events・next_actions・pending_candidates）</p>
+  <p>Instagramの4アカウントは未読（ログイン必須で取得不可）。型の抽出をやるなら投稿10本ぶんのスクリーンショットが必要です。</p>
+</footer>
+
+</div></div>

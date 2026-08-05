@@ -357,7 +357,7 @@ def cmd_report(args):
               f"{g['oyako_count']:>5}{g['eigyo_chokketsu']:>7}")
 
     for name, span, g, rec in rows:
-        if rec == 0 and g["study_h"] == 0:
+        if rec == 0 and g["study_h"] == 0 and name not in ("今日", "今週"):
             print(f"※ {name}（{span}）は記録が0日。作業DBの運用開始が2026-07-26なので、"
                   f"こことの対比は成立しない。0と読まず『比較不能』と読む。")
 

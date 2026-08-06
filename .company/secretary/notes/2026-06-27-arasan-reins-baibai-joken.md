@@ -219,6 +219,17 @@ https://www.aeonbank.co.jp/aeonbank/loan/housing/
 2. 「仮審査はこの物件の資料で出すと、実際いくら借りられるかがリアルに分かります。先日の4銀行リンクからご都合の良いところで進めてみてください」
 3. 「あわせて、すぐ内見できる空家の築浅（2021年築・4,780万・千葉方面）も1件確保してます。来週の平日夜、内見いけそうな日ありますか？」
 
+### 図面ファイルリンク（Drive・どの物件がどのファイルか）
+| 物件 | リンク | 位置 |
+|---|---|---|
+| 🥇亀戸9丁目 4,980万 | https://drive.google.com/file/d/1e7zt53psKiou3jR6GnnVRNWMrJMODE1r/view | PDF後半・リオン不動産の面 |
+| 🥈武石町 4,780万 | https://drive.google.com/file/d/1VQUFgwTro4mZci_QbGemibBvk3tS2mLC/view | PDF3枚目辺り・野村の面 |
+| 🥉駿河台 4,280万 | https://drive.google.com/file/d/1tMrw5EnpzPsAPOiZz1wuEHefknoca3K-/view | スクショ単体・ポラス |
+| 復活枠・東新小岩 4,980万 | https://drive.google.com/file/d/1VQUFgwTro4mZci_QbGemibBvk3tS2mLC/view | 同PDF1枚目 |
+| 復活候補・八広3丁目 5,499万 | https://drive.google.com/file/d/1We9TNBy9MrF4g3cDz14DX2WQYm76B2YX/view | PDF1枚目・ウィル |
+| 資料フォルダ全体 | https://drive.google.com/drive/folders/1cdMJYnSOhOblfH1pGHMCgDzZRFXAc37Z | 7/30取得の図面一式 |
+| LINEトーク履歴 | https://drive.google.com/file/d/1Z5ZS7yxzhz5E5JZTHPDM_1emxhbHbqai/view | 中澤さんトーク |
+
 ### 次アクション
 1. 🟨物確電話2本（亀戸＝分かれ/トイレ2/内見可否、東新小岩＝分かれ可否）→ 結果をこのファイルに追記
 2. 物確OK→上記LINEドラフト送信（図面添付）

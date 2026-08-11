@@ -1,0 +1,467 @@
+<title>医療人脈トラック｜加古川案件 × 医療飲み会</title>
+<style>
+  :root{
+    --paper:#ffffff;
+    --ground:#eaeeec;
+    --ink:#101a18;
+    --ink2:#4d5d59;
+    --ink3:#75827f;
+    --line:#d1dad7;
+    --line2:#e3e9e7;
+    --accent:#0f6e63;
+    --accent-soft:#dbeae7;
+    --brass:#8f5c1d;
+    --brass-soft:#f1e6d4;
+    --ok:#2c7048;
+    --ok-soft:#dcebe0;
+    --warn:#87610f;
+    --warn-soft:#f3e8ce;
+    --stop:#9a352e;
+    --stop-soft:#f3ddda;
+    --display:"Hiragino Mincho ProN","Yu Mincho",YuMincho,"Noto Serif JP","Times New Roman",serif;
+    --body:"Hiragino Kaku Gothic ProN","Yu Gothic Medium","Yu Gothic","Noto Sans JP",system-ui,sans-serif;
+    --data:ui-monospace,SFMono-Regular,Menlo,"Courier New",monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#151d1b;
+      --ground:#0c1312;
+      --ink:#e7ecea;
+      --ink2:#9aaba6;
+      --ink3:#7a8b86;
+      --line:#2a3835;
+      --line2:#1f2b29;
+      --accent:#5fbfb1;
+      --accent-soft:#12312d;
+      --brass:#d2a262;
+      --brass-soft:#312410;
+      --ok:#6cc48c;
+      --ok-soft:#132f1f;
+      --warn:#d7ad54;
+      --warn-soft:#32260a;
+      --stop:#e2857c;
+      --stop-soft:#361b18;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#151d1b;
+    --ground:#0c1312;
+    --ink:#e7ecea;
+    --ink2:#9aaba6;
+    --ink3:#7a8b86;
+    --line:#2a3835;
+    --line2:#1f2b29;
+    --accent:#5fbfb1;
+    --accent-soft:#12312d;
+    --brass:#d2a262;
+    --brass-soft:#312410;
+    --ok:#6cc48c;
+    --ok-soft:#132f1f;
+    --warn:#d7ad54;
+    --warn-soft:#32260a;
+    --stop:#e2857c;
+    --stop-soft:#361b18;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:var(--ground);
+    color:var(--ink);
+    font-family:var(--body);
+    font-size:14px;
+    line-height:1.72;
+    padding:22px 14px 56px;
+    font-variant-numeric:tabular-nums;
+    -webkit-font-smoothing:antialiased;
+  }
+  .sheet{
+    max-width:1040px;
+    margin:0 auto;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:34px 34px 30px;
+    display:flex;
+    flex-direction:column;
+    gap:34px;
+  }
+  @media (max-width:620px){ .sheet{padding:24px 18px 24px} }
+
+  /* ---- header ---- */
+  .masthead{display:flex;flex-direction:column;gap:12px;
+    border-bottom:1px solid var(--ink);padding-bottom:16px;}
+  .eyebrow{font-family:var(--data);font-size:10.5px;letter-spacing:.16em;
+    color:var(--accent);text-transform:uppercase;}
+  h1{font-family:var(--display);font-size:29px;font-weight:600;margin:0;
+    line-height:1.35;text-wrap:balance;letter-spacing:.01em;}
+  .standfirst{margin:0;color:var(--ink2);max-width:64ch;font-size:13.5px;}
+  .stamp{display:flex;flex-wrap:wrap;gap:8px 20px;font-family:var(--data);
+    font-size:11px;color:var(--ink3);}
+  .stamp b{color:var(--ink2);font-weight:500;}
+
+  /* ---- section frame ---- */
+  section{display:flex;flex-direction:column;gap:14px;}
+  .shead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;
+    border-bottom:1px solid var(--line);padding-bottom:7px;}
+  .shead h2{font-family:var(--display);font-size:18px;font-weight:600;margin:0;letter-spacing:.02em;}
+  .shead .tag{font-family:var(--data);font-size:10px;letter-spacing:.1em;
+    padding:2px 7px;border-radius:2px;text-transform:uppercase;}
+  .tag.a{background:var(--accent-soft);color:var(--accent);}
+  .tag.b{background:var(--brass-soft);color:var(--brass);}
+  .shead .note{font-size:11.5px;color:var(--ink3);margin-left:auto;}
+
+  p{margin:0;}
+  .lede{max-width:70ch;color:var(--ink2);font-size:13.5px;}
+  .lede b{color:var(--ink);font-weight:600;}
+
+  /* ---- focus strip ---- */
+  .focus{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+    background:var(--line);border:1px solid var(--line);border-radius:3px;overflow:hidden;}
+  @media (max-width:760px){ .focus{grid-template-columns:1fr;} }
+  .focus > div{background:var(--paper);padding:15px 16px;display:flex;flex-direction:column;gap:7px;}
+  .focus .who{font-family:var(--data);font-size:10px;letter-spacing:.1em;color:var(--ink3);
+    display:flex;justify-content:space-between;gap:8px;align-items:center;}
+  .focus h3{margin:0;font-size:14px;font-weight:600;line-height:1.5;}
+  .focus p{font-size:12.3px;color:var(--ink2);}
+  .focus .tel{font-family:var(--data);font-size:12px;color:var(--accent);}
+
+  .pip{display:inline-flex;align-items:center;gap:5px;font-family:var(--body);
+    font-size:10.5px;font-weight:600;letter-spacing:0;padding:2px 8px;border-radius:2px;white-space:nowrap;}
+  .pip.ok{background:var(--ok-soft);color:var(--ok);}
+  .pip.warn{background:var(--warn-soft);color:var(--warn);}
+  .pip.stop{background:var(--stop-soft);color:var(--stop);}
+  .pip.idle{background:var(--line2);color:var(--ink3);}
+
+  /* ---- pipeline grid ---- */
+  .railwrap{overflow-x:auto;padding-bottom:4px;}
+  .rail{display:grid;grid-template-columns:repeat(6,minmax(150px,1fr));gap:0;min-width:900px;}
+  .rail .col{display:flex;flex-direction:column;gap:9px;padding:0 9px;border-left:1px solid var(--line2);}
+  .rail .col:first-child{padding-left:0;border-left:none;}
+  .rail .col:last-child{padding-right:0;}
+  .stagehead{display:flex;flex-direction:column;gap:5px;padding-bottom:9px;}
+  .stagehead .n{font-family:var(--data);font-size:10px;color:var(--ink3);letter-spacing:.08em;}
+  .stagehead .nm{font-size:12.5px;font-weight:600;line-height:1.3;}
+  .spine{height:3px;border-radius:0;background:var(--line);position:relative;margin-bottom:11px;}
+  .spine.done{background:var(--accent);}
+  .spine.here{background:var(--accent);}
+  .spine.here::after{content:"";position:absolute;right:-1px;top:-3px;width:9px;height:9px;
+    border-radius:50%;background:var(--accent);}
+  .card{background:var(--paper);border:1px solid var(--line);border-left:3px solid var(--accent);
+    border-radius:2px;padding:10px 11px;display:flex;flex-direction:column;gap:6px;}
+  .card.rent{border-left-color:var(--brass);}
+  .card.hold{border-left-color:var(--ink3);}
+  .card .nm{font-size:12.6px;font-weight:600;line-height:1.45;}
+  .card .meta{font-family:var(--data);font-size:11px;color:var(--ink2);line-height:1.6;}
+  .card .price{font-family:var(--data);font-size:13.5px;font-weight:600;color:var(--ink);}
+  .card .why{font-size:11.4px;color:var(--ink3);line-height:1.55;}
+  .empty{font-size:11.5px;color:var(--ink3);padding:8px 0;font-family:var(--data);}
+
+  .src{display:inline-block;font-family:var(--data);font-size:9.5px;letter-spacing:.06em;
+    padding:1px 5px;border:1px solid var(--line);border-radius:2px;color:var(--ink3);}
+  .src.web{border-color:var(--accent);color:var(--accent);}
+
+  /* ---- tables ---- */
+  .tblwrap{overflow-x:auto;}
+  table{border-collapse:collapse;width:100%;font-size:12.4px;min-width:640px;}
+  caption{text-align:left;font-size:11.5px;color:var(--ink3);padding-bottom:7px;}
+  th,td{border-bottom:1px solid var(--line2);padding:9px 11px 9px 0;text-align:left;vertical-align:top;}
+  thead th{border-bottom:1px solid var(--line);font-family:var(--data);font-size:10px;
+    letter-spacing:.09em;color:var(--ink3);text-transform:uppercase;font-weight:500;white-space:nowrap;}
+  td.num,td.dt{font-family:var(--data);white-space:nowrap;}
+  td.num{font-weight:600;}
+  tbody tr:last-child td{border-bottom:none;}
+
+  /* ---- relationship track ---- */
+  .twocol{display:grid;grid-template-columns:1.15fr 1fr;gap:22px;}
+  @media (max-width:760px){ .twocol{grid-template-columns:1fr;} }
+  .panel{border:1px solid var(--line);border-radius:3px;padding:16px 17px;
+    display:flex;flex-direction:column;gap:11px;}
+  .panel h3{margin:0;font-family:var(--display);font-size:15px;font-weight:600;}
+  .panel p{font-size:12.6px;color:var(--ink2);}
+  .fields{display:flex;flex-direction:column;gap:0;}
+  .fields div{display:flex;gap:12px;padding:8px 0;border-bottom:1px dashed var(--line);
+    align-items:baseline;font-size:12.5px;}
+  .fields div:last-child{border-bottom:none;}
+  .fields dt,.fields .k{flex:0 0 92px;font-family:var(--data);font-size:10.5px;
+    letter-spacing:.06em;color:var(--ink3);}
+  .fields .v{color:var(--ink2);}
+  .fields .v.blank{color:var(--brass);font-weight:600;}
+
+  .cycle{display:flex;flex-direction:column;gap:0;}
+  .cycle div{display:grid;grid-template-columns:74px 1fr;gap:14px;padding:10px 0;
+    border-bottom:1px solid var(--line2);align-items:start;}
+  .cycle div:last-child{border-bottom:none;}
+  .cycle .when{font-family:var(--data);font-size:11px;color:var(--brass);font-weight:600;padding-top:2px;}
+  .cycle .what{font-size:12.5px;}
+  .cycle .what b{display:block;font-weight:600;margin-bottom:2px;}
+  .cycle .what span{color:var(--ink3);font-size:11.7px;line-height:1.55;}
+
+  /* ---- open questions ---- */
+  .qlist{display:flex;flex-direction:column;gap:0;}
+  .qlist div{display:grid;grid-template-columns:auto 1fr auto;gap:13px;align-items:start;
+    padding:11px 0;border-bottom:1px solid var(--line2);}
+  .qlist div:last-child{border-bottom:none;}
+  .qlist .mk{font-family:var(--data);font-size:11px;color:var(--ink3);padding-top:2px;}
+  .qlist .tx{font-size:12.8px;line-height:1.6;}
+  .qlist .tx b{font-weight:600;}
+  .qlist .tx span{display:block;color:var(--ink3);font-size:11.7px;margin-top:2px;}
+
+  .callout{border-left:3px solid var(--warn);background:var(--warn-soft);
+    padding:12px 15px;border-radius:0 3px 3px 0;font-size:12.6px;color:var(--ink);}
+  .callout b{color:var(--warn);}
+  .callout.teal{border-left-color:var(--accent);background:var(--accent-soft);}
+  .callout.teal b{color:var(--accent);}
+
+  a{color:var(--accent);text-decoration:underline;text-underline-offset:2px;
+    text-decoration-thickness:1px;overflow-wrap:anywhere;}
+  a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px;}
+
+  footer{border-top:1px solid var(--line);padding-top:13px;display:flex;
+    justify-content:space-between;flex-wrap:wrap;gap:8px;
+    font-family:var(--data);font-size:10.5px;color:var(--ink3);}
+</style>
+
+<div class="sheet">
+
+  <header class="masthead">
+    <div class="eyebrow">KHD ／ 医療人脈トラック ／ Team Board</div>
+    <h1>加古川・親愛レディースクリニック移転先 ＆ 医療飲み会の座組み</h1>
+    <p class="standfirst">野口さん紹介の1件目を確実に着地させ、そこで得た型を「医療飲み会」という継続的な人脈導線に乗せる。物件は期日のある実務、飲み会は仕込み。2つを1枚で並走管理する。</p>
+    <div class="stamp">
+      <span>更新 <b>2026-08-11</b></span>
+      <span>紹介元 <b>野口さん</b></span>
+      <span>担当 <b>菊池</b></span>
+      <span>調査 <b>REINS 第1回 ／ 公開市場 第2回</b></span>
+    </div>
+  </header>
+
+  <section>
+    <div class="shead">
+      <h2>今週の焦点</h2>
+      <span class="note">この3本が動けば案件は次段階に進む</span>
+    </div>
+    <div class="focus">
+      <div>
+        <div class="who"><span>物件トラック</span><span class="pip warn">確認待ち</span></div>
+        <h3>旧寺家町ツカサビルの在否確認</h3>
+        <p>業者間DBでは8/6付で媒介解除の記載。一方で公開サイトには掲載が残っている。売り止めか窓口変更かを掲載元に確認する。</p>
+      </div>
+      <div>
+        <div class="who"><span>物件トラック</span><span class="pip idle">未着手</span></div>
+        <h3>ビエラ加古川の空き区画照会</h3>
+        <p>高架下は売買に出ないが、賃貸なら現クリニックと同じ建物内での移転・増床の可能性が残る。窓口は電話のみ。</p>
+        <p class="tel">JR西日本不動産マネジメント<br>テナントリレーション部　06-7166-4813</p>
+      </div>
+      <div>
+        <div class="who"><span>関係トラック</span><span class="pip idle">未着手</span></div>
+        <h3>先方の3条件ヒアリング</h3>
+        <p>購入前提か賃貸も含めるか／必要な広さ／予算上限。この3つが埋まらないと候補を絞り切れない。LINE返信文は作成済み。</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="shead">
+      <span class="tag a">Track A</span>
+      <h2>物件パイプライン</h2>
+      <span class="note">段階が上がるほど確度が上がる。現在の最前線は「在否確認」</span>
+    </div>
+    <p class="lede">前提として<b>「加古川駅の高架下」で売買登録されている物件は存在しない</b>。高架下＝商業施設「ビエラ加古川」で、JR西日本(子会社)が所有し賃貸で運用している。そして<b>親愛レディースクリニックの現所在地(篠原町50)自体がこのビエラ加古川の中</b>にある。購入希望であれば駅前・駅近のビルを対象にするのが現実的、という整理で候補を並べている。</p>
+
+    <div class="railwrap">
+      <div class="rail">
+
+        <div class="col">
+          <div class="stagehead"><span class="n">STAGE 1</span><span class="nm">発掘</span></div>
+          <div class="spine done"></div>
+          <div class="card rent">
+            <span class="nm">カピル21<span class="src web">公開</span></span>
+            <span class="meta">加古川駅南口 徒歩1分<br>1F 67.68㎡／1F 57.90㎡<br>5F 181.10㎡</span>
+            <span class="price">賃 23.6万／25.6万</span>
+            <span class="why">賃貸。医院・クリニック相談可、駅前立体Pの入居者割引あり。立地は全候補中で最良。</span>
+          </div>
+          <div class="card rent">
+            <span class="nm">ニッケパークタウン<br>クリニックモール加古川<span class="src web">公開</span></span>
+            <span class="meta">加古川町寺家町303<br>駅 徒歩7〜10分／1区画</span>
+            <span class="why">賃貸。駐車場1,500台・年間来場約550万人。徒歩条件は外れるが産婦人科の集患環境としては有力。</span>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="stagehead"><span class="n">STAGE 2</span><span class="nm">一次調査</span></div>
+          <div class="spine done"></div>
+          <div class="card hold">
+            <span class="nm">区分・事務所 41.06㎡<span class="src">REINS</span></span>
+            <span class="meta">加古川町寺家町<br>加古川駅 徒歩5分</span>
+            <span class="price">550万円</span>
+            <span class="why">条件は満たすが診療所には手狭。リブライフ加古川店。</span>
+          </div>
+          <div class="card hold">
+            <span class="nm">区分・店舗 35.53㎡<span class="src">REINS</span></span>
+            <span class="meta">シャトー東加古川 1階<br>東加古川駅 徒歩3分</span>
+            <span class="price">750万円</span>
+            <span class="why">同上。面積不足。サンワ住研。</span>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="stagehead"><span class="n">STAGE 3</span><span class="nm">在否・条件確認</span></div>
+          <div class="spine here"></div>
+          <div class="card">
+            <span class="nm">旧寺家町ツカサビル<span class="src">REINS</span><span class="src web">公開</span></span>
+            <span class="meta">寺家町157-13<br>加古川駅 徒歩3分／RC4階<br>土地48.25㎡／建物142.32㎡<br>1980年1月築・現況空家</span>
+            <span class="price">2,300万円</span>
+            <span class="why">商業地域80／400。両ソースで裏取り済みの本命。媒介解除の記載と掲載継続が食い違っており、在否確認が次の一手。</span>
+          </div>
+          <div class="card">
+            <span class="nm">ＳＴビル(東加古川)<span class="src">REINS</span></span>
+            <span class="meta">東加古川駅 徒歩3分／鉄骨<br>建物377.05㎡／EV付<br>1988年8月築</span>
+            <span class="price">13,000万円</span>
+            <span class="why">規模とEVはクリニック向き。オーナーチェンジで即入居不可。<b>広告転載不可</b>のため外部共有時は物件名を出さない。</span>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="stagehead"><span class="n">STAGE 4</span><span class="nm">内見</span></div>
+          <div class="spine"></div>
+          <p class="empty">— まだなし</p>
+        </div>
+
+        <div class="col">
+          <div class="stagehead"><span class="n">STAGE 5</span><span class="nm">条件打診</span></div>
+          <div class="spine"></div>
+          <p class="empty">— まだなし</p>
+        </div>
+
+        <div class="col">
+          <div class="stagehead"><span class="n">STAGE 6</span><span class="nm">契約</span></div>
+          <div class="spine"></div>
+          <p class="empty">— まだなし</p>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="callout"><b>保留：</b>旧はなふさ診療所(米田町平津・宝殿駅徒歩6分・RC3階・土地1,787.55㎡／建物789.59㎡・19,500万円・現況空家)は「医療施設、介護施設等に適しています」と明記された最も用途適合の高い物件だが、加古川駅からも徒歩5分条件からも外れるためパイプライン外に置いている。予算と立地条件が動けば即復活させる枠。</div>
+
+    <div class="tblwrap">
+      <table>
+        <caption>調査の出典と網羅範囲</caption>
+        <thead>
+          <tr><th>回</th><th>手段</th><th>範囲</th><th>結果</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="dt">第1回</td>
+            <td>REINS 売買検索</td>
+            <td>兵庫県加古川市 × 売外全＋売外一</td>
+            <td>在庫40件(外全36／外一4)。<b>高架下の売買登録は0件</b></td>
+          </tr>
+          <tr>
+            <td class="dt">第2回</td>
+            <td>公開ポータル・事業者サイト</td>
+            <td>高架下の運営主体／本命の在否／賃貸を含む新規候補</td>
+            <td>高架下＝ビエラ加古川と特定。本命は「旧寺家町ツカサビル」として公開掲載継続を確認。カピル21・クリニックモールを新規発見</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="lede" style="font-size:12.3px">参照：<a href="https://toushi.homes.co.jp/bukkendetail/index/4470785/">旧寺家町ツカサビル(LIFULL HOME'S)</a>　／　<a href="https://kakogawa-sb.jp/tenant/">カピル21 空き物件一覧</a>　／　<a href="https://www.jrwd.co.jp/vierra/kakogawa.html">ビエラ加古川</a>　／　<a href="https://matsukiyococokara-medical.com/bukken/nikke-parktown-clinicmall-kakogawa/">ニッケパークタウン クリニックモール加古川</a></p>
+  </section>
+
+  <section>
+    <div class="shead">
+      <span class="tag b">Track B</span>
+      <h2>医療飲み会の座組み</h2>
+      <span class="note">今回の案件を単発で終わらせないための継続導線</span>
+    </div>
+    <p class="lede">野口さんとは今後も定期的に医療飲み会を企画する方針。<b>親愛レディースクリニックの移転相談は、この人脈から流れてきた1件目にあたる</b>。同じ導線を再現できる形にしておく。以下は未確定項目を空欄のまま置いている――埋まっていないこと自体が今の状態。</p>
+
+    <div class="twocol">
+      <div class="panel">
+        <h3>決めること</h3>
+        <div class="fields">
+          <div><span class="k">開催頻度</span><span class="v blank">未定 ── 下の案を叩き台に</span></div>
+          <div><span class="k">次回日程</span><span class="v blank">未定</span></div>
+          <div><span class="k">会場</span><span class="v blank">未定</span></div>
+          <div><span class="k">規模</span><span class="v blank">未定（少人数か拡大か）</span></div>
+          <div><span class="k">招待先</span><span class="v blank">未定 ── 野口さんと擦り合わせ</span></div>
+          <div><span class="k">幹事</span><span class="v">菊池（会場・日程調整）</span></div>
+          <div><span class="k">費用負担</span><span class="v blank">未定</span></div>
+        </div>
+        <p>次回の野口さんとのやり取りで、物件の話と併せて「次はいつやりますか」を必ず一言添える。案件報告だけで終わらせると継続導線にならない。</p>
+      </div>
+
+      <div class="panel">
+        <h3>運用サイクル案</h3>
+        <p style="font-size:12px">※ 確定事項ではなく提案。四半期ごとの開催を前提にした型。</p>
+        <div class="cycle">
+          <div>
+            <span class="when">開催 2週前</span>
+            <span class="what"><b>日程確定・声かけ</b><span>野口さんに候補日を2〜3日投げ、確定後に招待。</span></span>
+          </div>
+          <div>
+            <span class="when">開催前日</span>
+            <span class="what"><b>参加者の状況を1枚に</b><span>誰が何に困っているか事前に把握して臨む。手ぶらで行かない。</span></span>
+          </div>
+          <div>
+            <span class="when">開催当日</span>
+            <span class="what"><b>案件の芽を持ち帰る</b><span>移転・開業・承継・設備更新。その場で解決しようとせず、宿題として持ち帰る。</span></span>
+          </div>
+          <div>
+            <span class="when">翌営業日</span>
+            <span class="what"><b>お礼と初動を同時に送る</b><span>今回の加古川案件と同じ動き方。お礼だけの連絡にしない。</span></span>
+          </div>
+          <div>
+            <span class="when">2週後</span>
+            <span class="what"><b>一次調査を返す</b><span>ここまでの速さが次の紹介を呼ぶ。今回はREINS＋公開市場で2週内に返した。</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout teal"><b>今回得た型：</b>紹介を受けたら「業者間DB(REINS)」と「公開市場」の両方を当てる。今回は前者だけでは本命が媒介解除に見え、後者だけでは物件の全体像が掴めなかった。<b>2ソース突き合わせで初めて「解除記載だが掲載継続＝窓口変更の可能性」という判断材料が出てきた。</b>次の紹介案件でもこの2段構えを標準にする。</div>
+  </section>
+
+  <section>
+    <div class="shead">
+      <h2>未確定・確認待ち</h2>
+      <span class="note">埋まった順に候補が絞れる</span>
+    </div>
+    <div class="qlist">
+      <div>
+        <span class="mk">A-1</span>
+        <span class="tx"><b>旧寺家町ツカサビルは今も売り物件か</b><span>業者間DBの解除記載と公開掲載の食い違いを解消する。掲載元または(株)ねがいへ。</span></span>
+        <span class="pip warn">確認待ち</span>
+      </div>
+      <div>
+        <span class="mk">A-2</span>
+        <span class="tx"><b>ビエラ加古川に空き区画はあるか</b><span>Web非公開のため電話のみ。現クリニックと同一建物内での移転・増床が成立するかを見る。</span></span>
+        <span class="pip idle">未着手</span>
+      </div>
+      <div>
+        <span class="mk">A-3</span>
+        <span class="tx"><b>カピル21の1F区画はクリニック可か</b><span>「医院・クリニック相談可」の触れ込みだが、産婦人科として実際に許容されるかは要確認。</span></span>
+        <span class="pip idle">未着手</span>
+      </div>
+      <div>
+        <span class="mk">B-1</span>
+        <span class="tx"><b>先方の3条件（購入か賃貸か／必要面積／予算上限）</b><span>これが埋まると候補は2〜3件に絞れる。LINE返信文に質問として織り込み済み。</span></span>
+        <span class="pip idle">送信前</span>
+      </div>
+      <div>
+        <span class="mk">B-2</span>
+        <span class="tx"><b>次回の医療飲み会の日程</b><span>物件の報告と同じ連絡で切り出す。単発の案件対応で終わらせない。</span></span>
+        <span class="pip idle">未着手</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>KHD 医療人脈トラック ／ 加古川案件 × 医療飲み会</span>
+    <span>次の一手：ツカサビルの在否確認 ＋ 野口さんへLINE送信</span>
+  </footer>
+
+</div>

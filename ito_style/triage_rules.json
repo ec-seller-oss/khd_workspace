@@ -1,0 +1,4 @@
+{
+  "archive_days": 90,
+  "junk_patterns": ["^_chart_.*\\.png$", "^sc[0-9]+\\.jpg$", "^takeout\\."]
+}

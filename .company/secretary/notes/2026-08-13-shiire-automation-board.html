@@ -69,7 +69,7 @@
   <header>
     <div class="eyebrow">05_物件調達 ほか ｜ 仕入営業の自動化 ｜ 社内専用</div>
     <h1>仕入営業 自動化ボード — 巡回・抽出・判定を1つの型で回す（不動産／車両／EC）</h1>
-    <div class="asof">2026-08-13時点 ／ KIKUCHIホールディングス（担当：菊池研太）</div>
+    <div class="asof">2026-08-13時点（同日更新：REINS導入 全体マップ③bを追加） ／ KIKUCHIホールディングス（担当：菊池研太）</div>
   </header>
 
   <p class="lead"><b>現在地：</b>REINS巡回ツールを受領し、導入前の3確認（規約リスク引受・自社ID・東日本レインズ）が<b>8/13クリア</b>。次は母艦Macで <code>setup_khd.sh</code> → ログイン確認 → 保存済み検索3本 → cron1日2回。既存資産（landscanner／マイソクPDF抽出／EC価格監視）と束ね、<b>「巡回→抽出→判定→通知→人が当たる」の同じ型</b>を不動産・車両・ECの3事業に展開する。弾込め側は保証協会Excel（借入余力）で「いくらまで仕入れられるか」を並走管理。</p>
@@ -139,6 +139,72 @@
     <tr><td><span class="chip wait">並走</span></td><td>弾込め（借入余力）</td><td>保証協会Excel（KHD版）に第4期決算書の5数値を記入→⑥翌期の枠を確定。役員借入金の額が結果を左右</td><td class="date">8/13</td></tr>
   </table>
   </div>
+
+  <h2>③b 🗺 REINS導入 全体マップ — この画面（クラウド）から母艦Mac（Cursor）への移行</h2>
+  <p class="muted">前提の整理：Claude Codeのこのアプリはクラウドの隔離環境で動いており、<b>REINSには接続できない（ネットワーク遮断＋ログインは業者端末前提）</b>。巡回ツールの実行環境は母艦Macのターミナル。役割分担は下表で固定する。</p>
+  <div class="tblwrap">
+  <table>
+    <tr><th>場所</th><th>担うこと</th><th>担わないこと</th></tr>
+    <tr><td class="lane">☁️ この画面（クラウド）</td><td>設計・コード整備・手順書・ボード更新・調査(Web)・下書き</td><td>REINS接続／cron／実ID・PWの保管</td></tr>
+    <tr><td class="lane">💻 母艦Mac（Cursor＋ターミナル）</td><td>ツールの実行・ログイン・cron常駐・.env（実ID/PW）</td><td>コードの手書き修正（原則こちらで直してpush→Macはpull）</td></tr>
+  </table>
+  </div>
+
+  <div class="tblwrap" style="margin-top:8px">
+  <table>
+    <tr><th>Phase</th><th>やること（Cursorでの操作）</th><th>確認ポイント</th><th>目安</th></tr>
+    <tr>
+      <td class="date">0 開く</td>
+      <td>Cursor起動 → 「Open Folder」で <code>~/khd_workspace</code>（旧Macなら実際のクローン先）→ メニュー Terminal &gt; New Terminal（<code>⌃`</code>）</td>
+      <td>ターミナルのプロンプトにフォルダ名が出る</td>
+      <td class="date">2分</td>
+    </tr>
+    <tr>
+      <td class="date">1 取り込む</td>
+      <td><code>git fetch origin</code><br><code>git checkout claude/ito-reference-implementation-4c41bj</code><br><code>git pull</code></td>
+      <td><b>⚠️ reins_patrol/ はこの作業ブランチにだけある</b>（mainには未マージ）。<code>ls reins_patrol/</code> で4ファイル見えればOK</td>
+      <td class="date">2分</td>
+    </tr>
+    <tr>
+      <td class="date">2 構築</td>
+      <td><code>bash reins_patrol/setup_khd.sh</code><br>→ 3確認ゲートに <code>y</code>（8/13回答済みの内容）</td>
+      <td>Driveのキット発見→コピー→KHDパッチ→venv→Chromium導入まで自動。エラーはそのままCursorのチャットに貼って直させる</td>
+      <td class="date">10分</td>
+    </tr>
+    <tr>
+      <td class="date">3 鍵入れ</td>
+      <td><code>open ~/reins-patrol/.env</code> → REINS_USER_ID（a0303•••••21の実ID）とPWを記入して保存</td>
+      <td>.envは<b>Macのこのファイルだけ</b>。リポジトリ・チャット・Driveに書かない</td>
+      <td class="date">2分</td>
+    </tr>
+    <tr>
+      <td class="date">4 目視テスト</td>
+      <td><code>cd ~/reins-patrol</code><br><code>./.venv/bin/python patrol.py --headed --pause-after-login</code></td>
+      <td>Chromiumが開き<b>ログインが通る</b>のを目で見る。ここで止まったらスクショ＋logs/をCursorチャットへ</td>
+      <td class="date">10分</td>
+    </tr>
+    <tr>
+      <td class="date">5 検索を仕込む</td>
+      <td>REINSのWeb画面（普段のブラウザでよい）で保存済み検索を作成：<b>KHD01内科／KHD02三ツ境／KHD03新さん</b> → .envのSAVED_SEARCH_LABELを合わせる</td>
+      <td>ラベル名は<b>1字違いでも拾えない</b>。画面の表示名をコピペ</td>
+      <td class="date">20分</td>
+    </tr>
+    <tr>
+      <td class="date">6 通し検証</td>
+      <td><code>./.venv/bin/python patrol.py --headed</code>（1回流す）</td>
+      <td>downloads/にPDF、output/に物件txt/JSONが落ちる</td>
+      <td class="date">15分</td>
+    </tr>
+    <tr>
+      <td class="date">7 常駐化</td>
+      <td><code>crontab -e</code> で2行だけ登録：<br><code>2 10 * * * $HOME/reins-patrol/run_with_jitter.sh</code><br><code>0 18 * * * $HOME/reins-patrol/run_with_jitter.sh</code></td>
+      <td><b>1日2回から。増やさない。</b>23時〜7時はREINSメンテ＝流さない。翌朝logs/cron.logを確認</td>
+      <td class="date">5分</td>
+    </tr>
+  </table>
+  </div>
+
+  <p class="lead" style="margin-top:8px"><b>ゴールイメージ：</b>毎日10時・18時に勝手に巡回が走り、<b>案件条件（内科／三ツ境／新さん）に合う新着図面PDFと物件サマリが output/ に貯まる</b>。菊池さんは朝ターミナルで <code>ls ~/reins-patrol/output/</code>（またはwinq.sh）を見て、新着があれば福井さん・先方に「見つけました」と当てるだけ。<b>探す時間がゼロになり、5段目（指値・提案）に全時間を使う</b>状態が完成形。通知メールの自前化とlandscanner再稼働はその次。</p>
 
   <h2>④ 🚗 車両レーン詳細（1件目で基準を作る）</h2>
   <div class="tblwrap">

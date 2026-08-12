@@ -1,0 +1,297 @@
+<title>岩手帰省しおり 8/15-8/16</title>
+<style>
+  :root{
+    --ground:#e7ecec;
+    --paper:#ffffff;
+    --ink:#15222a;
+    --ink2:#4d6069;
+    --ink3:#78888f;
+    --line:#ccd8d9;
+    --line2:#e2eaea;
+    --ai:#26557f;
+    --ai-soft:#dae6f0;
+    --midori:#4f7344;
+    --midori-soft:#dfeadb;
+    --aka:#a3452c;
+    --aka-soft:#f4e0d9;
+    --ki:#8a6410;
+    --ki-soft:#f3e8cd;
+    --disp:"Hiragino Mincho ProN","Yu Mincho",YuMincho,"Noto Serif JP",serif;
+    --body:"Hiragino Kaku Gothic ProN","Yu Gothic Medium","Yu Gothic","Noto Sans JP",system-ui,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,"Courier New",monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ground:#0b1214; --paper:#141e22; --ink:#e6eced; --ink2:#9aabb0; --ink3:#7b8b90;
+      --line:#2a393e; --line2:#1e2b2f;
+      --ai:#6fabd8; --ai-soft:#132c3f;
+      --midori:#7fb471; --midori-soft:#163013;
+      --aka:#e08a70; --aka-soft:#38201a;
+      --ki:#d6ac54; --ki-soft:#32260a;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0b1214; --paper:#141e22; --ink:#e6eced; --ink2:#9aabb0; --ink3:#7b8b90;
+    --line:#2a393e; --line2:#1e2b2f;
+    --ai:#6fabd8; --ai-soft:#132c3f;
+    --midori:#7fb471; --midori-soft:#163013;
+    --aka:#e08a70; --aka-soft:#38201a;
+    --ki:#d6ac54; --ki-soft:#32260a;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--ground); color:var(--ink);
+    font-family:var(--body); font-size:14px; line-height:1.75;
+    padding:20px 13px 52px; font-variant-numeric:tabular-nums;
+    -webkit-font-smoothing:antialiased;
+  }
+  .sheet{max-width:900px;margin:0 auto;background:var(--paper);
+    border:1px solid var(--line);border-radius:3px;padding:32px 32px 28px;
+    display:flex;flex-direction:column;gap:32px;}
+  @media (max-width:620px){ .sheet{padding:22px 16px} }
+
+  header{display:flex;flex-direction:column;gap:10px;
+    border-bottom:2px solid var(--ai);padding-bottom:14px;}
+  .eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;color:var(--ai);}
+  h1{font-family:var(--disp);font-size:28px;font-weight:600;margin:0;line-height:1.35;
+    letter-spacing:.02em;text-wrap:balance;}
+  .sub{color:var(--ink2);font-size:13px;margin:0;max-width:60ch;}
+  .facts{display:flex;flex-wrap:wrap;gap:6px 18px;font-family:var(--mono);
+    font-size:11px;color:var(--ink3);}
+  .facts b{color:var(--ink2);font-weight:500;}
+
+  section{display:flex;flex-direction:column;gap:13px;}
+  .sh{display:flex;align-items:baseline;gap:11px;flex-wrap:wrap;
+    border-bottom:1px solid var(--line);padding-bottom:6px;}
+  .sh h2{font-family:var(--disp);font-size:19px;font-weight:600;margin:0;letter-spacing:.02em;}
+  .sh .note{font-size:11.5px;color:var(--ink3);margin-left:auto;}
+  p{margin:0;}
+  .lede{color:var(--ink2);font-size:13.2px;max-width:68ch;}
+  .lede b{color:var(--ink);font-weight:600;}
+
+  /* 葵斗の軸 */
+  .spine{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;
+    background:var(--line);border:1px solid var(--line);border-radius:3px;overflow:hidden;}
+  @media (max-width:700px){ .spine{grid-template-columns:repeat(3,1fr);} }
+  .spine > div{background:var(--paper);padding:11px 9px;display:flex;flex-direction:column;gap:3px;align-items:center;text-align:center;}
+  .spine .t{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--ai);}
+  .spine .n{font-size:11.5px;color:var(--ink2);line-height:1.4;}
+  .spine .fix{background:var(--aka-soft);}
+  .spine .fix .t{color:var(--aka);}
+  .spine .win{background:var(--midori-soft);}
+  .spine .win .t{color:var(--midori);}
+
+  .badge{display:inline-flex;align-items:center;font-size:10.5px;font-weight:600;
+    padding:2px 8px;border-radius:2px;white-space:nowrap;}
+  .badge.a{background:var(--ai-soft);color:var(--ai);}
+  .badge.m{background:var(--midori-soft);color:var(--midori);}
+  .badge.k{background:var(--ki-soft);color:var(--ki);}
+  .badge.r{background:var(--aka-soft);color:var(--aka);}
+
+  /* 日程 */
+  .day{border:1px solid var(--line);border-radius:3px;overflow:hidden;}
+  .dayhead{background:var(--ai-soft);padding:10px 15px;display:flex;gap:11px;align-items:baseline;flex-wrap:wrap;}
+  .dayhead h3{font-family:var(--disp);font-size:16px;margin:0;font-weight:600;color:var(--ai);}
+  .dayhead span{font-size:11.8px;color:var(--ink2);}
+  .rows{display:flex;flex-direction:column;}
+  .row{display:grid;grid-template-columns:88px 1fr;gap:14px;padding:9px 15px;
+    border-top:1px solid var(--line2);align-items:baseline;}
+  .row:first-child{border-top:none;}
+  .row .tm{font-family:var(--mono);font-size:12px;color:var(--ink2);white-space:nowrap;}
+  .row .bd{font-size:13px;}
+  .row .bd small{display:block;color:var(--ink3);font-size:11.5px;line-height:1.55;margin-top:1px;}
+  .row.meal{background:var(--aka-soft);}
+  .row.meal .tm{color:var(--aka);font-weight:600;}
+  .row.free{background:var(--midori-soft);}
+  .row.warn .bd b{color:var(--ki);}
+
+  /* プラン分岐 */
+  .plans{display:flex;flex-direction:column;gap:14px;}
+  .plan{border:1px solid var(--line);border-left:4px solid var(--ai);border-radius:0 3px 3px 0;
+    padding:15px 17px;display:flex;flex-direction:column;gap:9px;}
+  .plan.b{border-left-color:var(--midori);}
+  .plan.c{border-left-color:var(--ki);}
+  .plan .ph{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;}
+  .plan h3{font-family:var(--disp);font-size:16px;margin:0;font-weight:600;}
+  .plan .cond{font-size:11.5px;color:var(--ink3);}
+  .plan p{font-size:12.8px;color:var(--ink2);}
+  .plan p b{color:var(--ink);}
+  .mini{display:flex;flex-direction:column;gap:0;margin-top:2px;}
+  .mini div{display:grid;grid-template-columns:66px 1fr;gap:12px;padding:5px 0;
+    border-bottom:1px dashed var(--line);font-size:12.5px;}
+  .mini div:last-child{border-bottom:none;}
+  .mini .t{font-family:var(--mono);font-size:11.5px;color:var(--ai);font-weight:600;}
+  .spot{background:var(--line2);border-radius:3px;padding:9px 12px;font-size:12.2px;color:var(--ink2);}
+  .spot b{color:var(--ink);}
+  .spot a{color:var(--ai);}
+
+  .callout{border-left:3px solid var(--ki);background:var(--ki-soft);
+    padding:11px 14px;border-radius:0 3px 3px 0;font-size:12.6px;}
+  .callout b{color:var(--ki);}
+  .callout.r{border-left-color:var(--aka);background:var(--aka-soft);}
+  .callout.r b{color:var(--aka);}
+
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  @media (max-width:660px){ .cols{grid-template-columns:1fr;} }
+  .pack{display:flex;flex-direction:column;gap:6px;}
+  .pack h4{margin:0 0 2px;font-size:12.5px;font-weight:600;
+    font-family:var(--mono);letter-spacing:.06em;color:var(--ink3);}
+  .pack label{display:flex;gap:8px;align-items:flex-start;font-size:12.6px;line-height:1.6;}
+  .pack input{margin-top:5px;accent-color:var(--ai);flex-shrink:0;}
+  .pack input:focus-visible{outline:2px solid var(--ai);outline-offset:2px;}
+
+  footer{border-top:1px solid var(--line);padding-top:12px;
+    font-family:var(--mono);font-size:10.5px;color:var(--ink3);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  a{color:var(--ai);text-underline-offset:2px;overflow-wrap:anywhere;}
+</style>
+
+<div class="sheet">
+
+  <header>
+    <div class="eyebrow">2026 お盆 ／ 岩手・花巻東和</div>
+    <h1>帰省しおり　8月15日（土）・16日（日）</h1>
+    <p class="sub">葵斗の食事時間を動かさないことを最優先に、その「すき間」へ予定を差し込む形で組みました。鉄則はひとつ、<b>最後の食事17:00までに必ず帰宅</b>。</p>
+    <div class="facts">
+      <span>拠点 <b>花巻市東和町</b></span>
+      <span>葵斗 <b>生後10ヶ月（2025/9/19生）・離乳食3回食</b></span>
+      <span>8/14 <b>金消契約11:00-13:00 → 家族集合で終了</b></span>
+    </div>
+  </header>
+
+  <section>
+    <div class="sh">
+      <h2>葵斗の一日の軸</h2>
+      <span class="note">赤＝動かさない　緑＝出かけられる枠</span>
+    </div>
+    <p class="lede">この軸を先に固定して、緑の2枠だけで動きます。<b>外出できるのは実質「午前2時間」と「午後2時間」の2回だけ</b>です。</p>
+    <div class="spine">
+      <div class="fix"><span class="t">7:00</span><span class="n">朝食</span></div>
+      <div class="win"><span class="t">9:00–11:00</span><span class="n">外出枠①</span></div>
+      <div class="fix"><span class="t">11:30</span><span class="n">昼食</span></div>
+      <div><span class="t">12:30–14:30</span><span class="n">昼寝</span></div>
+      <div class="win"><span class="t">14:30–16:30</span><span class="n">外出枠②</span></div>
+      <div class="fix"><span class="t">17:00</span><span class="n">夕食<br>＝帰宅期限</span></div>
+      <div><span class="t">18:00 / 19:30</span><span class="n">風呂／就寝</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sh"><h2>2日間の骨組み</h2><span class="note">15日は近場、16日に遠出を置く</span></div>
+
+    <div class="day">
+      <div class="dayhead"><h3>8月15日（土）</h3><span>午前は予定が入っているので、遠出はしない日</span></div>
+      <div class="rows">
+        <div class="row"><span class="tm">04:30–07:30</span><span class="bd">土地家屋調査士<small>朝礼6:00／葵斗モーニングルーティン6:30–7:15</small></span></div>
+        <div class="row meal"><span class="tm">07:00</span><span class="bd">葵斗 朝食</span></div>
+        <div class="row"><span class="tm">08:30–11:30</span><span class="bd">家族タイム<small>既定。ここは触らない</small></span></div>
+        <div class="row meal"><span class="tm">11:30</span><span class="bd">葵斗 昼食</span></div>
+        <div class="row"><span class="tm">12:00–12:30</span><span class="bd">思い出探し<small>実家の写真・書類の整理。家族タイムから流すと自然</small></span></div>
+        <div class="row warn"><span class="tm">13:00–14:00</span><span class="bd"><b>⚠ 054_四街道市小名木</b><small>岩手にいるので現地訪問は不可。電話に切り替えるか8/17以降へリスケを、出発前に決めておく</small></span></div>
+        <div class="row"><span class="tm">12:30–14:30</span><span class="bd">葵斗 昼寝</span></div>
+        <div class="row free"><span class="tm">14:30–16:30</span><span class="bd">外出枠②<small>近場のみ。この日はのんびりに充てる</small></span></div>
+        <div class="row warn"><span class="tm">16:00–18:00</span><span class="bd"><b>趣味枠は16:00–17:00に短縮</b><small>17:00の夕食と重なっているため</small></span></div>
+        <div class="row meal"><span class="tm">17:00</span><span class="bd">葵斗 夕食 ← 帰宅期限</span></div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="dayhead"><h3>8月16日（日）</h3><span>朝の調査士以外まる一日空き。遠出はこの日に</span></div>
+      <div class="rows">
+        <div class="row"><span class="tm">04:30–07:30</span><span class="bd">土地家屋調査士<small>この日の固定はこれだけ</small></span></div>
+        <div class="row meal"><span class="tm">07:00</span><span class="bd">葵斗 朝食</span></div>
+        <div class="row free"><span class="tm">09:00–13:00</span><span class="bd">→ 下記【A】遠野へ行くならここ<small>行かない場合は外出枠①（9:00–11:00）で近場</small></span></div>
+        <div class="row meal"><span class="tm">11:30</span><span class="bd">葵斗 昼食<small>遠野に行く場合のみ、現地で離乳食を持参して対応</small></span></div>
+        <div class="row"><span class="tm">13:00–14:30</span><span class="bd">葵斗 昼寝</span></div>
+        <div class="row free"><span class="tm">14:30–16:30</span><span class="bd">外出枠②<small>→ 下記【B】友達の家／【C】遊び場</small></span></div>
+        <div class="row meal"><span class="tm">17:00</span><span class="bd">葵斗 夕食 ← 帰宅期限</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sh"><h2>3つの分かれ道</h2><span class="note">当日朝に決めても間に合う組み方</span></div>
+    <div class="plans">
+
+      <div class="plan">
+        <div class="ph"><span class="badge a">A</span><h3>遠野ジンギスカン</h3><span class="cond">条件：兄貴が乗るかどうか</span></div>
+        <p>片道およそ35分。<b>往復＋滞在で3時間弱</b>かかるので、16日の午前をまるごと使う前提です。3案のうち唯一、葵斗の昼食を外で取ることになります。</p>
+        <div class="mini">
+          <div><span class="t">10:20</span><span>東和 出発</span></div>
+          <div><span class="t">11:00</span><span>遠野食肉センター 本店 着（開店と同時＝混む前に入る）</span></div>
+          <div><span class="t">11:30</span><span>葵斗の昼食（離乳食を持参。ジンギスカンは食べられない）</span></div>
+          <div><span class="t">12:20</span><span>出発</span></div>
+          <div><span class="t">13:00</span><span>帰宅 → そのまま昼寝へ</span></div>
+        </div>
+        <div class="spot"><b>遠野食肉センター 本店</b>／岩手県遠野市松崎町白岩20地割13-1／11:00–21:00・無休<br><a href="https://tonosyokunikucenter.jp/">tonosyokunikucenter.jp</a>　※臨時休業がないか前日にGoogleで確認を。「じんぎすかん あんべ」は盆前後の予約を受けていないため、予約前提ならこちらが確実です。</div>
+        <p><b>兄貴への確認は、8/14の家族集合の場で聞いてしまうのが一番早い</b>です。15日中に可否が分かれば、16日の朝に迷わなくて済みます。</p>
+      </div>
+
+      <div class="plan b">
+        <div class="ph"><span class="badge m">B</span><h3>友達の家へ</h3><span class="cond">条件：先方の都合</span></div>
+        <p>時間は先方次第ですが、こちらの受けられる枠は2つです。</p>
+        <div class="mini">
+          <div><span class="t">午前</span><span>9:00 出発 〜 11:00 まで（11:30の昼食に戻る）</span></div>
+          <div><span class="t">午後</span><span>14:30 出発 〜 16:30 まで（<b>17:00夕食に間に合う最終ライン</b>）</span></div>
+        </div>
+        <p>午後の方が昼寝を先に済ませられるので、機嫌の面では有利です。離乳食・おむつ・着替えは持参で。</p>
+      </div>
+
+      <div class="plan c">
+        <div class="ph"><span class="badge k">C</span><h3>遊び場へ</h3><span class="cond">条件：友達の家に行けない場合</span></div>
+        <p><b>第1候補は花巻おもちゃ美術館。</b>0歳から遊べる木育施設で、10ヶ月の葵斗にちょうど合います。<b>1歳未満は無料</b>です。</p>
+        <div class="mini">
+          <div><span class="t">14:30</span><span>東和 出発</span></div>
+          <div><span class="t">15:00</span><span>花巻おもちゃ美術館 着</span></div>
+          <div><span class="t">16:00</span><span>出発（最終入館15:30なので余裕を持って）</span></div>
+          <div><span class="t">16:30</span><span>帰宅 → 17:00 夕食</span></div>
+        </div>
+        <div class="spot"><b>花巻おもちゃ美術館</b>（マルカンビル内）／花巻市上町6-2／10:00–16:00（最終入館15:30）／水曜定休＝15日・16日とも営業<br>大人900円・1歳〜小学生700円・<b>1歳未満 無料</b>　<a href="https://www.hanamaki-toymuseum.com/">hanamaki-toymuseum.com</a><br>午前に回すなら 9:30発 → 10:00開館と同時 → 11:00発 → 11:30帰宅で昼食にちょうど収まります。</div>
+        <div class="spot"><b>マルカンビル大食堂</b>（同じビル6F）／土日 11:00–18:00 L.O.／水曜定休<br>名物の10段巻きソフト。葵斗の食事枠と重なるので、<b>大人だけ寄り道する程度</b>が現実的です。</div>
+        <div class="callout"><b>あやなさんが送ってくれた「あそびばねっこ」について：</b>谷内の方がやっている遊び場の活動で、こども食堂的なこともされているとのことでした（Instagram: asobiba_nekko）。ただし<b>常設の施設ではなく活動</b>のため、8/15・16に開いているかは分かりません。行くなら事前にInstagramで開催日を確認するか、あやなさんに直接聞くのが確実です。上のおもちゃ美術館は、それが空振りだった場合でも確実に開いている受け皿として置いています。</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="sh"><h2>持ち物</h2></div>
+    <div class="cols">
+      <div class="pack">
+        <h4>葵斗</h4>
+        <label><input type="checkbox">離乳食 3食分＋予備／ベビーフード</label>
+        <label><input type="checkbox">スプーン・エプロン・マグ</label>
+        <label><input type="checkbox">おむつ・おしり拭き・替えの袋</label>
+        <label><input type="checkbox">着替え2組</label>
+        <label><input type="checkbox">母子手帳・保険証・医療証</label>
+        <label><input type="checkbox">抱っこ紐／ベビーカー</label>
+        <label><input type="checkbox">帽子・日よけ・虫よけ・体温計</label>
+      </div>
+      <div class="pack">
+        <h4>大人</h4>
+        <label><input type="checkbox">現金（食肉センターのカード可否は要確認）</label>
+        <label><input type="checkbox">車の準備（チャイルドシート・給油）</label>
+        <label><input type="checkbox">タオル・ウェットティッシュ</label>
+        <label><input type="checkbox">飲み物（車内用）</label>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sh"><h2>前日までに決めること</h2></div>
+    <div class="mini">
+      <div><span class="t">8/14</span><span><b>兄貴に遠野の可否を聞く</b>（家族集合の場で。これで16日の朝が決まる）</span></div>
+      <div><span class="t">8/14</span><span>友達の家へ行けるか、先方に打診</span></div>
+      <div><span class="t">出発前</span><span><b>8/15 13:00の四街道</b>を電話に切り替えるか、8/17以降へリスケするか決める</span></div>
+      <div><span class="t">前夜</span><span>遠野食肉センター・おもちゃ美術館の臨時休業をGoogleで確認</span></div>
+    </div>
+    <div class="callout r"><b>移動時間はすべて目安です。</b>東和→遠野 約35分、東和→花巻市街（マルカンビル）約25〜30分で見積もっています。お盆の交通量で前後するので、17:00の夕食に対しては<b>30分の余裕</b>を持って動いてください。</div>
+  </section>
+
+  <footer>
+    <span>KHD 家族しおり ／ 2026年お盆 岩手帰省</span>
+    <span>鉄則：最後の食事17:00までに帰宅</span>
+  </footer>
+
+</div>

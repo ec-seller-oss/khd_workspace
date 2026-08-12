@@ -1,0 +1,358 @@
+<title>調査士×宅建 一人デベロッパー戦略ボード</title>
+<style>
+  :root{
+    --bg:#f5f6f8; --paper:#ffffff; --ink:#232838; --sub:#65708a;
+    --accent:#3a4a8c; --accent-soft:#e8ebf6; --line:#dbdfe9;
+    --warn:#a34a00; --warn-soft:#faeedd;
+    --done:#0e6e5c; --done-soft:#e2efeb; --wait:#8a6d1f; --wait-soft:#f5eeda;
+    --todo:#a3311f; --todo-soft:#f8e3de;
+    --gold:#8a6d1f; --gold-soft:#f7f0da;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){ --bg:#14161d; --paper:#1d2029; --ink:#e8eaf1; --sub:#9aa3bb;
+      --accent:#8a9ae0; --accent-soft:#252b45; --line:#343a4d;
+      --warn:#e8a75a; --warn-soft:#3a2c1a;
+      --done:#4fbfa5; --done-soft:#153029; --wait:#d6b95c; --wait-soft:#37301c;
+      --todo:#e8836a; --todo-soft:#3d241d; --gold:#d6b95c; --gold-soft:#332c14; }
+  }
+  :root[data-theme="dark"]{ --bg:#14161d; --paper:#1d2029; --ink:#e8eaf1; --sub:#9aa3bb;
+      --accent:#8a9ae0; --accent-soft:#252b45; --line:#343a4d;
+      --warn:#e8a75a; --warn-soft:#3a2c1a;
+      --done:#4fbfa5; --done-soft:#153029; --wait:#d6b95c; --wait-soft:#37301c;
+      --todo:#e8836a; --todo-soft:#3d241d; --gold:#d6b95c; --gold-soft:#332c14; }
+  :root[data-theme="light"]{ --bg:#f5f6f8; --paper:#ffffff; --ink:#232838; --sub:#65708a;
+      --accent:#3a4a8c; --accent-soft:#e8ebf6; --line:#dbdfe9;
+      --warn:#a34a00; --warn-soft:#faeedd;
+      --done:#0e6e5c; --done-soft:#e2efeb; --wait:#8a6d1f; --wait-soft:#f5eeda;
+      --todo:#a3311f; --todo-soft:#f8e3de; --gold:#8a6d1f; --gold-soft:#f7f0da; }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+    font-size:13.5px;line-height:1.65;padding:18px 12px 40px;font-variant-numeric:tabular-nums;}
+  .sheet{max-width:920px;margin:0 auto;background:var(--paper);border:1px solid var(--line);
+    border-radius:10px;padding:26px 28px 24px;}
+  header{border-bottom:2px solid var(--accent);padding-bottom:10px;margin-bottom:14px;}
+  .eyebrow{font-size:11px;letter-spacing:.14em;color:var(--accent);font-weight:700;}
+  h1{font-size:19px;margin:3px 0 4px;line-height:1.4;text-wrap:balance;}
+  .asof{font-size:12px;color:var(--sub);}
+  h2{font-size:14.5px;margin:22px 0 8px;padding-left:9px;border-left:4px solid var(--accent);}
+  h3{font-size:13px;margin:12px 0 4px;color:var(--accent);}
+  .lead{background:var(--accent-soft);border-radius:8px;padding:10px 12px;font-size:13.5px;margin:0;}
+  .lead b{color:var(--accent);}
+
+  .banner{background:var(--gold-soft);border:1px solid var(--gold);border-radius:9px;
+    padding:12px 14px;margin:12px 0 0;}
+  .banner .t{font-weight:700;color:var(--gold);font-size:14px;margin-bottom:3px;}
+  .banner p{margin:0;font-size:12.8px;}
+
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0 2px;}
+  @media(max-width:700px){.kpis{grid-template-columns:repeat(2,1fr);}}
+  .kpi{border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:var(--paper);}
+  .kpi .lb{font-size:10.5px;color:var(--sub);letter-spacing:.03em;}
+  .kpi .vl{font-size:17px;font-weight:700;color:var(--accent);margin-top:1px;line-height:1.25;}
+  .kpi .nt{font-size:10.5px;color:var(--sub);margin-top:2px;line-height:1.45;}
+  .kpi.good .vl{color:var(--done);}
+
+  .river{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 2px;align-items:stretch;}
+  .river .step{flex:1 1 150px;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12px;}
+  .river .step b{display:block;color:var(--accent);font-size:12.5px;margin-bottom:2px;}
+  .river .step.exit{border-color:var(--done);}
+  .river .step.exit b{color:var(--done);}
+
+  .tblwrap{overflow-x:auto;}
+  table{border-collapse:collapse;width:100%;font-size:12.5px;}
+  th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top;}
+  th{background:var(--accent-soft);white-space:nowrap;font-size:11.5px;}
+  td.who{white-space:nowrap;font-weight:700;color:var(--accent);}
+  td.role{white-space:nowrap;color:var(--sub);font-weight:600;font-size:11.5px;}
+  td.num{text-align:right;white-space:nowrap;}
+  tr.me td{background:var(--accent-soft);}
+  tr.me td.who{color:var(--accent);}
+  .chip{display:inline-block;font-size:10.5px;font-weight:700;border-radius:4px;padding:1px 7px;white-space:nowrap;color:#fff;}
+  .chip.done{background:var(--done);}
+  .chip.wait{background:var(--wait);}
+  .chip.todo{background:var(--todo);}
+  .chip.now{background:var(--accent);}
+  ul{margin:4px 0;padding-left:1.4em;}
+  li{margin-bottom:3px;}
+  .note{background:var(--warn-soft);border-left:3px solid var(--warn);border-radius:0 8px 8px 0;
+    padding:8px 11px;font-size:12.5px;margin-top:10px;}
+  .note b{color:var(--warn);}
+  .danger{background:var(--todo-soft);border-left:3px solid var(--todo);border-radius:0 8px 8px 0;
+    padding:8px 11px;font-size:12.5px;margin-top:10px;}
+  .danger b{color:var(--todo);}
+  .win{background:var(--done-soft);border-left:3px solid var(--done);border-radius:0 8px 8px 0;
+    padding:8px 11px;font-size:12.5px;margin-top:10px;}
+  .win b{color:var(--done);}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  @media(max-width:640px){.two{grid-template-columns:1fr;}}
+  .muted{color:var(--sub);font-size:12px;}
+  .method{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px;}
+  @media(max-width:640px){.method{grid-template-columns:1fr;}}
+  .m-card{border:1px solid var(--line);border-radius:8px;padding:8px 11px;font-size:12.5px;}
+  .m-card b{color:var(--accent);display:block;font-size:12.5px;margin-bottom:2px;}
+
+  .stage{display:flex;gap:0;flex-wrap:nowrap;overflow-x:auto;margin:8px 0 2px;padding-bottom:4px;}
+  .stage .sg{flex:0 0 132px;border:1px solid var(--line);border-right:none;padding:8px 9px;font-size:11.5px;}
+  .stage .sg:last-child{border-right:1px solid var(--line);}
+  .stage .sg b{display:block;font-size:12px;color:var(--sub);margin-bottom:2px;}
+  .stage .sg.here{background:var(--accent-soft);border-color:var(--accent);border-right:1px solid var(--accent);}
+  .stage .sg.here b{color:var(--accent);}
+  .stage .sg .m{color:var(--sub);font-size:10.5px;line-height:1.45;}
+
+  .focus{border:2px solid var(--accent);border-radius:9px;padding:13px 15px;margin-top:8px;background:var(--accent-soft);}
+  .focus .hd{font-size:11px;letter-spacing:.12em;color:var(--accent);font-weight:700;}
+  .focus .big{font-size:16px;font-weight:700;margin:4px 0 6px;line-height:1.45;}
+  .focus ol{margin:4px 0 0;padding-left:1.3em;font-size:12.8px;}
+  a{color:var(--accent);word-break:break-all;}
+</style>
+
+<div class="sheet">
+  <header>
+    <div class="eyebrow">04_土地家屋調査士 × 05_物件調達 ｜ 一人デベロッパー構想 ｜ 2026-10-18 本試験 → 2027登録 → 第7期本格稼働</div>
+    <h1>調査士×宅建 一人デベロッパー戦略ボード — 源流情報×自社出口で「仕入れ特化」を確立する</h1>
+    <div class="asof">2026-08-13更新（高松二丁目 稟議通過を受け、①〜⑤に投資家フロー・保有一覧・先輩との距離を新設） ／ 菊池研太</div>
+  </header>
+
+  <p class="lead"><b>構想の核心：</b>調査士は不動産の<b>源流情報</b>（境界・相続・所有者不明）に最初に触れる職能。ここで見つけた「困っている土地」を宅建法人で仕入れ、<b>測量と並行して地盤・境界・登記を仕込んで商品化</b>し、出口は<b>①自社保有（賃貸）②再販</b>の二枚で自社完結する。出口を他人に依存しないから、<b>仕入れの目利きだけに特化できる</b>——これが一人デベロッパーの完成形。<b>情報の非対称性がそのまま利益の源泉になる</b>。</p>
+
+  <div class="banner">
+    <div class="t">🎉 2026-08-12 夜　岩手銀行 最終決済稟議 通過</div>
+    <p>正式条件の連絡が本日到着 → <b>8/14 金消契約 → 8/31 決済で「277 高松二丁目」が保有物件になる</b>。これで<b>賃料収入がゼロから年533万へ</b>。アストン退職（1月）で給与がゼロになって以来、初めて<b>自分の名義の「毎月入ってくる仕組み」</b>が立ち上がる。以下①〜⑤は、この日を起点に「いま自分がどこにいて、次に何を積むのか」を数字で固定したもの。</p>
+  </div>
+
+  <h2>① 現在地スナップショット（高松取得後・2026年8月末時点）</h2>
+  <div class="kpis">
+    <div class="kpi"><div class="lb">保有室数</div><div class="vl">11室</div><div class="nt">AP8戸＋貸家3棟</div></div>
+    <div class="kpi"><div class="lb">年間賃収（現況）</div><div class="vl">533万円</div><div class="nt">満室想定なら約598万</div></div>
+    <div class="kpi good"><div class="lb">表面利回り</div><div class="vl">14.4%</div><div class="nt">先輩平均10.4%を上回る</div></div>
+    <div class="kpi good"><div class="lb">返済比率</div><div class="vl">約50%</div><div class="nt">健全ライン60%以下をクリア</div></div>
+    <div class="kpi"><div class="lb">総投資額</div><div class="vl">3,700万円</div><div class="nt">借入4,320万（オーバー）</div></div>
+    <div class="kpi"><div class="lb">取引金融機関</div><div class="vl">4行</div><div class="nt">岩銀・朝日信金・公庫・ノンバンク</div></div>
+    <div class="kpi"><div class="lb">月次CF（概算）</div><div class="vl">約19万円</div><div class="nt">賃収−返済−管理−保険</div></div>
+    <div class="kpi"><div class="lb">保証協会 利用</div><div class="vl">0件</div><div class="nt">★最大の空白地帯</div></div>
+  </div>
+
+  <h3>保有・在庫・仕掛かり 一覧</h3>
+  <div class="tblwrap">
+  <table>
+    <tr><th>案件</th><th>種別</th><th>室数</th><th>取得/価格</th><th>年賃収</th><th>借入</th><th>状態</th></tr>
+    <tr class="me"><td class="who">277 高松二丁目<br>アーバンキューブ</td><td>木造AP（盛岡市）</td><td class="num">8戸</td><td class="num">2,500万</td><td class="num">403万</td><td class="num">2,950万</td><td><span class="chip wait">8/31決済</span><br>生協一括・満室</td></tr>
+    <tr class="me"><td class="who">277 高松二丁目<br>花みずき貸家</td><td>戸建3棟（同）</td><td class="num">3棟</td><td class="num">1,200万</td><td class="num">130万</td><td class="num">1,370万</td><td><span class="chip wait">8/31決済</span><br>2棟入居・<b>1棟空室</b></td></tr>
+    <tr><td class="who">055 辻堂東海岸<br>3丁目7239-245</td><td>買取再販の在庫</td><td class="num">—</td><td class="num">売出3,700万</td><td class="num">—</td><td class="num">日本モーゲージ</td><td><span class="chip todo">出口急ぐ</span><br>10月末が融資期限</td></tr>
+    <tr><td class="who">088 松戸市栄町<br>4-215-7</td><td>B&amp;S（売却済）</td><td class="num">—</td><td class="num">売買550万</td><td class="num">—</td><td class="num">—</td><td><span class="chip done">6/26決済</span><br>仲手247,500円</td></tr>
+    <tr><td class="who">054 四街道市小名木<br>289 川越市藤間</td><td>検討・査定中</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td><span class="chip wait">進行中</span></td></tr>
+  </table>
+  </div>
+  <p class="muted">※055辻堂は名義がKHDかテナントアシスト・ウインかを要確認（買取再販ローンの借主はTAW名義で連絡が来ている）。ボード上は「実務を持っている在庫」として扱う。</p>
+
+  <div class="win"><b>数字が語っていること：</b>規模は小さいが<b>中身の質は既に先輩と同等以上</b>。利回り14.4%は医者大家Tのポートフォリオ平均10.42%を上回り、返済比率50%はDr.不動産が「規模拡大期でも全体60%以下を目指せ」と言うラインを最初からクリアしている。<b>1棟目から悪い買い方をしていない</b>——これは次の融資を引くときに効く。</p></div>
+
+  <h2>② 先を行く先輩2人の型 × 自分はどこにいるか</h2>
+  <p class="muted">8/15 関東大家祭りの登壇者2名。<b>どちらの型を主にするかは「属性」で決まる</b>——ここを間違えると3年溶ける。</p>
+  <div class="tblwrap">
+  <table>
+    <tr><th>比較軸</th><th>千葉ちばマン（保証協会の魔術師）</th><th>医者大家T（Dr.不動産）</th><th class="who">菊池研太（高松取得後）</th></tr>
+    <tr><td class="role">属性</td><td>56歳・年収200万円台・癌経験・片腎＝<b>低属性</b></td><td>35歳・放射線診断専門医・医学博士＝<b>高属性</b></td><td class="who">35歳・<b>給与ゼロ（1月退職）</b>・法人は債務超過＝<b>低属性側</b></td></tr>
+    <tr><td class="role">主戦場</td><td>中古OC区分→地方高利回り木造新築（千葉）</td><td>躯体を問わず中古＋竣工済新築を爆速で買う（10都道府県）</td><td class="who">岩手（地縁）＋首都圏の仲介実務</td></tr>
+    <tr><td class="role">室数</td><td class="num">新築5棟46室＋区分40本</td><td class="num">567室（木鉄31・RC10・戸建3）</td><td class="who num">11室</td></tr>
+    <tr><td class="role">年間賃収</td><td class="num">新築13棟で数千万〜</td><td class="num">3.35億円</td><td class="who num">533万円</td></tr>
+    <tr><td class="role">総投資</td><td class="num">4億6,700万（新築分）</td><td class="num">32.16億円</td><td class="who num">3,700万円</td></tr>
+    <tr><td class="role">取引金融機関</td><td class="num">10行を目標に開拓中</td><td class="num">27行</td><td class="who num">4行</td></tr>
+    <tr><td class="role">利回り</td><td class="num">8.6〜13.0%</td><td class="num">平均10.42%</td><td class="who num">14.4%</td></tr>
+    <tr><td class="role">融資の入口</td><td><b>公庫＋信用保証協会</b>（責任共有対象外＝10割保証）で取引行を増やす</td><td>属性アパロン（オリックス等）→物件評価アパロン→信金信組プロパー</td><td class="who"><b>ちばマン型が正解</b>。給与ゼロで属性アパロンが使えない</td></tr>
+  </table>
+  </div>
+
+  <div class="danger"><b>まだどの程度か、正直な答え：</b>規模で言えば<b>医者大家Tの約1/50〜1/90</b>（室数11 vs 567／総投資3,700万 vs 32.16億／取引行4 vs 27）。Dr.不動産の段階マップでは<b>「パッケージ期」にすら到達しておらず、その入口に今日立ったところ</b>。祭りの壇上にいる人たちとは、まだ<b>桁が2つ違う</b>。<br>ただし勘違いしてはいけないのは、<b>ちばマンは56歳・年収200万円台からこの型で40本積み上げた</b>という事実。<b>属性の低さは敗因にならない。使う制度を間違えることが敗因になる。</b>菊池さんは21歳若く、宅建の実務と調査士（2026/10受験）を持つ。<b>スタート地点はちばマンより明確に有利</b>。</div>
+
+  <div class="win"><b>自分にしかない武器（先輩2人が持っていないもの）：</b><br>① <b>土地家屋調査士</b>（2026/10/18受験）——ちばマンは宅建業、医者大家Tは宅建士+FP3級。<b>境界・分筆・所有者不明に踏み込める投資家はこの2人にもいない</b>。仕入れの源流に立てる。<br>② <b>宅建の仲介実務が本業</b>——物件情報が毎日流れてくる側にいる（先輩方は「買う側」として業者から情報をもらう立場）。<br>③ <b>岩手の地縁</b>——ちばマンの「自治体を先に決める」戦略において、実家のある東和・花巻・盛岡は既に土地勘・人脈・兄夫婦の事業がある。<br>④ <b>医療テナント／ECという別エンジン</b>——Dr.不動産が言う「自己資金が投資手法を規定する」に対し、自己資金を作る事業を別に持っている。</div>
+
+  <h2>③ 投資家としての拡大フロー（Dr.不動産の段階マップ ＋ 今どこ）</h2>
+  <div class="stage">
+    <div class="sg here"><b>▶ 黎明・迷い</b><span class="m">〜10室<br>賃収〜500万<br><b>いまここ</b></span></div>
+    <div class="sg"><b>パッケージ期</b><span class="m">〜50室<br>賃収〜3,000万<br>総投資2〜3億</span></div>
+    <div class="sg"><b>エリア開拓期</b><span class="m">50-100室<br>賃収〜5,000万<br>総投資〜5億</span></div>
+    <div class="sg"><b>エリア拡大期</b><span class="m">100-200室<br>賃収〜1億<br>総投資〜12億</span></div>
+    <div class="sg"><b>メガ大家Ⅰ</b><span class="m">200-350室<br>賃収1〜2億<br>＝生存の確定</span></div>
+    <div class="sg"><b>メガ大家Ⅱ〜ギガ</b><span class="m">350室〜<br>賃収2億〜<br>＝時間と選択の自由</span></div>
+  </div>
+  <p class="muted">Dr.不動産の定義では、精神状態も段階に紐づく：黎明＝不安・強欲・他責 → 青春・向上 → <b>生活の保障</b> → <b>生存の確定</b>（サラ卒の根拠）→ 資本の実感 → 自由。<b>「生存の確定」まで行くかどうかは人生目標次第</b>で、全員がギガを目指す必要はない。</p>
+
+  <div class="tblwrap">
+  <table>
+    <tr><th>段階</th><th>資金調達の主役</th><th>菊池の到達条件</th><th>時期の目安</th></tr>
+    <tr class="me"><td class="who">▶ いま（〜10室）</td><td>岩銀プロパー／公庫／ノンバンク</td><td><b>高松の決済を無事に終える</b>。返済比率50%を維持し、初回返済9/30を通す</td><td>2026/8〜9</td></tr>
+    <tr><td class="who">パッケージ期<br>（〜50室）</td><td><b>公庫＋信用保証協会</b>（ちばマン型）</td><td>①保証協会を初めて使う ②取引行を4→7行へ ③小口（1,000万以下のOC区分 or 地方高利回り）を反復<br>④決算書を「自己資本比率20%以上・債務償還年数20年以内」に育てる</td><td>2027〜2028<br>（試験・登録後）</td></tr>
+    <tr><td class="who">エリア開拓期<br>（50-100室）</td><td>信金信組プロパー＋物件評価アパロン</td><td>岩手法人1号（第7期）が回り、<b>調査士×宅建の自社仕入れ</b>が効き始める。土地から新築に着手</td><td>2028〜2030</td></tr>
+    <tr><td class="who">エリア拡大期以降</td><td>地銀・信金信組プロパー中心</td><td>ここから先は「会社化」の総合力勝負。今決めなくてよい</td><td>2030〜</td></tr>
+  </table>
+  </div>
+
+  <h2>④ 地道な努力の方向性 — 積むべきは4本だけ</h2>
+  <div class="tblwrap">
+  <table>
+    <tr><th>柱</th><th>何を積むか</th><th>なぜ（先輩の言葉）</th><th>いまの状態</th></tr>
+    <tr><td class="who">1. 融資の器</td><td><b>口座有り＆取引有りの金融機関を増やす。</b>本命が否決でも「PLAN-B 保証協会付」「PLAN-C 小口運転資金100万でも借りる」まで下げて<b>取引を作って帰る</b></td><td>ちばマン「低属性の規模拡大のスタートは、口座有り＆取引有りを増やすこと」</td><td>4行 <span class="chip todo">保証協会0件</span></td></tr>
+    <tr><td class="who">2. 仕入れの目</td><td>REINS巡回で新着を毎日拾い、<b>判定基準（土地値・利回り・返済比率）に機械的に当てる</b>。買う判断だけ人がやる</td><td>Dr.不動産「融資が出たから買う、ではなく<b>融資をコントロールして買う</b>」</td><td><a href="https://claude.ai/code/artifact/7730f1a7-abf4-40aa-b203-306ed5979837">仕入営業 自動化ボード</a> <span class="chip wait">導入中</span></td></tr>
+    <tr><td class="who">3. 資格（最優先）</td><td><b>10/18の調査士本試験</b>。⑧の転写マップを頭に貼りながら過去問・答練を回すだけ</td><td>先輩2人が持っていない唯一の武器。ここで差がつく</td><td>残り<b>66日</b> <span class="chip now">集中</span></td></tr>
+    <tr><td class="who">4. 自己資金</td><td>仲介手数料・医療コンサル・EC。<b>入金を取りこぼさない</b>（請求書を寝かせない）</td><td>Dr.不動産「年収よりも<b>自己資金</b>が投資手法を決定する」</td><td>未送信の請求書が滞留 <span class="chip todo">要処理</span></td></tr>
+  </table>
+  </div>
+
+  <div class="note"><b>やらないことを決める：</b>ちばマンは「決めないから動けない。決めれば全てが回り始める」と言い、Dr.不動産は「一通りやり切るまで<b>目移り・浮気はNG</b>」と言う。<b>試験までは新しい手法を増やさない。</b>土地から新築・タワマン・区分の情報が入ってきても、10/18までは見るだけにする。</div>
+
+  <h2>⑤ 日々の集中 — 今日これだけやればいい</h2>
+  <div class="focus">
+    <div class="hd">TODAY'S ONE THING</div>
+    <div class="big">調査士の過去問を回す。それ以外は「1日1本のメールを送る」だけ。</div>
+    <ol>
+      <li><b>朝（4:30-7:30）</b>：調査士。答練の点数だけが距離計。ボードを見に来ない</li>
+      <li><b>日中に1本だけ</b>：滞留している下書きを1通送る（今日は辻堂＝8/14の振込期日が最優先）</li>
+      <li><b>夜（21時）</b>：翌日の「1本」を決めて閉じる</li>
+    </ol>
+  </div>
+  <div class="two" style="margin-top:10px">
+    <div>
+      <b>週次でだけ見る（月曜）</b>
+      <ul>
+        <li>答練の点数・順位を記録（これ以外に進捗の測り方はない）</li>
+        <li>REINS巡回の output/ に新着があるか</li>
+        <li>入金・請求の抜けがないか</li>
+      </ul>
+    </div>
+    <div>
+      <b>月次でだけ見る（月初）</b>
+      <ul>
+        <li>保証協会Excelを更新（借入余力＝次に買える大きさ）</li>
+        <li>取引金融機関の数（4行→7行への進捗）</li>
+        <li>このボードの①KPIを書き換える</li>
+      </ul>
+    </div>
+  </div>
+  <div class="note"><b>この⑤が全体マップの意味：</b>①〜④は「森」で、⑤が「今日の一歩」。<b>森を見るのは週1回・月1回だけでよく、それ以外の日は⑤だけを見る。</b>先を行く先輩の数字を毎日眺めると、焦りが判断を狂わせる（Dr.不動産いわく黎明期の精神面＝不安・強欲・他責）。数字は月初にだけ確認する。</div>
+
+  <div class="danger"><b>⚠️出口設計の重要訂正（2026-08-11確定）：</b>相続土地国庫帰属制度は<b>「相続・遺贈で取得した個人」しか申請できない</b>ため、法人が売買で仕入れた土地を国庫に返す出口には<b>使えない</b>。国庫帰属は出口ではなく<b>仕入れ側の武器</b>——①国庫帰属を検討中の地主への「負担金(原則20万円〜)+α で私が買います」という価格アンカー ②国に却下された土地(建物あり・境界未定等)の救済買取——として使う。出口はあくまで保有か再販の二枚。<b>だからこそ「本当に出口まで持てる土地しか買わない」玉川式(土地値)フィルタが生命線</b>。</div>
+
+  <h2>⑥ スキーム全体図（川の流れ）</h2>
+  <div class="river">
+    <div class="step"><b>1. 源流情報</b>調査士業務で境界・相続・所有者不明の「困った土地」に最初に接触。公開情報(公図・登記)の読解力でも先行</div>
+    <div class="step"><b>2. 目利き</b>玉川式=土地値で買える物件のみ。境界・地盤・接道のリスクを自分で査定(競合は査定できない)</div>
+    <div class="step"><b>3. 仕入れ</b>宅建法人(叔父の別法人 or KHD系新法人)で買取。調査士報酬と仕入れ利益は法人分離</div>
+    <div class="step"><b>4. 商品化</b>測量と並行して地盤調査・境界確定・分筆/地積更正・越境是正。「登記が1cmも狂わない」商品に磨く</div>
+    <div class="step exit"><b>5a. 出口A=保有</b>賃貸で法人の非課税売上に積む(免税天井を食わない)。<b>277高松がその1号</b></div>
+    <div class="step exit"><b>5b. 出口B=再販</b>境界確定済み・地盤データ付きの「綺麗な土地」として高値転売</div>
+  </div>
+
+  <h2>⑦ 競合分析 — なぜこのポジションが空いているか</h2>
+  <div class="tblwrap">
+  <table>
+    <tr><th>競合</th><th>強み</th><th>弱み（＝俺の付け入る隙）</th></tr>
+    <tr><td class="who">一般の買取再販業者</td><td>資金力・広告力・回転速度</td><td>境界未確定・地盤不明・再建築不可などの「訳あり」は<b>外注コストとリスクが読めず買えない or 2〜3割買い叩く</b>。その値引き分がそのまま俺の粗利になる</td></tr>
+    <tr><td class="who">既存の調査士（平均年齢高）</td><td>地元の信頼・役所人脈</td><td>大半は<b>受託業務のみで自ら買わない</b>(宅建側の出口を持たない)。若手が少なく、テック(ドローン・3Dスキャナ)も未導入が多い</td></tr>
+    <tr><td class="who">調査士×宅建の兼業者</td><td>俺と同じ構造を持つ唯一の直接競合</td><td>絶対数が少ない。かつ出口(保有できるBS)まで持つ者はさらに少ない——<b>ここで勝負が決まるのは資格でなく「出口まで持てる財務」</b>=第5〜9期の純資産戦略と直結</td></tr>
+    <tr><td class="who">松本大介氏(師匠・ベンチマーク)</td><td>11資格・新築マンション表題1棟1,000万・太客×反復モデル</td><td>弱みではなく<b>別モデル</b>。松本=受託の最大化(フロー)、俺=仕入れ~保有(ストック)。TTPすべきは「1太客×反復」のグリップ術で、モデル自体は競合しない</td></tr>
+  </table>
+  </div>
+
+  <h2>⑧ 試験勉強中に意識して学ぶこと（科目→実務転写マップ）</h2>
+  <p class="muted">新しい勉強は増やさない。今の過去問・答練を解くとき「この論点は将来どの局面で使うか」のタグを頭の中で貼るだけ。勉強がそのまま事業の仕込みになる。</p>
+  <div class="tblwrap">
+  <table>
+    <tr><th>試験科目・論点</th><th>実務での使い所（仕込み視点）</th></tr>
+    <tr><td class="who">筆界特定制度・境界確定</td><td><b>仕入れの最強武器</b>。境界不明で買い叩かれる土地を安く仕入れ→確定させて商品化。「相手方不在でも確定できる」制度の要件を本番レベルで頭に入れる</td></tr>
+    <tr><td class="who">分筆・地積更正（準則72条）</td><td><b>商品化の型</b>。「スピードの72条、安心の更正」——再販時は更正込み(登記簿が実測と一致=セールスポイント)、自社保有なら72条で速く</td></tr>
+    <tr><td class="who">民法（相続・共有・時効取得）</td><td><b>大相続時代の仕入れ源</b>。相続人多数・共有解消・遺産分割が絡む土地は競合が避ける=安い。相続登記義務化後の「困った相続人」が最初に相談する相手になる</td></tr>
+    <tr><td class="who">合筆・合体・区分建物</td><td><b>出口設計</b>。隣地を併せて一体商品化(合筆)、逆に切り売り(分筆)。区画割の巧拙が再販価格に直結</td></tr>
+    <tr><td class="who">表題部所有者不明・所有者不明土地管理</td><td><b>未公開物件の掘り起こし</b>。市場に出ない土地を「特定」して直接買付け。管理人制度は自己取引禁止=管理人は別士業に依頼する設計まで含めて理解</td></tr>
+    <tr><td class="who">調査士法（倫理・懲戒）</td><td><b>スキームの安全弁</b>。利益相反・守秘義務の懲戒ラインを本番知識として正確に持つ=攻められる範囲が正確に分かる</td></tr>
+    <tr><td class="who">記述（作図・計算）</td><td>現地測量→地盤調査を並行させる段取り力の基礎。「実態把握→計算→申請書→作図」の流れは仕入れDDの流れと同型</td></tr>
+  </table>
+  </div>
+
+  <h2>⑨ タイムライン（第5〜9期戦略と統合）</h2>
+  <div class="tblwrap">
+  <table>
+    <tr><th>期間</th><th>フェーズ</th><th>やること</th></tr>
+    <tr class="me"><td class="who">2026/8</td><td class="role">▶ 高松 決済</td><td><b>8/14 金消契約 → 8/31 決済・引渡し → 9/30 初回返済。</b>生協への振込先変更を8月中旬までに完了（9月分の賃料を取りこぼさない）。ここを無事に閉じることが今月の最大の仕事</td></tr>
+    <tr><td class="who">〜2026/10/18</td><td class="role">試験一本</td><td>スキームの新規作業は<b>一切しない</b>(集中モード)。⑧の転写タグを貼りながら勉強するだけ。答練で測定を続ける</td></tr>
+    <tr><td class="who">2026/11〜2027/3</td><td class="role">仕込み</td><td>合格発表→調査士登録準備。叔父と「宅建法人の器」を1回だけ相談。<b>保証協会の初回取引をここで作る</b>（ちばマン型の第一歩）</td></tr>
+    <tr><td class="who">2027/4〜</td><td class="role">修行×源流接続</td><td>調査士事務所勤務(月給30万+実務経験)。受託業務の中で「困った土地」の流れを観察=源流情報の水脈を特定する</td></tr>
+    <tr><td class="who">2028/2〜(第7期)</td><td class="role">呼び水発動</td><td>岩手空き家買取再販法人1号(玉川式土地値限定)。岩手では兄貴夫婦のカメラ買取と相互送客＝<a href="https://claude.ai/code/artifact/b134c945-53ea-406d-87d5-32bdf4e78251">家族連携ボード⑦</a>参照</td></tr>
+    <tr><td class="who">第8〜9期</td><td class="role">完成形</td><td>法人=医療×賃貸(純資産1,500万)/個人=調査士本業。仕入れ→商品化→保有or再販の川が回り出す</td></tr>
+  </table>
+  </div>
+
+  <h2>⑩ コンプライアンス3原則（スキームの生命線）</h2>
+  <ul>
+    <li><b>市場価格基準で買う</b>——調査士として作る評価・報告を自社買取に有利に歪めた瞬間、懲戒＋信頼死。買うなら客観的市場価格(鑑定等)基準</li>
+    <li><b>説明の切り分け</b>——依頼者には複数の選択肢(他社売却・国庫帰属申請等)を示した上で、宅建法人としての買取提案は別建てで行う</li>
+    <li><b>法人分離</b>——測量報酬(調査士個人)と仕入れ利益(宅建法人)は経理・契約とも完全分離。管理人等に就任した物件は自己取引禁止</li>
+  </ul>
+  <div class="note"><b>越えてはいけない一線：</b>他人から受注した調査士業務で知った<b>非公開情報</b>(売却意向等)を、依頼者の同意なく自分・関係会社の買付けに転用すること。公開情報(公図・登記)を誰より速く読むのは純粋なスキル優位でOK。</div>
+
+  <h2>⑪ 松本メソッド 要点（試験期間中はこれだけ・改造禁止）</h2>
+  <div class="method">
+    <div class="m-card"><b>1. 5周目まで線を引かない</b>理解が紐づくまでマーキング禁止。仕組みより回転。</div>
+    <div class="m-card"><b>2. ×だけ管理・○3回で卒業</b>どうしても間違う問題だけ管理し、○3回で二度と解かない。</div>
+    <div class="m-card"><b>3. 出題者と対話する</b>「捨て問」の評判は他人の敗因の集計。要求を順に処理すれば素直に解ける。</div>
+    <div class="m-card"><b>4. 型を素直にTTP・測定は答練のみ</b>自己流を挟まない。効果測定は答練の点数・順位だけ。</div>
+  </div>
+
+  <h2>⑫ 人物マップ</h2>
+  <div class="tblwrap">
+  <table>
+    <tr><th>誰</th><th>立場</th><th>要点</th><th>次の一手</th></tr>
+    <tr><td class="who">千葉ちばマン<br>(山崎次郎)</td><td class="role">融資の型のTTP対象<br>＜新規＞</td><td>56歳・年収200万円台・癌経験から40本＋新築13棟。<b>公庫と信用保証協会で取引行を10行まで増やす</b>のが型。「口座有り＆取引有り」「PLAN-A/B/C」「初回は100万でも借りる」。保証協会Excelの配布元</td><td>8/22の勉強会2.0を視野。まずは配布Excelで自社の枠を測る <span class="chip todo">未</span></td></tr>
+    <tr><td class="who">医者大家T<br>(Dr.不動産)</td><td class="role">思想のTTP対象<br>＜新規＞</td><td>35歳・放射線科医。2年2ヶ月で7室→567室・賃収3.35億・27行。<b>富＝レバレッジ＋資本回転率</b>／<b>融資をコントロールして買う</b>／金融機関オリエンテッド(各行が好む物件を買う)</td><td>段階マップを距離計として使う。会への入会は試験後に判断 <span class="chip wait">保留</span></td></tr>
+    <tr><td class="who">松本大介氏</td><td class="role">師匠・勉強法TTP</td><td>司法書士法人ネクストリーガル。11資格。新築マンション表題1棟1,000万。勉強法と「1太客×反復」のTTP元</td><td>お礼メール(3文・問いで終える)→合格後に改めて挨拶 <span class="chip todo">未</span></td></tr>
+    <tr><td class="who">りょーさん(@ryofeat)</td><td class="role">ライバル・情報源</td><td>29歳・情報強者。差の正体は才能でなく「答練で測定しているか」と気づかせてくれた</td><td>御礼LINE(勝負心は書かない・短文) <span class="chip todo">未</span></td></tr>
+    <tr><td class="who">福井社長(TAW)</td><td class="role">実務の師・案件の川上</td><td>宅建の実務・医療テナント・NPO案件の発注元。辻堂の出口も共同で持つ</td><td>辻堂の売却方策を返信（8/14期日） <span class="chip todo">下書き済</span></td></tr>
+    <tr><td class="who">岩手銀行 西原様</td><td class="role">1行目のメインバンク</td><td>高松4,320万の稟議を通してくれた担当。<b>ここが「取引有り」の1行目</b>。今後の実績づくりの起点</td><td>金消契約8/14。火災保険の相見積り依頼が7/29から未返信 <span class="chip wait">催促</span></td></tr>
+  </table>
+  </div>
+
+  <h2>⑬ 次の一手</h2>
+  <div class="two">
+    <div>
+      <b>今月（8月・高松を閉じる）</b>
+      <ul>
+        <li>8/14 金消契約 → 8/31 決済（最優先）</li>
+        <li>生協の振込先変更を8月中旬までに（9月賃料の取りこぼし防止）</li>
+        <li>辻堂の出口方策を福井さんへ返信（8/14が延長金の振込期日）</li>
+        <li>保証協会Excelに第4期の5数値を入れて<b>いま借りられる枠を知る</b></li>
+      </ul>
+    </div>
+    <div>
+      <b>試験まで（〜10/18）</b>
+      <ul>
+        <li>⑤の「今日これだけ」だけを見る。①〜④は月初のみ</li>
+        <li>スキームの新規作業ゼロ。答練の点数だけ記録</li>
+        <li>松本氏お礼メール・りょーさん御礼LINE（未のまま残っていれば早めに）</li>
+        <li>REINS巡回は「動く状態にして放置」。改良は試験後</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>⑭ 参照</h2>
+  <div class="tblwrap">
+  <table>
+    <tr><th>資料</th><th>場所</th></tr>
+    <tr><td><b>関東大家祭り2026 セミナー資料一式</b>（ちばマン／医者大家T／MJ ほか）</td><td class="muted"><a href="https://drive.google.com/drive/folders/1YIzfzOn-xgTGtV7xIycmAiDiVxxzfbHu">Driveフォルダ</a></td></tr>
+    <tr><td>千葉ちばマン「低属性大家の規模拡大戦略 Ver1.2」</td><td class="muted"><a href="https://drive.google.com/file/d/16VF5rfXjWpgKnBwre13BdCELGTRgNz8j/view">PDF</a></td></tr>
+    <tr><td>医者大家T「令和の融資情勢を踏まえた属性別拡大法の考察」</td><td class="muted"><a href="https://drive.google.com/file/d/1AI-tg6PPfEx9w73mEpN0xR6CEnqshyU2/view">PDF</a></td></tr>
+    <tr><td>信用保証協会 借入余力 試算EXCEL（<b>KHD版・判定式つき</b>）</td><td class="muted">リポジトリ `保証協会_翌期借入余力_KHD版.xlsx`／原本は<a href="https://drive.google.com/file/d/1fzhnJxLcUDG9YRrpkhholaVgaeoP0FiH/view">ちばマン配布版</a></td></tr>
+    <tr><td>277 高松二丁目 進捗まとめ（決済までの残務）</td><td class="muted"><a href="https://claude.ai/code/artifact/30b241bc-8c84-4d01-8d53-6e9f047b994c">ボード</a></td></tr>
+    <tr><td>仕入営業 自動化ボード（REINS巡回・車両・EC／社内限り）</td><td class="muted"><a href="https://claude.ai/code/artifact/7730f1a7-abf4-40aa-b203-306ed5979837">ボード</a></td></tr>
+    <tr><td>04_調査士スキーム ドキュメント</td><td class="muted">Google Doc: 1Jh6ptzoEvwVibOHDJNxoh1wZ9O3caUZ6Rg1djXOcyAM</td></tr>
+    <tr><td>KHD財務逆算設計 第5〜9期</td><td class="muted">スプシ17rsdZK 14タブ ／ 現在地ボード.md冒頭</td></tr>
+    <tr><td>松本大介TTP分析＋首席逆算 xlsx(6シート)</td><td class="muted">260724_松本大介TTP_資格覇者分析と首席逆算_v1.xlsx</td></tr>
+    <tr><td>北彩楽農 農地PJ（実地の練習台）</td><td class="muted"><a href="https://claude.ai/code/artifact/5bf7f132-abb0-47a7-8e46-0034683d493e">ボード</a></td></tr>
+    <tr><td>04_KHD家族連携ボード（岩手カメラ買取シナジー）</td><td class="muted"><a href="https://claude.ai/code/artifact/b134c945-53ea-406d-87d5-32bdf4e78251">ボード</a></td></tr>
+    <tr><td>調査士 択一弱点索引ダッシュボード</td><td class="muted"><a href="https://claude.ai/code/artifact/20a3bb7f-9856-4cd5-a021-935aa108fc44">ダッシュボード</a></td></tr>
+  </table>
+  </div>
+
+  <div class="note"><b>運用ルール：</b>このボードは「勉強の意識づけ」と「試験後の設計図」の2役。試験期間中(〜10/18)にこのボードを理由にした新規作業・新規ツール開発は行わない(集中モードの釘)。<b>日々見るのは⑤だけ。①〜④の数字は月初に1回だけ書き換える。</b>更新は①KPI・答練の点数記録・フェーズ移行時のみ。</div>
+</div>

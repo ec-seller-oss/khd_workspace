@@ -1,0 +1,184 @@
+<title>仕入営業 自動化ボード</title>
+<style>
+  :root{
+    --bg:#f6f7f5; --paper:#ffffff; --ink:#20302c; --sub:#5f6f6a;
+    --accent:#0e6e5c; --accent-soft:#e3efeb; --line:#dce3e0;
+    --warn:#a34a00; --warn-soft:#faeedd; --done:#0e6e5c; --wait:#8a6d1f; --wait-soft:#f5eeda;
+    --todo:#a3311f; --todo-soft:#f8e3de;
+    --secret:#7a2a48; --secret-soft:#f6e2ea;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){ --bg:#131816; --paper:#1c2321; --ink:#e9edec; --sub:#9db0aa;
+      --accent:#4fbfa5; --accent-soft:#1e3630; --line:#33413d;
+      --warn:#e8a75a; --warn-soft:#3a2c1a; --done:#4fbfa5; --wait:#d6b95c; --wait-soft:#37301c;
+      --todo:#e8836a; --todo-soft:#3d241d;
+      --secret:#e087ab; --secret-soft:#3a2230; }
+  }
+  :root[data-theme="dark"]{ --bg:#131816; --paper:#1c2321; --ink:#e9edec; --sub:#9db0aa;
+      --accent:#4fbfa5; --accent-soft:#1e3630; --line:#33413d;
+      --warn:#e8a75a; --warn-soft:#3a2c1a; --done:#4fbfa5; --wait:#d6b95c; --wait-soft:#37301c;
+      --todo:#e8836a; --todo-soft:#3d241d;
+      --secret:#e087ab; --secret-soft:#3a2230; }
+  :root[data-theme="light"]{ --bg:#f6f7f5; --paper:#ffffff; --ink:#20302c; --sub:#5f6f6a;
+      --accent:#0e6e5c; --accent-soft:#e3efeb; --line:#dce3e0;
+      --warn:#a34a00; --warn-soft:#faeedd; --done:#0e6e5c; --wait:#8a6d1f; --wait-soft:#f5eeda;
+      --todo:#a3311f; --todo-soft:#f8e3de;
+      --secret:#7a2a48; --secret-soft:#f6e2ea; }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+    font-size:13.5px;line-height:1.6;padding:18px 12px 40px;font-variant-numeric:tabular-nums;}
+  .sheet{max-width:920px;margin:0 auto;background:var(--paper);border:1px solid var(--line);
+    border-radius:10px;padding:26px 28px 24px;}
+  header{border-bottom:2px solid var(--accent);padding-bottom:10px;margin-bottom:14px;}
+  .eyebrow{font-size:11px;letter-spacing:.14em;color:var(--accent);font-weight:700;}
+  h1{font-size:19px;margin:3px 0 4px;line-height:1.4;text-wrap:balance;}
+  .asof{font-size:12px;color:var(--sub);}
+  h2{font-size:14.5px;margin:20px 0 8px;padding-left:9px;border-left:4px solid var(--accent);}
+  .lead{background:var(--accent-soft);border-radius:8px;padding:10px 12px;font-size:13.5px;margin:0;}
+  .lead b{color:var(--accent);}
+  .secretbar{background:var(--secret-soft);border:1px solid var(--secret);border-radius:8px;
+    padding:9px 12px;font-size:12.5px;margin:10px 0 0;}
+  .secretbar b{color:var(--secret);}
+  .tblwrap{overflow-x:auto;}
+  table{border-collapse:collapse;width:100%;font-size:12.5px;}
+  th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top;}
+  th{background:var(--accent-soft);white-space:nowrap;font-size:11.5px;}
+  td.date{white-space:nowrap;font-weight:700;color:var(--accent);}
+  td.lane{white-space:nowrap;font-weight:700;}
+  .chip{display:inline-block;font-size:10.5px;font-weight:700;border-radius:4px;padding:1px 7px;white-space:nowrap;color:#fff;}
+  .chip.done{background:var(--done);}
+  .chip.wait{background:var(--wait);}
+  .chip.todo{background:var(--todo);}
+  .chip.off{background:var(--sub);}
+  ul{margin:4px 0;padding-left:1.4em;}
+  li{margin-bottom:4px;}
+  .note{background:var(--warn-soft);border-left:3px solid var(--warn);border-radius:0 8px 8px 0;
+    padding:8px 11px;font-size:12.5px;margin-top:10px;}
+  .note b{color:var(--warn);}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  @media(max-width:640px){.two{grid-template-columns:1fr;}}
+  .muted{color:var(--sub);font-size:12px;}
+  .flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12.5px;margin:6px 0 2px;}
+  .flow .st{background:var(--accent-soft);border:1px solid var(--line);border-radius:6px;
+    padding:5px 10px;font-weight:700;color:var(--accent);white-space:nowrap;}
+  .flow .ar{color:var(--sub);}
+</style>
+
+<div class="sheet">
+  <header>
+    <div class="eyebrow">05_物件調達 ほか ｜ 仕入営業の自動化 ｜ 社内専用</div>
+    <h1>仕入営業 自動化ボード — 巡回・抽出・判定を1つの型で回す（不動産／車両／EC）</h1>
+    <div class="asof">2026-08-13時点 ／ KIKUCHIホールディングス（担当：菊池研太）</div>
+  </header>
+
+  <p class="lead"><b>現在地：</b>REINS巡回ツールを受領し、導入前の3確認（規約リスク引受・自社ID・東日本レインズ）が<b>8/13クリア</b>。次は母艦Macで <code>setup_khd.sh</code> → ログイン確認 → 保存済み検索3本 → cron1日2回。既存資産（landscanner／マイソクPDF抽出／EC価格監視）と束ね、<b>「巡回→抽出→判定→通知→人が当たる」の同じ型</b>を不動産・車両・ECの3事業に展開する。弾込め側は保証協会Excel（借入余力）で「いくらまで仕入れられるか」を並走管理。</p>
+
+  <div class="secretbar"><b>🔒 取扱注意：</b>本ボードと構築状況は<b>社内限り</b>。伊東さん・福井さん・ゆーしを含む社外・メンバーには<b>存在も進捗も共有しない</b>（会話・メール・LINE・共有Driveに書かない）。ツール名や巡回の存在を出さず、成果は「手動で見つけた物件」として扱う。</div>
+
+  <h2>① 共通の型（すべての仕入をこの5段で管理）</h2>
+  <div class="flow">
+    <span class="st">1 巡回</span><span class="ar">→</span>
+    <span class="st">2 抽出（構造化）</span><span class="ar">→</span>
+    <span class="st">3 判定（基準に当てる）</span><span class="ar">→</span>
+    <span class="st">4 通知</span><span class="ar">→</span>
+    <span class="st">5 人が当たる（指値・入札・発注）</span>
+  </div>
+  <p class="muted">自動化するのは1〜4まで。5は必ず人（菊池）。判定基準は各レーンの「基準」列が正で、変えたらこのボードも更新する。</p>
+
+  <h2>② 事業レーン一覧（どこまで自動化できているか）</h2>
+  <div class="tblwrap">
+  <table>
+    <tr><th>レーン</th><th>1 巡回</th><th>2 抽出</th><th>3 判定</th><th>4 通知</th><th>基準（3の中身）</th></tr>
+    <tr>
+      <td class="lane">🏠 不動産（業者間）</td>
+      <td><span class="chip wait">導入中</span><br>REINS巡回（新ツール）</td>
+      <td><span class="chip done">実装済</span><br>図面PDF→JSON（ツール内蔵）</td>
+      <td><span class="chip todo">未接続</span><br>property_intake→screener</td>
+      <td><span class="chip wait">要自前化</span><br>メール通知（送信CLI未整備）</td>
+      <td>案件別の保存済み検索3本（内科／三ツ境NPO／新さん）＋指値余地</td>
+    </tr>
+    <tr>
+      <td class="lane">🏠 不動産（公開市場）</td>
+      <td><span class="chip wait">休眠</span><br>landscanner（SUUMO/athome）</td>
+      <td><span class="chip done">実装済</span></td>
+      <td><span class="chip done">実装済</span><br>利回り計算（calculator）</td>
+      <td><span class="chip done">実装済</span><br>メール通知（notifier）</td>
+      <td>土地値・積算・利回り（SALT式AI査定TTPの流れ）</td>
+    </tr>
+    <tr>
+      <td class="lane">🚗 車両（入札）</td>
+      <td><span class="chip todo">未着手</span><br>官公庁オークション巡回</td>
+      <td><span class="chip todo">未着手</span></td>
+      <td><span class="chip wait">手動で進行中</span><br>ランクル1件目で基準づくり</td>
+      <td>—</td>
+      <td>落札相場−（陸送＋整備＋名変）−粗利目標 ＝ 上限入札額</td>
+    </tr>
+    <tr>
+      <td class="lane">📦 EC・せどり</td>
+      <td><span class="chip done">実装済</span><br>ec_price_monitor（Amazon価格）</td>
+      <td><span class="chip done">実装済</span><br>DB＋price_log</td>
+      <td><span class="chip done">実装済</span><br>利益率閾値→Wing価格自動更新</td>
+      <td><span class="chip done">実装済</span><br>LINE通知（異常時緊急）</td>
+      <td>margin_pct＝(純収入−原価)/純収入。仕入側はASIN蓄積5,355件が原資</td>
+    </tr>
+  </table>
+  </div>
+  <p class="muted">「実装済」＝コードが存在する状態。稼働中かどうかは③〜⑤の各レーン詳細が正。</p>
+
+  <h2>③ 🏠 不動産レーン詳細（今週の主戦場）</h2>
+  <div class="tblwrap">
+  <table>
+    <tr><th>状態</th><th>項目</th><th>内容</th><th>期限</th></tr>
+    <tr><td><span class="chip done">8/13クリア</span></td><td>導入前3確認</td><td>①規約リスク引受OK ②自社名義ID（a0303•••••21）で運用 ③東日本レインズ＝提供元と同一機構でセレクタ流用見込み</td><td class="date">済</td></tr>
+    <tr><td><span class="chip todo">次</span></td><td>母艦セットアップ</td><td><code>bash reins_patrol/setup_khd.sh</code>（Drive同期フォルダからコピー→KHDパッチ→venv）→ <code>--headed</code> でログイン確認だけ</td><td class="date">帰省前 or 休み明け</td></tr>
+    <tr><td><span class="chip todo">未着手</span></td><td>保存済み検索3本</td><td>REINS画面で作成：KHD01 内科（横浜線・田都 165㎡↑EV）／KHD02 三ツ境NPO（旭・瀬谷 売事業用 空家 延198㎡↑）／KHD03 新さん（墨田区 戸建 〜6,500万）</td><td class="date">セットアップ後</td></tr>
+    <tr><td><span class="chip todo">未着手</span></td><td>cron開始</td><td>動作確認が全部通ってから<b>1日2回</b>（10時台・18時台＋揺らぎ）。増やさない</td><td class="date">検証後</td></tr>
+    <tr><td><span class="chip wait">要自前化</span></td><td>通知の出口</td><td>提供元の私物送信CLIは使えない（パッチで無効化済み）。当面は output/ を朝のwinq.shで目視 → 後日Gmail送信を自前実装</td><td class="date">後日</td></tr>
+    <tr><td><span class="chip wait">休眠→再起動判断</span></td><td>landscanner</td><td>SUUMO/athome巡回＋利回り判定＋メール通知が一式ある自社製。REINS側が回り始めたら、公開市場の網として再稼働するか判断</td><td class="date">8月下旬</td></tr>
+    <tr><td><span class="chip wait">並走</span></td><td>弾込め（借入余力）</td><td>保証協会Excel（KHD版）に第4期決算書の5数値を記入→⑥翌期の枠を確定。役員借入金の額が結果を左右</td><td class="date">8/13</td></tr>
+  </table>
+  </div>
+
+  <h2>④ 🚗 車両レーン詳細（1件目で基準を作る）</h2>
+  <div class="tblwrap">
+  <table>
+    <tr><th>状態</th><th>項目</th><th>内容</th><th>期限</th></tr>
+    <tr><td><span class="chip wait">予定</span></td><td>ランクル現物確認</td><td>水道企業団入札の出品車両。現物確認して入札可否と上限額を決める</td><td class="date">8/20</td></tr>
+    <tr><td><span class="chip wait">宛先待ち</span></td><td>見積依頼4通</td><td>査定・陸送・整備の依頼雛形は作成済み（Gmail下書き）。現物確認後に宛先を確定して送付</td><td class="date">8/20後</td></tr>
+    <tr><td><span class="chip todo">未着手</span></td><td>入札情報の巡回化</td><td>KSI官公庁オークション等の巡回→車種・年式・入札締切の抽出。<b>ランクル1件目の実績から「上限入札額の式」を固めてから</b>着手（型：落札相場−経費−粗利目標）</td><td class="date">9月</td></tr>
+  </table>
+  </div>
+
+  <h2>⑤ 📦 EC・せどりレーン詳細（動く資産はあるが土台が停止中）</h2>
+  <div class="tblwrap">
+  <table>
+    <tr><th>状態</th><th>項目</th><th>内容</th><th>期限</th></tr>
+    <tr><td><span class="chip done">実装済</span></td><td>価格監視→自動値付け</td><td>ec_price_monitor.py：Amazon価格→利益率計算→Wing価格自動更新→price_log全記録→LINE通知。仕入判定の型として最も完成度が高い</td><td class="date">—</td></tr>
+    <tr><td><span class="chip wait">原資あり</span></td><td>仕入候補</td><td>ASIN蓄積5,355件（15ファイル）＋ec_frontier（DJI等300件リスト）。ここに同じ利益率判定を当てれば「仕入候補の自動抽出」になる</td><td class="date">—</td></tr>
+    <tr><td><span class="chip todo">ブロッカー</span></td><td>販路の土台</td><td>クーパン2垢（C01276519）が停止中＝自動化を当てる先が半分死んでいる。停止事由の全リスト開示要求（返信下書き済・8/13期限）が先</td><td class="date">8/13</td></tr>
+  </table>
+  </div>
+
+  <h2>⑥ 次の一手</h2>
+  <div class="two">
+    <div>
+      <b>今週（帰省まで）</b>
+      <ul>
+        <li>クーパン2垢へ返信（8/13期限・ECレーンの土台）</li>
+        <li>保証協会Excelに第4期の5数値を記入→仕入予算を確定</li>
+        <li>可能なら母艦で setup_khd.sh＋<code>--headed</code> ログイン確認まで</li>
+      </ul>
+    </div>
+    <div>
+      <b>休み明け（8/17〜）</b>
+      <ul>
+        <li>保存済み検索3本を作成→巡回テスト→cron1日2回</li>
+        <li>8/20 ランクル現物確認→見積4通送付→上限入札額の式を固定</li>
+        <li>landscanner再稼働の判断／ASIN5,355件に利益率判定を適用</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="note"><b>最重要リスク：</b>①REINS自動アクセスは規約違反＝<b>業者ID停止リスクを承知の上での運用</b>（8/13同意済）。検知回避の小細工は足さず、回数を抑える（1日2回）。②<b>秘匿の徹底</b>——構築状況が漏れた時点で①のリスクが跳ね上がる。共有Drive・メール・LINEに書かない、このボードも社内限り。③自動化はあくまで1〜4段まで。<b>買う判断（5段目）を自動化しない</b>。</div>
+</div>

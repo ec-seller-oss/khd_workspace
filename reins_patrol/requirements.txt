@@ -1,0 +1,4 @@
+# KHD REINS巡回（自社実装）の依存。バージョンは動作確認済みの下限で固定。
+playwright>=1.44
+pdfplumber>=0.11
+python-dotenv>=1.0

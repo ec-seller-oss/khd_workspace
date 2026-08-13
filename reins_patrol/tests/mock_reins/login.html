@@ -1,0 +1,20 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><title>レインズ ログイン</title></head>
+<body>
+<h1>不動産流通標準情報システム</h1>
+<form id="f">
+  <label>ユーザーID <input type="text" name="userId"></label><br>
+  <label>パスワード <input type="password" name="password"></label><br>
+  <label id="agree"><input type="checkbox" id="cb"> 当社は不動産流通機構のガイドラインを遵守します</label><br>
+  <button type="button" id="go">ログイン</button>
+</form>
+<script>
+document.getElementById('go').addEventListener('click', () => {
+  const u = document.querySelector("input[name=userId]").value;
+  const p = document.querySelector("input[type=password]").value;
+  const c = document.getElementById('cb').checked;
+  if (!u || !p) { document.body.innerHTML = '<h1>認証エラー</h1>'; return; }
+  if (!c) { document.body.innerHTML = '<h1>ガイドライン未同意</h1>'; return; }
+  location.href = 'menu.html';
+});
+</script>
+</body></html>

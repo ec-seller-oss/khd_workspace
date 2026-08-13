@@ -1,0 +1,7 @@
+# 実IDと取得データは絶対にコミットしない
+.env
+downloads/
+output/
+logs/
+state/
+.venv/

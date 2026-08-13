@@ -1,0 +1,3 @@
+# テスト実行時に生成されるもの
+.venv-test/
+mock_reins/*.pdf

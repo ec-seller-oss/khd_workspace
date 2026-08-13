@@ -1,0 +1,36 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><title>検索結果</title></head>
+<body>
+<h1>検索結果</h1>
+<div id="tabs">
+  <span class="tab" data-i="0">売外全（2件）</span>
+  <span class="tab" data-i="1">売外一（1件）</span>
+</div>
+<div id="panel"></div>
+<script>
+const N = [2, 1];
+function render(i) {
+  const p = document.getElementById('panel');
+  p.innerHTML = '<p>タブ' + i + ' / ' + N[i] + '件</p>' +
+    '<button type="button" id="all">ページ内全選択</button>' +
+    '<button type="button" id="zumen" disabled>図面一括取得</button>' +
+    '<div id="dlarea"></div>';
+  document.getElementById('all').onclick = () => {
+    document.getElementById('zumen').disabled = false;
+  };
+  document.getElementById('zumen').onclick = () => {
+    document.getElementById('dlarea').innerHTML =
+      '<button type="button" id="batch">一括取得</button>';
+    document.getElementById('batch').onclick = () => {
+      const a = document.createElement('a');
+      a.href = 'zumen_tab' + i + '.pdf';
+      a.download = 'zmn_list_tab' + i + '.pdf';
+      document.body.appendChild(a);
+      a.click();
+    };
+  };
+}
+document.querySelectorAll('.tab').forEach(t =>
+  t.addEventListener('click', () => render(+t.dataset.i)));
+render(0);
+</script>
+</body></html>

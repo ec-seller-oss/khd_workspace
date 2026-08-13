@@ -1,0 +1,33 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><title>売買物件検索</title></head>
+<body>
+<h1>売買物件検索</h1>
+<a href="#" id="expand">検索条件を表示</a>
+<div id="cond" style="display:none">
+  <label>保存済み検索
+    <select id="saved">
+      <option value=""></option>
+      <option>KHD01:横浜線・田都 貸店舗事務所165㎡↑EV</option>
+      <option>KHD02:旭区瀬谷区 売事業用 空家 延198㎡↑</option>
+      <option>KHD03:墨田区 戸建 3LDK 〜6500万</option>
+    </select>
+  </label>
+  <button type="button" id="load">読込み</button>
+  <p id="loaded"></p>
+  <button type="button" id="search">検索</button>
+</div>
+<script>
+document.getElementById('expand').addEventListener('click', e => {
+  e.preventDefault(); document.getElementById('cond').style.display = 'block';
+});
+document.getElementById('load').addEventListener('click', () => {
+  const s = document.getElementById('saved');
+  if (!s.value) { alert('検索条件を選択してください'); return; }
+  if (!confirm('現在の条件を破棄して読み込みますか？')) return;
+  document.getElementById('loaded').textContent = '読込済: ' + s.value;
+});
+document.getElementById('search').addEventListener('click', () => {
+  if (!document.getElementById('loaded').textContent) { alert('先に読込んでください'); return; }
+  location.href = 'results.html';
+});
+</script>
+</body></html>

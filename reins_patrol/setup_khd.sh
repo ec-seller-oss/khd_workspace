@@ -48,13 +48,55 @@ cd "$DEST"
 [ -d .venv ] || python3 -m venv .venv
 ./.venv/bin/pip install -q --upgrade pip
 ./.venv/bin/pip install -q -r requirements.txt
-./.venv/bin/python -m playwright install chromium
+echo "✅ Pythonパッケージ導入完了"
+
+# Chromiumのダウンロードは回線・プロキシで落ちることがある。
+# ここで落ちてもvenvは出来ているので、スクリプト全体を止めない（再開点を案内する）。
+CHROMIUM_OK=1
+if ./.venv/bin/python -m playwright install chromium; then
+  echo "✅ Chromium 導入完了"
+else
+  CHROMIUM_OK=0
+  cat <<'WARN'
+
+⚠️ Chromiumのダウンロードに失敗しました（回線かプロキシの可能性）。
+   Pythonパッケージまでは出来ているので、回線を変えて次の1行だけ再実行すればOKです:
+       cd ~/reins-patrol && ./.venv/bin/python -m playwright install chromium
+WARN
+fi
+
+# 起動できるかまで確かめる（入っただけで動かないことがあるため）
+if [ "$CHROMIUM_OK" = "1" ]; then
+  if ./.venv/bin/python - <<'PY'
+from playwright.sync_api import sync_playwright
+with sync_playwright() as p:
+    b = p.chromium.launch(headless=True)
+    print("   Chromium起動確認:", b.version)
+    b.close()
+PY
+  then
+    echo "✅ 起動確認OK"
+  else
+    CHROMIUM_OK=0
+    echo "⚠️ Chromiumは入ったが起動しませんでした。上のエラーをそのままClaudeに貼ってください"
+  fi
+fi
+
+if [ "$CHROMIUM_OK" = "1" ]; then
+  echo ""
+  echo "───── 自己診断（REINSに一切アクセスしない）─────"
+  echo "  bash $SRC/tests/run_tests.sh"
+  echo "  ここが緑なら、母艦の環境は正しく組めています"
+fi
+
+echo ""
+echo "==================================================================="
+echo "セットアップ完了。次は必ずこの順で、1つずつ。まとめて流さない。"
+echo ""
+[ "$CHROMIUM_OK" = "1" ] || \
+  echo "  0. ⚠️ まずChromiumを入れ直す（上の警告参照）。これが無いと動きません"
 
 cat <<EOS
-
-===================================================================
-セットアップ完了。次は必ずこの順で、1つずつ。まとめて流さない。
-
   1. REINSのWeb画面で「保存済み検索」を作る（条件設計が成果を決める）
   2. $DEST/.env に ID / PW / 検索の表示名を記入
      ※検索名は画面の表示をそのままコピペ（一字違うと止まる）

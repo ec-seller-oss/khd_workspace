@@ -46,6 +46,9 @@ USER_ID = os.environ.get("REINS_USER_ID", "")
 PASSWORD = os.environ.get("REINS_PASSWORD", "")
 SAVED_SEARCH = os.environ.get("SAVED_SEARCH_LABEL", "")
 NOTIFY_EMAIL = os.environ.get("NOTIFY_EMAIL", "").strip()
+# 通常は playwright 同梱のChromiumを使う。ダウンロードが回線で通らない等で
+# 別のChromiumを使いたい時だけ、絶対パスを PW_CHROMIUM に入れる。
+CHROMIUM_BIN = os.environ.get("PW_CHROMIUM", "").strip()
 
 LOGIN_URL = "https://system.reins.jp/login/main/KG/GKG001200"
 
@@ -397,13 +400,31 @@ def main() -> int:
     if not SAVED_SEARCH:
         log("❌ .env に SAVED_SEARCH_LABEL がありません")
         return 1
+    # 雛形の説明文が残ったまま実行されると、そのままREINSにログインを試みてしまう。
+    # 失敗ログインは検知されたくないので、ここで止める。
+    for name, val in (("REINS_USER_ID", USER_ID), ("REINS_PASSWORD", PASSWORD)):
+        if val.startswith("（") or val.startswith("("):
+            log(f"❌ .env の {name} が雛形のままです（値: {val}）")
+            log("   → 実際のIDとパスワードに書き換えてください")
+            return 1
     if in_maintenance() and not args.headed:
         log("REINSメンテナンス時間帯(23:00-7:00) → スキップ")
         return 5
 
     log(f"=== REINS巡回 開始 / 検索: {SAVED_SEARCH} ===")
     with sync_playwright() as pw:
-        browser = pw.chromium.launch(headless=not args.headed, args=LAUNCH_ARGS)
+        launch_kw = {"headless": not args.headed, "args": LAUNCH_ARGS}
+        if CHROMIUM_BIN:
+            launch_kw["executable_path"] = CHROMIUM_BIN
+            log(f"    Chromium: {CHROMIUM_BIN}")
+        try:
+            browser = pw.chromium.launch(**launch_kw)
+        except Exception as e:
+            log(f"❌ Chromiumを起動できません: {e}".split("\n")[0])
+            log("   → 母艦で次を実行して入れ直してください:")
+            log("      cd ~/reins-patrol && ./.venv/bin/python -m playwright install chromium")
+            log("   → 別の場所のChromiumを使うなら PW_CHROMIUM に絶対パスを指定")
+            return 1
         ctx = browser.new_context(user_agent=UA, locale="ja-JP",
                                   viewport={"width": 1440, "height": 900},
                                   accept_downloads=True)

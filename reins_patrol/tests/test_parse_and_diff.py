@@ -117,5 +117,28 @@ for h, want in [(23, True), (2, True), (6, True), (7, False), (10, False), (22, 
 patrol.datetime = real
 print("[7] in_maintenance 23-7時判定 ✅" if fail == 0 else "[7] 判定に失敗あり")
 
+# --- 8) .env のガード（別プロセスで起動して終了コードを見る） ---
+import subprocess
+def run_with_env(env_body):
+    (work / ".env").write_text(env_body, encoding="utf-8")
+    return subprocess.run([sys.executable, str(work / "patrol.py"), "--dry-run"],
+                          capture_output=True, text=True, timeout=120)
+
+CASES = [
+    ("IDもPWも無い", "SAVED_SEARCH_LABEL=X\n", "REINS_USER_ID / REINS_PASSWORD がありません"),
+    ("保存済み検索名が無い", "REINS_USER_ID=a1\nREINS_PASSWORD=p\n", "SAVED_SEARCH_LABEL がありません"),
+    ("雛形の説明文が残っている",
+     "REINS_USER_ID=（自分がログイン権限を持つ業者ID）\nREINS_PASSWORD=p\nSAVED_SEARCH_LABEL=X\n",
+     "雛形のままです"),
+]
+print("\n[8] .envガード")
+for name, body, expect in CASES:
+    r = run_with_env(body)
+    ok = r.returncode == 1 and expect in r.stdout
+    print(f"   {'✅' if ok else '❌'} {name} → rc={r.returncode}")
+    if not ok:
+        print(f"      期待: {expect!r} / 実際: {r.stdout.strip()[:200]}")
+        fail += 1
+
 print("\n" + ("🎉 全テスト通過" if fail == 0 else f"❌ 失敗 {fail}件"))
 sys.exit(1 if fail else 0)

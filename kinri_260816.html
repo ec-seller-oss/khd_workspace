@@ -1,0 +1,343 @@
+<title>金利と商売 — 時間の値段が上がるとき</title>
+<style>
+:root{
+  --paper:#F0F3F7; --panel:#FFFFFF;
+  --sumi:#16283A; --sumi-2:#4A5F74; --sumi-3:#8296AB;
+  --ao:#2C6FA0; --ao-w:#DCE7F1;
+  --shu:#C2402D; --shu-w:#F7E4E0;
+  --rule:#C9D6E2; --rule-f:#E3EAF1;
+  --dead:#8296AB; --dead-w:#E7ECF1;
+  --f-min:"Hiragino Mincho ProN","Yu Mincho",YuMincho,"Noto Serif JP",serif;
+  --f-go:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",YuGothic,"Noto Sans JP",sans-serif;
+  --f-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root{--paper:#0C1A28;--panel:#122536;--sumi:#D8E4EE;--sumi-2:#9DB2C6;--sumi-3:#6C839A;
+    --ao:#6BB2DE;--ao-w:#1B354A;--shu:#E8735C;--shu-w:#3A1E19;--rule:#2A4459;--rule-f:#1B3245;
+    --dead:#6C839A;--dead-w:#1A2A38}
+}
+:root[data-theme="dark"]{--paper:#0C1A28;--panel:#122536;--sumi:#D8E4EE;--sumi-2:#9DB2C6;--sumi-3:#6C839A;
+  --ao:#6BB2DE;--ao-w:#1B354A;--shu:#E8735C;--shu-w:#3A1E19;--rule:#2A4459;--rule-f:#1B3245;
+  --dead:#6C839A;--dead-w:#1A2A38}
+:root[data-theme="light"]{--paper:#F0F3F7;--panel:#FFFFFF;--sumi:#16283A;--sumi-2:#4A5F74;--sumi-3:#8296AB;
+  --ao:#2C6FA0;--ao-w:#DCE7F1;--shu:#C2402D;--shu-w:#F7E4E0;--rule:#C9D6E2;--rule-f:#E3EAF1;
+  --dead:#8296AB;--dead-w:#E7ECF1}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--sumi);font-family:var(--f-go);
+  font-size:15px;line-height:1.85;-webkit-font-smoothing:antialiased;
+  font-variant-numeric:tabular-nums}
+.wrap{max-width:900px;margin:0 auto;padding:0 22px 96px}
+.sheet{border-left:1px solid var(--rule);padding-left:26px}
+@media (max-width:640px){.sheet{border-left:0;padding-left:0}}
+
+header{padding:64px 0 34px;border-bottom:2px solid var(--ao)}
+.eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;color:var(--ao);margin:0 0 20px}
+h1{font-family:var(--f-min);font-weight:600;font-size:clamp(27px,4.6vw,40px);
+  line-height:1.38;margin:0;text-wrap:balance}
+.sub{margin:18px 0 0;color:var(--sumi-2);max-width:62ch}
+
+.thesis{margin:34px 0 0;padding:26px 28px;background:var(--panel);
+  border:1px solid var(--rule);border-top:3px solid var(--shu)}
+.thesis .lbl{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.16em;color:var(--shu);margin:0 0 12px}
+.thesis p{margin:0;font-family:var(--f-min);font-size:clamp(18px,2.5vw,23px);
+  line-height:1.65;font-weight:600;text-wrap:balance}
+.thesis .why{margin:16px 0 0;font-family:var(--f-go);font-size:14px;font-weight:400;
+  color:var(--sumi-2);line-height:1.8}
+
+section{margin-top:64px}
+h2{font-family:var(--f-min);font-size:22px;font-weight:600;margin:0 0 6px;line-height:1.5;text-wrap:balance}
+h2 .n{font-family:var(--f-mono);font-size:12px;color:var(--ao);letter-spacing:.1em;
+  margin-right:12px;font-weight:400;vertical-align:.18em}
+.lead{margin:0 0 26px;color:var(--sumi-2);font-size:14.5px;max-width:64ch;
+  padding-bottom:18px;border-bottom:1px solid var(--rule-f)}
+h3{font-size:15px;font-weight:600;margin:34px 0 10px}
+p{margin:0 0 16px;max-width:66ch}
+em{font-style:normal;color:var(--shu);font-weight:600}
+a{color:var(--ao)}
+a:focus-visible{outline:2px solid var(--shu);outline-offset:3px}
+
+.tw{overflow-x:auto;margin:0 0 20px;border:1px solid var(--rule);background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:13.5px}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--rule-f);vertical-align:top;line-height:1.7}
+thead th{background:var(--ao-w);font-weight:600;font-size:12px;border-bottom:1px solid var(--rule);white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}
+td.num,th.num{font-family:var(--f-mono);text-align:right;white-space:nowrap}
+td.k{font-weight:600;white-space:nowrap}
+tr.hi td{background:var(--shu-w)}
+.no{color:var(--sumi-3)}
+.yes{color:var(--shu);font-weight:600}
+
+ul.plain{margin:0 0 18px;padding:0;list-style:none}
+ul.plain li{position:relative;padding-left:20px;margin-bottom:9px;max-width:66ch}
+ul.plain li::before{content:"";position:absolute;left:2px;top:.72em;width:7px;height:1px;background:var(--ao)}
+
+figure{margin:26px 0;padding:22px;background:var(--panel);border:1px solid var(--rule);overflow-x:auto}
+figure svg{display:block;width:100%;height:auto;min-width:560px}
+figcaption{margin-top:16px;font-size:12.5px;color:var(--sumi-3);line-height:1.75;max-width:72ch}
+.dg{font-family:var(--f-go);font-size:12px}
+.dg text{fill:var(--sumi)}
+.t-shu{fill:var(--shu)} .t-ao{fill:var(--ao)} .t-mut{fill:var(--sumi-3);font-size:10.5px}
+.bx-hot{fill:var(--shu-w);stroke:var(--shu)}
+.bx-mid{fill:var(--ao-w);stroke:var(--ao)}
+.bx-cool{fill:var(--dead-w);stroke:var(--dead)}
+.ln{stroke:var(--sumi-3);stroke-width:1.2;fill:none}
+.hd{font-size:11.5px;letter-spacing:1.4px;font-weight:600}
+
+.note{border-left:2px solid var(--ao);padding:2px 0 2px 18px;margin:0 0 20px;
+  font-size:13.5px;color:var(--sumi-2);max-width:64ch}
+.fix{border:1px solid var(--shu);border-left-width:3px;background:var(--shu-w);padding:18px 20px;margin:0 0 22px}
+.fix .h{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;color:var(--shu);margin:0 0 9px}
+.fix p:last-child{margin-bottom:0}
+.cool{border:1px solid var(--ao);border-left-width:3px;background:var(--ao-w);padding:18px 20px;margin:0 0 22px}
+.cool .h{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;color:var(--ao);margin:0 0 9px}
+.cool p:last-child{margin-bottom:0}
+
+.verdict{margin:30px 0 0;padding:20px 24px;border:1px solid var(--rule);background:var(--panel);
+  font-family:var(--f-min);font-size:17px;line-height:1.7;font-weight:600}
+.verdict span{display:block;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.16em;
+  color:var(--ao);font-weight:400;margin-bottom:10px}
+
+footer{margin-top:72px;padding-top:26px;border-top:2px solid var(--ao);
+  font-size:12.5px;color:var(--sumi-3);line-height:1.8}
+footer code{font-family:var(--f-mono);font-size:11.5px;color:var(--sumi-2)}
+</style>
+
+<div class="wrap"><div class="sheet">
+
+<header>
+  <p class="eyebrow">KHD ／ 2026-08-16 ／ 金利</p>
+  <h1>金利と商売<br>——時間の値段が上がるとき</h1>
+  <p class="sub">田中宏貴さんのコラム（8/16）を、菊池さんの実際の借入8,300万に当てて検算する。結論から言うと、数字は思ったより穏やかで、効くのは別のところにある。</p>
+</header>
+
+<div class="thesis">
+  <p class="lbl">主メッセージ</p>
+  <p>金利は費用ではなく、時間の値段です。</p>
+  <p class="why">同じ1%でも、30年持つ賃貸業には30年ぶん効き、3か月で回す転売にはほぼ効かない。だから金利が上がる局面で強いのは「利回りが高い商売」ではなく<strong>「回転が速い商売」</strong>です。田中さんが挙げた5つの対策のうち、菊池さんが<em>すでに持っているのは1つだけ</em>で、それがこの理由で効きます。</p>
+</div>
+
+<section>
+  <h2><span class="n">01</span>まず、事実と見立てを分ける</h2>
+  <p class="lead">コラムの数字は田中さんの見立てで、私は裏取りしていない。信じて動く部分と、確かめてから動く部分を最初に切る。</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>コラムの記述</th><th>扱い</th><th>理由</th></tr></thead>
+    <tbody>
+      <tr><td>6月の日銀決定で8月から短プラが+0.25%して1.5%に</td><td class="no">未検証</td><td>私はこの環境から市場データを取れていない。取引銀行の通知で確認できる</td></tr>
+      <tr><td>年内にもう0.25%乗って短プラ2%も見える</td><td class="no">予測</td><td>誰にも分からない。<strong>ただし「上がる方向」であることは織り込んで設計する</strong></td></tr>
+      <tr><td>都銀・地銀で2.5〜3%、信組・ノンバンクで3.5〜5%</td><td>参考</td><td>菊池さんの高松は3.0%／3.3%なので、この帯の中では低い方にいる</td></tr>
+      <tr><td class="yes">「誰がやっても成功できた状況ではない。創意工夫やひずみを見つける投資をしないと」</td><td class="yes">同意</td><td class="yes">ここがコラムの本体。<strong>これは菊池さんにとって追い風です</strong>（→ 07）</td></tr>
+    </tbody>
+  </table></div>
+
+  <p class="note">田中さん自身が<strong>「賃貸業を20年コツコツしてきたがこのような状況は初めて」</strong>と書いています。20年やってきた人が初めてと言う局面で、判断材料は経験ではなく数字になる。<em>これが今回いちばん重要な一文</em>です。</p>
+</section>
+
+<section>
+  <h2><span class="n">02</span>菊池さんの実際の感応度</h2>
+  <p class="lead">借入は2本、合計8,300万。この2本は性質がまったく違うので、必ず分けて数える。</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>　</th><th>自宅ローズハイム東陽町</th><th>高松二丁目</th></tr></thead>
+    <tbody>
+      <tr><td class="k">借入</td><td class="num">4,300万円</td><td class="num">4,000万円（3,700＋300）</td></tr>
+      <tr><td class="k">金利</td><td class="num">変動 2.02%</td><td class="num">3.0% ／ 3.3%（🟡未確定）</td></tr>
+      <tr><td class="k">返済</td><td class="num">月 130,668円・2065年7月完済</td><td class="num">🟡期間未確定</td></tr>
+      <tr><td class="k">誰が払うか</td><td class="no">家計（個人）</td><td>法人（KHD）</td></tr>
+      <tr class="hi"><td class="k">金利は損金か</td><td class="no"><strong>ならない。全額が自己負担</strong></td><td class="yes"><strong>なる。実質67%の負担</strong></td></tr>
+    </tbody>
+  </table></div>
+
+  <p><strong>同じ+0.25%でも、自宅のほうが1.5倍痛い。</strong> 法人の支払利息は損金になって法人税を減らすので、実質負担は約67%。自宅ローンの利息は所得控除にならないので100%そのまま出ていきます。この非対称性が、以下の表の「実質」の列です。</p>
+
+  <div class="tw"><table>
+    <thead><tr>
+      <th>金利が</th><th class="num">自宅 年</th><th class="num">高松 年</th><th class="num">合計 年</th>
+      <th class="num">実質 年</th><th class="num">家計 月</th><th class="num">無収入寿命</th><th class="num">高松の税引後CF</th>
+    </tr></thead>
+    <tbody>
+      <tr><td class="k">現状</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">26.2ヶ月</td><td class="num">150.0万</td></tr>
+      <tr><td class="k">+0.25%</td><td class="num">10.8万</td><td class="num">10.0万</td><td class="num">20.8万</td><td class="num">17.4万</td><td class="num">0.90万</td><td class="num">25.4ヶ月</td><td class="num">143.3万</td></tr>
+      <tr><td class="k">+0.50%</td><td class="num">21.5万</td><td class="num">20.0万</td><td class="num">41.5万</td><td class="num">34.9万</td><td class="num">1.79万</td><td class="num">24.7ヶ月</td><td class="num">136.6万</td></tr>
+      <tr class="hi"><td class="k">+1.00%</td><td class="num">43.0万</td><td class="num">40.0万</td><td class="num">83.0万</td><td class="num">69.8万</td><td class="num">3.58万</td><td class="num">23.4ヶ月</td><td class="num">123.2万</td></tr>
+      <tr><td class="k">+2.00%</td><td class="num">86.0万</td><td class="num">80.0万</td><td class="num">166.0万</td><td class="num">139.6万</td><td class="num">7.17万</td><td class="num">21.2ヶ月</td><td class="num">96.4万</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="cool">
+    <p class="h">結論：思ったより穏やかです</p>
+    <p><strong>金利が+2%になっても、高松の税引後CFは96万で黒字を保ち、無収入寿命は21.2ヶ月あります。</strong> 短プラが2%（＝いまから+0.5%）まで行っても、無収入寿命は24.7ヶ月。田中さんが「かなりのインパクト」と書いている水準は、菊池さんの財務では<em>耐えられる範囲</em>です。<br>
+    理由は3つ。①借入8,300万に対して純手元資金788万を持っている ②高松が土地値90.5%で、家賃513万に対して金利121万と余裕がある ③物販67万という<strong>借入と無関係な収入</strong>がある。</p>
+  </div>
+
+  <h3>危険水域はどこか</h3>
+  <p>逆算しました。<strong>無収入寿命が18ヶ月を割るのは、自宅の金利が5.84%になったときです</strong>（現在2.02%から+3.82%）。住宅ローンの変動が5.8%になる世界は、短プラが5%を超える世界です。<em>今の議論の射程には入っていません。</em></p>
+
+  <p class="note">ただし<strong>変動金利の5年ルール・125%ルールに注意</strong>してください。多くの変動型は金利が上がっても5年間は返済額を据え置き、代わりに<strong>元金の減りが遅くなるか、未払利息が発生します</strong>。返済額が変わらないから安心、ではありません。返済予定表の「元金と利息の内訳」を年1回見て、元金の減り方が鈍っていないか確認するのが正しい監視です。自宅は2065年完済（残り39年）なので、ここが効きます。</p>
+</section>
+
+<section>
+  <h2><span class="n">03</span>金利は「時間の値段」——回転が速いほど当たらない</h2>
+  <p class="lead">同じ1%でも、資産を持っている期間の長さでインパクトが変わる。だから金利局面の競争優位は利回りではなく回転数になる。</p>
+
+  <figure>
+    <svg viewBox="0 0 720 250" role="img" aria-label="保有期間が長い商売ほど金利の影響を強く受けることを示す図。左から賃貸業30年、買取再販6か月、物販EC1か月、コンサル無借金の順に、金利の当たる面積が小さくなる。">
+      <g class="dg">
+        <text x="8" y="18" class="t-shu hd">保有期間が長い ── 金利に晒される</text>
+        <text x="470" y="18" class="t-ao hd">短い ── 当たらない</text>
+
+        <rect x="8" y="34" width="300" height="46" class="bx-hot"/>
+        <text x="24" y="54">賃貸業（高松・自宅）</text>
+        <text x="24" y="71" class="t-mut">保有30〜39年／借入8,300万／金利がフルに乗る</text>
+
+        <rect x="8" y="94" width="150" height="46" class="bx-mid"/>
+        <text x="24" y="114">買取再販・空き家</text>
+        <text x="24" y="131" class="t-mut">3〜6か月で回す</text>
+
+        <rect x="8" y="154" width="74" height="46" class="bx-cool"/>
+        <text x="24" y="174">物販EC</text>
+        <text x="24" y="191" class="t-mut">1か月</text>
+
+        <rect x="8" y="214" width="30" height="30" class="bx-cool"/>
+        <text x="50" y="234">コンサル・診断・調査士（無借金＝金利ゼロ）</text>
+
+        <path d="M320 57 L700 57" class="ln"/>
+        <text x="330" y="52" class="t-mut">1%＝年40万が30年で1,200万</text>
+        <path d="M170 117 L700 117" class="ln"/>
+        <text x="180" y="112" class="t-mut">1%＝1件あたり数万円。売値に乗せられる</text>
+        <path d="M94 177 L700 177" class="ln"/>
+        <text x="104" y="172" class="t-mut">1%＝ほぼ誤差</text>
+      </g>
+    </svg>
+    <figcaption>田中さんの対策④「旅館業や宅建業とか収益性が高い事業を並行して行う」は、正確には<strong>収益性が高いから効くのではなく、回転が速くて金利に晒されないから効きます</strong>。同じ理由で、菊池さんの03物販・診断レター・（将来の）調査士業務は、金利がどこまで上がっても無傷です。</figcaption>
+  </figure>
+
+  <p class="note">ここで6本部の意味が1つ書き換わります。これまで「多角化＝リスク分散」と説明していたものが、金利局面では<em>「回転速度の異なる商売を並べて、金利の当たる面積を減らしている」</em>という説明に変わる。同じ事実の、より鋭い言い方です。</p>
+</section>
+
+<section>
+  <h2><span class="n">04</span>田中さんの5つの対策を、菊池さん版で採点する</h2>
+  <p class="lead">全部やる必要はない。いま取れるもの、取れないもの、取るべきでないものを分ける。</p>
+
+  <div class="tw"><table>
+    <thead><tr><th style="width:20%">対策</th><th style="width:38%">菊池さんの状況</th><th>判定</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="k">① 賃料を金利以上に上げる</td>
+        <td>高松は取得直後で入居中。すぐには動かせない。+1%＝年40万を家賃で吸収するには、513万に対して<strong>約8%の値上げ</strong>が必要</td>
+        <td class="no">当面できない。更新時に1室ずつ</td>
+      </tr>
+      <tr>
+        <td class="k">② 売却してキャッシュを増やす</td>
+        <td>土地値90.5%物件で、売って損はしにくい。ただし<strong>買った直後に売ると短期譲渡（法人は関係ないが）と、そもそも取得の意味が消える</strong></td>
+        <td class="no">いま取らない。カードとして持っておく</td>
+      </tr>
+      <tr>
+        <td class="k">③ 高金利を借換</td>
+        <td>高松3.0%は都銀・地銀帯の下限側。自宅2.02%も低い。<strong>借り換える先がない</strong></td>
+        <td class="no">該当なし（＝良い状態）</td>
+      </tr>
+      <tr class="hi">
+        <td class="k yes">④ 回転の速い事業を並行</td>
+        <td class="yes"><strong>すでに持っている。</strong>03物販（月67万）／診断レター・開業支援／宅建業（承継準備中）／調査士（試験勉強中）。どれも借入ゼロで回る</td>
+        <td class="yes"><strong>唯一、いま伸ばせる。ここに寄せる</strong></td>
+      </tr>
+      <tr>
+        <td class="k">⑤ 現金化して金融投資へ</td>
+        <td>個人投資は1,500万規模。現金の下限851万は死守が前提。<strong>不動産を売って株に移すのは、事業所得で伸ばす方針と逆行する</strong></td>
+        <td class="no">取らない</td>
+      </tr>
+    </tbody>
+  </table></div>
+
+  <div class="verdict">
+    <span>5つのうち取るのは1つ</span>
+    金利対策として新しくやることは、何もありません。④はすでにやっていて、それを速める理由が1つ増えただけです。
+  </div>
+
+  <p class="note">これは<strong>「金利が上がったから対策を打つ」ではなく「もともと正しかった方針が、金利上昇でさらに正しくなった」</strong>という形です。①②⑤に手を出すと、資産を減らす方向に動いてしまう。何もしないことを選べるのは、②③の余地を持っているからで、それは土地値の高い物件を低金利で買えていたからです。<em>去年の判断が今年の選択肢を作っている</em>。</p>
+</section>
+
+<section>
+  <h2><span class="n">05</span>今週、不可逆の決断が1つあります</h2>
+  <p class="lead">8/14または8/17の金消契約。ここで決める金利タイプは、あとから安く変えられない。</p>
+
+  <div class="fix">
+    <p class="h">まだ確定していない</p>
+    <p>資産管理ボード（7/28時点）でも<strong>「西原様の金利／期間確定」が黄色セル＝未確定</strong>のままです。高松の3.0%／3.3%も想定値で、契約書で確定します。<strong>変動か固定かは、契約前に必ず紙で確認してください。</strong></p>
+  </div>
+
+  <p>先に作った「可逆か不可逆か」の分類では、<em>金利タイプの選択は不可逆側</em>です。借換にはコスト（事務手数料・登記費用・保証料）がかかり、根抵当権を張り替える手間も出る。だから<strong>ここは徹底的に考えていい数少ない領域</strong>です。可逆なものは考えずに出す、不可逆なものは式を全部かける——今週それが当たるのはここ1点だけです。</p>
+
+  <h3>判断式（借入期間25年と仮定）</h3>
+  <div class="tw"><table>
+    <thead><tr><th>問い</th><th>計算</th><th>判定</th></tr></thead>
+    <tbody>
+      <tr><td class="k">固定と変動の差は何%か</td><td>固定 − 変動 ＝ <strong>S%</strong>（これが保険料）</td><td>Sを聞く</td></tr>
+      <tr><td class="k">損益分岐</td><td>期間中に変動が<strong>平均でS%以上</strong>上がるなら固定が勝つ</td><td>Sが0.5%未満なら固定寄り</td></tr>
+      <tr><td class="k">耐えられるか</td><td>+2%でも税引後CF 96万・無収入寿命21.2ヶ月（→02）</td><td class="yes">耐えられる</td></tr>
+      <tr><td class="k">読めるか</td><td>25年先の金利を当てられる人はいない</td><td class="no">読めない</td></tr>
+    </tbody>
+  </table></div>
+
+  <p><strong>耐えられるが読めない、という状態では「読まなくて済む方」を選ぶのが合理的です。</strong> 保険料Sが小さいなら固定、大きいなら変動で耐える。具体的には<em>S ≦ 0.5% なら固定、S ≧ 1.0% なら変動</em>を推奨します。間なら、自宅がすでに変動4,300万で金利リスクを取っているので、<strong>法人側は固定に寄せて全体のバランスを取る</strong>のが筋が通ります。</p>
+
+  <p class="note">聞くべきことは1つだけです。<strong>「変動と固定、それぞれ何%になりますか。固定は何年固定ですか」</strong>。10年固定と全期間固定では意味が違います。金消契約の前に、この1問だけ投げてください。</p>
+</section>
+
+<section>
+  <h2><span class="n">06</span>金利上昇が、役員報酬の階段に効く</h2>
+  <p class="lead">影響が出るのは事業ではなく家計側。ただし桁は小さい。</p>
+
+  <p>自宅ローンの増分は家計を直撃します。+1%で月3.58万、+2%で月7.17万。これは「資産が減らないライン＝役員報酬 月32万」の前提を動かします。</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>金利が</th><th class="num">生活費 月</th><th class="num">資産が減らないライン</th><th>2027/4の判断</th></tr></thead>
+    <tbody>
+      <tr><td class="k">現状</td><td class="num">30.1万</td><td class="num">月32万</td><td>予定どおり月20万へ</td></tr>
+      <tr><td class="k">+0.5%</td><td class="num">31.9万</td><td class="num">月34万</td><td>変わらず</td></tr>
+      <tr><td class="k">+1.0%</td><td class="num">33.7万</td><td class="num">月36万</td><td>2028/4の月30万を<strong>月32万に</strong></td></tr>
+      <tr><td class="k">+2.0%</td><td class="num">37.3万</td><td class="num">月40万</td><td>自立ラインを月45万→<strong>月50万</strong>に</td></tr>
+    </tbody>
+  </table></div>
+
+  <p><strong>2027年1月31日の判定式（616万／411万の3分岐）は、金利+2%でも構造が変わりません。</strong> 変わるのは階段の高さで、判定のロジックではない。<em>設計をやり直す必要はなく、数字を1回入れ替えるだけ</em>です。</p>
+
+  <p class="note">役員報酬を動かせるのは<strong>年1回、4月末まで</strong>（定期同額給与）。金利がどう動いたかを見て決めるタイミングとしては、1月31日の判定 → 4月末の改定、という既存の流れがそのまま使えます。金利のために新しい意思決定日を作る必要はありません。</p>
+</section>
+
+<section>
+  <h2><span class="n">07</span>金利上昇は、菊池さんには追い風です</h2>
+  <p class="lead">田中さん自身の言葉がその根拠になっている。ここが今回いちばん大きい発見。</p>
+
+  <p>コラムにこうあります——<strong>「誰がやっても成功できた状況からすると、きちんと創意工夫やひずみを見つける投資をしないと誰でも成功できるという状況ではない」</strong>。そして<strong>「財務力や賃貸物件の運営能力が確立していない投資家の方にとってはかなり厳しい」</strong>。</p>
+
+  <p>これを裏返すと、<em>数字を出せる人の価値が上がる局面が来た</em>ということです。金利が0.5%だった10年間は、買えば上がったので誰も診断を必要としませんでした。金利が3%の世界では、<strong>「やるか迷っているものを、先に数字にします」に金を払う理由が生まれます</strong>。菊池さんの立ち位置は、この局面のために作られたようなものです。</p>
+
+  <div class="tw"><table>
+    <thead><tr><th>式</th><th>金利上昇で変わること</th><th>需要</th></tr></thead>
+    <tbody>
+      <tr><td class="k">イールドギャップ（10分）</td><td>借入金利が上がると利回りとの差が縮み、<strong>買っていい／いけないの線がはっきり動く</strong></td><td class="yes">急上昇</td></tr>
+      <tr><td class="k">無収入寿命（20分）</td><td>返済が増えると何ヶ月食えるかが変わる。<strong>独立を迷う人に直接効く</strong></td><td class="yes">上昇</td></tr>
+      <tr><td class="k">土地値割合（30分）</td><td>出口が読めない局面ほど、土地値が下限を作る。<strong>高松がまさにこれ</strong></td><td class="yes">上昇</td></tr>
+      <tr><td class="k">診療圏調査（40分）</td><td>開業資金の借入金利が上がる＝計画の精度が要る</td><td>上昇</td></tr>
+      <tr><td class="k">5段階利益管理（1時間）</td><td>金利は固定費。<strong>どの費用が利益を食っているかの可視化が要る</strong></td><td>横ばい</td></tr>
+    </tbody>
+  </table></div>
+
+  <p><strong>発信の1本目に、この検算そのものを出せます。</strong> 群C（過程の数字）の題材として、これ以上のものはありません——他人のコラムを自分の借入8,300万に当てて、+2%でも21.2ヶ月もつと出す。<em>結果ではなく過程の数字なので嫌味にならず、かつ誰も真似できない</em>（自分の実データがないと書けないため）。10/19の公開ネタとして在庫に入れてください。</p>
+
+  <div class="verdict">
+    <span>まとめ</span>
+    金利対策は何もしなくていい。やるのは、回転の速い商売を速めることと、契約前に「変動か固定か」を1問聞くことだけです。
+  </div>
+</section>
+
+<footer>
+  <p><strong>この検算の出典</strong>　自宅＝資産管理シート統合ボード（2026-07-28・返済予定表より借入4,300万／変動2.02%／月130,668円）／高松＝📈お金ボード（3,700万@3.0%＋300万@3.3%・年金利121万・税引後CF150万）／無収入寿命26.2ヶ月から純手元資金788万を逆算／法定実効税率33%で計算</p>
+  <p><strong>関連ボード</strong>　🎯 <a href="https://claude.ai/code/artifact/91d8601e-96a3-4c7c-983d-2f0049090866">行動原則</a>　🧬 <a href="https://claude.ai/code/artifact/93c8c218-188e-4b24-96e9-28d18fd25e42">TTP設計図</a>　📣 <a href="https://claude.ai/code/artifact/5c24cda4-0057-4584-b074-444f95411083">発信</a>　📈 <a href="https://claude.ai/code/artifact/45acd817-8204-469a-ba23-6c20e4d5a1f5">お金</a>　🧭 <a href="https://claude.ai/code/artifact/6e52460f-75f4-4f12-81b6-c69efc11a4af">指標＋原動力</a>　📮 <a href="https://claude.ai/code/artifact/2bdb3462-780f-42bc-b548-8c7b6d3956b8">営業</a></p>
+  <p>田中宏貴さん（エターナル投資塾）2026-08-16配信のコラムを材料にしています。短プラの水準は本人の記述で、私は裏取りしていません。</p>
+</footer>
+
+</div></div>

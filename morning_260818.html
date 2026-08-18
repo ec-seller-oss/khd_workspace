@@ -1,0 +1,176 @@
+<title>朝のブリーフ ／ 8月18日</title>
+<style>
+  :root{
+    --bg:#FCFCFB; --wash:#F9F9F7; --ink:#2E2C27; --ink-soft:#6B6A63;
+    --ink-grey:#B4B3A8; --hairline:#E4E3DC; --edge:#E1E1DF; --clay:#C6613F;
+    --sans:-apple-system,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",
+           "Segoe UI",sans-serif;
+    --serif:"Hiragino Mincho ProN","Yu Mincho",YuMincho,"Noto Serif JP",Georgia,serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+    font-size:15px;line-height:1.8;-webkit-font-smoothing:antialiased}
+  .band{width:100%}
+  .band.top{background:var(--wash);border-bottom:1px solid var(--edge)}
+  .inner{max-width:860px;margin:0 auto;padding:56px 28px 44px}
+  .band.bottom .inner{padding:48px 28px 72px}
+
+  .daydate{font-size:13px;color:var(--ink-soft);letter-spacing:.04em;margin:0 0 12px}
+  h1{font-family:var(--serif);font-weight:600;font-size:40px;line-height:1.45;
+    margin:0 0 34px;max-width:24ch;text-wrap:balance}
+
+  svg.terrain{display:block;width:100%;height:auto}
+
+  .acts{display:grid;grid-template-columns:repeat(3,1fr);margin-top:26px}
+  .act{padding:0 20px}
+  .act:nth-child(2),.act:nth-child(3){border-left:1px solid var(--hairline)}
+  .act:first-child{padding-left:0}
+  .act .time{font-weight:700;font-size:13.5px;letter-spacing:.02em;margin:0 0 7px}
+  .act p{margin:0;font-size:13.5px;color:var(--ink-soft);line-height:1.75}
+
+  h2{font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:.06em;
+    color:var(--ink);margin:0 0 20px}
+  section+section{margin-top:48px}
+  ol{list-style:none;margin:0;padding:0;counter-reset:n}
+  ol li{counter-increment:n;position:relative;padding-left:34px;margin-bottom:22px}
+  ol li::before{content:counter(n);position:absolute;left:0;top:.15em;
+    color:var(--ink-grey);font-size:13px;font-variant-numeric:tabular-nums}
+  ol li .t{display:block;font-weight:700;font-size:15px;line-height:1.6;margin-bottom:3px}
+  ol li p{margin:0;font-size:13.5px;color:var(--ink-soft);line-height:1.8}
+  ol li p .src{border-bottom:1px solid var(--ink-grey);color:var(--ink-soft)}
+  a{color:inherit;text-decoration:none}
+  a .t{border-bottom:1px solid transparent}
+  a:hover .t{border-bottom-color:var(--ink-grey)}
+  a:focus-visible{outline:2px solid var(--clay);outline-offset:3px}
+
+  @media (max-width:640px){
+    h1{font-size:30px}
+    .inner{padding:40px 20px 32px}
+    .acts{grid-template-columns:1fr}
+    .act{padding:18px 0 0;border-left:0 !important}
+    .act+.act{border-top:1px solid var(--hairline)}
+    .act:first-child{padding-top:0}
+  }
+</style>
+
+<div class="band top">
+  <div class="inner">
+    <p class="daydate">火曜日 ・ 8月18日 2026</p>
+    <h1>今日のカレンダーに、調査士が7時間あります。週に足りない量と、ちょうど同じです。</h1>
+
+    <svg class="terrain" viewBox="0 0 840 170" role="img"
+         aria-label="4時半から23時までの一日の起伏。12時半と16時に予定が重なり、16時がいちばん高い。夕方18時から親子タイムで線が下がる。">
+      <!-- 朝：半分昇った太陽（4時半開始） -->
+      <g stroke="#2E2C27" fill="none" stroke-width="1.2">
+        <path d="M42,34 a14,14 0 0,1 28,0"/>
+        <path d="M34,34 L78,34"/>
+        <path d="M56,12 L56,18 M38,18 L42,22 M74,18 L70,22"/>
+      </g>
+      <!-- 夜：三日月（久さんが23時まで） -->
+      <path d="M770,26 a13,13 0 1,0 12,15 a10,10 0 1,1 -12,-15 z"
+            fill="none" stroke="#2E2C27" stroke-width="1.2"/>
+
+      <!-- 地形（1本の線） -->
+      <path d="M0,112 C3.3,105.7 5.8,82.3 20,74 C34.2,65.7 70.7,61.0 85,62 C99.3,63.0 96.8,74.0 106,80 C115.2,86.0 129.2,100.3 140,98 C150.8,95.7 151.3,72.7 171,66 C190.7,59.3 236.5,56.3 258,58 C279.5,59.7 282.0,79.0 300,76 C318.0,73.0 344.3,43.7 366,40 C387.7,36.3 408.3,53.3 430,54 C451.7,54.7 481.5,48.0 496,44 C510.5,40.0 506.3,27.3 517,30 C527.7,32.7 545.5,50.0 560,60 C574.5,70.0 582.3,88.3 604,90 C625.7,91.7 664.8,75.3 690,70 C715.2,64.7 730.0,54.0 755,58 C780.0,62.0 825.8,88.0 840,94"
+            fill="none" stroke="#2E2C27" stroke-width="1.6"
+            stroke-linecap="round" stroke-linejoin="round"/>
+
+      <!-- 予定の点 -->
+      <circle cx="85"  cy="62" r="7"  fill="#2E2C27"/>
+      <circle cx="106" cy="80" r="6"  fill="#2E2C27"/>
+      <circle cx="171" cy="66" r="11" fill="#2E2C27"/>
+      <circle cx="258" cy="58" r="6"  fill="#B4B3A8"/>
+      <!-- 12:30 衝突（新さん × 調査士3時間） -->
+      <circle cx="360" cy="40" r="8.5" fill="#FCFCFB" stroke="#2E2C27" stroke-width="1.5"/>
+      <circle cx="373" cy="40" r="8.5" fill="#FCFCFB" stroke="#2E2C27" stroke-width="1.5"/>
+      <circle cx="496" cy="44" r="11" fill="#2E2C27"/>
+      <!-- 16:00 三重（営業2 × TAW × 辻堂） -->
+      <circle cx="510" cy="30" r="8"   fill="#FCFCFB" stroke="#2E2C27" stroke-width="1.5"/>
+      <circle cx="521" cy="30" r="8"   fill="#FCFCFB" stroke="#2E2C27" stroke-width="1.5"/>
+      <circle cx="532" cy="30" r="8"   fill="#FCFCFB" stroke="#2E2C27" stroke-width="1.5"/>
+      <!-- 唯一のクレイ：16時のぶつかりの下に張力の線 -->
+      <path d="M498,50 q7,7 14,0 q7,-7 14,0 q7,7 14,0"
+            fill="none" stroke="#C6613F" stroke-width="1.6" stroke-linecap="round"/>
+      <circle cx="604" cy="90" r="9"  fill="#2E2C27"/>
+      <circle cx="690" cy="70" r="7"  fill="#2E2C27"/>
+      <circle cx="755" cy="58" r="8"  fill="#2E2C27"/>
+    </svg>
+
+    <div class="acts">
+      <div class="act">
+        <p class="time">4:30 – 8 AM</p>
+        <p>調査士が3時間、その中に朝礼と葵斗のモーニングルーティンが挟まります。誰の都合も入っていない時間は、今日ここだけです。</p>
+      </div>
+      <div class="act">
+        <p class="time">8 AM – 3:30 PM</p>
+        <p>営業1が2時間半、10時に高松エステート。12時半から新さんと、調査士の試験想定3時間が真上で重なっています。</p>
+      </div>
+      <div class="act">
+        <p class="time">3:30 PM – 11 PM</p>
+        <p>営業2の中にTAWと辻堂が入り、16時は三重。18時から親子タイム、20時に調査士とYouTube、21時半から久さん。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="band bottom">
+  <div class="inner">
+
+    <section>
+      <h2>手が要るもの</h2>
+      <ol>
+        <li>
+          <span class="t">福井さんが待っている謄本が1件</span>
+          <p>昨日17日の朝、福井さんから<span class="src">メールで</span>「地蔵鉱山株式会社（長野県北安曇郡小谷村）の謄本を取って下さい」と届いています。13日の医療法人と同じ依頼で、そのときは当日中に返しています。ネットで取れるので15分で終わり、④の打席が今週初めて1になります。</p>
+        </li>
+        <li>
+          <span class="t">クーパンの出品が止まったままです</span>
+          <p>12日に<span class="src">クーパンから</span>「改善計画の内容は適合と確認できるが、別の事由（知的財産権・著作権）で解除できない」と回答が来ています。度付き眼鏡・レンズの件は片付いていて、別件が残っている状態。物販は月67万で、無収入寿命26.2ヶ月を支えている収入です。</p>
+        </li>
+        <li>
+          <span class="t">岩手銀行への送信が7月29日で止まっています</span>
+          <p>金消契約は14日か17日の予定でした。<span class="src">西原様とのやり取り</span>は7月29日の火災保険の相談が最後で、そのあと定款も不足書類の一覧依頼も送られていません。決済は28日、残りは7営業日です。</p>
+        </li>
+        <li>
+          <span class="t">桑原先生の農薬の質問が未回答です</span>
+          <p>12日に<span class="src">福井さん経由で</span>「残地でりんご栽培を継続する場合、農薬散布による来院者・スタッフへの影響が気になります。特に婦人科ですので」と届いています。事業用定期借地契約書は受領済みで、答える材料は揃っています。</p>
+        </li>
+        <li>
+          <span class="t">12時半と16時が、そのままだと二重・三重です</span>
+          <p><span class="src">カレンダー上</span>で、12時半は新さんと調査士の試験想定3時間が完全に重なり、16時は営業2・TAW・辻堂の三つが並んでいます。記述3時間は分割すると意味が薄れるので、動かすならこちらではなく面談側です。</p>
+        </li>
+        <li>
+          <span class="t">商工会議所からの契約者管理票がまだ届いていません</span>
+          <p>14日の朝、<span class="src">霜崎様へ</span>「11時までにデータ送付を」と至急で依頼したまま、返信が確認できていません。経営セーフティ共済の口座変更がこの1枚で止まっています。</p>
+        </li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>片づいたもの</h2>
+      <ol>
+        <li>
+          <span class="t">火災保険は8月28日始期で走っています</span>
+          <p>10日に共益商事の太田さんへ、28日実行に合わせた保険始期で手続きを依頼済み。相見積もりも取り終わっています。</p>
+        </li>
+        <li>
+          <span class="t">晴海・勝どきの居抜きは見送りの理由がはっきりしました</span>
+          <p>13日に福井さんから、あの医療法人は債務超過が約7.5億あり経営が成り立たない、という背景の説明がありました。謄本を取ったその日のうちに決着しています。</p>
+        </li>
+        <li>
+          <span class="t">佐久平のりんご園は条件が固まりました</span>
+          <p>12日に福井さんから契約期間20年、建物は引退時に承継者へそのまま引き継ぐ、と回答。事業用定期借地契約書の実物も受け取っています。</p>
+        </li>
+        <li>
+          <span class="t">アイリスファーマの8月特選物件が再送されました</span>
+          <p>14日に中田さんから、期限切れだったダウンロードリンクを送り直してもらえました。横浜線・田園都市線の開業物件は営業から別途連絡が来ます。</p>
+        </li>
+        <li>
+          <span class="t">サクサク住宅は継続相談に切り替えました</span>
+          <p>条件に合う物件がないと率直に返ってきたので、13日に条件を整理し直して継続でのご相談として送り直し済みです。</p>
+        </li>
+      </ol>
+    </section>
+
+  </div>
+</div>
